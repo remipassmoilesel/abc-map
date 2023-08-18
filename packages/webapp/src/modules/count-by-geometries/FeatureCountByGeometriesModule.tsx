@@ -18,14 +18,14 @@
 
 import FeatureCountByGeometriesUi from './view/FeatureCountByGeometriesView';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('FeatureCountByGeometriesModule:');
 
 export class FeatureCountByGeometriesModule extends ModuleAdapter {
   public getId(): ModuleId {
-    return LocalModuleId.CountPointsInPolygon;
+    return BundledModuleId.CountPointsInPolygon;
   }
 
   public getReadableName(): string {

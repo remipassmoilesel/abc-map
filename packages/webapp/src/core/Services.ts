@@ -26,7 +26,7 @@ import { ModalService } from './ui/ModalService';
 import { FeedbackService } from './feedback/FeedbackService';
 import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
 import { getAbcWindow, Logger } from '@abc-map/shared';
-import { LocalStorageService } from './storage/local-storage/LocalStorageService';
+import { StorageService } from './storage/StorageService';
 import { PwaService } from './pwa/PwaService';
 import { DocumentationService } from './documentation/DocumentationService';
 
@@ -42,7 +42,7 @@ export interface Services {
   dataStore: DataStoreService;
   feedback: FeedbackService;
   legalMentions: LegalMentionsService;
-  storage: LocalStorageService;
+  storage: StorageService;
   pwa: PwaService;
   documentation: DocumentationService;
 }
@@ -66,7 +66,7 @@ export function servicesFactory(): Services {
   const dataStore = DataStoreService.create(toasts);
   const feedback = FeedbackService.create(toasts);
   const legalMentions = LegalMentionsService.create(toasts);
-  const storage = new LocalStorageService();
+  const storage = new StorageService();
   const pwa = new PwaService(storage);
   const documentation = DocumentationService.create(toasts);
 

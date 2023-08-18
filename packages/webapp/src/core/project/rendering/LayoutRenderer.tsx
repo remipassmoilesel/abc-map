@@ -54,7 +54,7 @@ export class LayoutRenderer {
     this.rootElement?.remove();
   }
 
-  public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
+  public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper, abcMapAttributions: boolean): Promise<Blob> {
     const pdf = new jsPDF();
 
     // jsPDF create a first page that may not correspond to first layout
@@ -64,17 +64,17 @@ export class LayoutRenderer {
       const format = layout.format;
       pdf.addPage([format.width, format.height], format.orientation);
 
-      const canvas = await this.renderLayout(layout, sourceMap);
+      const canvas = await this.renderLayout(layout, sourceMap, abcMapAttributions);
       pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', 0, 0, layout.format.width, layout.format.height, undefined, 'NONE');
     }
 
     return pdf.output('blob');
   }
 
-  public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
+  public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper, abcMapAttributions: boolean): Promise<Blob> {
     const files: AbcFile<Blob>[] = [];
     for (const layout of layouts) {
-      const canvas = await this.renderLayout(layout, sourceMap);
+      const canvas = await this.renderLayout(layout, sourceMap, abcMapAttributions);
       const image = await BlobIO.canvasToPng(canvas);
       files.push({ path: `${layout.name}.png`, content: image });
     }
@@ -82,7 +82,7 @@ export class LayoutRenderer {
     return Zipper.forBrowser().zipFiles(files);
   }
 
-  private async renderLayout(layout: AbcLayout, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
+  private async renderLayout(layout: AbcLayout, sourceMap: MapWrapper, abcMapAttributions: boolean): Promise<HTMLCanvasElement> {
     logger.info('Rendering layout: ', layout);
     const renderingMap = this.map;
     const rootElement = this.rootElement;
@@ -99,7 +99,7 @@ export class LayoutRenderer {
     // Copy layers from sourceMap to exportMap
     renderingMap.importLayersFrom(sourceMap, { withSelection: false, ratio });
 
-    await this.renderMapDom(renderingMap, layout, `${dimensions.width}px`, `${dimensions.height}px`, ratio);
+    await this.renderMapDom(renderingMap, layout, `${dimensions.width}px`, `${dimensions.height}px`, ratio, abcMapAttributions);
 
     // Set view
     renderingMap.unwrap().setView(
@@ -145,7 +145,7 @@ export class LayoutRenderer {
     return toPrecision(layoutDiag / previewDiag, 9);
   }
 
-  private renderMapDom(map: MapWrapper, layout: AbcLayout, width: string, height: string, ratio: number): Promise<void> {
+  private renderMapDom(map: MapWrapper, layout: AbcLayout, width: string, height: string, ratio: number, abcMapAttributions: boolean): Promise<void> {
     const container = this.rootElement;
     if (!container) {
       return Promise.reject(new Error('You must call init() before'));
@@ -171,7 +171,7 @@ export class LayoutRenderer {
           {layout.north && <FloatingNorthArrow map={map} north={layout.north} ratio={ratio} readOnly={true} />}
 
           {/* Attributions */}
-          <StaticAttributions map={map} ratio={ratio} />
+          <StaticAttributions map={map} ratio={ratio} abcMapAttributions={abcMapAttributions} />
 
           {/*resolve() will be called when div will be created, see: https://github.com/reactwg/react-18/discussions/5*/}
           {/*  We leave a second more in order to avoid occasional CSS style loading errors */}

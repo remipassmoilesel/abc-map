@@ -36,7 +36,7 @@ export declare type History = {
 };
 
 /**
- * This service manage several histories in order to let users undo and redo actions.
+ * This service manage several history stacks in order to let users undo and redo actions.
  *
  * As most of the objects managed here are mutable, we use redux only for states that impact
  * directly UI components, actually canUndo and canRedo only.
@@ -51,9 +51,10 @@ export class HistoryService {
   public resetHistory(): void {
     for (const key in this.history) {
       const stack = this.getStack(key as HistoryKey);
-      stack.undo.forEach((cs) => cs.dispose().catch((err) => logger.error(err)));
-      stack.redo.forEach((cs) => cs.dispose().catch((err) => logger.error(err)));
+      stack.undo.forEach((cs) => cs.dispose().catch((err) => logger.error('Dispose error: ', err)));
+      stack.redo.forEach((cs) => cs.dispose().catch((err) => logger.error('Dispose error: ', err)));
     }
+
     this.history = {};
     this.store.dispatch(UiActions.cleanHistoryCapabilities());
   }
@@ -62,7 +63,9 @@ export class HistoryService {
     const stack = this.getStack(key);
 
     stack.undo.push(cs);
-    stack.redo.forEach((t) => t.dispose().catch((err) => logger.error(err)));
+
+    // FIXME: Is it mandatory ?
+    stack.redo.forEach((t) => t.dispose().catch((err) => logger.error('Dispose error: ', err)));
     stack.redo = [];
 
     this.limitHistorySize(key);

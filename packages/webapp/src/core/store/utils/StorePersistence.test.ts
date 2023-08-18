@@ -17,7 +17,7 @@
  */
 
 import { PersistedMainState, StorePersistence } from './StorePersistence';
-import { LocalStorageService, StorageKey } from '../../storage/local-storage/LocalStorageService';
+import { StorageService, StorageKey } from '../../storage/StorageService';
 import sinon, { SinonStub } from 'sinon';
 import { FillPatterns, ProjectConstants, UserStatus } from '@abc-map/shared';
 import { MainState } from '../reducer';
@@ -27,12 +27,12 @@ import { DateTime } from 'luxon';
 import { CURRENT_STATE_VERSION } from '../state';
 
 describe('StorePersistence', () => {
-  let storage: LocalStorageService;
+  let storage: StorageService;
   let setStorageStub: SinonStub;
   let persistence: StorePersistence;
 
   beforeEach(() => {
-    storage = new LocalStorageService();
+    storage = new StorageService();
     setStorageStub = sinon.stub(storage, 'set');
     persistence = new StorePersistence(storage);
   });
@@ -47,7 +47,6 @@ describe('StorePersistence', () => {
             id: 'test-project-id',
             version: ProjectConstants.CurrentVersion,
             name: `Test project`,
-            containsCredentials: false,
             public: false,
           },
           mainView: {
@@ -59,6 +58,7 @@ describe('StorePersistence', () => {
           layouts: {
             list: [],
             activeId: 'test-active-layout-id',
+            abcMapAttributionsEnabled: true,
           },
           sharedViews: {
             list: [],
@@ -153,7 +153,6 @@ describe('StorePersistence', () => {
             id: 'test-project-id',
             version: ProjectConstants.CurrentVersion,
             name: `Test project`,
-            containsCredentials: false,
             public: false,
           },
           mainView: {
@@ -164,8 +163,8 @@ describe('StorePersistence', () => {
           },
           layouts: {
             list: [],
-            // Active layout may have 'disappear'
             activeId: undefined,
+            abcMapAttributionsEnabled: true,
           },
           sharedViews: {
             list: [],

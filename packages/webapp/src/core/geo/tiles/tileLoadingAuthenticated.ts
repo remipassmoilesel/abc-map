@@ -21,7 +21,8 @@ import { BasicAuthentication, Logger } from '@abc-map/shared';
 import axios, { AxiosError } from 'axios';
 import { setTileImage } from './setTileImage';
 import { setTileError } from './setTileError';
-import { TileStorage } from '../../storage/project-storage/TileDbStorage';
+import { TileStorage } from '../../storage/indexed-db/tiles/TileIDBStorage';
+import { CURRENT_VERSION } from '../../storage/indexed-db/tiles/TileIDBEntry';
 
 export const logger = Logger.get('tileLoadingAuthenticated.ts');
 
@@ -52,7 +53,7 @@ export function tileLoadingAuthenticated(auth: BasicAuthentication): LoadFunctio
       })
       .then((image) => {
         setTileImage(tile, image);
-        return storage.put({ url: src, image });
+        return storage.put({ version: CURRENT_VERSION, url: src, image });
       })
       .catch((err: Error | AxiosError | undefined) => {
         logger.error('Cannot load tile: ', err);

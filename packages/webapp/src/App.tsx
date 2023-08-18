@@ -24,7 +24,7 @@ import TopBar from './components/top-bar/TopBar';
 import PasswordInputModal from './components/password-input-modal/PasswordInputModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
 import { EditPropertiesModal } from './components/edit-properties-modal/EditPropertiesModal';
-import SolicitationModal from './components/solicitation-modal/SolicitationModal';
+import { SolicitationModal } from './components/solicitation-modal/SolicitationModal';
 import LoginModal from './components/login-modal/LoginModal';
 import RegistrationModal from './components/registration-modal/RegistrationModal';
 import PasswordLostModal from './components/password-lost-modal/PasswordLostModal';
@@ -46,6 +46,7 @@ import { useFullscreenView } from './core/ui/useFullscreenView';
 import { SimplePromptModal } from './components/simple-prompt-modal/SimplePromptModal';
 import { MultipleTabsWarning } from './components/multiple-tabs-warning/MultipleTabsWarning';
 import { IframeWarning } from './components/iframe-warning/IframeWarning';
+import { useRedirectLegacyRoutes } from './core/ui/useRedirectLegacyRoutes';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -63,6 +64,8 @@ const ModuleView = lazy(() => import('./views/module-view/ModuleView'));
 
 export function App() {
   const fullscreenView = useFullscreenView();
+
+  useRedirectLegacyRoutes();
 
   return (
     <>
@@ -102,13 +105,13 @@ export function App() {
           <RegistrationModal />
           <SetPasswordModal />
           <SolicitationModal />
-          <WarningBeforeUnload />
           <PromptVariablesModal />
           <InstallAppModal />
           <MainKeyboardListener />
           <SimplePromptModal />
           <MultipleTabsWarning />
           <IframeWarning />
+          <WarningBeforeUnload />
         </>
       )}
 

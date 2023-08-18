@@ -50,20 +50,18 @@
 }
 
 .title {
-  font-size: 4rem;
+  font-size: 4.5rem;
   font-weight: 900;
   background: #3f3d56;
   background: linear-gradient(to right, #0094e3 5%, #3f3d56 72%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  margin-bottom: 1rem;
 }
 
 .intro {
   font-size: 2rem;
-  margin: 0.5rem 0 4rem 0;
   line-height: 1;
+  margin: 0.5rem 0 3rem 0;
 }
 
 .authenticationButtons {
@@ -99,6 +97,7 @@
 }
 
 .version {
-  font-size: 0.9em;
-  color: #ffffff;
+  margin: 1rem;
+  font-size: 0.9rem;
+  color: white;
 }

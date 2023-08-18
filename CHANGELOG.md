@@ -2,9 +2,74 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## ??/07/2023 - Better documentation (git: master)
+## ??/08/2023 - Project budget and optional attributions
 
-- New documentation, built with [Eleventy](https://www.11ty.dev/) more scalable, more SE friendly
+- Project budget is now displayed on solicitation modals
+- Abc-Map attributions are now optional on static exports !
+- Minor bug fixes
+- Switch to [MongoDB 5](https://www.mongodb.com/)
+- Migration of project schemas stored in indexeddb
+- Better migration of exported project schemas: added better typing
+- Users can now clean local data and data is cleaned on logout
+
+**About MongoDB 5**
+
+If Mongodb does not start after update, you may need to do the following:
+
+- Create a backup with `mongodump`, in case something goes wrong
+- Start a MongoDB 4.4 instance:
+
+```sh
+$ git diff
+
+   abc-mongodb:
+-    image: 'mongo:5.0.20-focal'
++    image: 'mongo:4.4-focal'
+
+$ docker compose down
+$ docker compose up     # Or helm upgrade
+```
+
+- Execute this admin command:
+
+```sh
+# Replace parameters with correct host, username and password
+$ mongo -h localhost:27020 -u admin -p admin --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "4.4" } )'
+```
+
+- Then start a MongoDB 5 instance:
+
+```sh
+$ git diff
+
+   abc-mongodb:
+-    image: 'mongo:4.4-focal'
++    image: 'mongo:5.0.20-focal'
+
+$ docker compose down
+$ docker compose up     # Or helm upgrade
+```
+
+**Helm Chart Values**:
+
+```
+
+# ...
+
+mongodb:
+  enabled: true
+  # image: 'mongo:4.4-focal'
+  image: 'mongo:5.0.20-focal'
+
+# ...
+
+```
+
+Source: https://www.mongodb.com/docs/rapid/release-notes/5.0-upgrade-standalone/.
+
+## 01/08/2023 - Better documentation (git: 28cd21b7)
+
+- New documentation, built with [Eleventy](https://www.11ty.dev/) more scalable, more search engine friendly
 - In addition to the static site, the doc is directly available in the webapp
 - Server behavior have been improved: better sitemaps, 404 errors even for webapp routes that does not exist, ...
 - Added an optional instance of [Mongo Express](https://github.com/mongo-express/mongo-express) to the Helm chart

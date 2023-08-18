@@ -18,14 +18,14 @@
 
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import ProjectsModuleView from './view/ProjectManagementView';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('ProjectManagement:');
 
 export class ProjectManagement extends ModuleAdapter {
   public getId(): ModuleId {
-    return LocalModuleId.ProjectManagement;
+    return BundledModuleId.ProjectManagement;
   }
 
   public getReadableName(): string {

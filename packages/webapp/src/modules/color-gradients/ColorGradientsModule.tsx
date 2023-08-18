@@ -34,7 +34,7 @@ import { prettyStringify } from '../../core/utils/strings';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../core/history/changesets/layers/AddLayersChangeset';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('ColorGradientsModule:');
@@ -49,7 +49,7 @@ export class ColorGradientsModule extends ModuleAdapter {
   }
 
   public getId(): ModuleId {
-    return LocalModuleId.ColorGradients;
+    return BundledModuleId.ColorGradients;
   }
 
   public getReadableName(): string {

@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
+import { AbcFile, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
+import { AbcProjectManifest050 } from './dependencies/050-project-types';
+import { AbcProjectManifest060 } from './dependencies/060-project-types';
 
 const NEXT = '0.6.0';
 
@@ -29,13 +31,13 @@ const logger = Logger.get('FromV050ToV060.ts');
  * - "sharedViews" field
  * - "metadata.public" field
  */
-export class FromV050ToV060 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV050ToV060 implements ProjectMigration<AbcProjectManifest050, AbcProjectManifest060> {
+  public async interestedBy(manifest: AbcProjectManifest050): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
+  public async migrate(manifest: AbcProjectManifest050, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest060>> {
     return {
       manifest: {
         ...manifest,
@@ -45,7 +47,7 @@ export class FromV050ToV060 implements ProjectMigration {
           version: NEXT,
           public: false,
         },
-      } as unknown as AbcProjectManifest,
+      },
       files,
     };
   }

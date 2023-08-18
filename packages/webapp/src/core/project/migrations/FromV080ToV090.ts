@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
+import { AbcFile, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcProjectManifest080 } from './dependencies/080-project';
+import { AbcProjectManifest080 } from './dependencies/080-project-types';
+import { AbcProjectManifest090 } from './dependencies/090-project-types';
 
 const NEXT = '0.9.0';
 
@@ -31,15 +32,13 @@ const logger = Logger.get('FromV080ToV090.ts');
  * - adds textFrames field to shared views
  * - adds fullscreen field to shared views
  */
-export class FromV080ToV090 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV080ToV090 implements ProjectMigration<AbcProjectManifest080, AbcProjectManifest090> {
+  public async interestedBy(manifest: AbcProjectManifest080): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
-    const manifest = _manifest as unknown as AbcProjectManifest080;
-
+  public async migrate(manifest: AbcProjectManifest080, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest090>> {
     return {
       manifest: {
         ...manifest,
@@ -55,7 +54,7 @@ export class FromV080ToV090 implements ProjectMigration {
           ...manifest.metadata,
           version: NEXT,
         },
-      } as unknown as AbcProjectManifest,
+      },
       files,
     };
   }

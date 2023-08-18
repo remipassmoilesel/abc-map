@@ -19,8 +19,9 @@
 import { MongodbClient } from '../../MongodbClient';
 import { DatabaseMigrationScript } from '../DatabaseMigrationScript';
 import { S2022_01_04_AddPublicField } from './S2022_01_04_AddPublicField/S2022_01_04_AddPublicField';
+import { S2023_08_06_RemoveCredentialsField } from './S2023_08_06_RemoveCredentialsField/S2023_08_06_RemoveCredentialsField';
 
 // Scripts are executed in provided order
 export function getScripts(client: MongodbClient): DatabaseMigrationScript[] {
-  return [S2022_01_04_AddPublicField.create(client)];
+  return [S2022_01_04_AddPublicField.create(client), S2023_08_06_RemoveCredentialsField.create(client)];
 }

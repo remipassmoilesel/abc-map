@@ -17,7 +17,7 @@
  */
 
 import { Routes } from '../../routes';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 
@@ -29,7 +29,7 @@ export function useShowDataTableModule(): ShowDataTableViewFunc {
   return useMemo(
     () => (layerId?: string) => {
       navigate({
-        pathname: Routes.module().withParams({ moduleId: LocalModuleId.DataTable }),
+        pathname: Routes.module().withParams({ moduleId: BundledModuleId.DataTable }),
         search: layerId ? createSearchParams({ layerId }).toString() : undefined,
       });
     },

@@ -34,7 +34,7 @@ light continuous integration:
     - source ci-env.sh
     - ./abc-cli ci --light
   services:
-    - name: mongo:4.2-bionic
+    - name: mongo:5.0.20-focal
       alias: mongodb
   variables:
     MONGO_INITDB_ROOT_USERNAME: admin

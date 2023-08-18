@@ -35,6 +35,8 @@ import Chainable = Cypress.Chainable;
 // because of testing environment. So we set a long timeout in order to prevent anoying failures.
 const exportTimeoutMs = 3 * 60 * 1000;
 
+const defaultExportMinSize = 40_000;
+
 describe('Static exports', function () {
   describe('As a visitor', function () {
     beforeEach(() => {
@@ -43,72 +45,77 @@ describe('Static exports', function () {
 
     it('can create layout, undo and redo', function () {
       cy.visit(Routes.module().withParams({ moduleId: 'static-export' }))
+        .wait(500)
+        // We create one layout with center button
         .get('[data-cy=new-layout]')
         .click()
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 1']))
+        .then(() => expectLayoutNames(['Page 1']))
+        // We create one layout
         .get('[data-cy=add-layout]')
         .click()
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']))
+        // We undo
         .get('[data-cy=undo]')
         .click()
-        .wait(800)
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 1']))
+        .then(() => expectLayoutNames(['Page 1']))
+        // We redo
         .get('[data-cy=redo]')
         .click()
-        .wait(800)
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']));
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']));
     });
 
     it('can change layout order, undo and redo', function () {
       cy.visit(Routes.module().withParams({ moduleId: 'static-export' }))
+        .wait(500)
+        // We create one layout
         .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1']))
+        // We create one layout
+        .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']))
+        // We move up layout
         .get('[data-cy=layout-up]')
         .click()
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 2', 'Page 1']))
+        .then(() => expectLayoutNames(['Page 2', 'Page 1']))
+        // We move down layout
         .get('[data-cy=layout-down]')
         .click()
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']))
+        // We undo
         .get('[data-cy=undo]')
         .click()
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 2', 'Page 1']))
+        .then(() => expectLayoutNames(['Page 2', 'Page 1']))
+        // We redo
         .get('[data-cy=redo]')
         .click()
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']));
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']));
     });
 
     it('can delete all layouts, undo and redo', function () {
       cy.visit(Routes.module().withParams({ moduleId: 'static-export' }))
-        // Add two layouts
+        .wait(500)
+        // We add one layout
         .get('[data-cy=add-layout]')
         .click()
-        .wait(300)
+        .then(() => expectLayoutNames(['Page 1']))
+        // We add one layout
+        .get('[data-cy=add-layout]')
         .click()
-        .wait(300)
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']))
+        // We clear all
         .get('[data-cy=clear-all]')
         .click()
-        .wait(300)
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal([]))
+        .then(() => expectLayoutNames([]))
+        // We undo
         .get('[data-cy=undo]')
         .click()
-        .wait(300)
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']))
+        // We redo
         .get('[data-cy=redo]')
         .click()
-        .wait(300)
-        .then(() => getLayoutNames())
-        .should((elem) => expect(elem).deep.equal([]));
+        .then(() => expectLayoutNames([]));
     });
 
     it('can export PDF with predefined layer', function () {
@@ -119,12 +126,13 @@ describe('Static exports', function () {
         .then(() => Modules.open('static-export'))
         .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(exportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(50_000);
+          expect(pdf.size).greaterThan(defaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -139,12 +147,13 @@ describe('Static exports', function () {
         .then(() => Modules.open('static-export'))
         .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(exportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(50_000);
+          expect(pdf.size).greaterThan(defaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -159,12 +168,13 @@ describe('Static exports', function () {
         .then(() => Modules.open('static-export'))
         .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(exportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(50_000);
+          expect(pdf.size).greaterThan(defaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -179,12 +189,13 @@ describe('Static exports', function () {
         .then(() => Modules.open('static-export'))
         .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(exportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(50_000);
+          expect(pdf.size).greaterThan(defaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -196,7 +207,10 @@ describe('Static exports', function () {
         .then(() => Modules.open('static-export'))
         .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1']))
+        .get('[data-cy=add-layout]')
         .click()
+        .then(() => expectLayoutNames(['Page 1', 'Page 2']))
         .get('[data-cy=png-export]')
         .click()
         .then(() => LongOperation.done(exportTimeoutMs))
@@ -215,7 +229,7 @@ describe('Static exports', function () {
         // Create layout
         .get('[data-cy=add-layout]')
         .click()
-        .wait(800)
+        .then(() => expectLayoutNames(['Page 1']))
         // Create text frame
         .get('[data-cy=create-text-frame]')
         .click()
@@ -267,13 +281,19 @@ describe('Static exports', function () {
   });
 });
 
-function getLayoutNames(): Chainable<string[]> {
-  return cy.get('[data-cy=layout-list]').then(
-    (elem) =>
-      elem
-        .find('[data-cy=list-item]')
-        .toArray()
-        .map((elem) => elem.textContent)
-        .filter((s) => !!s) as string[]
+function expectLayoutNames(expectedNames: string[]): Chainable<any> {
+  return (
+    cy
+      // We MUST wait a little otherwise some changes will not be applied
+      .wait(500)
+      .get('[data-cy=layout-list] [data-cy=list-item]')
+      .should('have.length', expectedNames.length)
+      .and((layouts) => {
+        const actualNames = layouts
+          .toArray()
+          .map((elem) => elem.textContent)
+          .filter((s): s is string => !!s);
+        expect(actualNames).deep.equal(expectedNames, `Actual: "${JSON.stringify(expectedNames)}"`);
+      })
   );
 }

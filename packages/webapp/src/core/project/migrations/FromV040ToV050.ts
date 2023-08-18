@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayout, AbcProjectManifest, AbcProjectMetadata, LayoutFormats, Logger } from '@abc-map/shared';
+import { AbcFile, AbcLayout, LayoutFormats, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
-import { LayoutFormat040 } from './dependencies/040-project';
+import { AbcProjectManifest040, LayoutFormat040 } from './dependencies/040-project-types';
 import semver from 'semver';
+import { AbcProjectManifest050, AbcProjectMetadata050 } from './dependencies/050-project-types';
 
 const NEXT = '0.5.0';
 
@@ -48,13 +49,13 @@ const v040LayoutNameMapper = (name: string | undefined): string => {
 /**
  * This migration rename layout names to ids
  */
-export class FromV040ToV050 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV040ToV050 implements ProjectMigration<AbcProjectManifest040, AbcProjectManifest050> {
+  public async interestedBy(manifest: AbcProjectManifest040): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
+  public async migrate(manifest: AbcProjectManifest040, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest050>> {
     const layouts: AbcLayout[] = manifest.layouts.map((layout) => {
       // There was a mistake in migrations, some projects were migrated without version upgrade
       if (layout.format.id) {
@@ -71,10 +72,10 @@ export class FromV040ToV050 implements ProjectMigration {
       return { ...layout, format };
     });
 
-    const metadata: AbcProjectMetadata = { ...manifest.metadata, version: NEXT };
+    const metadata: AbcProjectMetadata050 = { ...manifest.metadata, version: NEXT };
     return {
       manifest: {
-        ...manifest,
+        ...(manifest as any),
         metadata,
         layouts,
       },

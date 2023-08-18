@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import Ajv from 'ajv';
-import { ValidateFunction } from 'ajv';
+import Ajv, { ValidateFunction } from 'ajv';
 import { ProjectMetadataSchema } from '../projects/ProjectMetadata.schema';
 import { ConfigInputSchema } from '../config/ConfigInputSchema';
-import { ArtefactManifestSchema } from '../data-store/ArtefactManifest';
+import { ArtefactManifestWithPath, ArtefactManifestSchema } from '../data-store/ArtefactManifestSchema';
 import { AbcProjectMetadata } from '@abc-map/shared';
+import { ConfigInput } from '../config/Config';
 
 const ajv = new Ajv();
 
@@ -34,13 +34,18 @@ const ajv = new Ajv();
 export class Validation {
   public static readonly Ajv = Ajv;
 
-  public static readonly ConfigInput = ajv.compile(ConfigInputSchema);
+  public static readonly ConfigInput = ajv.compile<ConfigInput>(ConfigInputSchema);
 
   public static readonly ProjectMetadata = ajv.compile<AbcProjectMetadata>(ProjectMetadataSchema);
 
-  public static readonly ArtefactManifest = ajv.compile(ArtefactManifestSchema);
+  public static readonly ArtefactManifest = ajv.compile<ArtefactManifestWithPath>(ArtefactManifestSchema);
 
   public static formatErrors(validateFunc: ValidateFunction): string {
-    return validateFunc.errors?.map((e) => JSON.stringify(e)).join(', ') || 'No validation error message';
+    const errors = (validateFunc.errors || []).map((err) => JSON.stringify(err, null, 2));
+    if (!errors.length) {
+      errors.push('<No error message found>');
+    }
+
+    return errors.join(', ');
   }
 }

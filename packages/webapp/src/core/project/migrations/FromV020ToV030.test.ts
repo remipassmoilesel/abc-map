@@ -16,18 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectManifest, LayerType } from '@abc-map/shared';
+import { LayerType } from '@abc-map/shared';
 import { FromV020ToV030 } from './FromV020ToV030';
 import { ModalService } from '../../ui/ModalService';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import { TestData } from './test-data/TestData';
 import { MigrationProject } from './typings';
-import { WmsMetadata030 } from './dependencies/030-project';
+import { WmsMetadata030 } from './dependencies/030-project-types';
+import { AbcProjectManifest020 } from './dependencies/020-project-types';
 
 describe('FromV020ToV030', () => {
   let modals: SinonStubbedInstance<ModalService>;
-  let sampleProject: MigrationProject;
+  let sampleProject: MigrationProject<AbcProjectManifest020>;
   let migration: FromV020ToV030;
 
   beforeEach(async () => {
@@ -69,10 +70,10 @@ describe('FromV020ToV030', () => {
           },
         },
       ],
-    };
+    } as AbcProjectManifest020;
 
     // Act
-    await migration.migrate(project as unknown as AbcProjectManifest, []).catch((err) => err);
+    await migration.migrate(project, []).catch((err) => err);
 
     // Assert
     expect(modals.createPassword.callCount).toEqual(0);
@@ -83,7 +84,7 @@ describe('FromV020ToV030', () => {
     modals.createPassword.resolves({ type: ModalEventType.CreatePasswordClosed, status: ModalStatus.Canceled, value: '' });
 
     // Act
-    const error: Error = await migration.migrate(sampleProject.manifest as unknown as AbcProjectManifest, []).catch((err) => err);
+    const error: Error = await migration.migrate(sampleProject.manifest, []).catch((err) => err);
 
     // Assert
     expect(error).toBeInstanceOf(Error);

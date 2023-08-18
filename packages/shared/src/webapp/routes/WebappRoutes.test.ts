@@ -23,7 +23,7 @@ describe('WebappRoutes', function () {
   it('getAll()', () => {
     const routes = new WebappRoutes(Language.English);
 
-    routes.getAll().forEach((route) => {
+    routes.getMainRoutes().forEach((route) => {
       // We do not expect that routes ends with / by default
       expect(route.raw().endsWith('/')).toBe(false);
       expect(route.raw().trim()).toBe(route.raw());

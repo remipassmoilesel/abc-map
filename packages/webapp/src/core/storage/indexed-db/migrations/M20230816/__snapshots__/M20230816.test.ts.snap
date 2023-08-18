@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`M20230816 Projects should do nothing 1`] = `
+Array [
+  Object {
+    "key": "test-project-1",
+    "value": Object {
+      "layerIds": Array [
+        "layer-id-1",
+        "layer-id-2",
+        "layer-id-3",
+      ],
+      "layouts": Object {
+        "abcMapAttributionsEnabled": true,
+        "layoutIds": Array [
+          "layout-id-1",
+          "layout-id-2",
+          "layout-id-3",
+        ],
+      },
+      "metadata": Object {
+        "id": "test-project-1",
+        "name": "Test project 1",
+        "public": false,
+        "version": "1.3.0",
+      },
+      "sharedViews": Object {
+        "fullscreen": false,
+        "mapDimensions": Object {
+          "height": 600,
+          "width": 800,
+        },
+        "viewIds": Array [
+          "shared-view-id-1",
+          "shared-view-id-2",
+          "shared-view-id-3",
+        ],
+      },
+      "version": 99,
+      "view": Object {
+        "center": Array [
+          1,
+          2,
+        ],
+        "projection": Object {
+          "name": "EPSG:3857",
+        },
+        "resolution": 1000,
+        "rotation": 0,
+      },
+    },
+  },
+]
+`;
+
+exports[`M20230816 Projects should migrate 1`] = `
+Array [
+  Object {
+    "key": "test-project-1",
+    "value": Object {
+      "layerIds": Array [
+        "layer-id-1",
+        "layer-id-2",
+        "layer-id-3",
+      ],
+      "layouts": undefined,
+      "metadata": Object {
+        "id": "test-project-1",
+        "name": "Test project 1",
+        "public": false,
+        "version": "1.3.0",
+      },
+      "sharedViews": Object {
+        "fullscreen": false,
+        "mapDimensions": Object {
+          "height": 600,
+          "width": 800,
+        },
+        "viewIds": Array [
+          "shared-view-id-1",
+          "shared-view-id-2",
+          "shared-view-id-3",
+        ],
+      },
+      "version": 3,
+      "view": Object {
+        "center": Array [
+          1,
+          2,
+        ],
+        "projection": Object {
+          "name": "EPSG:3857",
+        },
+        "resolution": 1000,
+        "rotation": 0,
+      },
+    },
+  },
+]
+`;

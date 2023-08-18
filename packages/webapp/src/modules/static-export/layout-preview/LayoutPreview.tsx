@@ -17,7 +17,7 @@
  */
 
 import Cls from './LayoutPreview.module.scss';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import isEqual from 'lodash/isEqual';
@@ -38,6 +38,7 @@ import { FloatingScale } from '../../../components/floating-scale/FloatingScale'
 import { LayoutRenderer } from '../../../core/project/rendering/LayoutRenderer';
 import { normalize, toPrecision } from '../../../core/utils/numbers';
 import { FloatingNorthArrow } from '../../../components/floating-north-arrow/FloatingNorthArrow';
+import { useAppSelector } from '../../../core/store/hooks';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -119,10 +120,18 @@ export function LayoutPreview(props: Props) {
     }
   }, [layout, layout?.format, layout?.view, previewDimensions, previewMap, previewRatio, previewView]);
 
-  // Triggered when user moves map
+  // We keep track of the latest layout changes because we need to prevent events from being triggered during preview setup
+  const lastPreviewChange = useRef<number>();
+  useEffect(() => {
+    lastPreviewChange.current = Date.now();
+  }, [layout?.id, layout?.format.id]);
+
+  // Triggered when user moves map or when map size change
   const handleViewChange = useCallback(
     (view: AbcView) => {
-      if (!previewRatio || !layout) {
+      // We need to make sure this doesn't trigger right after map setup
+      const duringPreviewSetup = Date.now() - (lastPreviewChange.current || Date.now()) < 1_000;
+      if (!previewRatio || !layout || duringPreviewSetup) {
         return;
       }
 
@@ -271,6 +280,8 @@ export function LayoutPreview(props: Props) {
     setPreviewNorth(previewNorth);
   }, [layout?.north, previewDimensions, previewMap, previewRatio]);
 
+  const abcMapAttributions = useAppSelector((st) => st.project.layouts.abcMapAttributionsEnabled);
+
   return (
     <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
       {/* There is one layout to preview, we display it */}
@@ -298,7 +309,7 @@ export function LayoutPreview(props: Props) {
           {previewNorth && <FloatingNorthArrow map={previewMap} north={previewNorth} onChange={handleNorthChange} />}
 
           {/* Attributions */}
-          <StaticAttributions map={previewMap} />
+          <StaticAttributions map={previewMap} abcMapAttributions={abcMapAttributions} />
         </div>
       )}
 
@@ -311,7 +322,7 @@ export function LayoutPreview(props: Props) {
 
           <button onClick={onNewLayout} className={'btn btn-primary mt-3'} data-cy={'new-layout'}>
             <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
-            {t('Create_A4_layout')}
+            {t('New_layout')}
           </button>
         </div>
       )}

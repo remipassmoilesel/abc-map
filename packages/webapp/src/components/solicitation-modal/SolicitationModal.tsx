@@ -16,142 +16,133 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import Cls from './SolicitationModal.module.scss';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
-import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger, VoteValue } from '@abc-map/shared';
 import { FundingLinks } from '../funding-links/FundingLinks';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import Cls from './SolicitationModal.module.scss';
+import { useTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
 import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
 import TextFeedbackForm from '../feedback/form/TextFeedbackForm';
 import { confetti } from '../../core/ui/confetti';
-import { withRouter, WithRouterProps } from '../../core/utils/withRouter';
+import { useServices } from '../../core/useServices';
+import { useNavigate } from 'react-router-dom';
+import { useBudget } from '../../core/budget/useBudget';
+import clsx from 'clsx';
 
 const logger = Logger.get('SolicitationModal.ts');
 
-declare type Props = ServiceProps & WithRouterProps;
+export function SolicitationModal() {
+  const { t } = useTranslation('SolicitationModal');
+  const [visible, setVisible] = useState(false);
+  const [voteValue, setVoteValue] = useState<VoteValue | undefined>(undefined);
+  const { modals, feedback } = useServices();
+  const navigate = useNavigate();
 
-interface State {
-  visible: boolean;
-  voteDone: boolean;
-  voteValue?: VoteValue;
-}
+  const { readableTotal, totalTheme } = useBudget();
 
-const t = prefixedTranslation('SolicitationModal:');
+  useEffect(() => {
+    const handleOpen = () => {
+      setVisible(true);
+      setVoteValue(undefined);
+    };
 
-class SolicitationModal extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { visible: false, voteDone: false };
-  }
+    modals.addListener(ModalEventType.ShowSolicitation, handleOpen);
+    return () => modals.removeListener(ModalEventType.ShowSolicitation, handleOpen);
+  }, [modals]);
 
-  public render(): ReactNode {
-    const { visible, voteDone, voteValue } = this.state;
-    if (!visible) {
-      return <div />;
-    }
-
-    return (
-      <FullscreenModal className={Cls.modal}>
-        <h1>{t('So_how_was_it')}</h1>
-
-        <div className={'border rounded p-4 d-flex flex-column justify-content-center align-items-center mb-5'}>
-          <h4 className={'text-center mb-5'}>{t('Support_your_software')} ✊</h4>
-
-          <FundingLinks />
-
-          <button onClick={this.handleExplainDonation} className={'btn btn-link mt-3'}>
-            {t('What_are_donations_used_for')}
-          </button>
-        </div>
-
-        {!voteDone && (
-          <div className={'d-flex flex-column'}>
-            <h4 className={'mx-4 mb-3 text-center'}>{t('How_did_it_go')}</h4>
-            <div className={'d-flex flex-row justify-content-center mb-4'}>
-              <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-                <span className={Cls.face}>🥰</span>
-                {t('Well')}
-              </button>
-              <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-                <span className={Cls.face}>😐</span>
-                {t('Blah')}
-              </button>
-              <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-                <span className={Cls.face}>😞</span>
-                {t('Not_good')}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {voteDone && voteValue && voteValue < VoteValue.SATISFIED && (
-          <div className={Cls.feedbackArea}>
-            <h5>{t('What_happened')}</h5>
-            <TextFeedbackForm onCancel={this.close} onDone={this.close} className={'mt-4'} />
-          </div>
-        )}
-        {voteDone && voteValue && voteValue === VoteValue.SATISFIED && (
-          <div className={Cls.feedbackArea}>
-            <h5>{t('Thanks_for_your_feedback')} 👍️</h5>
-            <h5>{t('Support_project')} ⬆</h5>
-          </div>
-        )}
-
-        <button className={`btn btn-outline-secondary`} onClick={this.close} data-cy={'close-solicitation-modal'}>
-          {t('Close')}
-        </button>
-      </FullscreenModal>
-    );
-  }
-
-  public componentDidMount() {
-    const { modals } = this.props.services;
-
-    modals.addListener(ModalEventType.ShowSolicitation, this.handleOpen);
-  }
-
-  public componentWillUnmount() {
-    const { modals } = this.props.services;
-
-    modals.removeListener(ModalEventType.ShowSolicitation, this.handleOpen);
-  }
-
-  private handleOpen = () => {
-    this.setState({ visible: true, voteDone: false });
-  };
-
-  private handleVote = (value: VoteValue) => {
-    const { feedback } = this.props.services;
-    // We do not wait for vote
-    feedback.vote(value).catch((err) => logger.error('Error while voting: ', err));
-    this.setState({ voteDone: true, voteValue: value });
-
-    if (value > VoteValue.BLAH) {
-      confetti();
-    }
-  };
-
-  private handleExplainDonation = () => {
-    const { navigate } = this.props.router;
-
-    navigate(Routes.funding().format());
-    this.close();
-  };
-
-  private close = () => {
-    const { modals } = this.props.services;
-
+  const close = useCallback(() => {
     modals.dispatch({
       type: ModalEventType.SolicitationClosed,
       status: ModalStatus.Confirmed,
     });
 
-    this.setState({ visible: false });
-  };
-}
+    setVisible(false);
+  }, [modals]);
 
-export default withTranslation()(withRouter(withServices(SolicitationModal)));
+  const handleVote = useCallback(
+    (value: VoteValue) => {
+      // We do not wait for vote
+      feedback.vote(value).catch((err) => logger.error('Error while voting: ', err));
+      setVoteValue(value);
+
+      if (value > VoteValue.BLAH) {
+        confetti();
+      }
+    },
+    [feedback]
+  );
+
+  const handleExplainDonation = useCallback(() => {
+    navigate(Routes.funding().format());
+    close();
+  }, [close, navigate]);
+
+  const voteDone = typeof voteValue !== 'undefined';
+
+  if (!visible) {
+    return <div></div>;
+  }
+
+  return (
+    <FullscreenModal className={Cls.modal}>
+      <h1>{t('So_how_was_it')}</h1>
+
+      <div className={Cls.centerFrame}>
+        <h4 className={'text-center fs-20 mb-5'}>{t('Support_your_software')} ✊</h4>
+
+        <FundingLinks />
+
+        <h5 onClick={handleExplainDonation} className={'cursor-pointer'}>
+          {t('For_the_moment_the_budget_is')}
+        </h5>
+        <h2 onClick={handleExplainDonation} className={clsx(totalTheme, 'fw-bold cursor-pointer mb-4')}>
+          {readableTotal}
+        </h2>
+
+        <button onClick={handleExplainDonation} className={'btn btn-link mt-3'}>
+          {t('What_are_donations_used_for')}
+        </button>
+      </div>
+
+      {!voteDone && (
+        <div className={'d-flex flex-column'}>
+          <h4 className={'mx-4 mb-3 text-center'}>{t('How_did_it_go')}</h4>
+          <div className={'d-flex flex-row justify-content-center mb-4'}>
+            <button onClick={() => handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+              <span className={Cls.face}>🥰</span>
+              {t('Well')}
+            </button>
+            <button onClick={() => handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+              <span className={Cls.face}>😐</span>
+              {t('Blah')}
+            </button>
+            <button onClick={() => handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+              <span className={Cls.face}>😞</span>
+              {t('Not_good')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {voteDone && voteValue && voteValue < VoteValue.SATISFIED && (
+        <div className={Cls.feedbackArea}>
+          <h5>{t('What_happened')}</h5>
+          <TextFeedbackForm onCancel={close} onDone={close} className={'mt-4'} />
+        </div>
+      )}
+
+      {voteDone && voteValue && voteValue === VoteValue.SATISFIED && (
+        <div className={Cls.feedbackArea}>
+          <h5>{t('Thanks_for_your_feedback')} 👍️</h5>
+          <h5>{t('Support_project')} ⬆</h5>
+        </div>
+      )}
+
+      <button className={`btn btn-outline-secondary`} onClick={close} data-cy={'close-solicitation-modal'}>
+        {t('Close')}
+      </button>
+    </FullscreenModal>
+  );
+}

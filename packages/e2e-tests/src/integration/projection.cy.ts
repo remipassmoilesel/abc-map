@@ -50,7 +50,7 @@ describe('Projection', () => {
       .then(() => MainMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equal([139344.6577422124, 6288631.393789791, 802999.1035239202, 6952285.839571498], `Actual: "${JSON.stringify(extent)}"`);
+        expect(extent).deep.equal([-6099007.132605841, 3199319.9486759407, 7041350.893871974, 10041597.284685347], `Actual: "${JSON.stringify(extent)}"`);
       })
       .then(() => Modules.open('static-export'))
       .get('[data-cy=add-layout]')
@@ -58,7 +58,7 @@ describe('Projection', () => {
       .then(() => LayoutPreviewMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equal([-3583756.783093121, 3753471.4109037006, 4526100.544359253, 9487445.82245759], `Actual: "${JSON.stringify(extent)}"`);
+        expect(extent).deep.equal([-3597029.872008803, 3753471.4109036666, 4539373.633274935, 9487445.822457623], `Actual: "${JSON.stringify(extent)}"`);
       })
       .get('[data-cy=pdf-export]')
       .click()

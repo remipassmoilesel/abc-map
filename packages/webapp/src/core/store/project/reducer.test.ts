@@ -39,6 +39,7 @@ describe('Project reducer', function () {
       layouts: {
         list: [TestHelper.sampleLayout()],
         activeId: 'test-active-layout-id',
+        abcMapAttributionsEnabled: true,
       },
       sharedViews: {
         list: [TestHelper.sampleSharedView()],
@@ -246,5 +247,13 @@ describe('Project reducer', function () {
 
     // Assert
     expect(state.metadata.public).toEqual(true);
+  });
+
+  it('SetAbcMapAttributions', () => {
+    // Act
+    const state = projectReducer(initialState, ProjectActions.setAbcMapAttributions(false));
+
+    // Assert
+    expect(state.layouts.abcMapAttributionsEnabled).toEqual(false);
   });
 });

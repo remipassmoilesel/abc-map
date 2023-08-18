@@ -95,11 +95,13 @@ export class TestHelper {
         id: uuid(),
         version: ProjectConstants.CurrentVersion,
         name: `Test project ${uuid()}`,
-        containsCredentials: false,
         public: false,
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
-      layouts: [],
+      layouts: {
+        abcMapAttributionsEnabled: true,
+        list: [],
+      },
       view: {
         center: [1, 2],
         projection: DEFAULT_PROJECTION,

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { LocalModuleId } from '../../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 
 export interface UiState {
   historyCapabilities: {
@@ -69,7 +69,7 @@ export interface UiState {
 
 export type InformationKey = keyof UiState['informations'];
 
-export const DefaultFavoriteModules = [LocalModuleId.DataStore, LocalModuleId.StaticExport, LocalModuleId.SharedMapSettings];
+export const DefaultFavoriteModules = [BundledModuleId.DataStore, BundledModuleId.StaticExport, BundledModuleId.SharedMapSettings];
 
 export interface ServiceWorkerUiState {
   present: boolean;

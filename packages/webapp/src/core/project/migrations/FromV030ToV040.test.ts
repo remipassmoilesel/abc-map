@@ -20,11 +20,11 @@ import { WmsMetadata } from '@abc-map/shared';
 import { TestData } from './test-data/TestData';
 import { MigrationProject } from './typings';
 import { FromV030ToV040 } from './FromV030ToV040';
-import { WmsMetadata030 } from './dependencies/030-project';
-import { AbcProjectMetadata040 } from './dependencies/040-project';
+import { AbcProjectManifest030, WmsMetadata030 } from './dependencies/030-project-types';
+import { AbcProjectMetadata040 } from './dependencies/040-project-types';
 
 describe('FromV030ToV040', () => {
-  let sampleProject: MigrationProject;
+  let sampleProject: MigrationProject<AbcProjectManifest030>;
   let migration: FromV030ToV040;
 
   beforeEach(async () => {

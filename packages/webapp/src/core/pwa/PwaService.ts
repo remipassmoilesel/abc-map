@@ -17,7 +17,7 @@
  */
 
 import { BeforeInstallPromptEvent } from './BeforeInstallPromptEvent';
-import { LocalStorageService, StorageKey } from '../storage/local-storage/LocalStorageService';
+import { StorageService, StorageKey } from '../storage/StorageService';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('PwaService.ts');
@@ -26,7 +26,7 @@ export class PwaService {
   private online = navigator.onLine ?? true;
   private beforeInstallPromptEvent?: BeforeInstallPromptEvent;
 
-  constructor(private storage: LocalStorageService) {
+  constructor(private storage: StorageService) {
     window.addEventListener('offline', () => (this.online = false));
     window.addEventListener('online', () => (this.online = true));
     window.addEventListener('beforeinstallprompt', (ev) => {

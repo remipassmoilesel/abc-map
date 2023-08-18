@@ -29,7 +29,10 @@ export interface AbcProjectManifest {
   // Layers: raster, geometries, ...
   layers: AbcLayer[];
   // Layouts for PDF exports
-  layouts: AbcLayout[];
+  layouts: {
+    abcMapAttributionsEnabled: boolean;
+    list: AbcLayout[];
+  };
   // Views publicly accessible
   sharedViews: {
     // If true, map is fullscreen
@@ -45,8 +48,6 @@ export interface AbcProjectMetadata {
   id: string;
   version: string;
   name: string;
-  // True if project contains encrypted credentials, false otherwise
-  containsCredentials: boolean;
   // True if project can be accessed publicly
   public: boolean;
 }

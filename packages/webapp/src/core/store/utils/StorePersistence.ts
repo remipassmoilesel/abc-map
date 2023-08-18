@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LocalStorageService, StorageKey } from '../../storage/local-storage/LocalStorageService';
+import { StorageService, StorageKey } from '../../storage/StorageService';
 import { Logger } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { CURRENT_STATE_VERSION, toPersistedState } from '../state';
@@ -36,10 +36,10 @@ export interface PersistedMainState {
  */
 export class StorePersistence {
   public static newPersistence() {
-    return new StorePersistence(new LocalStorageService());
+    return new StorePersistence(new StorageService());
   }
 
-  constructor(private storage: LocalStorageService) {}
+  constructor(private storage: StorageService) {}
 
   public loadState(): MainState | undefined {
     try {
@@ -50,6 +50,7 @@ export class StorePersistence {
       const persisted: PersistedMainState = JSON.parse(serializedState);
       logger.debug('Loaded state: ', persisted);
 
+      // FIXME: we should probably use a migration system
       if (persisted.version === CURRENT_STATE_VERSION) {
         return persisted.state;
       } else {

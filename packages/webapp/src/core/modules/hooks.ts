@@ -21,7 +21,7 @@ import { useContext } from 'react';
 import { ModuleRegistryContext } from './registry/context';
 import { Logger, Module, ModuleId } from '@abc-map/module-api';
 import { useAppSelector } from '../../core/store/hooks';
-import { LocalModuleId } from '../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 
 const logger = Logger.get('hooks.ts');
 
@@ -37,7 +37,7 @@ export function useModuleRegistry(): ModuleRegistry {
 }
 
 export function useEssentialModules(): Module[] {
-  const moduleIds: ModuleId[] = [LocalModuleId.DataStore, LocalModuleId.StaticExport, LocalModuleId.SharedMapSettings];
+  const moduleIds: ModuleId[] = [BundledModuleId.DataStore, BundledModuleId.StaticExport, BundledModuleId.SharedMapSettings];
 
   const registry = useModuleRegistry();
   const modules = registry.getModules();

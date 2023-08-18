@@ -44,15 +44,15 @@ function HistoryControls(props: Props) {
 
   const handleUndo = useCallback(() => {
     history.undo(historyKey).catch((err) => {
-      logger.error(err);
-      toasts.genericError();
+      logger.error('Undo error: ', err);
+      toasts.genericError(err);
     });
   }, [historyKey, history, toasts]);
 
   const handleRedo = useCallback(() => {
     history.redo(historyKey).catch((err) => {
-      logger.error(err);
-      toasts.genericError();
+      logger.error('Redo error: ', err);
+      toasts.genericError(err);
     });
   }, [historyKey, history, toasts]);
 

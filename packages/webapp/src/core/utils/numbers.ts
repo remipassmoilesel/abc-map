@@ -81,10 +81,6 @@ export function toRadians(degrees: number): number {
   return toPrecision((degrees * Math.PI) / 180, 4);
 }
 
-export function isDefined(num: number | undefined): num is number {
-  return typeof num === 'number';
-}
-
 export function normalize(value: number, min: number, max: number, precision = 8): number {
   const atPrecision = toPrecision(value, precision);
   const notBelowMin = Math.max(min, atPrecision);

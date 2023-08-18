@@ -23,7 +23,6 @@ import { DateTime } from 'luxon';
 import Illustration1 from '../../assets/illustrations/illustration-1.svg';
 import Illustration2 from '../../assets/illustrations/illustration-2.svg';
 import Illustration3 from '../../assets/illustrations/illustration-3.svg';
-import { VERSION } from '../../version';
 import { pageSetup } from '../../core/utils/page-setup';
 import sample from 'lodash/sample';
 import { Routes } from '../../routes';
@@ -33,7 +32,9 @@ import Cls from './LandingView.module.scss';
 import { useAppSelector } from '../../core/store/hooks';
 import { useServices } from '../../core/useServices';
 import { useTranslation } from 'react-i18next';
-import { LocalModuleId } from '../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
+import clsx from 'clsx';
+import { VERSION } from '../../version';
 
 const logger = Logger.get('LandingView.tsx');
 
@@ -99,25 +100,27 @@ function LandingView() {
           <div className={'col-xl-6 mt-5'}>
             {/* Title */}
             <h1 className={Cls.title}>Abc-Map</h1>
-            <p className={Cls.intro}>{t('Open_source_extensible_online_mapping')}</p>
+            <div className={Cls.intro}>{t('Open_source_extensible_online_mapping')}</div>
 
             {/* Explanation and start link */}
             <h3 className={'mb-3'}>{t('How_does_it_work')}</h3>
 
             <ul className={'mb-4'}>
               <li>
-                <Link to={Routes.module().withParams({ moduleId: LocalModuleId.Documentation })}>{t('Browse_the_doc')} 📖</Link>
+                <Link to={Routes.module().withParams({ moduleId: BundledModuleId.Documentation })}>{t('Browse_the_doc')} 📖</Link>
               </li>
               <li>
                 <Link to={Routes.map().format()}>{t('Then_open_map')} 🌍</Link>
               </li>
             </ul>
 
-            <div>
+            <div className={'d-flex flex-wrap'}>
               <button className={'btn btn-primary'} onClick={handleGoToMap}>
                 <FaIcon icon={IconDefs.faRocket} className={'mr-2'} />
                 {t('Lets_go')}
               </button>
+
+              <div className={clsx(Cls.version)}>Your are running version {VERSION.hash.slice(0, 15)}</div>
             </div>
 
             {/* Authenticate and register buttons */}
@@ -138,19 +141,21 @@ function LandingView() {
 
             {/* Vote results, legal mentions, current version */}
             <div className={Cls.bottomMentions}>
-              <div className={'mb-2'}>
-                {t('For_7_days_opinions_are_positive', { votes: satisfied })}&nbsp;
-                {satisfied < 60 && (
-                  <>
-                    {t('Will_have_to_do_better')} <span className={'ml-2'}>🧑‍🏭</span>
-                  </>
-                )}
-                {satisfied >= 60 && (
-                  <>
-                    {t('Champagne')} <span className={'ml-2'}>🎉</span>
-                  </>
-                )}
-              </div>
+              {!!voteAggregation?.total && (
+                <div className={'mb-2'}>
+                  {t('For_7_days_opinions_are_positive', { votes: satisfied })}&nbsp;
+                  {satisfied < 60 && (
+                    <>
+                      {t('Will_have_to_do_better')} <span className={'ml-2'}>🧑‍🏭</span>
+                    </>
+                  )}
+                  {satisfied >= 60 && (
+                    <>
+                      {t('Champagne')} <span className={'ml-2'}>🎉</span>
+                    </>
+                  )}
+                </div>
+              )}
 
               <div className={'d-flex flex-wrap mb-2'}>
                 <Link to={Routes.changelog().format()} className={'mr-3'}>
@@ -158,8 +163,6 @@ function LandingView() {
                 </Link>
                 <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
               </div>
-
-              <div className={Cls.version}>git:{VERSION.hash}</div>
             </div>
           </div>
 

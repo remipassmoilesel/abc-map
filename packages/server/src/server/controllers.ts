@@ -30,6 +30,7 @@ import { WebappController } from './WebappController';
 import { SitemapController } from './sitemap/SitemapController';
 import { LegalMentionsController } from './LegalMentionsController';
 import { DocumentationController } from '../documentation/DocumentationController';
+import { LegacyRoutesRedirectionController } from './LegacyRoutesRedirectionController';
 
 /**
  * Routes exposed in these controllers are public and do not need a valid authentication
@@ -38,6 +39,7 @@ import { DocumentationController } from '../documentation/DocumentationControlle
  */
 export function publicControllers(config: Config, services: Services): Controller[] {
   return [
+    new LegacyRoutesRedirectionController(),
     new SitemapController(config),
     new LegalMentionsController(config),
     new DocumentationController(config),

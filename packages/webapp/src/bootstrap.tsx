@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Services } from './core/Services';
-import { errorMessage, Logger, UserStatus } from '@abc-map/shared';
+import { errorMessage, getAbcWindow, Logger, UserStatus } from '@abc-map/shared';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
 import { VERSION } from './version';
@@ -27,7 +27,7 @@ import { StyleFactory } from './core/geo/styles/StyleFactory';
 import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
 import { UiActions } from './core/store/ui/actions';
 import React from 'react';
-import { initProjectDatabase } from './core/storage/project-storage/projects-database';
+import { initMainDatabase } from './core/storage/indexed-db/main-database';
 import { Routes } from './routes';
 import { matchRoutes } from 'react-router-dom';
 
@@ -43,7 +43,7 @@ export function bootstrap(svc: Services, store: MainStore) {
     .then(() => dispatchVisit(store))
     .then(() => initProject(svc, store))
     .then(() => enableGeolocation(svc, store))
-    .catch((err) => bootstrapError(err));
+    .catch((err) => bootstrapError(svc, err));
 }
 
 async function setGlobals() {
@@ -59,20 +59,33 @@ async function setGlobals() {
  * @param svc
  */
 async function authentication(svc: Services): Promise<void> {
-  if (!svc.pwa.isOnline()) {
+  const { authentication, pwa, project } = svc;
+
+  // On logout we clear all data
+  authentication.addDisconnectListener(() => {
+    project
+      .newProject()
+      .catch((err) => logger.error('New project error: ', err))
+      .then(() => svc.storage.clear())
+      .catch((err) => {
+        logger.error('Clear storage error: ', err);
+      });
+  });
+
+  if (!pwa.isOnline()) {
     return;
   }
 
-  const connected = !!svc.authentication.getUserStatus();
+  const connected = !!authentication.getUserStatus();
   if (connected) {
-    return svc.authentication.renewToken().catch((err) => {
+    return authentication.renewToken().catch((err) => {
       logger.error('Cannot renew token: ', err);
-      return svc.authentication.anonymousLogin();
+      return authentication.anonymousLogin();
     });
   }
   // Else we authenticate as anonymous
   else {
-    return svc.authentication.anonymousLogin();
+    return authentication.anonymousLogin();
   }
 }
 
@@ -83,7 +96,7 @@ function dispatchVisit(store: MainStore) {
 async function initProject(services: Services, store: MainStore) {
   const { project: projectService, geo, history, authentication } = services;
 
-  await initProjectDatabase();
+  await initMainDatabase();
 
   // When project loaded, we clean style cache and undo/redo history
   projectService.addProjectLoadedListener((ev) => {
@@ -160,21 +173,36 @@ function enableGeolocation(svc: Services, store: MainStore) {
   }
 }
 
-function bootstrapError(err: Error | AxiosError | undefined): Promise<void> {
+function bootstrapError(svc: Services, err: Error | AxiosError | undefined): Promise<void> {
   logger.error('Bootstrap error: ', err);
+  const { storage } = svc;
 
   let message: string;
   if (HttpError.isTooManyRequests(err)) {
-    message = 'You have exceeded the number of authorized requests 😭. Please try again later.';
+    message = '<div>You have exceeded the number of authorized requests 😭. Please try again later.</div>';
   } else {
-    message = 'Small technical issue 😅 Please try again later.';
+    message = '<div>Small technical issue 😅 Please try again later.</div>';
+
+    // If there's a problem with local data, we let users clear it.
+    const window = getAbcWindow();
+    window.abc = {
+      ...window.abc,
+      clearLocalData: () => {
+        storage
+          .clear()
+          .catch((err) => logger.error('Clear error: ', err))
+          .finally(() => window.location.reload());
+      },
+    };
+    message += '<div>If this error persist, you can try to ';
+    message += '<button onclick="window.abc.clearLocalData()" class="btn btn-link p-0 mb-1">clean your local data.</button></div>';
   }
 
   const root = document.querySelector('#root');
   if (root) {
     root.innerHTML = `
     <h1 class='text-center my-5'>Abc-Map</h1>
-    <h5 class='text-center my-5'>${message}</h5>
+    <div class='d-flex flex-column justify-content-center align-items-center my-5'>${message}</div>
   `;
   } else {
     alert(message);

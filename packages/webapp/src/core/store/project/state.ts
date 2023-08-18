@@ -48,6 +48,8 @@ export interface ProjectState {
      * Current layout displayed
      */
     activeId?: string;
+
+    abcMapAttributionsEnabled: boolean;
   };
 
   sharedViews: {
@@ -76,6 +78,7 @@ export const projectInitialState: ProjectState = {
   mainView: Views.defaultView(),
   layouts: {
     list: [],
+    abcMapAttributionsEnabled: true,
   },
   sharedViews: {
     fullscreen: false,

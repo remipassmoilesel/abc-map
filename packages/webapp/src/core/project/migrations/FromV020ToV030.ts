@@ -16,28 +16,29 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest, LayerType } from '@abc-map/shared';
+import { AbcFile, LayerType } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
-import { AbcWmsLayer020, WmsMetadata020 } from './dependencies/020-project';
+import { AbcProjectManifest020, AbcWmsLayer020, WmsMetadata020 } from './dependencies/020-project-types';
 import { Encryption } from '../../utils/Encryption';
+import { AbcProjectManifest030 } from './dependencies/030-project-types';
 
 const NEXT = '0.3.0';
 
 /**
  * This migration add encrypted WMS remote url, even without authentication credentials
  */
-export class FromV020ToV030 implements ProjectMigration {
+export class FromV020ToV030 implements ProjectMigration<AbcProjectManifest020, AbcProjectManifest030> {
   constructor(private modalService: ModalService) {}
 
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+  public async interestedBy(manifest: AbcProjectManifest020): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
+  public async migrate(manifest: AbcProjectManifest020, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest030>> {
     const wmsLayers = manifest.layers.filter((lay) => lay.metadata.type === LayerType.Wms) as unknown as AbcWmsLayer020[];
     const clearUrl = wmsLayers?.find((layer) => !layer.metadata.remoteUrl.startsWith('encrypted:'))?.metadata.remoteUrl;
 
@@ -50,7 +51,7 @@ export class FromV020ToV030 implements ProjectMigration {
             ...manifest.metadata,
             version: NEXT,
           },
-        },
+        } as AbcProjectManifest030,
         files,
       };
     }
@@ -79,6 +80,6 @@ export class FromV020ToV030 implements ProjectMigration {
     manifest.metadata.version = NEXT;
     manifest.metadata.containsCredentials = true;
 
-    return { manifest, files };
+    return { manifest: manifest as AbcProjectManifest030, files };
   }
 }

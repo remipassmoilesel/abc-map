@@ -18,4 +18,5 @@ with_toc: false
 
 ## Blog articles
 
-- [July updates](blog/2023-07-21/)
+- [Optional Abc-Map attribution](blog/2023-08-10/)
+- [New documentation engine](blog/2023-08-01/)

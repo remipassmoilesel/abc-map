@@ -148,19 +148,20 @@ export function LayerControls() {
   const handleToggleVisibility = useCallback(
     (layerId: string) => {
       const map = geo.getMainMap();
-      if (!activeLayer) {
+      const layer = map.getLayers().find((layer) => layer.getId() === layerId);
+      if (!layer) {
         logger.error('Layer not found: ', layerId);
         return;
       }
 
       const toggle = async () => {
-        const cs = new ToggleLayerVisibilityChangeset(map, activeLayer, !activeLayer.isVisible());
+        const cs = new ToggleLayerVisibilityChangeset(map, layer, !layer.isVisible());
         await cs.execute();
         history.register(HistoryKey.Map, cs);
       };
       toggle().catch((err) => logger.error('Cannot toggle visibility of layer', err));
     },
-    [activeLayer, geo, history]
+    [geo, history]
   );
 
   const moveActiveLayer = useCallback(

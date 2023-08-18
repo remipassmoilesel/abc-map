@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayout, AbcProjectManifest, AbcSharedView, AbcTextFrame, Logger, TableElement, TableRowElement, TextFrameChild } from '@abc-map/shared';
+import { AbcFile, AbcLayout, AbcSharedView, AbcTextFrame, Logger, TableElement, TableRowElement, TextFrameChild } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcLayout070, AbcProjectManifest070, AbcSharedView070 } from './dependencies/070-project';
-import { AbcLegend060, LegendDisplay } from './dependencies/060-legend';
+import { AbcLayout070, AbcProjectManifest070, AbcSharedView070 } from './dependencies/070-project-types';
+import { AbcLegend060, LegendDisplay } from './dependencies/060-legend-types';
 import { nanoid } from 'nanoid';
+import { AbcProjectManifest080 } from './dependencies/080-project-types';
 
 const NEXT = '0.8.0';
 
@@ -30,13 +31,13 @@ const logger = Logger.get('FromV070ToV080.ts');
 /**
  * This migration transforms legends in text frames
  */
-export class FromV070ToV080 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV070ToV080 implements ProjectMigration<AbcProjectManifest070, AbcProjectManifest080> {
+  public async interestedBy(manifest: AbcProjectManifest070): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
+  public async migrate(_manifest: AbcProjectManifest070, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest080>> {
     const manifest = _manifest as unknown as AbcProjectManifest070;
 
     const layouts: AbcLayout[] = manifest.layouts.map((lay) => {
@@ -62,7 +63,7 @@ export class FromV070ToV080 implements ProjectMigration {
           ...manifest.metadata,
           version: NEXT,
         },
-      } as unknown as AbcProjectManifest,
+      },
       files,
     };
   }

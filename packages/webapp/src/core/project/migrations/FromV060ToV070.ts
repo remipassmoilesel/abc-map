@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
+import { AbcFile, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcProjectManifest060 } from './dependencies/060-project';
+import { AbcProjectManifest060 } from './dependencies/060-project-types';
 import { nanoid } from 'nanoid';
+import { AbcProjectManifest070 } from './dependencies/070-project-types';
 
 const NEXT = '0.7.0';
 
@@ -29,15 +30,13 @@ const logger = Logger.get('FromV060ToV070.ts');
 /**
  * This migration moves legend to layouts and views
  */
-export class FromV060ToV070 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV060ToV070 implements ProjectMigration<AbcProjectManifest060, AbcProjectManifest070> {
+  public async interestedBy(manifest: AbcProjectManifest060): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
-    const manifest = _manifest as unknown as AbcProjectManifest060;
-
+  public async migrate(manifest: AbcProjectManifest060, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest070>> {
     const layouts = manifest.layouts.map((lay) => ({
       ...lay,
       legend: {
@@ -67,7 +66,7 @@ export class FromV060ToV070 implements ProjectMigration {
           ...manifest.metadata,
           version: NEXT,
         },
-      } as unknown as AbcProjectManifest,
+      },
       files,
     };
   }

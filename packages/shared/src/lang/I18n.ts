@@ -28,14 +28,14 @@ export interface I18nList {
   text: string[];
 }
 
-export function getTextByLang(texts: I18nText[], lang: Language): string | undefined {
+export function getTextByLang(texts: I18nText[], lang: Language | string): string | undefined {
   const wanted = texts.find((desc) => desc.language === lang);
   const fallback = texts.find((desc) => desc.language === FallbackLang);
   const first = texts.length ? texts[0] : undefined;
   return wanted?.text ?? fallback?.text ?? first?.text;
 }
 
-export function getListByLang(texts: I18nList[], lang: Language): string[] | undefined {
+export function getListByLang(texts: I18nList[], lang: Language | string): string[] | undefined {
   const wanted = texts.find((desc) => desc.language === lang);
   const fallback = texts.find((desc) => desc.language === FallbackLang);
   const first = texts.length ? texts[0] : undefined;

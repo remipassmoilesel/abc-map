@@ -68,7 +68,11 @@ export class WebappRoutes {
     return new Route<ModuleParams>('/:lang/modules/:moduleId', this.lang);
   }
 
-  public getAll(): Route<any>[] {
+  public staticDocumentation() {
+    return new Route<EmptyParams>('/documentation', this.lang);
+  }
+
+  public getMainRoutes(): Route<any>[] {
     return [
       this.landing(),
       this.map(),

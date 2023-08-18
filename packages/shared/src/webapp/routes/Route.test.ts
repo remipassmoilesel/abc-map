@@ -38,8 +38,12 @@ describe('Route', () => {
     expect(route.format()).toEqual('/en/sample/route/:param1/');
   });
 
-  it('withParams() should replace params', () => {
+  it('withParams()', () => {
     const actual = route.withParams({ param1: 'value1', param2: 'value2' });
     expect(actual).toEqual('/en/sample/route/value1/value2/:param3?/');
+  });
+
+  it('withParams() should replace params', () => {
+    expect(route.replaceLang(false).withParams({ param1: 'value1', param2: 'value2' })).toEqual('/:lang/sample/route/value1/value2/:param3?/');
   });
 });

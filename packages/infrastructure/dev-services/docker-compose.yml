@@ -23,7 +23,7 @@ version: '3'
 
 services:
   abc-dev-mongodb:
-    image: 'mongo:4.2-bionic'
+    image: 'mongo:5.0.20-focal'
     container_name: abc-dev-mongodb
     restart: always
     ports:

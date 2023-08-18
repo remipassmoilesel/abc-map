@@ -130,6 +130,7 @@ abcMap:
 
 mongodb:
   enabled: true
+  image: "mongo:5.0.20-focal"
   auth:
     rootUsername: '<CHANGE_ME>'
     rootPassword: '<CHANGE_ME>'

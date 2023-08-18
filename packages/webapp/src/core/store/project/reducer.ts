@@ -32,7 +32,8 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
         metadata: action.project.metadata,
         mainView: action.project.view,
         layouts: {
-          list: action.project.layouts,
+          list: action.project.layouts.list,
+          abcMapAttributionsEnabled: action.project.layouts.abcMapAttributionsEnabled,
         },
         sharedViews: {
           list: action.project.sharedViews.list,
@@ -88,7 +89,7 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     }
 
     case ActionType.ClearLayouts: {
-      return { ...state, layouts: { list: [], activeId: undefined } };
+      return { ...state, layouts: { list: [], abcMapAttributionsEnabled: state.layouts.abcMapAttributionsEnabled, activeId: undefined } };
     }
 
     case ActionType.SetActiveLayout: {
@@ -169,6 +170,12 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     case ActionType.SetLastExport: {
       const newState: ProjectState = { ...state };
       newState.lastExport = action.date;
+      return newState;
+    }
+
+    case ActionType.SetAbcMapAttributions: {
+      const newState: ProjectState = { ...state, layouts: { ...state.layouts } };
+      newState.layouts.abcMapAttributionsEnabled = action.value;
       return newState;
     }
 

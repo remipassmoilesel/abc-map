@@ -42,14 +42,6 @@ export function ProjectItem(props: Props) {
   return (
     <div key={project.id} className={clsx(Cls.item, selected && Cls.selected)}>
       <div onClick={handleSelect} className={'flex-grow-1 d-flex align-items-center'} data-cy={'remote-project'}>
-        {project.containsCredentials && (
-          <WithTooltip title={t('This_project_is_password_protected')} placement={'top'}>
-            <div>
-              <FaIcon icon={IconDefs.faLock} className={'mr-2'} />
-            </div>
-          </WithTooltip>
-        )}
-
         {project.public && (
           <WithTooltip title={t('This_project_is_public')} placement={'top'}>
             <div>
@@ -58,7 +50,7 @@ export function ProjectItem(props: Props) {
           </WithTooltip>
         )}
 
-        {!project.containsCredentials && !project.public && (
+        {!project.public && (
           <WithTooltip title={t('This_project_is_private')} placement={'top'}>
             <div>
               <FaIcon icon={IconDefs.faFile} className={'mr-2'} />

@@ -98,7 +98,7 @@ export class ConfigLoader {
     // We validate config input
     if (!Validation.ConfigInput(input)) {
       explainedError(Validation.formatErrors(Validation.ConfigInput));
-      return Promise.reject(new Error(`Invalid configuration ${configPath}: ${Validation.formatErrors(Validation.ConfigInput)}`));
+      return Promise.reject(new Error(`Configuration ${configPath} is not valid: ${Validation.formatErrors(Validation.ConfigInput)}`));
     }
 
     const config: Config = {

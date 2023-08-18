@@ -31,12 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useServiceWorker } from '../../../core/pwa/useServiceWorker';
 import { Link } from 'react-router-dom';
 import { Routes } from '../../../routes';
+import { ModalStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('AppSection.tsx');
 
 export function AppSection() {
   const { t } = useTranslation('TopBar');
-  const { modals } = useServices();
+  const { project, modals, storage, toasts, authentication } = useServices();
   const [experimentalFeaturesModal, setExperimentalFeaturesModal] = useState(false);
   const experimentalFeaturesMenuEntry = ExperimentalFeatures.length > 0;
   const runningAsPwa = useRunningAsPwa();
@@ -59,6 +60,25 @@ export function AppSection() {
   const swState = useServiceWorker();
   const worksOffline = swState.present || swState.installed;
 
+  const handleClearData = useCallback(
+    () =>
+      modals
+        .modificationsLostConfirmation()
+        .then((result) => {
+          if (ModalStatus.Confirmed === result) {
+            return project
+              .newProject()
+              .then(() => authentication.logout())
+              .then(() => storage.clear());
+          }
+        })
+        .catch((err) => {
+          logger.error('Clear storage error: ', err);
+          toasts.genericError(err);
+        }),
+    [authentication, modals, project, storage, toasts]
+  );
+
   return (
     <>
       <div className={'d-flex flex-wrap mb-4'}>
@@ -78,6 +98,8 @@ export function AppSection() {
         {experimentalFeaturesMenuEntry && (
           <ActionButton label={t('More_features')} icon={IconDefs.faFlask} onClick={handleExperimentalFeaturesModal} data-cy={'experimental-features'} />
         )}
+
+        <ActionButton label={t('Clear_local_app_data')} icon={IconDefs.faTrash} onClick={handleClearData} />
       </div>
 
       <div className={'d-flex flex-wrap ps-2 mb-4'}>

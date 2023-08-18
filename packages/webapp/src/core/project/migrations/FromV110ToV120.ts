@@ -16,13 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
+import { AbcFile, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
 import { DeprecatedEncryption } from './dependencies/DeprecatedEncryption';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import { AbcProjectManifest120 } from './dependencies/120-project-types';
+import { AbcProjectManifest110 } from './dependencies/110-project-types';
 
 const NEXT = '1.2.0';
 
@@ -31,16 +33,17 @@ const logger = Logger.get('FromV110ToV120.ts');
 /**
  * This migration removes passwords from projects
  */
-export class FromV110ToV120 implements ProjectMigration {
+export class FromV110ToV120 implements ProjectMigration<AbcProjectManifest110, AbcProjectManifest120> {
   constructor(private modals: ModalService) {}
 
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+  public async interestedBy(manifest: AbcProjectManifest110): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
-    let migrated: AbcProjectManifest = { ...manifest };
+  public async migrate(manifest: AbcProjectManifest110, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest120>> {
+    let migrated: AbcProjectManifest110 = { ...manifest };
+
     if (DeprecatedEncryption.manifestContainsCredentials(manifest)) {
       // We prompt user for a password
       const t = prefixedTranslation('FromV110ToV120:');
@@ -57,15 +60,13 @@ export class FromV110ToV120 implements ProjectMigration {
       }
 
       // Then we decrypt the project
-      migrated = await DeprecatedEncryption.decryptManifest(migrated, password.value);
+      migrated = await DeprecatedEncryption.decryptManifest(migrated as unknown as AbcProjectManifest120, password.value);
     }
 
     return {
       manifest: {
-        ...manifest,
         ...migrated,
         metadata: {
-          ...manifest.metadata,
           ...migrated.metadata,
           version: NEXT,
         },

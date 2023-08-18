@@ -39,7 +39,7 @@ import { MapGeolocation } from './geolocation/MapGeolocation';
 import { useMapLayers } from '../../core/geo/useMapLayers';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { Routes } from '../../routes';
-import { LocalModuleId } from '../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { useNavigate } from 'react-router-dom';
 import { FeatureExplorer } from './feature-exporer/FeatureExplorer';
 
@@ -62,7 +62,7 @@ function MapView() {
     return () => listener.destroy();
   }, []);
 
-  const handleShowProjectManagement = useCallback(() => navigate(Routes.module().withParams({ moduleId: LocalModuleId.ProjectManagement })), [navigate]);
+  const handleShowProjectManagement = useCallback(() => navigate(Routes.module().withParams({ moduleId: BundledModuleId.ProjectManagement })), [navigate]);
 
   return (
     <div className={Cls.mapView}>

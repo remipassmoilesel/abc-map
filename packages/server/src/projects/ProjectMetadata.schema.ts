@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { JSONSchemaType } from 'ajv';
+import { AbcProjectMetadata } from '@abc-map/shared';
 
-export const ProjectMetadataSchema = {
+export const ProjectMetadataSchema: JSONSchemaType<AbcProjectMetadata> = {
   type: 'object',
-  minProperties: 5,
-  maxProperties: 5,
+  required: ['id', 'version', 'name', 'public'],
   additionalProperties: false,
   properties: {
     id: { type: 'string' },
     version: { type: 'string' },
     name: { type: 'string' },
-    containsCredentials: { type: 'boolean' },
     public: { type: 'boolean' },
   },
 };

@@ -38,28 +38,32 @@ import { ToastService } from '../ui/ToastService';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEventType } from './ProjectEvent';
 import { LayerFactory } from '../geo/layers/LayerFactory';
-import { ProjectUpdater } from './ProjectUpdater';
+import { ProjectUpdater } from './migrations/ProjectUpdater';
 import { ProjectFactory } from './ProjectFactory';
 import { deepFreeze } from '../utils/deepFreeze';
-import { LayoutStorage, ProjectDbStorage, SharedViewStorage } from '../storage/project-storage/ProjectDbStorage';
-import { initProjectDatabase } from '../storage/project-storage/projects-database';
+import { ProjectIDBStorage } from '../storage/indexed-db/projects/ProjectIDBStorage';
+import { initMainDatabase } from '../storage/indexed-db/main-database';
 import { ApiClient, DownloadClient } from '../http/http-clients';
-import { LayerDbStorage } from '../storage/project-storage/LayerDbStorage';
+import { LayerIDBStorage } from '../storage/indexed-db/layers/LayerIDBStorage';
 import { logger, ProjectService } from './ProjectService';
-import { throttleDbStorage } from '../storage/project-storage/throttleDbStorage';
-import { disableGenericStorageLog } from '../storage/project-storage/GenericReduxDbStorage';
+import { throttleDbStorage } from '../storage/indexed-db/client/throttleDbStorage';
+import { disableGenericStorageLog } from '../storage/indexed-db/redux/GenericReduxIDBStorage';
 import { VectorLayerWrapper } from '../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../geo/features/FeatureWrapper';
-import { disableFeatureStorageLog, FeatureDbStorage } from '../storage/project-storage/FeatureDbStorage';
+import { disableFeatureStorageLog, FeatureIDBStorage } from '../storage/indexed-db/features/FeatureIDBStorage';
 import sortBy from 'lodash/sortBy';
 import MockedFn = jest.MockedFn;
+import { SharedViewIDBStorage } from '../storage/indexed-db/shared-views/SharedViewIDBStorage';
+import { LayoutIDBStorage } from '../storage/indexed-db/layouts/LayoutIDBStorage';
+import { disableStorageMigrationLogs } from '../storage/indexed-db/migrations/StorageUpdater';
 
 logger.disable();
 disableGenericStorageLog();
 disableFeatureStorageLog();
+disableStorageMigrationLogs();
 
 // We disable throttling for tests
-jest.mock('../storage/project-storage/throttleDbStorage', () => ({
+jest.mock('../storage/indexed-db/client/throttleDbStorage', () => ({
   throttleDbStorage: jest.fn(),
 }));
 
@@ -75,14 +79,14 @@ describe('ProjectService', function () {
     let toastMock: SinonStubbedInstance<ToastService>;
     let modals: SinonStubbedInstance<ModalService>;
     let updater: SinonStubbedInstance<ProjectUpdater>;
-    let storage: SinonStubbedInstance<ProjectDbStorage>;
+    let storage: SinonStubbedInstance<ProjectIDBStorage>;
     let projectService: ProjectService;
 
     beforeEach(() => {
       store = storeFactory();
       geoMock = sinon.createStubInstance(GeoService);
       modals = sinon.createStubInstance(ModalService);
-      storage = sinon.createStubInstance(ProjectDbStorage);
+      storage = sinon.createStubInstance(ProjectIDBStorage);
 
       updater = sinon.createStubInstance(ProjectUpdater);
       updater.update.callsFake((manifest, files) => Promise.resolve({ manifest, files }));
@@ -95,7 +99,7 @@ describe('ProjectService', function () {
         geoMock as unknown as GeoService,
         modals as unknown as ModalService,
         updater as unknown as ProjectUpdater,
-        storage as unknown as ProjectDbStorage
+        storage as unknown as ProjectIDBStorage
       );
     });
 
@@ -229,7 +233,10 @@ describe('ProjectService', function () {
           // Prepare
           const originalManifest: AbcProjectManifest = {
             ...ProjectFactory.newProjectManifest(),
-            layouts: [TestHelper.sampleLayout()],
+            layouts: {
+              list: [TestHelper.sampleLayout()],
+              abcMapAttributionsEnabled: true,
+            },
             sharedViews: {
               ...ProjectFactory.newProjectManifest().sharedViews,
               list: [TestHelper.sampleSharedView()],
@@ -277,13 +284,11 @@ describe('ProjectService', function () {
           expect(exported.metadata.id).toEqual(originalManifest.metadata.id);
           expect(exported.metadata.public).toEqual(true);
           expect(exported.metadata.name).toEqual(originalManifest.metadata.name);
-          expect(exported.metadata.containsCredentials).toEqual(false);
 
           const manifest: AbcProjectManifest = await ProjectHelper.forBrowser().extractManifest(exported.project);
           expect(manifest.metadata.id).toEqual(originalManifest.metadata.id);
           expect(manifest.metadata.public).toEqual(true);
           expect(manifest.metadata.name).toEqual(originalManifest.metadata.name);
-          expect(manifest.metadata.containsCredentials).toEqual(false);
 
           expect(manifest.layers.length).toEqual(1);
           const layer = manifest.layers[0] as AbcXyzLayer;
@@ -299,8 +304,8 @@ describe('ProjectService', function () {
         // Prepare
         const original = TestHelper.sampleProjectManifest();
         original.metadata.public = true;
-        original.layouts.push(TestHelper.sampleLayout());
-        original.layouts.push(TestHelper.sampleLayout());
+        original.layouts.list.push(TestHelper.sampleLayout());
+        original.layouts.list.push(TestHelper.sampleLayout());
         original.sharedViews.list.push(TestHelper.sampleSharedView());
         original.sharedViews.list.push(TestHelper.sampleSharedView());
         original.sharedViews.list.push(TestHelper.sampleSharedView());
@@ -325,8 +330,8 @@ describe('ProjectService', function () {
         expect(clonedLayerIds.length).toEqual(layers.length);
         expect(clonedLayerIds).not.toEqual(originalLayerIds);
 
-        const clonedLayoutIds = clonedManifest.layouts.map((lay) => lay.id);
-        const originalLayoutIds = original.layouts.map((lay) => lay.id);
+        const clonedLayoutIds = clonedManifest.layouts.list.map((lay) => lay.id);
+        const originalLayoutIds = original.layouts.list.map((lay) => lay.id);
         expect(clonedLayoutIds.length).toEqual(originalLayoutIds.length);
         expect(clonedLayoutIds).not.toEqual(originalLayoutIds);
 
@@ -355,16 +360,16 @@ describe('ProjectService', function () {
     let toastMock: SinonStubbedInstance<ToastService>;
     let modals: SinonStubbedInstance<ModalService>;
     let updater: ProjectUpdater;
-    let storage: ProjectDbStorage;
+    let storage: ProjectIDBStorage;
     let projectService: ProjectService;
 
     beforeEach(async () => {
-      await initProjectDatabase();
+      await initMainDatabase();
 
       store = storeFactory();
       geoService = sinon.createStubInstance(GeoService);
       modals = sinon.createStubInstance(ModalService);
-      storage = ProjectDbStorage.create();
+      storage = ProjectIDBStorage.create();
 
       updater = ProjectUpdater.create(modals);
 
@@ -438,7 +443,7 @@ describe('ProjectService', function () {
         expect(projectFromDb?.layerIds.length).toEqual(2);
         expect(projectFromDb?.layerIds).toEqual(layerIds);
 
-        const layersFromDb = await LayerDbStorage.create().getAll(layerIds);
+        const layersFromDb = await LayerIDBStorage.create().getAll(layerIds);
         expect(layersFromDb.length).toEqual(2);
         expect(layersFromDb).toEqual(layers);
       });
@@ -467,7 +472,7 @@ describe('ProjectService', function () {
         expect(projectFromDb?.layerIds.length).toEqual(3);
         expect(projectFromDb?.layerIds).toEqual(layerIds);
 
-        const layersFromDb = await LayerDbStorage.create().getAll(layerIds);
+        const layersFromDb = await LayerIDBStorage.create().getAll(layerIds);
         expect(layersFromDb.length).toEqual(3);
         expect(layersFromDb).toEqual(layers.concat(await newLayer.toAbcLayer()));
       });
@@ -485,7 +490,7 @@ describe('ProjectService', function () {
         await TestHelper.wait(20);
 
         // Assert
-        const featuresFromDb = await FeatureDbStorage.create().getAllByLayerId(vectorLayer.getId() as string);
+        const featuresFromDb = await FeatureIDBStorage.create().getAllByLayerId(vectorLayer.getId() as string);
         expect(featuresFromDb.length).toEqual(3);
         expect(sortBy(featuresFromDb, 'id')).toEqual(
           sortBy(
@@ -509,10 +514,10 @@ describe('ProjectService', function () {
 
         // Assert
         const projectFromDb = await storage.get(metadata.id);
-        expect(projectFromDb?.layoutIds.length).toEqual(2);
-        expect(projectFromDb?.layoutIds).toEqual(layoutIds);
+        expect(projectFromDb?.layouts.layoutIds.length).toEqual(2);
+        expect(projectFromDb?.layouts.layoutIds).toEqual(layoutIds);
 
-        const layoutsFromDb = await LayoutStorage.getAll(layoutIds);
+        const layoutsFromDb = await LayoutIDBStorage.getAll(layoutIds);
         expect(layoutsFromDb.length).toEqual(2);
         expect(layoutsFromDb).toEqual(layouts);
       });
@@ -535,10 +540,10 @@ describe('ProjectService', function () {
 
         // Assert
         const projectFromDb = await storage.get(metadata.id);
-        expect(projectFromDb?.layoutIds.length).toEqual(3);
-        expect(projectFromDb?.layoutIds).toEqual(layoutIds);
+        expect(projectFromDb?.layouts.layoutIds.length).toEqual(3);
+        expect(projectFromDb?.layouts.layoutIds).toEqual(layoutIds);
 
-        const layoutsFromDb = await LayoutStorage.getAll(layoutIds);
+        const layoutsFromDb = await LayoutIDBStorage.getAll(layoutIds);
         expect(layoutsFromDb.length).toEqual(3);
         expect(layoutsFromDb).toEqual(layouts.concat(newLayout));
       });
@@ -560,7 +565,7 @@ describe('ProjectService', function () {
         expect(projectFromDb?.sharedViews.viewIds.length).toEqual(2);
         expect(projectFromDb?.sharedViews.viewIds).toEqual(sharedViewIds);
 
-        const sharedViewFromDb = await SharedViewStorage.getAll(sharedViewIds);
+        const sharedViewFromDb = await SharedViewIDBStorage.getAll(sharedViewIds);
         expect(sharedViewFromDb.length).toEqual(2);
         expect(sharedViewFromDb).toEqual(sharedViews);
       });
@@ -586,7 +591,7 @@ describe('ProjectService', function () {
         expect(projectFromDb?.sharedViews.viewIds.length).toEqual(3);
         expect(projectFromDb?.sharedViews.viewIds).toEqual(sharedViewIds);
 
-        const sharedViewsFromDb = await SharedViewStorage.getAll(sharedViewIds);
+        const sharedViewsFromDb = await SharedViewIDBStorage.getAll(sharedViewIds);
         expect(sharedViewsFromDb.length).toEqual(3);
         expect(sharedViewsFromDb).toEqual(sharedViews.concat(newSharedView));
       });

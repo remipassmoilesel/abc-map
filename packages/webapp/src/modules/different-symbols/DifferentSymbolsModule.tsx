@@ -18,14 +18,14 @@
 
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import DifferentSymbolsView from './view/DifferentSymbolsView';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('DifferentSymbolsModule:');
 
 export class DifferentSymbolsModule extends ModuleAdapter {
   public getId(): ModuleId {
-    return LocalModuleId.DifferentSymbols;
+    return BundledModuleId.DifferentSymbols;
   }
 
   public getReadableName(): string {

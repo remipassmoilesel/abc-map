@@ -21,7 +21,7 @@ import { Routes } from '../../routes';
 import Grid from './grid.svg';
 import { useFavoriteModules } from '../../core/modules/hooks';
 import { useTranslation } from 'react-i18next';
-import { LocalModuleId } from '../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 
 interface LinkDef {
   to: string;
@@ -80,7 +80,7 @@ export function useLinks(): Result {
   );
 
   const menuLinks: LinkDef[] = useMemo(() => {
-    const docRoute = Routes.module().withParams({ moduleId: LocalModuleId.Documentation });
+    const docRoute = Routes.module().withParams({ moduleId: BundledModuleId.Documentation });
     return [
       {
         to: docRoute,
