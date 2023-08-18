@@ -34,7 +34,7 @@ $ docker compose up     # Or helm upgrade
 
 ```sh
 # Replace parameters with correct host, username and password
-$ mongo -h localhost:27020 -u admin -p admin --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "4.4" } )'
+$ mongo --host localhost:27017 -u admin -p admin --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "4.4" } )'
 ```
 
 - Then start a MongoDB 5 instance:
