@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
+import { AbcFile, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
+import { AbcProjectManifest090 } from './dependencies/090-project-types';
+import { AbcProjectManifest110 } from './dependencies/110-project-types';
 
 const NEXT = '1.0.0';
 
@@ -28,13 +30,13 @@ const logger = Logger.get('FromV090ToV100.ts');
  * This migration:
  * - adds textFrames style options
  */
-export class FromV090ToV100 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV090ToV100 implements ProjectMigration<AbcProjectManifest090, AbcProjectManifest110> {
+  public async interestedBy(manifest: AbcProjectManifest090): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
+  public async migrate(manifest: AbcProjectManifest090, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest110>> {
     const defaultStyle = {
       withBorders: true,
       withShadows: true,

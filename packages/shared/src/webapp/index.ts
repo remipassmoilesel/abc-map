@@ -20,4 +20,6 @@ export * from './blob/BlobIO';
 export * from './routes/WebappRoutes';
 export * from './routes/Route';
 export * from './AbcWindow';
+export * from './BundledModuleId';
+export * from './LegacyRouteRedirections';
 export * from './MapTool';

@@ -53,15 +53,7 @@
     width: 100%;
   }
 
-  .paypalImage {
-    height: 5vmin;
-
-    @include media-breakpoint-down(xl) {
-      height: 10vmin;
-    }
-  }
-
-  .tipeeeImage {
+  .button {
     height: 5vmin;
 
     @include media-breakpoint-down(xl) {

@@ -19,14 +19,14 @@
 import React from 'react';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import { DataTableView } from './view/DataTableView';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('DataTableModule:');
 
 export class DataTableModule extends ModuleAdapter {
   public getId(): ModuleId {
-    return LocalModuleId.DataTable;
+    return BundledModuleId.DataTable;
   }
 
   public getReadableName(): string {

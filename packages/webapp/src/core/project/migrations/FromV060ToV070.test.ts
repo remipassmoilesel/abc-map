@@ -19,13 +19,13 @@
 import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV060ToV070 } from './FromV060ToV070';
-import { AbcProjectManifest060 } from './dependencies/060-project';
+import { AbcProjectManifest060 } from './dependencies/060-project-types';
 import uniq from 'lodash/uniq';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { AbcProjectManifest070 } from './dependencies/070-project';
+import { AbcProjectManifest070 } from './dependencies/070-project-types';
 
 describe('FromV060ToV070', () => {
-  let sampleProject: MigrationProject;
+  let sampleProject: MigrationProject<AbcProjectManifest060>;
   let migration: FromV060ToV070;
 
   beforeEach(async () => {

@@ -28,6 +28,8 @@ describe('Script module', function () {
 
   it('User can execute sample script', () => {
     cy.visit(Routes.module().withParams({ moduleId: 'scripts' }))
+      // We wait a little for project loading
+      .wait(500)
       .get('[data-cy=execute]')
       .click()
       .get('[data-cy=message]')

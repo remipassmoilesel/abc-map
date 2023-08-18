@@ -59,7 +59,7 @@ function ChangelogView() {
         <div className={'alert alert-info mb-4'}>
           <div className={'fst-italic mb-4'}>🇬🇧 Changelog is only available in English !</div>
           <a target={'_blank'} href={'https://gitlab.com/abc-map/abc-map_private/-/blob/master/CHANGELOG.md'} rel="noreferrer">
-            The latest version of the changelog is here 🦊
+            The latest version of the changelog is on Gitlab 🦊
           </a>
         </div>
 

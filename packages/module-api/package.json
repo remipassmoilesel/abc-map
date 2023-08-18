@@ -1,6 +1,6 @@
 {
   "name": "@abc-map/module-api",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "license": "AGPL-3.0-or-later",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -23,6 +23,9 @@
     "watch": "concurrently 'pnpm run watch:ts' 'pnpm run watch:scss'",
     "watch:scss": "copy-and-watch 'src/**/*.scss' build --watch",
     "watch:ts": "tsc --watch | sed -u 's/\\x1Bc//g'"
+  },
+  "dependencies": {
+    "loglevel": "^1.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.7",
@@ -48,8 +51,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "jest": "^27.5.1",
     "jest-environment-jsdom": "^27.5.1",
-    "loglevel": "^1.8.1",
-    "ol": "7.2.2",
+    "ol": "7.4.0",
     "prettier": "^2.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

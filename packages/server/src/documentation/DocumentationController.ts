@@ -36,15 +36,19 @@ export class DocumentationController extends Controller {
   public setup = async (app: FastifyInstance): Promise<void> => {
     const { userDocumentationPath } = this.config;
 
-    void app.register(fastifyStatic, {
-      root: userDocumentationPath,
-      wildcard: false,
-      etag: true,
-      maxAge: '3d',
-      decorateReply: false,
-      // If a user enters a URL without a trailing slash, it will be appended. Example: /document/fr/blog -> /document/fr/blog/
-      redirect: true,
-      prefix: '/documentation/',
+    // FIXME: we should return a specific 404 page here
+    void app.register((childContext, _, done) => {
+      void childContext.register(fastifyStatic, {
+        root: userDocumentationPath,
+        wildcard: false,
+        etag: true,
+        maxAge: '3d',
+        // If a user enters a URL without a trailing slash, it will be appended. Example: /document/fr/blog -> /document/fr/blog/
+        redirect: true,
+        prefix: '/documentation/',
+      });
+
+      done();
     });
   };
 }

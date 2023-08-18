@@ -20,6 +20,7 @@ import Cls from './FundingLinks.module.scss';
 import React from 'react';
 import { PaypalButton } from './PaypalButton';
 import { useTranslation } from 'react-i18next';
+import BuyMeACoffee from './buymeacoffee.png';
 
 export function FundingLinks() {
   const { t } = useTranslation('FundingLinks');
@@ -29,7 +30,16 @@ export function FundingLinks() {
       <div className={Cls.fundingMedium}>
         <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('By_CB_paypal') }} />
         <div className={Cls.logo}>
-          <PaypalButton className={Cls.paypalImage} />
+          <PaypalButton className={Cls.button} />
+        </div>
+      </div>
+
+      <div className={Cls.fundingMedium}>
+        <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('Buy_me_a_coffee') }} />
+        <div className={Cls.logo}>
+          <a href={'https://www.buymeacoffee.com/remipace'} target={'_blank'} rel="noreferrer">
+            <img src={BuyMeACoffee} className={Cls.button} alt={t('Buy_me_a_coffee')} />
+          </a>
         </div>
       </div>
     </div>

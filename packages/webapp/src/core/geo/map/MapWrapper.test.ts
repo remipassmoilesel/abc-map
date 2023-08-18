@@ -465,11 +465,11 @@ describe('MapWrapper', function () {
     const map = MapFactory.createNaked();
     map.setView(Views.defaultView());
 
-    map.moveViewToExtent([41.2611155, 51.3055721, -5.4517733, 9.8282225], EPSG_4326, 0);
+    map.moveViewToExtent([5.8795028, 43.1010435, 5.9873841, 43.171494], EPSG_4326, 0);
 
     expect(map.getView()).toEqual({
-      center: [1993138.869673042, 3887501.414438],
-      resolution: 55760.470248396,
+      center: [660507.903504684, 5332737.942197564],
+      resolution: 120.092913821,
       rotation: 0,
       projection: { name: 'EPSG:3857' },
     });

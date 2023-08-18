@@ -47,6 +47,7 @@ interface Props {
   onRemoveScale: () => void;
   onAddNorth: (north: AbcNorth) => void;
   onRemoveNorth: () => void;
+  onAbcMapAttributionsChange: (value: boolean) => void;
 }
 
 function ExportControls(props: Props) {
@@ -62,6 +63,7 @@ function ExportControls(props: Props) {
     onRemoveScale,
     onAddNorth,
     onRemoveNorth,
+    onAbcMapAttributionsChange,
   } = props;
 
   const { t } = useTranslation('StaticExport');
@@ -98,6 +100,13 @@ function ExportControls(props: Props) {
         },
       }),
     [onAddTextFrame]
+  );
+
+  const abcMapAttributions = useAppSelector((st) => st.project.layouts.abcMapAttributionsEnabled);
+
+  const handleToggleAbcMapAttributions = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => onAbcMapAttributionsChange(ev.target.checked),
+    [onAbcMapAttributionsChange]
   );
 
   return (
@@ -154,6 +163,13 @@ function ExportControls(props: Props) {
 
       {/* Scale */}
       <NorthControls disabled={!activeLayout} hasNorth={!!activeLayout?.north} onAddNorth={onAddNorth} onRemoveNorth={onRemoveNorth} />
+
+      <div className={'control-block'}>
+        <label>
+          <input type={'checkbox'} checked={abcMapAttributions} onChange={handleToggleAbcMapAttributions} className={'me-2'} />
+          {t('Show_AbcMap_attributions')}
+        </label>
+      </div>
 
       {/* Export buttons */}
       <div className={'control-block'}>

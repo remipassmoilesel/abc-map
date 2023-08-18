@@ -67,7 +67,6 @@ export function ScriptsView(props: Props) {
   return (
     <ModuleContainer>
       <ModuleTitle>{t('Running_scripts')}</ModuleTitle>
-
       <div className={'mb-2'}>
         <p>{t('Script_module_allow_advanced_data_modification')}</p>
         <p>{t('Keep_in_mind_recommendations')}: </p>
@@ -101,7 +100,6 @@ export function ScriptsView(props: Props) {
           {message}
         </div>
       )}
-
       {!!output.length && (
         <div className={Cls.output}>
           {t('Output')}: <pre data-cy={'output'}>{output.join('\n')}</pre>

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeatureIDBEntry should not change without migration 1`] = `
+Object {
+  "feature": Object {
+    "bbox": Array [
+      1,
+      2,
+      3,
+      4,
+    ],
+    "geometry": Object {
+      "bbox": Array [
+        1,
+        2,
+        3,
+        4,
+      ],
+      "coordinates": Array [
+        1,
+        3,
+      ],
+      "type": "Point",
+    },
+    "id": "test-feature-1",
+    "properties": Object {
+      "property1": "value1",
+      "property2": 2,
+    },
+    "type": "Feature",
+  },
+  "layerId": "test-layer-id",
+  "version": 2,
+}
+`;

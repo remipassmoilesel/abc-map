@@ -17,7 +17,7 @@
  */
 
 import { ModuleAdapter } from '@abc-map/module-api';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import SharedMapSettingsView from './SharedMapSettingsView';
 import { prefixedTranslation } from '../../i18n/i18n';
 
@@ -25,7 +25,7 @@ const t = prefixedTranslation('SharedMapSettingsModule:');
 
 export class SharedMapSettings extends ModuleAdapter {
   public getId() {
-    return LocalModuleId.SharedMapSettings;
+    return BundledModuleId.SharedMapSettings;
   }
 
   public getReadableName(): string {

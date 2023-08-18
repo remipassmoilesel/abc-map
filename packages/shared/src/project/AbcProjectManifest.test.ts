@@ -28,11 +28,13 @@ describe('AbcProjectManifest', () => {
         id: 'test-project-id',
         version: '0.1',
         name: 'Test project',
-        containsCredentials: false,
         public: false,
       },
       layers: [],
-      layouts: [],
+      layouts: {
+        list: [],
+        abcMapAttributionsEnabled: true,
+      },
       view: {
         center: [1, 2],
         resolution: 1000,

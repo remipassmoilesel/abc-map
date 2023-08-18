@@ -87,6 +87,10 @@ describe('Map', function () {
 
   it('user can rename layer', function () {
     cy.visit(Routes.map().format())
+      // First we wait for active layer
+      .wait(300)
+      .then(() => LayerControls.getActiveItem())
+      // Then we edit it
       .get('[data-cy=edit-layer]')
       .click()
       .get('[data-cy=name-input]')
@@ -102,6 +106,10 @@ describe('Map', function () {
 
   it('user can delete layer', function () {
     cy.visit(Routes.map().format())
+      // First we wait for active layer
+      .wait(300)
+      .then(() => LayerControls.getActiveItem())
+      // Then we delete it
       .get('[data-cy=delete-layer]')
       .click()
       .then(() => LayerControls.getNames())

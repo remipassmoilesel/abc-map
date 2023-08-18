@@ -30,7 +30,6 @@ export class ProjectFactory {
       id: uuid(),
       version: ProjectConstants.CurrentVersion,
       name: t('Project', { date: DateTime.local().toLocaleString() }),
-      containsCredentials: false,
       public: false,
     };
   }
@@ -41,9 +40,12 @@ export class ProjectFactory {
 
     return {
       metadata: ProjectFactory.newProjectMetadata(),
-      layers: [],
-      layouts: [],
       view: Views.random(),
+      layers: [],
+      layouts: {
+        list: [],
+        abcMapAttributionsEnabled: true,
+      },
       sharedViews: {
         fullscreen: false,
         mapDimensions: { width, height },

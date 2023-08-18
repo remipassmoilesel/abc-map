@@ -1,0 +1,454 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LayerIDBEntry should not change without migration 1`] = `
+Object {
+  "layer": Object {
+    "metadata": Object {
+      "active": false,
+      "id": "test-layer-1",
+      "model": "OSM",
+      "name": "OpenStreetMap",
+      "opacity": 1,
+      "type": "Predefined",
+      "visible": true,
+    },
+    "type": "Predefined",
+  },
+  "version": 2,
+}
+`;
+
+exports[`LayerIDBEntry should not change without migration 2`] = `
+Object {
+  "layer": Object {
+    "metadata": Object {
+      "active": true,
+      "auth": Object {
+        "password": "test-password",
+        "username": "test-username",
+      },
+      "extent": Array [
+        1,
+        2,
+        3,
+        4,
+      ],
+      "id": "test-layer-1",
+      "name": "Couche WMS",
+      "opacity": 1,
+      "projection": Object {
+        "name": "EPSG:4326",
+      },
+      "remoteLayerName": "test-layer-name",
+      "remoteUrls": Array [
+        "http://domain.fr/wms",
+      ],
+      "type": "Wms",
+      "visible": true,
+    },
+    "type": "Wms",
+  },
+  "version": 2,
+}
+`;
+
+exports[`LayerIDBEntry should not change without migration 3`] = `
+Object {
+  "layer": Object {
+    "metadata": Object {
+      "active": true,
+      "auth": Object {
+        "password": "test-password",
+        "username": "test-username",
+      },
+      "capabilitiesUrl": "http://domain.fr/wmts",
+      "id": "test-layer-1",
+      "name": "Couche WMTS",
+      "opacity": 1,
+      "remoteLayerName": "GEOGRAPHICALGRIDSYSTEMS.MAPS",
+      "sourceOptions": Object {
+        "crossOrigin": undefined,
+        "dimensions": Object {},
+        "format": "image/jpeg",
+        "layer": "GEOGRAPHICALGRIDSYSTEMS.MAPS",
+        "matrixSet": "PM",
+        "projection": EPSG3857Projection {
+          "axisOrientation_": "enu",
+          "canWrapX_": true,
+          "code_": "EPSG:3857",
+          "defaultTileGrid_": null,
+          "extent_": Array [
+            -20037508.342789244,
+            -20037508.342789244,
+            20037508.342789244,
+            20037508.342789244,
+          ],
+          "getPointResolutionFunc_": [Function],
+          "global_": true,
+          "metersPerUnit_": undefined,
+          "units_": "m",
+          "worldExtent_": Array [
+            -180,
+            -85,
+            180,
+            85,
+          ],
+        },
+        "requestEncoding": "KVP",
+        "style": "normal",
+        "tileGrid": WMTSTileGrid {
+          "extent_": Array [
+            -7034346.839028204,
+            -2443080.2980507985,
+            6216929.25854652,
+            6652314.571658893,
+          ],
+          "fullTileRanges_": Array [
+            TileRange {
+              "maxX": 0,
+              "maxY": 0,
+              "minX": 0,
+              "minY": 0,
+            },
+            TileRange {
+              "maxX": 1,
+              "maxY": 1,
+              "minX": 0,
+              "minY": 0,
+            },
+            TileRange {
+              "maxX": 2,
+              "maxY": 2,
+              "minX": 1,
+              "minY": 1,
+            },
+            TileRange {
+              "maxX": 5,
+              "maxY": 4,
+              "minX": 2,
+              "minY": 2,
+            },
+            TileRange {
+              "maxX": 10,
+              "maxY": 8,
+              "minX": 5,
+              "minY": 5,
+            },
+            TileRange {
+              "maxX": 20,
+              "maxY": 17,
+              "minX": 10,
+              "minY": 10,
+            },
+            TileRange {
+              "maxX": 41,
+              "maxY": 35,
+              "minX": 20,
+              "minY": 21,
+            },
+            TileRange {
+              "maxX": 83,
+              "maxY": 71,
+              "minX": 41,
+              "minY": 42,
+            },
+            TileRange {
+              "maxX": 167,
+              "maxY": 143,
+              "minX": 83,
+              "minY": 85,
+            },
+            TileRange {
+              "maxX": 335,
+              "maxY": 287,
+              "minX": 166,
+              "minY": 171,
+            },
+            TileRange {
+              "maxX": 670,
+              "maxY": 574,
+              "minX": 332,
+              "minY": 342,
+            },
+            TileRange {
+              "maxX": 1341,
+              "maxY": 1148,
+              "minX": 664,
+              "minY": 684,
+            },
+            TileRange {
+              "maxX": 2683,
+              "maxY": 2297,
+              "minX": 1329,
+              "minY": 1368,
+            },
+            TileRange {
+              "maxX": 5366,
+              "maxY": 4595,
+              "minX": 2658,
+              "minY": 2736,
+            },
+            TileRange {
+              "maxX": 10733,
+              "maxY": 9190,
+              "minX": 5316,
+              "minY": 5472,
+            },
+            TileRange {
+              "maxX": 21467,
+              "maxY": 18381,
+              "minX": 10632,
+              "minY": 10944,
+            },
+            TileRange {
+              "maxX": 42934,
+              "maxY": 36763,
+              "minX": 21264,
+              "minY": 21889,
+            },
+            TileRange {
+              "maxX": 85869,
+              "maxY": 73526,
+              "minX": 42529,
+              "minY": 43778,
+            },
+            TileRange {
+              "maxX": 171738,
+              "maxY": 147052,
+              "minX": 85058,
+              "minY": 87557,
+            },
+          ],
+          "matrixIds_": Array [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+          ],
+          "maxZoom": 18,
+          "minZoom": 0,
+          "origin_": null,
+          "origins_": Array [
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+            Array [
+              -20037508.342789248,
+              20037508.342789248,
+            ],
+          ],
+          "resolutions_": Array [
+            156543.033928041,
+            78271.51696402048,
+            39135.758482010235,
+            19567.87924100512,
+            9783.93962050256,
+            4891.96981025128,
+            2445.98490512564,
+            1222.99245256282,
+            611.49622628141,
+            305.7481131407048,
+            152.8740565703525,
+            76.43702828517624,
+            38.21851414258813,
+            19.10925707129406,
+            9.554628535647032,
+            4.777314267823516,
+            2.388657133911758,
+            1.194328566955879,
+            0.5971642834779395,
+          ],
+          "tileSize_": null,
+          "tileSizes_": Array [
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+            256,
+          ],
+          "tmpExtent_": Array [
+            0,
+            0,
+            0,
+            0,
+          ],
+          "tmpSize_": Array [
+            256,
+            256,
+          ],
+          "zoomFactor_": undefined,
+        },
+        "urls": Array [
+          "https://wxs.ign.fr/0666d69045a3e461-lol/geoportail/wmts?",
+        ],
+        "wrapX": false,
+      },
+      "type": "Wmts",
+      "visible": true,
+    },
+    "type": "Wmts",
+  },
+  "version": 2,
+}
+`;
+
+exports[`LayerIDBEntry should not change without migration 4`] = `
+Object {
+  "layer": Object {
+    "metadata": Object {
+      "active": true,
+      "id": "test-layer-1",
+      "name": "Couche XYZ",
+      "opacity": 1,
+      "projection": Object {
+        "name": "EPSG:4326",
+      },
+      "remoteUrl": "http://domain.fr/xyz/{x}/{y}/{z}",
+      "type": "Xyz",
+      "visible": true,
+    },
+    "type": "Xyz",
+  },
+  "version": 2,
+}
+`;
+
+exports[`LayerIDBEntry should not change without migration 5`] = `
+Object {
+  "layer": Object {
+    "features": Object {
+      "features": Array [
+        Object {
+          "bbox": Array [
+            1,
+            2,
+            3,
+            4,
+          ],
+          "geometry": Object {
+            "coordinates": Array [
+              1,
+              5,
+            ],
+            "type": "Point",
+          },
+          "id": "test-feature-0",
+          "properties": Object {
+            "val": "var",
+          },
+          "type": "Feature",
+        },
+      ],
+      "type": "FeatureCollection",
+    },
+    "metadata": Object {
+      "active": true,
+      "id": "test-layer-1",
+      "name": "Vecteurs",
+      "opacity": 1,
+      "type": "Vector",
+      "visible": true,
+    },
+    "type": "Vector",
+  },
+  "version": 2,
+}
+`;

@@ -25,13 +25,14 @@ import VectorTile from 'ol/VectorTile';
 import TileState from 'ol/TileState';
 import { waitFor } from '@testing-library/react';
 import { logger, tileLoadingAuthenticated } from './tileLoadingAuthenticated';
-import { TileStorage } from '../../storage/project-storage/TileDbStorage';
+import { TileStorage } from '../../storage/indexed-db/tiles/TileIDBStorage';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { disableTileImageLogging } from './setTileImage';
 import MockedFn = jest.MockedFn;
+import { CURRENT_VERSION } from '../../storage/indexed-db/tiles/TileIDBEntry';
 
 jest.mock('axios');
-jest.mock('../../storage/project-storage/TileDbStorage');
+jest.mock('../../storage/indexed-db/tiles/TileIDBStorage');
 
 logger.disable();
 disableTileImageLogging();
@@ -80,7 +81,7 @@ describe('tileLoadingAuthenticated', () => {
       expect(axios.create).toBeCalledWith({ auth: { password: 'bonno', username: 'jean' }, responseType: 'blob', timeout: 10000 });
 
       expect(storage.put.callCount).toEqual(1);
-      expect(storage.put.args).toEqual([[{ url: 'http://test.domain/1/2/3', image: new Blob(['123']) }]]);
+      expect(storage.put.args).toEqual([[{ version: CURRENT_VERSION, url: 'http://test.domain/1/2/3', image: new Blob(['123']) }]]);
     });
   });
 

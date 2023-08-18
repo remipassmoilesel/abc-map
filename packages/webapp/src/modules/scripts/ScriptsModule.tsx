@@ -21,7 +21,7 @@ import React from 'react';
 import { errorMessage, Logger } from '@abc-map/shared';
 import { ChromiumErrorRegexp, ErrorPosition, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { getModuleApi } from '../../core/modules/registry/getModuleApi';
 
@@ -31,7 +31,7 @@ export const logger = Logger.get('Scripts.tsx', 'warn');
 
 export class ScriptsModule extends ModuleAdapter {
   public getId(): ModuleId {
-    return LocalModuleId.Scripts;
+    return BundledModuleId.Scripts;
   }
 
   public getReadableName(): string {

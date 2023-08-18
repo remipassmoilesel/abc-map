@@ -95,8 +95,12 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   private handleRefresh = () => {
     const { storage } = this.props.services;
-    storage.clear();
-    window.location.reload();
+
+    // No need to create a new project here, we will reload page
+    storage
+      .clear()
+      .catch((err) => logger.error('Clear storage error: ', err))
+      .finally(() => window.location.reload());
   };
 }
 

@@ -32,7 +32,7 @@ services:
       - './datastore:/srv/datastore:rw'
 
   abc-mongodb:
-    image: 'mongo:4.2-bionic'
+    image: 'mongo:5.0.20-focal'
     container_name: abc-mongodb
     restart: on-failure
     ports:

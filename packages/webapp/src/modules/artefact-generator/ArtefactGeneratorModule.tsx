@@ -41,7 +41,7 @@ import { PreviewExporter } from './PreviewExporter';
 import { DimensionsPx } from '../../core/utils/DimensionsPx';
 import { WmsSettings, WmtsSettings } from '../../core/geo/layers/LayerFactory.types';
 import { toSlug } from '../../core/utils/toSlug';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { isOpenlayersProjection } from '../../core/utils/crossContextInstanceof';
 
@@ -66,7 +66,7 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
   }
 
   public getId(): ModuleId {
-    return LocalModuleId.ArtefactGenerator;
+    return BundledModuleId.ArtefactGenerator;
   }
 
   public getReadableName(): string {

@@ -40,6 +40,8 @@ export class Authentication {
       MainMenu.open()
         .get('[data-cy=main-menu] [data-cy=logout]')
         .click()
+        .get('[data-cy=confirmation-confirm]')
+        .click()
         .then(() => Toasts.assertText('You are disconnected'))
         .then(() => MainMenu.close())
         // We must wait a little for storage persistence

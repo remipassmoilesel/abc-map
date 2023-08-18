@@ -19,9 +19,10 @@
 import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV080ToV090 } from './FromV080ToV090';
+import { AbcProjectManifest080 } from './dependencies/080-project-types';
 
 describe('FromV070ToV080', () => {
-  let sampleProject: MigrationProject;
+  let sampleProject: MigrationProject<AbcProjectManifest080>;
   let migration: FromV080ToV090;
 
   beforeEach(async () => {

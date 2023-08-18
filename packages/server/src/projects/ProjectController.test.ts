@@ -27,6 +27,7 @@ import { TestAuthentication } from '../utils/TestAuthentication';
 import { AbcProjectMetadata, AbcUser, CompressedProject, ProjectConstants } from '@abc-map/shared';
 import { IncomingHttpHeaders } from 'http';
 import * as _ from 'lodash';
+import { range } from 'lodash';
 
 describe('ProjectController', () => {
   let config: Config;
@@ -145,7 +146,10 @@ describe('ProjectController', () => {
     it('should fail if metadata field is too big', async () => {
       // Prepare
       const project = await TestHelper.sampleCompressedProject();
-      const heavyMeta = _.range(1, 70).map(() => project.metadata);
+      const heavyMeta: AbcProjectMetadata = {
+        ...project.metadata,
+        name: 'Project ' + range(0, 1_000_000).join(''),
+      };
       const form = new FormData();
       form.append('metadata', JSON.stringify(heavyMeta));
       form.append('project', project.project);
@@ -163,8 +167,8 @@ describe('ProjectController', () => {
 
       // Assert
       // If field is too heavy, content will truncated and will not pass parsing
-      assert.equal(res.statusCode, 500);
       assert.match(res.body, /(Unexpected end of JSON input|Unterminated string in JSON at position)/gi);
+      assert.equal(res.statusCode, 500);
     });
 
     it('should fail if project is too big', async () => {

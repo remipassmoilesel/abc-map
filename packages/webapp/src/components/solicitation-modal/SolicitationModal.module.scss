@@ -36,6 +36,25 @@
   }
 }
 
+.centerFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border: solid 0.1rem $gray-300;
+  border-radius: $border-radius;
+
+  padding: 1.2rem;
+  margin-bottom: 2rem;
+  box-shadow: $box-shadow;
+
+  width: 40%;
+  @include media-breakpoint-down(xl) {
+    width: 90%;
+  }
+}
+
 .voteBtn {
   display: flex;
   flex-direction: column;
@@ -61,7 +80,7 @@
   justify-content: center;
   align-items: center;
 
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   width: 40rem;
 
   @include media-breakpoint-down(xl) {

@@ -26,7 +26,7 @@ import { ReadStatus } from '../../../core/data/ReadResult';
 import { useServices } from '../../../core/useServices';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../../routes';
-import { LocalModuleId } from '../../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 
 const logger = Logger.get('ImportData.tsx');
 
@@ -35,7 +35,7 @@ export function ImportData() {
   const { t } = useTranslation('MapView');
   const navigate = useNavigate();
 
-  const handleBrowseDocumentation = useCallback(() => navigate(Routes.module().withParams({ moduleId: LocalModuleId.Documentation })), [navigate]);
+  const handleBrowseDocumentation = useCallback(() => navigate(Routes.module().withParams({ moduleId: BundledModuleId.Documentation })), [navigate]);
 
   const handleImportLocalFile = useCallback(() => {
     const dataReader = DataReader.create();
@@ -76,7 +76,7 @@ export function ImportData() {
       });
   }, [t, toasts]);
 
-  const handleBrowseDatastore = useCallback(() => navigate(Routes.module().withParams({ moduleId: LocalModuleId.DataStore })), [navigate]);
+  const handleBrowseDatastore = useCallback(() => navigate(Routes.module().withParams({ moduleId: BundledModuleId.DataStore })), [navigate]);
 
   return (
     <div className={'d-flex flex-column p-3'}>

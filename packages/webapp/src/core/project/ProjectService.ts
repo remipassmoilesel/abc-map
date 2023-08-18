@@ -42,15 +42,18 @@ import { HttpError } from '../http/HttpError';
 import { ToastService } from '../ui/ToastService';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
-import { ProjectUpdater } from './ProjectUpdater';
+import { ProjectUpdater } from './migrations/ProjectUpdater';
 import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
 import { TextFrameHelpers } from './TextFrameHelpers';
 import uuid from 'uuid-random';
-import { LayoutStorage, ProjectDbStorage, SharedViewStorage } from '../storage/project-storage/ProjectDbStorage';
+import { ProjectIDBStorage } from '../storage/indexed-db/projects/ProjectIDBStorage';
 import { ApiClient, DownloadClient } from '../http/http-clients';
-import { throttleDbStorage } from '../storage/project-storage/throttleDbStorage';
-import { LayerDbStorage } from '../storage/project-storage/LayerDbStorage';
+import { throttleDbStorage } from '../storage/indexed-db/client/throttleDbStorage';
+import { LayerIDBStorage } from '../storage/indexed-db/layers/LayerIDBStorage';
+import { LayoutIDBStorage } from '../storage/indexed-db/layouts/LayoutIDBStorage';
+import { SharedViewIDBStorage } from '../storage/indexed-db/shared-views/SharedViewIDBStorage';
+import { CURRENT_VERSION } from '../storage/indexed-db/projects/ProjectIDBEntry';
 
 export const logger = Logger.get('ProjectService.ts', 'warn');
 
@@ -62,7 +65,7 @@ export type ExportResult = { manifest: AbcProjectManifest; files: AbcFile<Blob>[
 export class ProjectService {
   public static create(toasts: ToastService, geoService: GeoService, modals: ModalService) {
     const updater = ProjectUpdater.create(modals);
-    const storage = ProjectDbStorage.create();
+    const storage = ProjectIDBStorage.create();
     return new ProjectService(ApiClient, DownloadClient, mainStore, toasts, geoService, modals, updater, storage);
   }
 
@@ -77,7 +80,7 @@ export class ProjectService {
     private geoService: GeoService,
     private modals: ModalService,
     private updater: ProjectUpdater,
-    private storage: ProjectDbStorage
+    private storage: ProjectIDBStorage
   ) {}
 
   public enableProjectAutoSave() {
@@ -89,19 +92,19 @@ export class ProjectService {
     this.persistProjectLocally();
 
     // We watch store for special objects of project
-    LayoutStorage.watch(this.store);
-    SharedViewStorage.watch(this.store);
+    LayoutIDBStorage.watch(this.store);
+    SharedViewIDBStorage.watch(this.store);
 
     // When layers change, we enable storage for them if needed, then we call project persistence
     const persistLayers = () => {
       const layers = mainMap.getLayers();
       for (const layer of layers) {
-        if (!LayerDbStorage.isStorageEnabled(layer)) {
+        if (!LayerIDBStorage.isStorageEnabled(layer)) {
           logger.debug(`Enabling storage on layer ${layer.getName()} (vector=${layer.isVector()})`);
           if (layer.isVector()) {
-            LayerDbStorage.enableVectorLayerStorage(layer);
+            LayerIDBStorage.enableVectorLayerStorage(layer);
           } else {
-            LayerDbStorage.enableTileLayerStorage(layer);
+            LayerIDBStorage.enableTileLayerStorage(layer);
           }
         }
       }
@@ -116,8 +119,8 @@ export class ProjectService {
   public disableProjectAutoSave() {
     this.autoSaveSubscription && this.autoSaveSubscription();
 
-    LayoutStorage.unwatch();
-    SharedViewStorage.unwatch();
+    LayoutIDBStorage.unwatch();
+    SharedViewIDBStorage.unwatch();
   }
 
   private persistProjectLocally = () => {
@@ -136,10 +139,14 @@ export class ProjectService {
 
     this.storage
       .put({
+        version: CURRENT_VERSION,
         metadata,
         view: mainView,
         layerIds,
-        layoutIds,
+        layouts: {
+          layoutIds,
+          abcMapAttributionsEnabled: layouts.abcMapAttributionsEnabled,
+        },
         sharedViews: {
           fullscreen: sharedViews.fullscreen,
           mapDimensions: sharedViews.mapDimensions,
@@ -251,7 +258,10 @@ export class ProjectService {
     // We load frame images
     manifest = {
       ...manifest,
-      layouts: TextFrameHelpers.loadImagesOfLayouts(manifest.layouts, files),
+      layouts: {
+        list: TextFrameHelpers.loadImagesOfLayouts(manifest.layouts.list, files),
+        abcMapAttributionsEnabled: manifest.layouts.abcMapAttributionsEnabled,
+      },
       sharedViews: {
         ...manifest.sharedViews,
         list: TextFrameHelpers.loadImagesOfSharedViews(manifest.sharedViews.list, files),
@@ -271,8 +281,8 @@ export class ProjectService {
     }
 
     // Set active layout if any
-    if (manifest.layouts.length) {
-      this.store.dispatch(ProjectActions.setActiveLayout(manifest.layouts[0].id));
+    if (manifest.layouts.list.length) {
+      this.store.dispatch(ProjectActions.setActiveLayout(manifest.layouts.list[0].id));
     }
 
     // Set active shared view
@@ -298,7 +308,10 @@ export class ProjectService {
       metadata: state.metadata,
       layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
       view: state.mainView,
-      layouts,
+      layouts: {
+        list: layouts,
+        abcMapAttributionsEnabled: state.layouts.abcMapAttributionsEnabled,
+      },
       sharedViews: {
         list: sharedViews,
         fullscreen: state.sharedViews.fullscreen,
@@ -344,7 +357,10 @@ export class ProjectService {
         id: uuid(),
       },
       layers: exported.manifest.layers.map((lay) => ({ ...lay, metadata: { ...lay.metadata, id: uuid() } })) as AbcLayer[], // Typings are borked
-      layouts: exported.manifest.layouts.map((lay) => ({ ...lay, id: uuid() })),
+      layouts: {
+        list: exported.manifest.layouts.list.map((lay) => ({ ...lay, id: uuid() })),
+        abcMapAttributionsEnabled: exported.manifest.layouts.abcMapAttributionsEnabled,
+      },
       sharedViews: {
         ...exported.manifest.sharedViews,
         list: exported.manifest.sharedViews.list.map((view) => ({ ...view, id: uuid() })),

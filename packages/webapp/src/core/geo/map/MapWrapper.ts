@@ -355,7 +355,7 @@ export class MapWrapper {
   /**
    * Move to specified extent. Extent numbers are: minX, minY, maxX, maxY.
    *
-   * Source projection is assumed EPSG4326
+   * Source projection is assumed EPSG:4326
    */
   public moveViewToExtent(extent: Extent, sourceProjection?: AbcProjection, duration = 1500): void {
     const _sourceProj = sourceProjection || EPSG_4326;

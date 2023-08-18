@@ -41,6 +41,7 @@ export enum ActionType {
   SetPublic = 'SetPublic',
   SetLastSaveOnline = 'SetLastSaveOnline',
   SetLastExport = 'SetLastExport',
+  SetAbcMapAttributions = 'SetAbcMapAttributions',
 }
 
 export interface LoadProject {
@@ -151,6 +152,11 @@ export interface SetLastExport {
   date: DateTime;
 }
 
+export interface SetAbcMapAttributions {
+  type: ActionType.SetAbcMapAttributions;
+  value: boolean;
+}
+
 export type ProjectAction =
   | LoadProject
   | SetProjectName
@@ -172,7 +178,8 @@ export type ProjectAction =
   | SetView
   | SetPublic
   | SetLastSaveOnline
-  | SetLastExport;
+  | SetLastExport
+  | SetAbcMapAttributions;
 
 export class ProjectActions {
   public static loadProject(project: AbcProjectManifest): ProjectAction {
@@ -322,6 +329,13 @@ export class ProjectActions {
     return {
       type: ActionType.SetLastExport,
       date,
+    };
+  }
+
+  public static setAbcMapAttributions(value: boolean): ProjectAction {
+    return {
+      type: ActionType.SetAbcMapAttributions,
+      value,
     };
   }
 }

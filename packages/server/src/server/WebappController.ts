@@ -51,7 +51,7 @@ export class WebappController extends Controller {
     });
 
     // We register webapp routes for deep link usage
-    this.routes.getAll().forEach((route) => {
+    this.routes.getMainRoutes().forEach((route) => {
       app.get(route.raw(), (req: FastifyRequest, reply: FastifyReply) => {
         void reply.view('webapp/index', indexParameters(this.config, getLang(req)));
       });

@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectIDBEntry should not change without migration 1`] = `
+Object {
+  "layerIds": Array [
+    "layer-id-1",
+    "layer-id-2",
+  ],
+  "layouts": Object {
+    "abcMapAttributionsEnabled": true,
+    "layoutIds": Array [
+      "layout-id-1",
+      "layout-id-2",
+    ],
+  },
+  "metadata": Object {
+    "id": "test-project-id",
+    "name": "Test project",
+    "public": false,
+    "version": "1.3.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": true,
+    "mapDimensions": Object {
+      "height": 666,
+      "width": 888,
+    },
+    "viewIds": Array [
+      "view-id-1",
+      "view-id-2",
+    ],
+  },
+  "version": 2,
+  "view": Object {
+    "center": Array [
+      1.5,
+      45.4,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 1000,
+    "rotation": 0,
+  },
+}
+`;

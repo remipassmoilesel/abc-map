@@ -77,5 +77,7 @@ export interface ArtefactManifest {
      * Weight is used to sort results in search and lists. The higher the number, the more likely the artifact is above.
      */
     weight?: number;
+
+    metadata?: Record<string, unknown>;
   };
 }

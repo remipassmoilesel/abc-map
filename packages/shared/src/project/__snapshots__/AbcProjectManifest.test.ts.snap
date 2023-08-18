@@ -3,9 +3,11 @@
 exports[`AbcProjectManifest should not change without migration 1`] = `
 Object {
   "layers": Array [],
-  "layouts": Array [],
+  "layouts": Object {
+    "abcMapAttributionsEnabled": true,
+    "list": Array [],
+  },
   "metadata": Object {
-    "containsCredentials": false,
     "id": "test-project-id",
     "name": "Test project",
     "public": false,

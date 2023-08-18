@@ -36,7 +36,7 @@ import { Status } from '../color-gradients/typings/ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
 import { AddLayersChangeset } from '../../core/history/changesets/layers/AddLayersChangeset';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('ProportionalSymbolsModule:');
@@ -51,7 +51,7 @@ export class ProportionalSymbolsModule extends ModuleAdapter {
   }
 
   public getId(): ModuleId {
-    return LocalModuleId.ProportionalSymbols;
+    return BundledModuleId.ProportionalSymbols;
   }
 
   public getReadableName(): string {

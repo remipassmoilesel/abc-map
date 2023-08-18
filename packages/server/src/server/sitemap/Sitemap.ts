@@ -23,7 +23,7 @@ import * as path from 'path';
 import { DateTime } from 'luxon';
 import { XMLBuilder } from 'fast-xml-parser';
 
-const DefaultDocBlackList = ['automated-test-target'];
+const DefaultDocBlackList = ['/automated-test-target'];
 
 interface SitemapContent {
   urlset: {
@@ -115,7 +115,7 @@ export class Sitemap {
       // We must add original link too, see https://developers.google.com/search/docs/specialty/international/localized-versions#sitemap
       const alternates = routesPerLang
         .map<Alternate | null>((routes) => {
-          const route = routes.getAll().find((r) => r.raw() === url.id);
+          const route = routes.getMainRoutes().find((r) => r.raw() === url.id);
           if (route) {
             return { '@_rel': 'alternate', '@_hreflang': route.getLang(), '@_href': this.baseUrl + route.format() };
           } else {

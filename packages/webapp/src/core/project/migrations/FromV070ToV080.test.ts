@@ -20,9 +20,10 @@ import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV070ToV080 } from './FromV070ToV080';
 import { mockNanoid, restoreNanoid } from '../../utils/test/mock-nanoid';
+import { AbcProjectManifest070 } from './dependencies/070-project-types';
 
 describe('FromV070ToV080', () => {
-  let sampleProject: MigrationProject;
+  let sampleProject: MigrationProject<AbcProjectManifest070>;
   let migration: FromV070ToV080;
 
   beforeEach(async () => {

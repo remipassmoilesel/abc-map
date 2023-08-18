@@ -28,7 +28,7 @@ describe('S2022_01_04_AddPublicField', function () {
 
   beforeEach(() => {
     projectDao = sinon.createStubInstance(ProjectDao);
-    script = new S2022_01_04_AddPublicField(projectDao as unknown as ProjectDao);
+    script = new S2022_01_04_AddPublicField(projectDao);
   });
 
   it('should remove alias if any', async () => {

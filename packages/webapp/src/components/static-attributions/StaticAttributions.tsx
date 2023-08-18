@@ -27,6 +27,7 @@ const logger = Logger.get('Attributions.tsx');
 
 interface Props {
   map: MapWrapper;
+  abcMapAttributions: boolean;
   ratio?: number;
 }
 
@@ -39,24 +40,26 @@ const baseFontSizeEm = 0.7;
  * @constructor
  */
 export function StaticAttributions(props: Props) {
-  const { map, ratio: _ratio } = props;
+  const { map, ratio: _ratio, abcMapAttributions } = props;
   const ratio = _ratio ?? 1;
   const attributions = map.getAttributions(AttributionFormat.Text);
   const style: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeEm * ratio}em` }), [ratio]);
 
   return (
     <div className={Cls.attributions} style={style}>
-      {/* We use a sub-level in order to use 'em' units in a consistent way */}
+      {/* We use a sublevel in order to use 'em' units in a consistent way */}
       <div className={Cls.content}>
         {attributions.map((attr) => (
           <div key={attr} className={Cls.attribution}>
             {attr}
           </div>
         ))}
-        <div className={Cls.softwareBrand}>
-          Abc-Map
-          <img src={MainIcon} alt={MainIcon} />
-        </div>
+        {abcMapAttributions && (
+          <div className={Cls.softwareBrand}>
+            Abc-Map
+            <img src={MainIcon} alt={MainIcon} />
+          </div>
+        )}
       </div>
     </div>
   );

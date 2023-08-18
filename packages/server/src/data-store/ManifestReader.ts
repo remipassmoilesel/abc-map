@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ArtefactManifestRead } from './ArtefactManifest';
+import { ArtefactManifestWithPath } from './ArtefactManifestSchema';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 import { promises as fs } from 'fs';
@@ -32,9 +32,9 @@ export class ManifestReader {
 
   constructor(private file: FileModule) {}
 
-  public async read(manifestPath: string): Promise<ArtefactManifestRead> {
+  public async read(manifestPath: string): Promise<ArtefactManifestWithPath> {
     const fileContent = await this.file.readFile(manifestPath, 'utf8');
-    const manifest = yaml.load(fileContent) as ArtefactManifestRead | undefined;
+    const manifest = yaml.load(fileContent) as ArtefactManifestWithPath | undefined;
     if (!manifest) {
       return Promise.reject(new Error(`Invalid manifest: ${manifestPath}`));
     }

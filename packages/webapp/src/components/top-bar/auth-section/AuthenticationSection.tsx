@@ -26,6 +26,7 @@ import { useServices } from '../../../core/useServices';
 import { useIsUserAuthenticated } from '../../../core/authentication/useIsUserAuthenticated';
 import { useTranslation } from 'react-i18next';
 import { ActionButton } from '../action-button/ActionButton';
+import { ModalStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('AuthenticationSection.tsx');
 
@@ -36,7 +37,7 @@ interface Props {
 export function AuthenticationSection(props: Props) {
   const { onToggleMenu } = props;
   const { t } = useTranslation('TopBar');
-  const { modals, toasts, authentication, project } = useServices();
+  const { modals, toasts, authentication } = useServices();
   const user = useAppSelector((st) => st.authentication.user);
   const userAuthenticated = useIsUserAuthenticated();
   const userLabel = user && userAuthenticated ? user.email : t('Hello_visitor');
@@ -75,18 +76,21 @@ export function AuthenticationSection(props: Props) {
   }, [navigate, onToggleMenu]);
 
   const handleLogout = useCallback(() => {
-    project
-      .newProject()
-      .then(() => authentication.logout())
-      .then(() => {
-        toasts.info(`${t('You_are_disconnected')} 👋`);
-        navigate(Routes.landing().format());
+    modals
+      .modificationsLostConfirmation()
+      .then((result) => {
+        if (ModalStatus.Confirmed === result) {
+          return authentication.logout().then(() => {
+            toasts.info(`${t('You_are_disconnected')} 👋`);
+            navigate(Routes.landing().format());
+          });
+        }
       })
       .catch((err) => {
         toasts.genericError();
         logger.error('Logout error: ', err);
       });
-  }, [authentication, navigate, project, t, toasts]);
+  }, [authentication, modals, navigate, t, toasts]);
 
   return (
     <>

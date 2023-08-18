@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SharedViewIDBStorage should not change without migration 1`] = `
+Object {
+  "id": "test-shared-view-1",
+  "layers": Array [],
+  "scale": Object {
+    "x": 30,
+    "y": 100,
+  },
+  "textFrames": Array [
+    Object {
+      "content": Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "Hey man, how are you ?",
+            },
+          ],
+          "type": "paragraph",
+        },
+      ],
+      "id": "test-text-frame-1",
+      "position": Object {
+        "x": 10,
+        "y": 10,
+      },
+      "size": Object {
+        "height": 100,
+        "width": 100,
+      },
+      "style": Object {
+        "background": "#FFFFFF",
+        "withBorders": true,
+        "withShadows": true,
+      },
+    },
+  ],
+  "title": "Sample layout",
+  "view": Object {
+    "center": Array [
+      1.5,
+      45.4,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 1000,
+    "rotation": 0,
+  },
+}
+`;

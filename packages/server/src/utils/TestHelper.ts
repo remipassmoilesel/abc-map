@@ -20,6 +20,7 @@ import {
   AbcArtefact,
   AbcProjectManifest,
   AbcUser,
+  ArtefactManifest,
   ArtefactType,
   CompressedProject,
   DEFAULT_PROJECTION,
@@ -32,7 +33,7 @@ import {
 import * as uuid from 'uuid-random';
 import { ProjectDocument } from '../projects/ProjectDocument';
 import { DateTime } from 'luxon';
-import { ArtefactManifestRead } from '../data-store/ArtefactManifest';
+import { ArtefactManifestWithPath } from '../data-store/ArtefactManifestSchema';
 
 export class TestHelper {
   public static sampleUser(): AbcUser {
@@ -49,7 +50,6 @@ export class TestHelper {
         id: uuid(),
         version: ProjectConstants.CurrentVersion,
         name: `Test project ${uuid()}`,
-        containsCredentials: false,
         public: false,
       },
       layers: [
@@ -94,7 +94,10 @@ export class TestHelper {
           },
         },
       ],
-      layouts: [],
+      layouts: {
+        abcMapAttributionsEnabled: true,
+        list: [],
+      },
       view: {
         center: [1, 2],
         projection: DEFAULT_PROJECTION,
@@ -129,7 +132,6 @@ export class TestHelper {
       name: 'Fake project',
       version: '0.1',
       public: false,
-      containsCredentials: false,
     };
   }
 
@@ -150,10 +152,27 @@ export class TestHelper {
     };
   }
 
-  public static sampleArtefactManifest(name: string): ArtefactManifestRead {
+  public static sampleArtefactManifestWithPath(name: string): ArtefactManifestWithPath {
     return {
       version: '0.0.1',
       path: `/datastore/${name}/manifest.yml`,
+      artefact: {
+        name: [{ language: Language.English, text: name }],
+        type: ArtefactType.BaseMap,
+        license: `${name}-AGPLv3.txt`,
+        attributions: ['Copyright somebody somewhere inc'],
+        description: [{ language: Language.English, text: `A beautiful artefact named ${name}` }],
+        keywords: [{ language: Language.English, text: ['beautiful', 'artifact', name] }],
+        files: [`file1.gpx`, `file2.shp`],
+        provider: `Nowhere inc`,
+        link: `http://nowhere.net/${name}`,
+      },
+    };
+  }
+
+  public static sampleArtefactManifest(name: string): ArtefactManifest {
+    return {
+      version: '0.0.1',
       artefact: {
         name: [{ language: Language.English, text: name }],
         type: ArtefactType.BaseMap,

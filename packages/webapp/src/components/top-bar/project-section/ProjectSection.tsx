@@ -26,7 +26,7 @@ import { useExportProject } from '../../../core/project/useExportProject';
 import { useSaveProjectOnline } from '../../../core/project/useSaveProjectOnline';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../../routes';
-import { LocalModuleId } from '../../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import clsx from 'clsx';
 import Cls from './ProjectSection.module.scss';
 import { useImportProject } from '../../../core/project/useImportProject';
@@ -44,14 +44,19 @@ export function ProjectSection(props: Props) {
   const userAuthenticated = useIsUserAuthenticated();
   const handleCreateNewProject = useCreateNewProject();
   const handleImportProject = useImportProject();
-  const handleExportProject = useExportProject();
+  const exportProject = useExportProject();
   const handleSaveProjectOnline = useSaveProjectOnline();
   const navigate = useNavigate();
 
   const handleShowMore = useCallback(() => {
-    navigate(Routes.module().withParams({ moduleId: LocalModuleId.ProjectManagement }));
+    navigate(Routes.module().withParams({ moduleId: BundledModuleId.ProjectManagement }));
     toggleMenu();
   }, [navigate, toggleMenu]);
+
+  const handleExportProject = useCallback(() => {
+    exportProject().catch((err) => logger.error('Export error: ', err));
+    toggleMenu();
+  }, [exportProject, toggleMenu]);
 
   return (
     <div className={clsx('d-flex flex-wrap align-items-start', Cls.menu)}>

@@ -17,15 +17,16 @@
  */
 
 import { FromV010ToV020 } from './FromV010ToV020';
-import { AbcProjectManifest } from '@abc-map/shared';
 import { deepFreeze } from '../../utils/deepFreeze';
 import { Views } from '../../geo/Views';
 import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
+import { AbcProjectManifest020 } from './dependencies/020-project-types';
 
 describe('FromV010ToV020', () => {
-  let project: MigrationProject;
+  let project: MigrationProject<AbcProjectManifest020>;
   let migration: FromV010ToV020;
+
   beforeEach(async () => {
     project = await TestData.project01();
     migration = new FromV010ToV020();
@@ -41,7 +42,7 @@ describe('FromV010ToV020', () => {
     const original = deepFreeze(project.manifest);
 
     // Act
-    const result = await migration.migrate(original as unknown as AbcProjectManifest, []);
+    const result = await migration.migrate(original, []);
 
     // Assert
     expect(result.manifest.metadata).toEqual({ ...original.metadata, version: '0.2.0' });

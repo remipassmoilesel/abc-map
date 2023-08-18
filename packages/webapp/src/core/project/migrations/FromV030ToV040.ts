@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayer, AbcProjectManifest, AbcProjectMetadata, LayerType } from '@abc-map/shared';
+import { AbcFile, AbcLayer, LayerType } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
-import { AbcProjectMetadata030, WmsMetadata030 } from './dependencies/030-project';
+import { AbcProjectManifest030, AbcProjectMetadata030, WmsMetadata030 } from './dependencies/030-project-types';
 import semver from 'semver';
+import { AbcProjectManifest040, AbcProjectMetadata040 } from './dependencies/040-project-types';
 
 const NEXT = '0.4.0';
 
@@ -28,13 +29,13 @@ const NEXT = '0.4.0';
  * - adds multiple WMS remote urls
  * - delete projection field in metadata
  */
-export class FromV030ToV040 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV030ToV040 implements ProjectMigration<AbcProjectManifest030, AbcProjectManifest040> {
+  public async interestedBy(manifest: AbcProjectManifest030): Promise<boolean> {
     const version = manifest.metadata.version;
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
+  public async migrate(manifest: AbcProjectManifest030, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest040>> {
     const upgrated: AbcLayer[] = manifest.layers.map((layer) => {
       // We ignore other layers
       if (layer.type !== LayerType.Wms) {
@@ -70,8 +71,8 @@ export class FromV030ToV040 implements ProjectMigration {
 
     return {
       manifest: {
-        ...manifest,
-        metadata: metadata as AbcProjectMetadata,
+        ...(manifest as any),
+        metadata: metadata as AbcProjectMetadata040,
         layers: upgrated,
       },
       files,

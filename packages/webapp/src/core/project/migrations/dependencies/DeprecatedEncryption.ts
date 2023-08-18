@@ -16,19 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-  AbcLayer,
-  AbcProjectManifest,
-  AbcWmsLayer,
-  AbcWmtsLayer,
-  AbcXyzLayer,
-  LayerType,
-  Logger,
-  WmsMetadata,
-  WmtsMetadata,
-  XyzMetadata,
-} from '@abc-map/shared';
+import { AbcLayer, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer, LayerType, Logger, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
 import { Encryption } from '../../../utils/Encryption';
+import { AbcProjectManifest110 } from './110-project-types';
 
 const logger = Logger.get('DeprecatedEncryption.ts');
 
@@ -38,7 +28,7 @@ const logger = Logger.get('DeprecatedEncryption.ts');
 const ProtectedLayerTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
 
 export class DeprecatedEncryption {
-  public static manifestContainsCredentials(project: AbcProjectManifest): boolean {
+  public static manifestContainsCredentials(project: AbcProjectManifest110): boolean {
     if (project.metadata.public) {
       return false;
     }
@@ -47,7 +37,7 @@ export class DeprecatedEncryption {
     return !!protectedLayer;
   }
 
-  public static extractWitness(project: AbcProjectManifest): string | undefined {
+  public static extractWitness(project: AbcProjectManifest110): string | undefined {
     const protectedLayer = project.layers.find((lay) => ProtectedLayerTypes.includes(lay.type));
     if (LayerType.Wms === protectedLayer?.type) {
       return protectedLayer.metadata.remoteUrls[0];
@@ -63,7 +53,7 @@ export class DeprecatedEncryption {
     }
   }
 
-  public static async decryptManifest(manifest: AbcProjectManifest, password: string): Promise<AbcProjectManifest> {
+  public static async decryptManifest(manifest: AbcProjectManifest110, password: string): Promise<AbcProjectManifest110> {
     const layers: AbcLayer[] = [];
     for (const lay of manifest.layers) {
       // WMS

@@ -67,6 +67,8 @@ describe('DocumentationController', () => {
       path: '/documentation/',
     });
 
+    assert.equal(req.statusCode, 200);
+
     const body = req.body.slice(0, 300).replace(/\s/gi, '');
     assert.equal(body.includes('<title>Abc-Map-Documentation-'), true);
   });
@@ -76,6 +78,8 @@ describe('DocumentationController', () => {
       method: 'GET',
       path: '/documentation/index.html',
     });
+
+    assert.equal(req.statusCode, 200);
 
     const body = req.body.slice(0, 300).replace(/\s/gi, '');
     assert.equal(body.includes('<title>Abc-Map-Documentation-'), true);
@@ -97,7 +101,18 @@ describe('DocumentationController', () => {
       path: '/documentation/en/automated-test-target/',
     });
 
+    assert.equal(req.statusCode, 200);
+
     const body = req.body.slice(0, 300).replace(/\s/gi, '');
     assert.equal(body.includes('<title>Abc-Map-Documentation-'), true);
+  });
+
+  it('/documentation/unknown-route', async () => {
+    const req = await server.getApp().inject({
+      method: 'GET',
+      path: '/documentation/unknown-route',
+    });
+
+    assert.equal(req.statusCode, 404);
   });
 });

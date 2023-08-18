@@ -18,13 +18,13 @@
 
 import { useEffect } from 'react';
 import { Env } from '../../core/utils/Env';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { useExperimentalFeature } from '../../core/ui/useExperimentalFeature';
 import { DisableWarningBeforeUnload } from '../../experimental-features';
-
-const t = prefixedTranslation('WarningBeforeUnload:');
+import { useTranslation } from 'react-i18next';
 
 export function WarningBeforeUnload() {
+  const { t } = useTranslation('WarningBeforeUnload');
+
   const disabled = useExperimentalFeature(DisableWarningBeforeUnload);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function WarningBeforeUnload() {
       window.removeEventListener('beforeunload', warning);
       window.removeEventListener('unload', warning);
     };
-  }, [disabled]);
+  }, [disabled, t]);
 
   return <></>;
 }

@@ -22,6 +22,5 @@ export interface ProjectDocument extends MongodbDocument {
   ownerId: string;
   version: string;
   name: string;
-  containsCredentials: boolean;
   public: boolean;
 }

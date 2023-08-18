@@ -17,7 +17,7 @@
  */
 
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { LazyExoticComponent } from 'react';
 import DocumentationView from './view/DocumentationView';
@@ -26,7 +26,7 @@ const t = prefixedTranslation('DocumentationModule:');
 
 export class DocumentationModule extends ModuleAdapter {
   public getId(): ModuleId {
-    return LocalModuleId.Documentation;
+    return BundledModuleId.Documentation;
   }
 
   public getReadableName(): string {

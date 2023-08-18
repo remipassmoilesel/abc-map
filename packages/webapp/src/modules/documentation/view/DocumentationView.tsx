@@ -27,7 +27,7 @@ import clsx from 'clsx';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { getLang } from '../../../i18n/i18n';
-import { LocalModuleId } from '../../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { Env } from '../../../core/utils/Env';
 import { isExternalURL, rewriteAssetsUrls, rewriteContentPath } from './helpers';
 import { usePersistentStore } from '../state';
@@ -49,7 +49,7 @@ function DocumentationView() {
 
   // We MUST ensure that module is initially loaded with a terminal '/', otherwise relative links may be broken
   useEffect(() => {
-    const docRoute = Routes.module().withParams({ moduleId: LocalModuleId.Documentation });
+    const docRoute = Routes.module().withParams({ moduleId: BundledModuleId.Documentation });
     if (location.pathname.endsWith(docRoute)) {
       navigate(docRoute + '/', { replace: true });
     }
@@ -172,7 +172,7 @@ function DocumentationView() {
   }, []);
 
   const handleGoToToc = useCallback(() => {
-    navigate(Routes.module().withParams({ moduleId: LocalModuleId.Documentation }));
+    navigate(Routes.module().withParams({ moduleId: BundledModuleId.Documentation }));
   }, [navigate]);
 
   const { zoom, setZoom } = usePersistentStore();

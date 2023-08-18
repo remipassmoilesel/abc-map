@@ -17,7 +17,7 @@
  */
 
 import { ModuleAdapter } from '@abc-map/module-api';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import DataStoreView from './DataStoreView';
 import { prefixedTranslation } from '../../i18n/i18n';
 
@@ -25,7 +25,7 @@ const t = prefixedTranslation('DataStoreModule:');
 
 export class DataStoreModule extends ModuleAdapter {
   public getId() {
-    return LocalModuleId.DataStore;
+    return BundledModuleId.DataStore;
   }
 
   public getReadableName(): string {

@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest } from '@abc-map/shared';
+import { AbcFile } from '@abc-map/shared';
 
-export interface MigrationProject {
-  manifest: AbcProjectManifest;
+export interface MigrationProject<ProjectManifest> {
+  manifest: ProjectManifest;
   files: AbcFile<Blob>[];
 }
 
-export interface ProjectMigration {
-  interestedBy(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<boolean>;
-  migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject>;
+export interface ProjectMigration<From, To> {
+  interestedBy(manifest: From, files: AbcFile<Blob>[]): Promise<boolean>;
+  migrate(manifest: From, files: AbcFile<Blob>[]): Promise<MigrationProject<To>>;
 }
 
-export declare type MigrationsFactory = () => ProjectMigration[];
+export declare type MigrationsFactory = () => ProjectMigration<unknown, unknown>[];

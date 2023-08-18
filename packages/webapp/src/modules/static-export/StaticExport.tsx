@@ -17,7 +17,7 @@
  */
 
 import { ModuleAdapter } from '@abc-map/module-api';
-import { LocalModuleId } from '../LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { StaticExportView } from './StaticExportView';
 import { prefixedTranslation } from '../../i18n/i18n';
 import i18n from 'i18next';
@@ -26,7 +26,7 @@ const t = prefixedTranslation('StaticExport:');
 
 export class StaticExport extends ModuleAdapter {
   public getId() {
-    return LocalModuleId.StaticExport;
+    return BundledModuleId.StaticExport;
   }
 
   public getReadableName(): string {

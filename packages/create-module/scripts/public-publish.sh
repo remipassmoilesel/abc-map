@@ -22,5 +22,5 @@ pnpm run clean-build
 # We do not publish tests
 find build -name '*.test.js' -delete
 
-pnpx -y is-published || pnpm publish --access public --registry "https://registry.npmjs.org/"
+npx -y is-published || npm publish --access public --registry "https://registry.npmjs.org/"
 

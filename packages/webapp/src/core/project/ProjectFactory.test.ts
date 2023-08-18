@@ -33,7 +33,6 @@ describe('ProjectFactory', () => {
       expect(metadata.id).toBeDefined();
       expect(metadata.name).toMatch(/Projet du [0-9]+\/[0-9]+\/[0-9]+/);
       expect(metadata.version).toBe(ProjectConstants.CurrentVersion);
-      expect(metadata.containsCredentials).toBe(false);
       expect(metadata.public).toBe(false);
     });
 
@@ -49,8 +48,12 @@ describe('ProjectFactory', () => {
 
   it('newProjectManifest()', () => {
     const manifest = ProjectFactory.newProjectManifest();
-    expect(manifest.layers).toHaveLength(0);
-    expect(manifest.layouts).toHaveLength(0);
+
     expect(manifest.view).toBeDefined();
+    expect(manifest.layers).toHaveLength(0);
+    expect(manifest.layouts.list).toHaveLength(0);
+    expect(manifest.layouts.abcMapAttributionsEnabled).toBe(true);
+    expect(manifest.sharedViews.list).toHaveLength(0);
+    expect(manifest.sharedViews.fullscreen).toBe(false);
   });
 });

@@ -25,8 +25,10 @@ import { mockServices } from './core/utils/test/mock-services';
 import { matchRoutes } from 'react-router-dom';
 import { disableSearchIndexLogging } from './core/utils/SearchIndex';
 import MockedFn = jest.MockedFn;
+import { disableStorageMigrationLogs } from './core/storage/indexed-db/migrations/StorageUpdater';
 
 disableSearchIndexLogging();
+disableStorageMigrationLogs();
 
 jest.mock('./render');
 

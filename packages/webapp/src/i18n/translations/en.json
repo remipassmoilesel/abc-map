@@ -60,7 +60,8 @@
     "You_can_use_abc-map_offline": "You can use Abc-map offline",
     "You_cannot_use_abc-map_offline": "You cannot use Abc-map offline",
     "About_this_platform": "About this platform",
-    "What_changed": "What changed ?"
+    "What_changed": "What changed ?",
+    "Clear_local_app_data": "Clear local app data"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "So how is it going ?"
@@ -562,11 +563,10 @@
     "Layouts": "Layouts",
     "Export": "Export",
     "Create_layout_to_export": "Create a layout to export your map to PDF or PNG",
-    "Create_A4_layout": "New A4 layout",
+    "New_layout": "New layout",
     "Layout": "Layout",
     "Create_layout_to_export_your_map": "Layout and export your maps as PDF or PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
     "You_muse_select_a_layout": "You must select a layout",
-    "New_layout": "New layout",
     "A5_portrait": "A5 portrait",
     "A5_landscape": "A5 landscape",
     "A4_portrait": "A4 portrait",
@@ -583,7 +583,8 @@
     "Controls_menu": "Controls",
     "Export_in_progress": "Export in progress ...",
     "Connect_to_the_Internet_to_export_your_map": "Connect to the Internet to <br/>export your map",
-    "Nothing_to_delete": "There is nothing to delete"
+    "Nothing_to_delete": "There is nothing to delete",
+    "Show_AbcMap_attributions": "Show Abc-Map attributions"
   },
   "TextFrameControls": {
     "New_text_frame": "New text frame",
@@ -622,28 +623,28 @@
     "AbcMap_is_FOSS": "Abc-Map is a free software developed and hosted on a voluntary basis.",
     "No_ads_no_race_for_attention": "You have noticed ? No ads, no race for attention, no collection of personal data",
     "Fund_a_free_internet_territory": "By funding this software you are funding a free territory of the internet, where the software serves the user.",
-    "How": "How",
+    "How_to_donate": "How to donate ?",
     "What_is_the_point": "What is the point",
     "Money_collected": "Money collected",
     "Pays_hosting": "Pays hosting",
     "Funds_development_sessions": "Funds development sessions",
     "Funds_documentation": "Funds documentation",
-    "Next_planned_features_are": "The next planned features are",
-    "Better_styles": "Better styles to create better looking maps",
-    "Creating_symbols_from_CSV_workbooks": "Creating symbols from CSV workbooks",
-    "Automatic_saving_of_projects": "Automatic saving of projects",
-    "And_more": "And more !",
     "Links": "Links",
     "Source_code": "Source code",
     "Author_personal_website": "Author's personal website",
     "Fund_Abc-map": "Fund Abc-Map !",
-    "Fund_a_little_piece_of_free_internet": "Fund a little piece of free internet \uD83D\uDC8C"
+    "Fund_a_little_piece_of_free_internet": "Fund a little piece of free internet \uD83D\uDC8C",
+    "What_budget": "What budget ?",
+    "The_budget_is_manually_updated_every_month": "The budget is manually updated every month",
+    "And_the_cost_of_labor": "And the cost of labor ?",
+    "A_year_of_development_costs_up_to": "A year of development costs up to €250,000.",
+    "Expenses": "Expenses",
+    "Income": "Income"
   },
   "FundingLinks": {
     "By_CB_paypal": "By <b>Credit card</b> or <b>Paypal</b>.",
-    "With_utip": "With <b>uTip</b>",
-    "With_tipeee": "With <b>Tipeee</b>",
-    "Donate_with_paypal": "Donate with Paypal"
+    "Donate_with_paypal": "Donate with Paypal",
+    "Buy_me_a_coffee": "With <b>Buy Me a Coffee</b>"
   },
   "LoginModal": {
     "Login": "Login",
@@ -724,7 +725,8 @@
     "Thanks_for_your_feedback": "Thanks for your feedback",
     "Support_project": "Make a donation to support this project",
     "Close": "Close",
-    "What_happened": "What happened ?️"
+    "What_happened": "What happened ?️",
+    "For_the_moment_the_budget_is": "For the moment the budget is:"
   },
   "ResetPasswordView": {
     "Reset_your_password": "Reset your password",

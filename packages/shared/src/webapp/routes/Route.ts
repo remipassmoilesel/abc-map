@@ -23,10 +23,21 @@ const logger = Logger.get('Route.ts');
 export declare type Params = { [k: string]: string | undefined };
 
 export class Route<T extends Params> {
+  private _replaceLang = true;
+
   constructor(private readonly _raw: string, private lang: Language | (() => Language)) {}
 
   public raw(): string {
     return this._raw;
+  }
+
+  /**
+   * By default, :lang is replaced, you can disable it by calling replaceLang(false).
+   * @param value
+   */
+  public replaceLang(value: boolean): Route<T> {
+    this._replaceLang = value;
+    return this;
   }
 
   /**
@@ -49,7 +60,11 @@ export class Route<T extends Params> {
       }
     }
 
-    return this.replaceParam(result, 'lang', this.getLang());
+    if (this._replaceLang) {
+      return this.replaceParam(result, 'lang', this.getLang());
+    } else {
+      return result;
+    }
   }
 
   public getLang(): Language {

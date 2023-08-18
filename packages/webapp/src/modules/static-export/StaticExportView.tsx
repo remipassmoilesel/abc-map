@@ -34,7 +34,7 @@ import uuid from 'uuid-random';
 import SideMenu from '../../components/side-menu/SideMenu';
 import { IconDefs } from '../../components/icon/IconDefs';
 import { useServices } from '../../core/useServices';
-import { useAppSelector } from '../../core/store/hooks';
+import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { useTranslation } from 'react-i18next';
 import { ExportKeyboardListener } from './ExportKeyboardListener';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
@@ -57,6 +57,7 @@ import { RemoveLayoutNorthChangeset } from '../../core/history/changesets/layout
 import { UpdateLayoutNorthChangeset } from '../../core/history/changesets/layouts/UpdateLayoutNorthChangeset';
 import isEqual from 'lodash/isEqual';
 import { LayoutPreview } from './layout-preview/LayoutPreview';
+import { ProjectActions } from '../../core/store/project/actions';
 
 const logger = Logger.get('StaticExportView.tsx', 'warn');
 
@@ -113,7 +114,8 @@ export function StaticExportView() {
       const layout: AbcLayout = {
         id: uuid(),
         name,
-        format: LayoutFormats.A4_LANDSCAPE,
+        // By default we use small formats
+        format: LayoutFormats.A5_LANDSCAPE,
         view: Views.normalize({ center, resolution: layoutRes, projection, rotation }),
         textFrames: [],
       };
@@ -213,7 +215,7 @@ export function StaticExportView() {
     (layout: AbcLayout) => {
       const before = layouts.find((lay) => lay.id === layout.id);
       if (!before) {
-        logger.error('Cannot register changeset', { before, layout });
+        logger.error('Cannot register changeset, layout not found', { before, layout });
         return;
       }
 
@@ -227,6 +229,8 @@ export function StaticExportView() {
     },
     [history, layouts]
   );
+
+  const abcMapAttributions = useAppSelector((st) => st.project.layouts.abcMapAttributionsEnabled);
 
   // User exports layouts to PDF or PNG
   const handleExport = useCallback(
@@ -244,12 +248,12 @@ export function StaticExportView() {
         let status: OperationStatus = OperationStatus.Succeed;
         switch (format) {
           case ExportFormat.PDF:
-            result = await renderer.renderLayoutsAsPdf(layouts, geo.getMainMap());
+            result = await renderer.renderLayoutsAsPdf(layouts, geo.getMainMap(), abcMapAttributions);
             FileIO.downloadBlob(result, 'map.pdf');
             break;
 
           case ExportFormat.PNG:
-            result = await renderer.renderLayoutsAsPng(layouts, geo.getMainMap());
+            result = await renderer.renderLayoutsAsPng(layouts, geo.getMainMap(), abcMapAttributions);
             FileIO.downloadBlob(result, 'map.zip');
             break;
 
@@ -272,7 +276,7 @@ export function StaticExportView() {
         })
         .finally(() => renderer.dispose());
     },
-    [geo, layouts, modals, t, toasts]
+    [abcMapAttributions, geo, layouts, modals, t, toasts]
   );
 
   const handleAddTextFrame = useCallback(
@@ -428,6 +432,9 @@ export function StaticExportView() {
     [activeLayout, history]
   );
 
+  const dispatch = useAppDispatch();
+  const handleAbcMapAttributionsChange = useCallback((value: boolean) => dispatch(ProjectActions.setAbcMapAttributions(value)), [dispatch]);
+
   if (offline) {
     return (
       <LargeOfflineIndicator>
@@ -486,6 +493,7 @@ export function StaticExportView() {
             onRemoveScale={handleRemoveScale}
             onAddNorth={handleAddNorth}
             onRemoveNorth={handleRemoveNorth}
+            onAbcMapAttributionsChange={handleAbcMapAttributionsChange}
           />
         </SideMenu>
       </div>

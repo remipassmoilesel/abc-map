@@ -28,7 +28,7 @@ import { FeedbackService } from '../../feedback/FeedbackService';
 import { SinonStubbedInstance } from 'sinon';
 import { Services } from '../../Services';
 import { LegalMentionsService } from '../../legal-mentions/LegalMentionsService';
-import { LocalStorageService } from '../../storage/local-storage/LocalStorageService';
+import { StorageService } from '../../storage/StorageService';
 import { PwaService } from '../../pwa/PwaService';
 import { DocumentationService } from '../../documentation/DocumentationService';
 
@@ -46,7 +46,7 @@ export interface TestServices {
   dataStore: SinonStubbedInstance<DataStoreService>;
   feedback: SinonStubbedInstance<FeedbackService>;
   legalMentions: SinonStubbedInstance<LegalMentionsService>;
-  storage: SinonStubbedInstance<LocalStorageService>;
+  storage: SinonStubbedInstance<StorageService>;
   pwa: SinonStubbedInstance<PwaService>;
   documentation: SinonStubbedInstance<DocumentationService>;
 }
@@ -63,7 +63,7 @@ export function newTestServices(): TestServices {
     dataStore: sinon.createStubInstance(DataStoreService),
     feedback: sinon.createStubInstance(FeedbackService),
     legalMentions: sinon.createStubInstance(LegalMentionsService),
-    storage: sinon.createStubInstance(LocalStorageService),
+    storage: sinon.createStubInstance(StorageService),
     pwa: sinon.createStubInstance(PwaService),
     documentation: sinon.createStubInstance(DocumentationService),
   };

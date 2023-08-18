@@ -22,7 +22,7 @@ import { MainStore, storeFactory } from '../../../core/store/store';
 import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
 import { localModulesFactory } from '../../../modules';
 import { UiActions } from '../../store/ui/actions';
-import { LocalModuleId } from '../../../modules/LocalModuleId';
+import { BundledModuleId } from '@abc-map/shared';
 import { disableSearchIndexLogging } from '../../utils/SearchIndex';
 
 disableSearchIndexLogging();
@@ -57,10 +57,10 @@ describe('ModuleRegistry', () => {
       await registry.initialize();
 
       // Act
-      const result = registry.search(LocalModuleId.SharedMapSettings);
+      const result = registry.search(BundledModuleId.SharedMapSettings);
 
       // Assert
-      expect(result.find((mod) => mod.getId() === LocalModuleId.SharedMapSettings)).toBeDefined();
+      expect(result.find((mod) => mod.getId() === BundledModuleId.SharedMapSettings)).toBeDefined();
     });
 
     it('should initialize index and remote modules', async () => {

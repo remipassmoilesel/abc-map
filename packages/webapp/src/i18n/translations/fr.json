@@ -62,7 +62,8 @@
     "You_can_use_abc-map_offline": "Vous pouvez utiliser Abc-map hors ligne",
     "You_cannot_use_abc-map_offline": "Vous ne pouvez pas utiliser Abc-map hors ligne",
     "About_this_platform": "A propos de cette plateforme",
-    "What_changed": "Qu'est-ce qui a changé ?"
+    "What_changed": "Qu'est-ce qui a changé ?",
+    "Clear_local_app_data": "Effacer les données locales"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "Alors, comment ça se passe ?"
@@ -73,7 +74,7 @@
     "Close": "Fermer",
     "MapSharing": "Partage de carte",
     "ArtefactGenerator": "Générateur d'artefact",
-    "DevServiceWorker": "Service worker de dévelopement",
+    "DevServiceWorker": "Service worker de développement",
     "DisableWarningBeforeUnload": "Désactiver l'avertissement avant rechargement de la page"
   },
   "MapView": {
@@ -565,11 +566,10 @@
     "Layouts": "Mises en page",
     "Export": "Export",
     "Create_layout_to_export": "Créez une mise en page pour exporter votre carte en PDF ou PNG",
-    "Create_A4_layout": "Nouvelle page A4",
+    "New_layout": "Nouvelle page",
     "Layout": "Mise en page",
     "Create_layout_to_export_your_map": "Mettez en page et exportez vos cartes au format PDF ou PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
     "You_muse_select_a_layout": "Vous devez sélectionner une mise en page",
-    "New_layout": "Nouvelle page",
     "A5_portrait": "A5 portrait",
     "A5_landscape": "A5 paysage",
     "A4_portrait": "A4 portrait",
@@ -586,7 +586,8 @@
     "Controls_menu": "Actions",
     "Export_in_progress": "Export en cours ...",
     "Connect_to_the_Internet_to_export_your_map": "Connectez-vous à Internet pour <br/>exporter votre carte",
-    "Nothing_to_delete": "Il n'y a rien à supprimer"
+    "Nothing_to_delete": "Il n'y a rien à supprimer",
+    "Show_AbcMap_attributions": "Afficher les attributions Abc-Map"
   },
   "TextFrameControls": {
     "New_text_frame": "Nouveau cadre de texte",
@@ -625,28 +626,28 @@
     "AbcMap_is_FOSS": "Abc-Map est un logiciel libre développé et hébergé bénévolement.",
     "No_ads_no_race_for_attention": "Vous avez remarqué ? Pas de pub, pas de course à l'attention, pas de récolte de données personnelles",
     "Fund_a_free_internet_territory": "En finançant ce logiciel vous financez un territoire d'internet libre, où le logiciel sert l'utilisateur.",
-    "How": "Comment",
+    "How_to_donate": "Comment donner ?",
     "What_is_the_point": "A quoi ça sert",
     "Money_collected": "L'argent récolté",
     "Pays_hosting": "Paie l'hébergement",
     "Funds_development_sessions": "Finance des sessions de développement",
     "Funds_documentation": "Finance de la documentation",
-    "Next_planned_features_are": "Les prochaines fonctionnalités prévues sont",
-    "Better_styles": "De meilleurs styles pour créer de plus belles cartes",
-    "Creating_symbols_from_CSV_workbooks": "La création de symboles à partir de classeurs CSV",
-    "Automatic_saving_of_projects": "L'enregistrement automatique des projets",
-    "And_more": "Et plus !",
     "Links": "Liens",
     "Source_code": "Code source",
     "Author_personal_website": "Site personnel de l'auteur",
     "Fund_Abc-map": "Financez Abc-Map !",
-    "Fund_a_little_piece_of_free_internet": "Financez un petit bout d'Internet libre \uD83D\uDC8C"
+    "Fund_a_little_piece_of_free_internet": "Financez un petit bout d'Internet libre \uD83D\uDC8C",
+    "What_budget": "Quel budget ?",
+    "The_budget_is_manually_updated_every_month": "Le budget est mis à jour manuellement tous les mois",
+    "And_the_cost_of_labor": "Et le coût de la main d'oeuvre ?",
+    "A_year_of_development_costs_up_to": "Une année de développement coûte jusqu'à 250 000 €.",
+    "Expenses": "Dépenses",
+    "Income": "Revenu"
   },
   "FundingLinks": {
     "By_CB_paypal": "Par <b>Carte bleue</b> ou <b>Paypal</b>.",
-    "With_utip": "Avec <b>uTip</b>",
-    "With_tipeee": "Avec <b>Tipeee</b>",
-    "Donate_with_paypal": "Faire un don Paypal"
+    "Donate_with_paypal": "Faire un don Paypal",
+    "Buy_me_a_coffee": "Avec <b>Buy Me a Coffee</b>"
   },
   "LoginModal": {
     "Login": "Connexion",
@@ -727,7 +728,8 @@
     "Thanks_for_your_feedback": "Merci pour votre retour",
     "Support_project": "Faites-un don pour soutenir ce projet",
     "Close": "Fermer",
-    "What_happened": "Que s'est il passé ?️"
+    "What_happened": "Que s'est il passé ?️",
+    "For_the_moment_the_budget_is": "Pour le moment le budget est de:"
   },
   "ResetPasswordView": {
     "Reset_your_password": "Réinitialiser votre mot de passe",

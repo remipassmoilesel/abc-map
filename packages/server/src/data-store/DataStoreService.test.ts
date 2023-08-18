@@ -28,7 +28,7 @@ import { AbcArtefact, ArtefactFilter, ArtefactType, Language } from '@abc-map/sh
 import { TestHelper } from '../utils/TestHelper';
 import * as _ from 'lodash';
 import * as uuid from 'uuid-random';
-import { ArtefactManifestRead } from './ArtefactManifest';
+import { ArtefactManifestWithPath } from './ArtefactManifestSchema';
 
 logger.disable();
 
@@ -165,10 +165,10 @@ describe('DatastoreService', () => {
   it('index() should work', async () => {
     // Prepare
     const testId = uuid();
-    const artefacts: ArtefactManifestRead[] = [
-      TestHelper.sampleArtefactManifest(`${testId}-0`),
-      TestHelper.sampleArtefactManifest(`${testId}-1`),
-      TestHelper.sampleArtefactManifest(`${testId}-2`),
+    const artefacts: ArtefactManifestWithPath[] = [
+      TestHelper.sampleArtefactManifestWithPath(`${testId}-0`),
+      TestHelper.sampleArtefactManifestWithPath(`${testId}-1`),
+      TestHelper.sampleArtefactManifestWithPath(`${testId}-2`),
     ].sort((a, b) => a.artefact.name[0].text.localeCompare(b.artefact.name[0].text));
 
     scanner.scan.resolves(artefacts);

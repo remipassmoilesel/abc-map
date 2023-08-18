@@ -49,15 +49,10 @@ export function ProjectManagementView() {
   return (
     <div className={Cls.panel} data-cy={'project-management-module'}>
       <ProjectStatus className={'mt-5 mb-3'} />
-
       <Actions className={'mb-3'} />
-
       <LayersSummary className={'mb-3'} />
-
       <LayoutsSummary className={'mb-3'} />
-
       <SharedViewsSummary className={'mb-3'} />
-
       <ProjectionStatus className={'my-4'} />
 
       {/* If the user is authenticated, we show him his projects */}

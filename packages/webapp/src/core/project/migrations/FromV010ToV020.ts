@@ -16,22 +16,24 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest } from '@abc-map/shared';
+import { AbcFile } from '@abc-map/shared';
 import { Views } from '../../geo/Views';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
+import { AbcProjectManifest010 } from './dependencies/010-project-types';
+import { AbcProjectManifest020 } from './dependencies/020-project-types';
 
 /**
  * This migration add a view in project manifest
  */
-export class FromV010ToV020 implements ProjectMigration {
-  public async interestedBy(manifest: AbcProjectManifest): Promise<boolean> {
+export class FromV010ToV020 implements ProjectMigration<AbcProjectManifest010, AbcProjectManifest020> {
+  public async interestedBy(manifest: AbcProjectManifest010): Promise<boolean> {
     const version = manifest.metadata.version;
     const isV1 = version === '0.1';
     return isV1 || semver.lt(version, '0.2.0');
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
+  public async migrate(manifest: AbcProjectManifest010, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest020>> {
     return {
       manifest: {
         ...manifest,

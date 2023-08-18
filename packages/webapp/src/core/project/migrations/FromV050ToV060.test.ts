@@ -19,10 +19,11 @@
 import { TestData } from './test-data/TestData';
 import { MigrationProject } from './typings';
 import { FromV050ToV060 } from './FromV050ToV060';
-import { AbcProjectMetadata } from '@abc-map/shared';
+import { AbcProjectMetadata120 } from './dependencies/120-project-types';
+import { AbcProjectManifest050 } from './dependencies/050-project-types';
 
 describe('FromV050ToV060', () => {
-  let sampleProject: MigrationProject;
+  let sampleProject: MigrationProject<AbcProjectManifest050>;
   let migration: FromV050ToV060;
 
   beforeEach(async () => {
@@ -40,7 +41,7 @@ describe('FromV050ToV060', () => {
     const result = await migration.migrate(sampleProject.manifest, sampleProject.files);
 
     // Assert
-    const expectedMetadata: AbcProjectMetadata = {
+    const expectedMetadata: AbcProjectMetadata120 = {
       id: sampleProject.manifest.metadata.id,
       version: '0.6.0',
       name: sampleProject.manifest.metadata.name,

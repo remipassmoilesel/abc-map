@@ -18,6 +18,7 @@
 
 import { ConfigLoader, logger } from './ConfigLoader';
 import { assert } from 'chai';
+import { normalizeBlankChars } from '../utils/normalizeBlankChars';
 
 logger.disable();
 
@@ -34,7 +35,10 @@ describe('ConfigLoader', () => {
 
   it('load bad config', async () => {
     const err = await loader.load('resources/test/wrong-config.js').catch((err) => err);
-    assert.match(err.message, /Invalid configuration resources\/test\/wrong-config.js: {"instancePath"/);
+    assert.isTrue(
+      normalizeBlankChars(err.message).startsWith('Configuration resources/test/wrong-config.js is not valid: { "instancePath"'),
+      'Unexpected message: ' + normalizeBlankChars(err.message)
+    );
   });
 
   it('load development.js', async () => {
