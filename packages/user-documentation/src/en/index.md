@@ -18,5 +18,6 @@ with_toc: false
 
 ## Blog articles
 
+- [Quick troubleshooting](blog/2023-08-19/)
 - [Optional Abc-Map attribution](blog/2023-08-10/)
 - [New documentation engine](blog/2023-08-01/)

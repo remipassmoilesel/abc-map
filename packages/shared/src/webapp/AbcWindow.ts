@@ -27,7 +27,7 @@ export interface AbcWindow extends Window {
     services?: any;
     store?: any;
     goToFunding?: () => void;
-    clearLocalData?: () => void;
+    resetLocalData?: () => void;
   };
   __REDUX_DEVTOOLS_EXTENSION__?: () => any;
   Cypress?: any;

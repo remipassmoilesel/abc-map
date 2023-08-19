@@ -3,7 +3,7 @@
     <url>
         <loc>http://domain.org/en</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>1.0</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/en"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/fr"></xhtml:link>
@@ -12,7 +12,7 @@
     <url>
         <loc>http://domain.org/en/map</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/en/map"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/fr/map"></xhtml:link>
@@ -21,7 +21,7 @@
     <url>
         <loc>http://domain.org/en/changelog</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.8</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/en/changelog"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/fr/changelog"></xhtml:link>
@@ -30,7 +30,7 @@
     <url>
         <loc>http://domain.org/en/funding</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.7</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/en/funding"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/fr/funding"></xhtml:link>
@@ -39,7 +39,7 @@
     <url>
         <loc>http://domain.org/en/legal-mentions</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.6</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/en/legal-mentions"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/fr/legal-mentions"></xhtml:link>
@@ -48,7 +48,7 @@
     <url>
         <loc>http://domain.org/documentation/en/blog/2023-08-01/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/blog/2023-08-01/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/blog/2023-08-01/"></xhtml:link>
@@ -57,16 +57,25 @@
     <url>
         <loc>http://domain.org/documentation/en/blog/2023-08-10/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/blog/2023-08-10/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/blog/2023-08-10/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.org/documentation/en/blog/2023-08-10/"></xhtml:link>
     </url>
     <url>
+        <loc>http://domain.org/documentation/en/blog/2023-08-19/</loc>
+        <changefreq>monthly</changefreq>
+        <lastmod>2023-08-18</lastmod>
+        <priority>0.9</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/blog/2023-08-19/"></xhtml:link>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/blog/2023-08-19/"></xhtml:link>
+        <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.org/documentation/en/blog/2023-08-19/"></xhtml:link>
+    </url>
+    <url>
         <loc>http://domain.org/documentation/en/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/"></xhtml:link>
@@ -75,7 +84,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/01_presentation/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/01_presentation/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/01_presentation/"></xhtml:link>
@@ -84,7 +93,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/02_basics/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/02_basics/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/02_basics/"></xhtml:link>
@@ -93,7 +102,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/03_create-map/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/03_create-map/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/03_create-map/"></xhtml:link>
@@ -102,7 +111,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/04_import-data/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/04_import-data/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/04_import-data/"></xhtml:link>
@@ -111,7 +120,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/05_registration/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/05_registration/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/05_registration/"></xhtml:link>
@@ -120,7 +129,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/06_modules/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/06_modules/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/06_modules/"></xhtml:link>
@@ -129,7 +138,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/07_mobile-application/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/07_mobile-application/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/07_mobile-application/"></xhtml:link>
@@ -138,7 +147,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/98_faq/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/98_faq/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/98_faq/"></xhtml:link>
@@ -147,7 +156,7 @@
     <url>
         <loc>http://domain.org/documentation/en/reference/99_helpme/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/99_helpme/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/99_helpme/"></xhtml:link>
@@ -156,7 +165,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/blog/2023-08-01/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/blog/2023-08-01/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/blog/2023-08-01/"></xhtml:link>
@@ -165,16 +174,25 @@
     <url>
         <loc>http://domain.org/documentation/fr/blog/2023-08-10/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/blog/2023-08-10/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/blog/2023-08-10/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.org/documentation/fr/blog/2023-08-10/"></xhtml:link>
     </url>
     <url>
+        <loc>http://domain.org/documentation/fr/blog/2023-08-19/</loc>
+        <changefreq>monthly</changefreq>
+        <lastmod>2023-08-18</lastmod>
+        <priority>0.9</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/blog/2023-08-19/"></xhtml:link>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/blog/2023-08-19/"></xhtml:link>
+        <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.org/documentation/fr/blog/2023-08-19/"></xhtml:link>
+    </url>
+    <url>
         <loc>http://domain.org/documentation/fr/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/"></xhtml:link>
@@ -183,7 +201,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/01_presentation/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/01_presentation/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/01_presentation/"></xhtml:link>
@@ -192,7 +210,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/02_basics/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/02_basics/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/02_basics/"></xhtml:link>
@@ -201,7 +219,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/03_create-map/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/03_create-map/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/03_create-map/"></xhtml:link>
@@ -210,7 +228,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/04_import-data/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/04_import-data/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/04_import-data/"></xhtml:link>
@@ -219,7 +237,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/05_registration/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/05_registration/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/05_registration/"></xhtml:link>
@@ -228,7 +246,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/06_modules/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/06_modules/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/06_modules/"></xhtml:link>
@@ -237,7 +255,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/07_mobile-application/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/07_mobile-application/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/07_mobile-application/"></xhtml:link>
@@ -246,7 +264,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/98_faq/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/98_faq/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/98_faq/"></xhtml:link>
@@ -255,7 +273,7 @@
     <url>
         <loc>http://domain.org/documentation/fr/reference/99_helpme/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/en/reference/99_helpme/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="fr" href="http://domain.org/documentation/fr/reference/99_helpme/"></xhtml:link>
@@ -264,7 +282,7 @@
     <url>
         <loc>http://domain.org/documentation/</loc>
         <changefreq>monthly</changefreq>
-        <lastmod>2023-08-07</lastmod>
+        <lastmod>2023-08-18</lastmod>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="http://domain.org/documentation/"></xhtml:link>
         <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.org/documentation/"></xhtml:link>

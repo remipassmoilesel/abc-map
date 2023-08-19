@@ -18,5 +18,6 @@ with_toc: false
 
 ## Blog
 
+- [Dépannage rapide](blog/2023-08-19/)
 - [Attribution Abc-Map optionnelle](blog/2023-08-10/)
 - [Nouveau moteur de documentation !](blog/2023-08-01/)

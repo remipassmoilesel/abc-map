@@ -69,7 +69,7 @@ export function AppSection() {
             return project
               .newProject()
               .then(() => authentication.logout())
-              .then(() => storage.clear());
+              .then(() => storage.resetStorage());
           }
         })
         .catch((err) => {

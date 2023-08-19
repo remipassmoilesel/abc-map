@@ -98,7 +98,7 @@ class ErrorBoundary extends React.Component<Props, State> {
 
     // No need to create a new project here, we will reload page
     storage
-      .clear()
+      .resetStorage()
       .catch((err) => logger.error('Clear storage error: ', err))
       .finally(() => window.location.reload());
   };

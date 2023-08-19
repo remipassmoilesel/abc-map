@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { getMainDbClient } from './indexed-db/main-database';
+import { getMainDbClient, MainDatabase } from './indexed-db/main-database';
 import { wait } from '../utils/wait';
+import { BeforeUnloadWarning } from '../../components/warning-before-unload/BeforeUnloadWarning';
+import { ObjectStore } from './indexed-db/client/ObjectStore';
 
 export enum StorageKey {
   REDUX_STATE = 'ABC_MAP_REDUX_STATE',
@@ -37,11 +39,29 @@ export class StorageService {
    *
    * You should probably create a new project before.
    */
-  public async clear(): Promise<void> {
+  public async clearStorage(): Promise<void> {
     // We wait a little for throttled saves
     await wait(500);
 
     localStorage.clear();
-    await getMainDbClient().clearDatabase();
+
+    await getMainDbClient().clearStores([ObjectStore.Migrations]);
+  }
+
+  /**
+   * Drop all local storage and indexed db storage.
+   *
+   * You should probably create a new project before.
+   */
+  public async resetStorage(): Promise<void> {
+    // We wait a little for throttled saves
+    await wait(500);
+
+    localStorage.clear();
+    await getMainDbClient().dropDatabase(MainDatabase);
+
+    // We reload in order to reset indexed db schema
+    BeforeUnloadWarning.get().setEnabled(false);
+    window.location.reload();
   }
 }
