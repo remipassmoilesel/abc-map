@@ -66,10 +66,8 @@ async function authentication(svc: Services): Promise<void> {
     project
       .newProject()
       .catch((err) => logger.error('New project error: ', err))
-      .then(() => svc.storage.clear())
-      .catch((err) => {
-        logger.error('Clear storage error: ', err);
-      });
+      .then(() => svc.storage.clearStorage())
+      .catch((err) => logger.error('Clear storage error: ', err));
   });
 
   if (!pwa.isOnline()) {
@@ -187,15 +185,15 @@ function bootstrapError(svc: Services, err: Error | AxiosError | undefined): Pro
     const window = getAbcWindow();
     window.abc = {
       ...window.abc,
-      clearLocalData: () => {
+      resetLocalData: () => {
         storage
-          .clear()
+          .resetStorage()
           .catch((err) => logger.error('Clear error: ', err))
           .finally(() => window.location.reload());
       },
     };
     message += '<div>If this error persist, you can try to ';
-    message += '<button onclick="window.abc.clearLocalData()" class="btn btn-link p-0 mb-1">clean your local data.</button></div>';
+    message += '<button onclick="window.abc.resetLocalData()" class="btn btn-link p-0 mb-1">clean your local data.</button></div>';
   }
 
   const root = document.querySelector('#root');

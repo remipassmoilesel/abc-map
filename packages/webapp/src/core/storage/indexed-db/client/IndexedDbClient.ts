@@ -18,7 +18,6 @@
 
 import { Logger } from '@abc-map/shared';
 import isEqual from 'lodash/isEqual';
-import { ObjectStore } from './ObjectStore';
 
 export const logger = Logger.get('IndexedDbClient.ts', 'warn');
 
@@ -225,11 +224,25 @@ export class IndexedDbClient {
     }
   }
 
-  public async clearDatabase() {
-    const protectedStores: string[] = [ObjectStore.Migrations];
+  /**
+   * Drop the entire database. You should probably reload app after.
+   * @param databaseName
+   */
+  public async dropDatabase(databaseName: string) {
+    const db = this.getDatabase();
+    db.close();
+
+    const transaction = indexedDB.deleteDatabase(databaseName);
+    await this.requestPromise(transaction);
+  }
+
+  /**
+   * Clear all database data. You do not need to reload app after.
+   */
+  public async clearStores(ignoreNames: string[] = []) {
     const db = this.getDatabase();
     for (const storeName of db.objectStoreNames) {
-      if (protectedStores.includes(storeName)) {
+      if (ignoreNames.includes(storeName)) {
         continue;
       }
 

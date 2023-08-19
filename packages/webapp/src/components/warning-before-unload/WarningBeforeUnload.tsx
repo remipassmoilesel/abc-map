@@ -17,42 +17,16 @@
  */
 
 import { useEffect } from 'react';
-import { Env } from '../../core/utils/Env';
 import { useExperimentalFeature } from '../../core/ui/useExperimentalFeature';
 import { DisableWarningBeforeUnload } from '../../experimental-features';
-import { useTranslation } from 'react-i18next';
+import { BeforeUnloadWarning } from './BeforeUnloadWarning';
 
 export function WarningBeforeUnload() {
-  const { t } = useTranslation('WarningBeforeUnload');
-
   const disabled = useExperimentalFeature(DisableWarningBeforeUnload);
 
   useEffect(() => {
-    // Warning is never enabled in E2E tests
-    if (Env.isE2e()) {
-      return;
-    }
-
-    if (disabled) {
-      return;
-    }
-
-    const warning = (ev: BeforeUnloadEvent | undefined): string => {
-      const message = t('Modification_in_progress_will_be_lost');
-      if (ev) {
-        ev.returnValue = message;
-      }
-      return message;
-    };
-
-    window.addEventListener('beforeunload', warning);
-    window.addEventListener('unload', warning);
-
-    return () => {
-      window.removeEventListener('beforeunload', warning);
-      window.removeEventListener('unload', warning);
-    };
-  }, [disabled, t]);
+    BeforeUnloadWarning.get().setEnabled(!disabled);
+  }, [disabled]);
 
   return <></>;
 }
