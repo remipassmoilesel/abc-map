@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copyright © 2021 Rémi Pace.
+ * Copyright © 2023 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify

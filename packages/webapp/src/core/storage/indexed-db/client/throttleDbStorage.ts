@@ -1,5 +1,5 @@
 /**
- * Copyright © 2022 Rémi Pace.
+ * Copyright © 2023 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
