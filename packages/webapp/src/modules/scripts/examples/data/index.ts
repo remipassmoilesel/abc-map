@@ -23,10 +23,14 @@ import bufferSampleData from './buffer-sample-data.geojson';
 import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
+import { Logger } from '@abc-map/shared';
+
+export const logger = Logger.get('modules/scripts/examples/index.ts', 'info');
 
 export async function setupFranceRegions(map: MapWrapper) {
   const alreadyExists = map.getLayers().find((lay) => lay.getName() === 'Regions of France');
   if (alreadyExists) {
+    logger.info(`Layer "${alreadyExists.getName()}" already exists.`);
     return;
   }
 
@@ -47,6 +51,7 @@ export async function setupFranceRegions(map: MapWrapper) {
 export async function setupBufferSampleData(map: MapWrapper) {
   const alreadyExists = map.getLayers().find((lay) => lay.getName() === 'Buffer sample data');
   if (alreadyExists) {
+    logger.info(`Layer "${alreadyExists.getName()}" already exists.`);
     return;
   }
 

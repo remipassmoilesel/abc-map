@@ -70,8 +70,8 @@ export function ScriptsView(props: Props) {
     (example: ScriptExample) => {
       setExampleLoading(true);
 
-      const setup = example.setup ? example.setup(geo.getMainMap()) : Promise.resolve();
-      setup
+      example
+        .setup(geo.getMainMap())
         .then(() => fetch(example.codeUrl))
         .then((response) => response.text())
         .then((scriptContent) => {
