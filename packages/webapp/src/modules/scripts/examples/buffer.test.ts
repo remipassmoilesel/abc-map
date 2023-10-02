@@ -31,6 +31,9 @@ import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { getScriptApi } from '../script-api/ScriptApi';
 import * as turf from '@turf/turf';
 import sortBy from 'lodash/sortBy';
+import { logger } from './data';
+
+logger.disable();
 
 describe('buffers.js-txt', () => {
   let logStub: sinon.SinonStub;

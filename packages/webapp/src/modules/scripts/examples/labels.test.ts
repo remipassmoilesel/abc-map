@@ -30,6 +30,9 @@ import { newTestServices, TestServices } from '../../../core/utils/test/TestServ
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { getScriptApi } from '../script-api/ScriptApi';
 import sortBy from 'lodash/sortBy';
+import { logger } from './data';
+
+logger.disable();
 
 describe('labels.js-txt', () => {
   let logStub: sinon.SinonStub;

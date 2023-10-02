@@ -52,5 +52,7 @@ export class StorageUpdater {
         await migrationStorage.put({ name: migration.getName(), when: Date.now() });
       }
     }
+
+    logger.warn(`Schema update done.`);
   }
 }
