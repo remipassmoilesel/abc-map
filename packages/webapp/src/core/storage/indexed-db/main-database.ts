@@ -21,6 +21,9 @@ import { IndexedDbClient } from './client/IndexedDbClient';
 import { FeatureIDBEntry } from './features/FeatureIDBEntry';
 import { TileIDBEntry } from './tiles/TileIDBEntry';
 import { StorageUpdater } from './migrations/StorageUpdater';
+import { Logger } from '@abc-map/shared';
+
+const logger = Logger.get('initMainDatabase.ts');
 
 export const MainDatabase = 'abc-map_projects';
 
@@ -28,6 +31,20 @@ export const Features_LayerIdIndex = 'Features_LayerIdIndex';
 export const Tiles_UrlIndex = 'Tiles_UrlIndex';
 
 let client: IndexedDbClient | undefined;
+
+/**
+ * Return Indexed DB client if connected.
+ *
+ * Sometimes Indexed DB may be unavailable, and sometimes it may become stuck, so you need to ensure that the features can work without it.
+ */
+export function getMainDbClient(): IndexedDbClient | undefined {
+  if (!client || !client.isConnected()) {
+    logger.warn('Client not available, not connected');
+    return;
+  }
+
+  return client;
+}
 
 export async function initMainDatabase() {
   client?.disconnect();
@@ -69,12 +86,4 @@ export async function initMainDatabase() {
 
   const updater = StorageUpdater.create();
   await updater.update(client);
-}
-
-export function getMainDbClient(): IndexedDbClient {
-  if (!client) {
-    throw new Error('Not connected');
-  }
-
-  return client;
 }

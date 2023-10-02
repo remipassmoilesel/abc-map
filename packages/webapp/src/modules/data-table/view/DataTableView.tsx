@@ -24,7 +24,6 @@ import Cls from './DataTableView.module.scss';
 import { useTranslation } from 'react-i18next';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { DataViewSearchParams } from './DataViewSearchParams';
 import { useMapLayers } from '../../../core/geo/useMapLayers';
 import { useServices } from '../../../core/useServices';
 import { ModalStatus } from '../../../core/ui/typings';
@@ -57,7 +56,7 @@ export function DataTableView() {
 
   // Active Layer id is in search params
   const [searchParams] = useSearchParams();
-  const searchParamKey: keyof DataViewSearchParams = 'layerId';
+  const searchParamKey = 'layerId';
   const layerId = searchParams.get(searchParamKey) || activeLayer?.getId();
   const layer = layers.find((lay) => lay.getId() === layerId);
 

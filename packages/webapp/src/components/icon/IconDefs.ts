@@ -141,6 +141,8 @@ import { faShareAltSquare } from '@fortawesome/free-solid-svg-icons/faShareAltSq
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
+import { faSmileWink } from '@fortawesome/free-regular-svg-icons/faSmileWink';
+import { faFaceSadTear } from '@fortawesome/free-solid-svg-icons/faFaceSadTear';
 
 export const IconDefs = {
   faFilter,
@@ -244,6 +246,8 @@ export const IconDefs = {
   faCompass,
   faTrashAlt,
   faUndo,
+  faFaceSadTear,
+  faSmileWink,
   faRedo,
   faUpload,
   faDownload,

@@ -10,6 +10,12 @@ module.exports = {
         type: 'asset/source',
       });
 
+      // We add rule for js examples
+      addWebpackModuleRule(config, {
+        test: /\.js-txt$/,
+        type: 'asset/resource',
+      });
+
       // We disable eslint and typescript check for a better DX as they are very slow.
       // Lint and typecheck pass only in CI. See package.json for eslint and tsc commands.
       const excluded = ['ESLintWebpackPlugin', 'ForkTsCheckerWebpackPlugin'];
@@ -26,12 +32,12 @@ module.exports = {
       // Ignore source map warnings
       config.ignoreWarnings = (config.ignoreWarnings || []).concat([/Failed to parse source map/]);
 
-      // We remove the ability to load SVGs as React Component as it is useless and all SVG contains namespaces
-      const uselessSvgRule = config.module.rules[1].oneOf[3].use[0];
-      if (!uselessSvgRule.loader.includes('@svgr')) {
-        throw new Error("Webpack configuration changed, update 'craco.config.js' file");
+      // We remove the ability to load SVGs as React Component as it is not used and because it creates errors for SVG namespaces
+      const uselessSvgRule = config.module.rules[1].oneOf.find((rule) => rule.test.toString() === '/\\.svg$/');
+      if (!uselessSvgRule) {
+        throw new Error('Webpack configuration changed, see craco.config.js');
       }
-      config.module.rules[1].oneOf[3].use = config.module.rules[1].oneOf[3].use.filter((r) => r !== uselessSvgRule);
+      config.module.rules[1].oneOf = config.module.rules[1].oneOf.filter((rule) => rule !== uselessSvgRule);
 
       // Service worker config for development
       if (env === 'development') {
@@ -83,9 +89,10 @@ module.exports = {
       };
       config.coverageReporters = ['text', 'html'];
       config.transform = {
-        '\\.inline\\.svg$': '<rootDir>/scripts/inline-svg-transformer.js',
+        '^.+\\.inline\\.svg$': '<rootDir>/scripts/inline-svg-transformer.js',
         ...config.transform,
       };
+
       config.setupFiles = ['<rootDir>/scripts/test-setup.js'];
       // This option is needed in order to prevent weird errors in low ressources environment
       config.maxWorkers = '25%';

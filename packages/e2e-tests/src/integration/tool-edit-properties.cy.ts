@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapTool } from '@abc-map/shared';
+import { BundledModuleId, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ModeName, ToolSelector } from '../helpers/ToolSelector';
 import { MainMap } from '../helpers/MainMap';
@@ -51,7 +51,7 @@ describe('Edit properties', function () {
   it('user can edit properties, then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => Project.newProject())
-      .then(() => Modules.open('data-store'))
+      .then(() => Modules.open(BundledModuleId.DataStore))
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.map())
       .then(() => MainMap.fixedView1())

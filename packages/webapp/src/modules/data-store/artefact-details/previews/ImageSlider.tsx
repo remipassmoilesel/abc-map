@@ -27,7 +27,6 @@ import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useServices } from '../../../../core/useServices';
 import { Logger } from '@abc-map/shared';
 import { BlueLoader } from '../../../../components/blue-loader/BlueLoader';
-import { resolveInAtLeast } from '../../../../core/utils/resolveInAtLeast';
 
 const logger = Logger.get('ImageSlider.tsx');
 
@@ -58,7 +57,8 @@ function ImageSlider(props: Props) {
 
     let objectUrl: string | undefined;
     setLoading(true);
-    resolveInAtLeast(dataStore.downloadFile(urls[activeIndex]), 200)
+    dataStore
+      .downloadFile(urls[activeIndex])
       .then((res) => {
         objectUrl = URL.createObjectURL(res.content);
         setActivePreview(objectUrl);

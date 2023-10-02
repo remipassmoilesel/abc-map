@@ -38,6 +38,7 @@ import { SetLayerPositionChangeset } from '../../../core/history/changesets/laye
 import { useMapLayers } from '../../../core/geo/useMapLayers';
 import { SetActiveLayerChangeset } from '../../../core/history/changesets/layers/SetActiveLayerChangeset';
 import { useShowDataTableModule } from '../../../modules/data-table/useShowDataTableModule';
+import { useShowLayerExport } from '../../../modules/layer-export/useShowLayerExport';
 
 const logger = Logger.get('LayerControls.tsx');
 
@@ -45,7 +46,8 @@ export function LayerControls() {
   const { layers, activeLayer, activeVectorLayer } = useMapLayers();
   const { geo, toasts, history } = useServices();
   const { t } = useTranslation('MapView');
-  const showDataTableView = useShowDataTableModule();
+  const showDataTable = useShowDataTableModule();
+  const showExportLayer = useShowLayerExport();
 
   const [editedLayer, setEditedLayer] = useState<LayerWrapper | undefined>();
   const [addModalVisible, setAddModalVisible] = useState(false);
@@ -198,8 +200,18 @@ export function LayerControls() {
       return;
     }
 
-    showDataTableView(layerId);
-  }, [activeLayer, showDataTableView, t, toasts]);
+    showDataTable(layerId);
+  }, [activeLayer, showDataTable, t, toasts]);
+
+  const handleExport = useCallback(() => {
+    const layerId = activeLayer?.getId();
+    if (!layerId) {
+      toasts.info(t('You_must_first_select_layer'));
+      return;
+    }
+
+    showExportLayer(layerId);
+  }, [activeLayer, showExportLayer, t, toasts]);
 
   return (
     <div className={`control-block ${Cls.layerControls}`}>
@@ -258,6 +270,11 @@ export function LayerControls() {
           <WithTooltip title={t('Show_data')}>
             <button onClick={handleShowData} disabled={!activeVectorLayer} className={'btn btn-link'}>
               <FaIcon icon={IconDefs.faTable} />
+            </button>
+          </WithTooltip>
+          <WithTooltip title={t('Export')}>
+            <button onClick={handleExport} disabled={!activeVectorLayer} className={'btn btn-link'}>
+              <FaIcon icon={IconDefs.faDownload} />
             </button>
           </WithTooltip>
         </div>

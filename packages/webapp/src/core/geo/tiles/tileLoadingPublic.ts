@@ -34,6 +34,8 @@ export function tileLoadingPublic(): LoadFunction {
 
     storage
       .get(src)
+      // If storage fails, we try a network request
+      .catch((err) => logger.warn('Cannot get tile: ', err))
       .then<Blob>((tile) => {
         if (!tile) {
           return httpClient.get(src).then((res) => res.data);

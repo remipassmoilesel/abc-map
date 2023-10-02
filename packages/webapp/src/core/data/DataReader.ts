@@ -24,7 +24,7 @@ import { KmlReader } from './readers/KmlReader';
 import { ShapefileReader } from './readers/ShapefileReader';
 import { GeoJsonReader } from './readers/GeoJsonReader';
 import { WmsDefinitionReader } from './readers/WmsDefinitionReader';
-import { AbstractDataReader } from './readers/AbstractDataReader';
+import { ReaderImplementation as DataReaderImplem } from './readers/ReaderImplementation';
 import { AbcArtefact, AbcFile, AbcProjection, Zipper } from '@abc-map/shared';
 import { FileFormat, FileFormats } from './FileFormats';
 import { ModalStatus } from '../ui/typings';
@@ -35,6 +35,9 @@ import { XyzDefinitionReader } from './readers/XyzDefinitionReader';
 import { WmtsDefinitionReader } from './readers/WmtsDefinitionReader';
 import { ReadResult, ReadStatus } from './ReadResult';
 import { attributionsVariableExpansion } from '../utils/variableExpansion';
+import { WktReader } from './readers/WktReader';
+import { TopoJsonReader } from './readers/TopoJsonReader';
+import { UiConstants } from '../ui/UiConstants';
 
 const t = prefixedTranslation('DataReader:');
 
@@ -43,22 +46,21 @@ export const readersFactory = (services: Services) => [
   new KmlReader(),
   new ShapefileReader(),
   new GeoJsonReader(),
+  new WktReader(),
+  new TopoJsonReader(),
   new WmsDefinitionReader(services.geo, services.modals),
   new WmtsDefinitionReader(services.geo, services.modals),
   new XyzDefinitionReader(services.geo, services.modals),
 ];
-
-export const MAX_RECOMMENDED_SIZE = 5 * 1024 * 1024;
-export const MAX_RECOMMENDED_FEATURES = 1000;
 
 export class DataReader {
   public static create(): DataReader {
     return new DataReader(getServices(), readersFactory(getServices()));
   }
 
-  constructor(private services: Services, private readers: AbstractDataReader[]) {}
+  constructor(private services: Services, private readers: DataReaderImplem[]) {}
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
+  public async read(files: AbcFile<Blob>[], targetProjection: AbcProjection): Promise<ReadResult> {
     if (!files.length) {
       throw new Error('No file provided');
     }
@@ -79,7 +81,7 @@ export class DataReader {
     for (const reader of this.readers) {
       // We read files
       if (await reader.isSupported(_files)) {
-        const r = await reader.read(_files, projection);
+        const r = await reader.read(_files, targetProjection);
 
         // Read succeed, we store layers
         if (r.status === ReadStatus.Succeed && r.layers) {
@@ -104,7 +106,7 @@ export class DataReader {
     const { modals, history, geo } = this.services;
 
     // We check if files are not too big
-    const bigFiles = files.filter((f) => f.content.size >= MAX_RECOMMENDED_SIZE);
+    const bigFiles = files.filter((f) => f.content.size >= UiConstants.IMPORT_FILE_SIZE_MAX);
     if (bigFiles.length && (await modals.dataSizeWarning()) === ModalStatus.Canceled) {
       return { status: ReadStatus.Canceled, layers: [] };
     }
@@ -118,7 +120,7 @@ export class DataReader {
     }
 
     // We check if layers are not too big
-    const bigLayers = layers.filter((lay) => lay.isVector() && lay.getSource().getFeatures().length > MAX_RECOMMENDED_FEATURES);
+    const bigLayers = layers.filter((lay) => lay.isVector() && lay.getSource().getFeatures().length > UiConstants.FEATURE_PER_LAYER_MAX);
     if (!bigFiles.length && bigLayers.length && (await modals.dataSizeWarning()) === ModalStatus.Canceled) {
       return { status: ReadStatus.Canceled, layers: [] };
     }

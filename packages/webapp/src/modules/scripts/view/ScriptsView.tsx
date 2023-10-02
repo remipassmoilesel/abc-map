@@ -24,19 +24,21 @@ import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { ModuleContainer } from '../../../components/module-container/ModuleContainer';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
-import { Example, getScriptErrorOutput } from '../typings';
 import { usePersistentStore } from './state';
 import Cls from './ScriptsView.module.scss';
+import { AllScriptExamples, ScriptExample } from '../examples';
+import { useServices } from '../../../core/useServices';
+import { getScriptErrorOutput } from '../script-api/errors';
 
 const logger = Logger.get('ScriptsView.tsx');
 
 interface Props {
-  onProcess: (script: string) => string[];
+  onProcess: (script: string) => Promise<string[]>;
 }
 
 export function ScriptsView(props: Props) {
   const { onProcess } = props;
-
+  const { geo, toasts } = useServices();
   const { script, setScript } = usePersistentStore();
 
   const [message, setMessage] = useState('');
@@ -45,28 +47,50 @@ export function ScriptsView(props: Props) {
   const { t } = useTranslation('ScriptsModule');
 
   const handleExecute = useCallback(() => {
-    try {
-      const output = onProcess(script);
-      setMessage(`✨ ${t('Executed_without_errors')}`);
-      setOutput(output);
-    } catch (err: unknown) {
-      logger.error('Script error: ', err);
+    onProcess(script)
+      .then((output) => {
+        setMessage(`✨ ${t('Executed_without_errors')}`);
+        setOutput(output);
+      })
+      .catch((err) => {
+        logger.error('Script error: ', err);
 
-      const message = errorMessage(err);
-      setMessage(`${t('Error')}: ${message || '<no-message>'}`);
+        const message = errorMessage(err);
+        setMessage(`${t('Error')}: ${message || '<no-message>'}`);
 
-      const output = getScriptErrorOutput(err);
-      setOutput(output);
-    }
+        const output = getScriptErrorOutput(err);
+        setOutput(output);
+      });
   }, [onProcess, script, t]);
 
-  const handleReset = useCallback(() => setScript(Example), [setScript]);
-
   const handleChange = useCallback((content: string) => setScript(content), [setScript]);
+
+  const [exampleLoading, setExampleLoading] = useState(false);
+  const loadExample = useCallback(
+    (example: ScriptExample) => {
+      setExampleLoading(true);
+
+      const setup = example.setup ? example.setup(geo.getMainMap()) : Promise.resolve();
+      setup
+        .then(() => fetch(example.codeUrl))
+        .then((response) => response.text())
+        .then((scriptContent) => {
+          setScript(scriptContent);
+          toasts.info(t('Example_loaded'));
+        })
+        .catch((err) => {
+          logger.error('Example loading error: ', err);
+          toasts.genericError(err);
+        })
+        .finally(() => setExampleLoading(false));
+    },
+    [geo, setScript, t, toasts]
+  );
 
   return (
     <ModuleContainer>
       <ModuleTitle>{t('Running_scripts')}</ModuleTitle>
+
       <div className={'mb-2'}>
         <p>{t('Script_module_allow_advanced_data_modification')}</p>
         <p>{t('Keep_in_mind_recommendations')}: </p>
@@ -77,9 +101,25 @@ export function ScriptsView(props: Props) {
         </ul>
       </div>
 
-      <div className={'alert alert-danger my-2'}>
+      <div className={'alert alert-danger mb-4'}>
         <FaIcon icon={IconDefs.faExclamationTriangle} className={'mr-2'} size={'1.2rem'} />
         {t('Improper_use_can_cause_security_issue')}
+      </div>
+
+      <div className={'my-2 d-flex'}>
+        <div className={'me-2'}>{t('Do_you_want_to_load_an_example')}</div>
+
+        {AllScriptExamples.map((example) => (
+          <button
+            key={example.i18n_key}
+            data-cy={'load-example-' + example.id}
+            onClick={() => loadExample(example)}
+            className={'btn btn-sm btn-outline-primary me-2'}
+            disabled={exampleLoading}
+          >
+            {t(example.i18n_key)}
+          </button>
+        ))}
       </div>
 
       <div className={Cls.editorContainer}>
@@ -87,9 +127,6 @@ export function ScriptsView(props: Props) {
       </div>
 
       <div className={'d-flex justify-content-end'}>
-        <button className={'btn btn-outline-primary mt-3 me-2'} onClick={handleReset}>
-          {t('Default_content')}
-        </button>
         <button className={'btn btn-primary mt-3'} onClick={handleExecute} data-cy={'execute'}>
           {t('Execute')}
         </button>
@@ -100,6 +137,7 @@ export function ScriptsView(props: Props) {
           {message}
         </div>
       )}
+
       {!!output.length && (
         <div className={Cls.output}>
           {t('Output')}: <pre data-cy={'output'}>{output.join('\n')}</pre>

@@ -9,7 +9,7 @@ Vous venez de démarrer Abc-Map, mais ça ne fonctionne comme vous le voulez ?
 
 S'il s'agit d'un bug, ce guide peut vous aider à le résoudre.
 
-## Rechargez l'application
+## Recharger l'application
 
 Recharger l'application peut résoudre votre bug, par exemple en appliquant une mise à jour.
 

@@ -17,45 +17,24 @@
  */
 
 import { TestHelper } from '../helpers/TestHelper';
-import { DataStore } from '../helpers/DataStore';
 import { Routes } from '../helpers/Routes';
-import { Modules } from '../helpers/Modules';
+import { Toasts } from '../helpers/Toasts';
 
 describe('Script module', function () {
   beforeEach(() => {
     TestHelper.init();
   });
 
-  it('User can execute sample script', () => {
+  it('User can run example', () => {
     cy.visit(Routes.module().withParams({ moduleId: 'scripts' }))
       // We wait a little for project loading
       .wait(500)
+      .get('[data-cy=load-example-buffers]')
+      .click()
+      .then(() => Toasts.assertText('Example loaded'))
       .get('[data-cy=execute]')
       .click()
       .get('[data-cy=message]')
-      .should('contain', 'Script executed without errors')
-      .get('[data-cy=output]')
-      .contains('Layer OpenStreetMap is a Predefined layer.');
-  });
-
-  it('User can update features', () => {
-    const script = `\
-const mainMap = moduleApi.mainMap;
-const layer = mainMap.getLayers()[2];
-layer.getSource().getFeatures().forEach((f, i) => f.set('e2e', i));
-layer.getSource().getFeatures().forEach((f) => log(f.get('e2e')));
-`;
-
-    DataStore.importByName('Countries of the world')
-      .then(() => Modules.open('scripts'))
-      .get('#code-editor')
-      .clear()
-      .type(script)
-      .get('[data-cy=execute]')
-      .click()
-      .get('[data-cy=message]')
-      .should('contain', 'Script executed without errors')
-      .get('[data-cy=output]')
-      .should('contain', '0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11');
+      .should('contain', 'Script executed without errors');
   });
 });

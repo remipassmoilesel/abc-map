@@ -17,7 +17,7 @@
  */
 
 import 'cypress-file-upload';
-import { LayerType, ProjectConstants, ProjectHelper } from '@abc-map/shared';
+import { BundledModuleId, LayerType, ProjectConstants, ProjectHelper } from '@abc-map/shared';
 import { Toasts } from '../helpers/Toasts';
 import { TestHelper } from '../helpers/TestHelper';
 import { Download } from '../helpers/Download';
@@ -57,7 +57,7 @@ describe('Project', function () {
 
     it('can rename project', function () {
       cy.visit(Routes.map().format())
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         .get('[data-cy=edit-project-name]')
         .click()
         .get('[data-cy=prompt-input]')
@@ -74,7 +74,7 @@ describe('Project', function () {
     it('can export project', function () {
       cy.visit(Routes.map().format())
         .then(() => LayerControls.addWmsLayerWithCredentials())
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=export-project]')
         .click()
         .then(() => Toasts.assertText('Export done !'))
@@ -98,7 +98,7 @@ describe('Project', function () {
 
     it('can import project', function () {
       cy.visit(Routes.map().format())
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -123,7 +123,7 @@ describe('Project', function () {
 
     it('can import old projects with credentials', function () {
       cy.visit(Routes.map().format())
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -175,7 +175,7 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayerWithCredentials())
         // Save project online
 
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'));
@@ -187,7 +187,7 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .then(() => LayerControls.addVectorLayer())
         // Save project online
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'))
@@ -216,7 +216,7 @@ describe('Project', function () {
     it('can delete project', function () {
       const projectName = `Project ${uuid()}`;
       cy.visit(Routes.map().format())
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         // Rename project
         .get('[data-cy=edit-project-name]')
         .click()

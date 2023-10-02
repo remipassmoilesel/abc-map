@@ -45,7 +45,7 @@ export function DownloadExplanation(props: Props) {
 
           <div className={'ml-4'}>
             <h4 className={'mb-4'}>
-              <i>Et voila !</i>
+              <i>{t('Et_voila')}</i>
             </h4>
             <div className={'mb-3'}>{t('Beautiful_data_ready_to_use')} 🚀</div>
             <div>

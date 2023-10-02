@@ -32,6 +32,14 @@ export class TestData {
     return this.readFile('./stations.geojson');
   }
 
+  public async getSampleWkt(): Promise<Blob> {
+    return this.readFile('./stations.wkt');
+  }
+
+  public async getSampleTopoJSON(): Promise<Blob> {
+    return this.readFile('./belgium.topojson');
+  }
+
   /**
    * Zip containing multiple format of data (KML, geojson, gpx)
    */

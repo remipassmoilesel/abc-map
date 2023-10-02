@@ -19,6 +19,7 @@ You can use in this software:
 - GPX files
 - KML files
 - GeoJSON files
+- TopoJSON files
 - Shapefile files
 - WMS layers
 - WMTS layers
@@ -49,3 +50,24 @@ need as precisely as possible (you need to create a Gitlab account, it's free). 
 ## Where is the source code for Abc-Map ?
 
 The source code for the application is available <a target="_blank" href="https://gitlab.com/abc-map/abc-map">here</a>.
+
+## The numbers I'm using don't work
+
+If you are using digital data and the processing results are strange, you may need to check the format of your
+numbers.
+
+These formats work:
+
+```
+123
+1 234
+1 123.123
+1 123,123
+```
+
+But these formats don't work:
+
+```
+1,123,123
+1,123,123.123
+```

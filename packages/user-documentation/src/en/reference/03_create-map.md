@@ -16,7 +16,7 @@ You can use:
 
 <video controls src="../assets/add-predefined-layer.mp4" preload="none"></video>
 
-### Which layer to choose ?
+## Which layer to choose ?
 
 First, try the `predefined layers`, they are the easiest to use.
 
@@ -67,7 +67,7 @@ Add a title and description for each shape used on your map.
 
 <video controls src="../assets/create-scale-legend.mp4" preload="none"></video>
 
-## Layout and export
+## Layout and export your map
 
 On the "Layout" page, create one or more pages according to your needs. When your creation is ready export it in `PDF` or `PNG` format:
 
@@ -75,6 +75,8 @@ On the "Layout" page, create one or more pages according to your needs. When you
 - The PNG format allows you to integrate your map into a document, for example in a word processor
 
 <video controls src="../assets/pdf-export.mp4" preload="none"></video>
+
+You can also export geometry layers in GeoJSON, KML or GPX format using the layers export module.
 
 ## Share your map
 

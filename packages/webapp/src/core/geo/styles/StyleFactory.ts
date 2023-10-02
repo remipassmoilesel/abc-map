@@ -137,8 +137,8 @@ export class StyleFactory {
       const name = (properties.point?.icon as IconName) || DefaultIcon;
       const color = properties.point?.color || '#000000';
       const icon = IconProcessor.get().prepareCached(safeGetIcon(name), size, color);
-      // We must use "src" attribute here, as icons may not be loaded
-      const pointStyle = new Icon({ src: icon, imgSize: [size, size] });
+      // We need to use the "src" attribute here, otherwise there may be loading issues
+      const pointStyle = new Icon({ src: icon });
       return new Style({ image: pointStyle, text: textStyle, zIndex: properties.zIndex });
     }
 

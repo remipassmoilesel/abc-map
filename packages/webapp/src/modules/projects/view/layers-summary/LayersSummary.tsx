@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { layerIcon, layerTypeName } from './helpers';
 import clsx from 'clsx';
 import { useMapLayers } from '../../../../core/geo/useMapLayers';
+import { LayerIDBStorage } from '../../../../core/storage/indexed-db/layers/LayerIDBStorage';
 
 interface Props {
   className?: string;
@@ -33,13 +34,15 @@ export function LayersSummary(props: Props) {
   const { t } = useTranslation('ProjectManagement');
   const { layers } = useMapLayers();
 
+  const withoutAutoSave = layers.filter((layer) => !LayerIDBStorage.isStorageEnabled(layer));
+
   return (
     <>
       {!!layers?.length && (
         <div className={clsx('d-flex flex-column', className)}>
           <div className={'mb-3'}>{t('Layers')}:</div>
 
-          <table className={Cls.table}>
+          <table className={clsx(Cls.table)}>
             <tbody>
               {layers?.map((lay) => (
                 <tr key={lay.getId()}>
@@ -56,6 +59,17 @@ export function LayersSummary(props: Props) {
               ))}
             </tbody>
           </table>
+
+          {!!withoutAutoSave.length && (
+            <div className={'mt-4'}>
+              <div className={'mb-2'}>{t('Some_layers_are_not_saved_automatically_probably_because_they_have_a_lot_of_geometry')}</div>
+              <ul className={'ps-5'}>
+                {withoutAutoSave.map((layer) => (
+                  <li key={layer.getId()}>{layer.getName()}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </>

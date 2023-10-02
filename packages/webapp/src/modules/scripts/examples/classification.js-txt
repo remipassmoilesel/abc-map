@@ -1,0 +1,32 @@
+// This is javascript code. Here you can modify map, layers and data.
+// See module source code for complete API: https://gitlab.com/abc-map/abc-map/-/tree/master/packages/webapp/src/modules/scripts
+
+// In this script, we will iterate the regions of France and change their color depending on their density.
+
+// We select features we want to use
+const {getLayers} = scriptApi;
+const regionsOfFrance = getLayers().find(layer => layer.name === 'Regions of France').getFeatures();
+
+// We iterate regions
+for (const region of regionsOfFrance) {
+    const density = region.getProperties().density2020;
+    const name = region.getProperties().name;
+
+    // You can log the values to ensure that numbers are usable
+    log('Region "' + name + '" has density ' + density);
+
+    // We fill low-population regions with blue
+    if (density < 100) {
+        region.setStyle({fill: {color1: '#9fd6ff'}});
+    }
+
+    // We fill medium-population regions with red
+    else if (density >= 100 && density < 300) {
+        region.setStyle({fill: {color1: '#006abd'}});
+    }
+
+    // We fill high-population regions with orange
+    else if (density > 300) {
+        region.setStyle({fill: {color1: '#00447c'}});
+    }
+}

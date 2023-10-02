@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { logger, parseError, ScriptsModule } from './ScriptsModule';
+import { logger, ScriptsModule } from './ScriptsModule';
 import { ChromiumStack, FirefoxStack } from './ScriptsModule.test.data';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { GeoService } from '../../core/geo/GeoService';
-import { ScriptError } from './typings';
+import { parseError, ScriptError } from './script-api/errors';
 
 logger.disable();
 
@@ -34,7 +34,7 @@ describe('ScriptsModule', function () {
       scripts = new ScriptsModule();
     });
 
-    it('should work', () => {
+    it('module API should work', async () => {
       geoStub.getMainMap.returns({} as any);
       const script = `
          const {mainMap} = moduleApi;
@@ -43,11 +43,28 @@ describe('ScriptsModule', function () {
          log(mainMap)
       `;
 
-      const result = scripts.process(script);
+      const result = await scripts.process(script);
       expect(result).toEqual(['Hello', 'World', '[object Object]']);
     });
 
-    it('should return correct error', () => {
+    it('await should work', async () => {
+      geoStub.getMainMap.returns({} as any);
+      const script = `
+         async function wait() {
+            return new Promise(resolve => setTimeout(resolve, 250));
+         }
+         
+         await wait();
+         
+         log('Hello');
+         log('World');
+      `;
+
+      const result = await scripts.process(script);
+      expect(result).toEqual(['Hello', 'World']);
+    });
+
+    it('should return correct error', async () => {
       geoStub.getMainMap.returns({} as any);
       const script = `\
          const {mainMap} = moduleApi;
@@ -59,7 +76,7 @@ describe('ScriptsModule', function () {
 
       let error: ScriptError | undefined;
       try {
-        scripts.process(script);
+        await scripts.process(script);
       } catch (err) {
         error = err as ScriptError;
       }

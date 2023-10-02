@@ -11,6 +11,7 @@ You can import:
 - GPX files
 - KML files
 - GeoJSON files
+- TopoJSON files
 - Shapefile files
 
 The files are always imported in new layers, with the default style.

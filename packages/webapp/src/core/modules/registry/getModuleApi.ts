@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerWrapper as ModuleLayerWrapper, FeatureWrapper as ModuleFeatureWrapper, ModuleApi } from '@abc-map/module-api';
-import { getServices } from '../../../core/Services';
+import { FeatureWrapper as ModuleFeatureWrapper, LayerWrapper as ModuleLayerWrapper, ModuleApi } from '@abc-map/module-api';
+import { Services } from '../../../core/Services';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
@@ -31,8 +31,8 @@ import { RemoveFeaturesChangeset } from '../../../core/history/changesets/featur
 /**
  * This API is used in external modules and in scripts
  */
-export function getModuleApi(): ModuleApi {
-  const { geo, history, modals } = getServices();
+export function getModuleApi(services: Services): ModuleApi {
+  const { geo, history, modals } = services;
 
   return {
     FeatureWrapperFactory: {

@@ -77,7 +77,6 @@ describe('ProjectService', function () {
     let store: MainStore;
     let geoMock: SinonStubbedInstance<GeoService>;
     let toastMock: SinonStubbedInstance<ToastService>;
-    let modals: SinonStubbedInstance<ModalService>;
     let updater: SinonStubbedInstance<ProjectUpdater>;
     let storage: SinonStubbedInstance<ProjectIDBStorage>;
     let projectService: ProjectService;
@@ -85,7 +84,6 @@ describe('ProjectService', function () {
     beforeEach(() => {
       store = storeFactory();
       geoMock = sinon.createStubInstance(GeoService);
-      modals = sinon.createStubInstance(ModalService);
       storage = sinon.createStubInstance(ProjectIDBStorage);
 
       updater = sinon.createStubInstance(ProjectUpdater);
@@ -97,7 +95,6 @@ describe('ProjectService', function () {
         store,
         toastMock as unknown as ToastService,
         geoMock as unknown as GeoService,
-        modals as unknown as ModalService,
         updater as unknown as ProjectUpdater,
         storage as unknown as ProjectIDBStorage
       );
@@ -379,7 +376,6 @@ describe('ProjectService', function () {
         store,
         toastMock as unknown as ToastService,
         geoService as unknown as GeoService,
-        modals as unknown as ModalService,
         updater,
         storage
       );

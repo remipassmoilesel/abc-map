@@ -1,0 +1,500 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`classification.js-txt example should work 1`] = `
+Array [
+  Object {
+    "fill": Object {
+      "color1": "#00447c",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#006abd",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#00447c",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#9fd6ff",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#9fd6ff",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#006abd",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#006abd",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#9fd6ff",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#006abd",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#9fd6ff",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#006abd",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#9fd6ff",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#9fd6ff",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#006abd",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#9fd6ff",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#00447c",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#00447c",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "#006abd",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": undefined,
+      "value": undefined,
+    },
+    "zIndex": undefined,
+  },
+]
+`;
+
+exports[`classification.js-txt setup should work 1`] = `
+Array [
+  "OpenStreetMap",
+  "Geometries",
+  "Regions of France",
+]
+`;

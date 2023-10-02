@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createScript should work 1`] = `[Function]`;
+
+exports[`createScript should work 2`] = `
+Array [
+  Array [
+    "stub",
+  ],
+  Array [
+    "{\\"type\\":\\"module-api\\"}",
+  ],
+  Array [
+    "{\\"type\\":\\"script-api\\"}",
+  ],
+  Array [
+    "Waited",
+  ],
+]
+`;

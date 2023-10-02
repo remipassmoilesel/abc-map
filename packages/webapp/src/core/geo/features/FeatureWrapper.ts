@@ -99,7 +99,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
    *
    * @param id
    */
-  public setId(id?: string | number): FeatureWrapper {
+  public setId(id?: string | number | undefined): FeatureWrapper {
     this.feature.setId(id ?? nanoid(10));
     return this;
   }
@@ -199,6 +199,9 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   }
 
   public setDefaultStyle(): FeatureWrapper {
+    // We erase feature specific style
+    this.feature.setStyle(undefined);
+
     const geom = this.getGeometry();
     if (!geom) {
       return this;

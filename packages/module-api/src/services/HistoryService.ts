@@ -27,7 +27,7 @@ export interface HistoryService {
 
 export enum HistoryKey {
   Map = 'Map',
-  Export = 'Export',
+  MapExport = 'MapExport',
   SharedViews = 'SharedViews',
 }
 

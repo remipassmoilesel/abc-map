@@ -30,7 +30,7 @@
     "axios": "^1.4.0",
     "concurrently": "^7.6.0",
     "dependency-cruiser": "^13.0.4",
-    "eleventy-plugin-toc": "^1.1.5",
+    "eleventy-plugin-nesting-toc": "^1.3.0",
     "fast-glob": "^3.2.12",
     "html-validate": "^8.0.5",
     "markdown-it": "^13.0.1",

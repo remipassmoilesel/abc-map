@@ -82,7 +82,7 @@ export class LayerIDBStorage {
     }
   }
 
-  constructor(private client: () => IndexedDbClient) {}
+  constructor(private getClient: () => IndexedDbClient | undefined) {}
 
   public watch(layer: LayerWrapper): void {
     const handler = () => this.put(layer).catch((err) => logger.error('Storage error: ', err));
@@ -100,6 +100,12 @@ export class LayerIDBStorage {
   }
 
   public async put(layer: LayerWrapper): Promise<void> {
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot save layer.');
+      return;
+    }
+
     const layerId = layer.getId();
     if (!layerId) {
       throw new Error('Layer must have a valid id: ' + layerId);
@@ -126,12 +132,16 @@ export class LayerIDBStorage {
       abcLayer = await layer.toAbcLayer();
     }
 
-    await this.client().put<LayerIDBEntry>(ObjectStore.Layers, layerId, { version: CURRENT_VERSION, layer: abcLayer });
+    await client.put<LayerIDBEntry>(ObjectStore.Layers, layerId, { version: CURRENT_VERSION, layer: abcLayer });
   }
 
   public async getAll(ids: string[]): Promise<AbcLayer[]> {
-    return this.client()
-      .getAllByKeys<LayerIDBEntry>(ObjectStore.Layers, ids)
-      .then((result) => result.map((entry) => entry.layer));
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot get layers.');
+      return [];
+    }
+
+    return client.getAllByKeys<LayerIDBEntry>(ObjectStore.Layers, ids).then((result) => result.map((entry) => entry.layer));
   }
 }

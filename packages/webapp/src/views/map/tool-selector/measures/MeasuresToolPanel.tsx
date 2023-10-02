@@ -47,11 +47,12 @@ function MeasuresToolPanel() {
         return style;
       }
 
+      const projection = layer.getProjection() || geo.getMainMap().getProjection();
       return {
         ...style,
         text: {
           ...style.text,
-          value: formatLength(geom, layer.getProjection()),
+          value: formatLength(geom, projection),
         },
       };
     });
@@ -69,11 +70,12 @@ function MeasuresToolPanel() {
         return style;
       }
 
+      const projection = layer.getProjection() || geo.getMainMap().getProjection();
       return {
         ...style,
         text: {
           ...style.text,
-          value: formatArea(geom, layer.getProjection()),
+          value: formatArea(geom, projection),
         },
       };
     });

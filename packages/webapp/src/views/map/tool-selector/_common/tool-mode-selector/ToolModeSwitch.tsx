@@ -32,7 +32,7 @@ function ToolModeSwitch(props: Props) {
   const { mode, value, onSelect } = props;
   const keys = mode.shortcut.split(/( +|\+)/i);
   const handleToggle = useCallback(() => onSelect(mode), [mode, onSelect]);
-  const { t } = useTranslation('MapView', { keyPrefix: 'ToolModeSelector' });
+  const { t } = useTranslation('MapView');
   const { t: tModes } = useTranslation('ToolModeSwitch');
 
   return (

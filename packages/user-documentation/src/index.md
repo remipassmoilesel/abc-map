@@ -2,6 +2,7 @@
 title: Index
 layout: main-layout.njk
 with_toc: false
+with_main_toc_button: false
 with_title: false
 head: |
   <style>

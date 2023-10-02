@@ -29,20 +29,32 @@ let tileIDBStorage: TileStorage | undefined;
 export class TileStorage {
   public static get(): TileStorage {
     if (!tileIDBStorage) {
-      tileIDBStorage = new TileStorage(getMainDbClient());
+      tileIDBStorage = new TileStorage(getMainDbClient);
     }
 
     return tileIDBStorage;
   }
 
-  constructor(private client: IndexedDbClient) {}
+  constructor(private getClient: () => IndexedDbClient | undefined) {}
 
   public async put(tile: TileIDBEntry): Promise<void> {
-    await this.client.put<TileIDBEntry>(ObjectStore.Tiles, tile.url, tile);
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot save tile.');
+      return;
+    }
+
+    await client.put<TileIDBEntry>(ObjectStore.Tiles, tile.url, tile);
   }
 
   public async get(url: string): Promise<Blob | undefined> {
-    return this.client.get<TileIDBEntry>(ObjectStore.Tiles, url).then((entry) => {
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot get tile.');
+      return;
+    }
+
+    return client.get<TileIDBEntry>(ObjectStore.Tiles, url).then((entry) => {
       if (!entry) {
         return;
       }

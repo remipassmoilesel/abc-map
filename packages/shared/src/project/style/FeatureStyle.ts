@@ -47,19 +47,19 @@ export interface FillProperties {
 
 export interface TextProperties {
   /**
-   * Text
+   * Text displayed.
    */
   value?: string;
   /**
-   * Color of text
+   * Color of text.
    */
   color?: string;
   /**
-   * Size of text
+   * Size of text in pixels.
    */
   size?: number;
   /**
-   * Font of text
+   * Font of text.
    */
   font?: string;
   /**
@@ -75,7 +75,7 @@ export interface TextProperties {
    */
   alignment?: 'left' | 'right' | 'center' | 'end' | 'start' | undefined;
   /**
-   * Text rotation in degrees
+   * Text rotation in degrees.
    */
   rotation?: number;
 }
@@ -107,7 +107,8 @@ export const DefaultStyle = {
   },
   point: {
     icon: 'twbs/0_circle-fill.inline.svg',
-    size: 10,
+    size: 20,
+    color: 'rgba(18,90,147,1)',
   },
 };
 

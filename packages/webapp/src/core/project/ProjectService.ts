@@ -54,6 +54,7 @@ import { LayerIDBStorage } from '../storage/indexed-db/layers/LayerIDBStorage';
 import { LayoutIDBStorage } from '../storage/indexed-db/layouts/LayoutIDBStorage';
 import { SharedViewIDBStorage } from '../storage/indexed-db/shared-views/SharedViewIDBStorage';
 import { CURRENT_VERSION } from '../storage/indexed-db/projects/ProjectIDBEntry';
+import { UiConstants } from '../ui/UiConstants';
 
 export const logger = Logger.get('ProjectService.ts', 'warn');
 
@@ -66,7 +67,7 @@ export class ProjectService {
   public static create(toasts: ToastService, geoService: GeoService, modals: ModalService) {
     const updater = ProjectUpdater.create(modals);
     const storage = ProjectIDBStorage.create();
-    return new ProjectService(ApiClient, DownloadClient, mainStore, toasts, geoService, modals, updater, storage);
+    return new ProjectService(ApiClient, DownloadClient, mainStore, toasts, geoService, updater, storage);
   }
 
   private eventTarget = document.createDocumentFragment();
@@ -78,7 +79,6 @@ export class ProjectService {
     private store: MainStore,
     private toasts: ToastService,
     private geoService: GeoService,
-    private modals: ModalService,
     private updater: ProjectUpdater,
     private storage: ProjectIDBStorage
   ) {}
@@ -99,13 +99,24 @@ export class ProjectService {
     const persistLayers = () => {
       const layers = mainMap.getLayers();
       for (const layer of layers) {
-        if (!LayerIDBStorage.isStorageEnabled(layer)) {
-          logger.debug(`Enabling storage on layer ${layer.getName()} (vector=${layer.isVector()})`);
-          if (layer.isVector()) {
+        // Layer is a vector layer
+        if (layer.isVector()) {
+          const isLargeLayer = layer.getSource().getFeatures().length >= UiConstants.FEATURE_PER_LAYER_MAX;
+
+          // We enable storage for "small layers"
+          if (!LayerIDBStorage.isStorageEnabled(layer) && !isLargeLayer) {
+            logger.debug(`Enabling storage on layer ${layer.getName()} (vector=${layer.isVector()})`);
             LayerIDBStorage.enableVectorLayerStorage(layer);
-          } else {
-            LayerIDBStorage.enableTileLayerStorage(layer);
           }
+          // We disable storage for "large layers"
+          else if (LayerIDBStorage.isStorageEnabled(layer) && isLargeLayer) {
+            logger.debug(`Disabling storage on layer ${layer.getName()} (vector=${layer.isVector()})`);
+            LayerIDBStorage.disableVectorLayerStorage(layer);
+          }
+        }
+        // Layer is a tile layer
+        else {
+          LayerIDBStorage.enableTileLayerStorage(layer);
         }
       }
 

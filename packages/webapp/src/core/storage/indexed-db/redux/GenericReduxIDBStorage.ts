@@ -46,7 +46,12 @@ export class GenericReduxIDBStorage<T extends ValidEntity> {
 
   private unsubscribe: Unsubscribe | undefined;
 
-  constructor(private client: () => IndexedDbClient, private storeName: string, private selector: ReduxStoreSelector<T>, private version: number) {}
+  constructor(
+    private getClient: () => IndexedDbClient | undefined,
+    private storeName: string,
+    private selector: ReduxStoreSelector<T>,
+    private version: number
+  ) {}
 
   public watch(store: MainStore, throttlingMs = 5_000) {
     let previouslySaved: T[] = [];
@@ -77,13 +82,23 @@ export class GenericReduxIDBStorage<T extends ValidEntity> {
   }
 
   public async putAll(values: T[]): Promise<void> {
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot save entries.');
+      return;
+    }
+
     const genericEntries = values.map((entry) => ({ version: this.version, id: entry.id, entry }));
-    await this.client().putAll<GenericReduxIDBEntry<T>>(this.storeName, toKvPair(genericEntries));
+    await client.putAll<GenericReduxIDBEntry<T>>(this.storeName, toKvPair(genericEntries));
   }
 
   public async getAll(ids: string[]): Promise<T[]> {
-    return this.client()
-      .getAllByKeys<GenericReduxIDBEntry<T>>(this.storeName, ids)
-      .then((entries) => entries.map((entry) => entry.entry));
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot get entries.');
+      return [];
+    }
+
+    return client.getAllByKeys<GenericReduxIDBEntry<T>>(this.storeName, ids).then((entries) => entries.map((entry) => entry.entry));
   }
 }

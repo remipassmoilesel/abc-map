@@ -31,8 +31,6 @@
     "Map": "Carte",
     "Data_store": "Catalogue de données",
     "Data_processing": "Traitement de données",
-    "Export": "Export",
-    "Share": "Partage",
     "Documentation": "Documentation",
     "Support_AbcMap": "Soutenez Abc-Map",
     "Menu": "Menu",
@@ -237,7 +235,8 @@
     "Settings": "Paramètres",
     "Geometry": "Géometrie",
     "More": "Plus",
-    "Invalid_feature": "Entité invalide"
+    "Invalid_feature": "Entité invalide",
+    "Export": "Export"
   },
   "Scale": {
     "Scale": "Echelle"
@@ -554,16 +553,21 @@
     "Output": "Sortie",
     "Executed_without_errors": "Script exécuté sans erreurs",
     "Error": "Erreur d'exécution",
-    "Default_content": "Contenu par défaut"
+    "Do_you_want_to_load_an_example": "Voulez vous charger un exemple ? Ils montrent les possibilités des scripts:",
+    "Classification": "Classification",
+    "Color_gradients": "Dégradés de couleurs",
+    "Buffers": "Tampons",
+    "Example_loaded": "Exemple chargé"
   },
   "ArtefactGeneratorModule": {
     "Artefact_generator": "Générateur d'artefact",
     "Generate_data_store_artefacts": "Générer des artefacts pour le magasin de données. Sauf si vous administrez une instance Abc-Map, ce module est inutile."
   },
-  "StaticExport": {
+  "MapExport": {
     "Format": "Format",
     "List_of_layouts_displayed_here": "La liste des mises en page sera affichée ici.",
     "Layouts": "Mises en page",
+    "Map_export": "Export de carte",
     "Export": "Export",
     "Create_layout_to_export": "Créez une mise en page pour exporter votre carte en PDF ou PNG",
     "New_layout": "Nouvelle page",
@@ -587,7 +591,8 @@
     "Export_in_progress": "Export en cours ...",
     "Connect_to_the_Internet_to_export_your_map": "Connectez-vous à Internet pour <br/>exporter votre carte",
     "Nothing_to_delete": "Il n'y a rien à supprimer",
-    "Show_AbcMap_attributions": "Afficher les attributions Abc-Map"
+    "Show_AbcMap_attributions": "Afficher les attributions Abc-Map",
+    "Hide_AbcMap_attributions": "Masquer les attributions Abc-Map"
   },
   "TextFrameControls": {
     "New_text_frame": "Nouveau cadre de texte",
@@ -635,7 +640,7 @@
     "Links": "Liens",
     "Source_code": "Code source",
     "Author_personal_website": "Site personnel de l'auteur",
-    "Fund_Abc-map": "Financez Abc-Map !",
+    "Fund_Abc-map": "Financez Abc-Map !",
     "Fund_a_little_piece_of_free_internet": "Financez un petit bout d'Internet libre \uD83D\uDC8C",
     "What_budget": "Quel budget ?",
     "The_budget_is_manually_updated_every_month": "Le budget est mis à jour manuellement tous les mois",
@@ -750,6 +755,7 @@
     "This_account_is_already_activated": "Cet adresse email a déjà été activée \uD83E\uDD37 <br /> Connectez-vous ou demandez une réinitialisation de mot de passe.",
     "Activation_failed": "L'activation de votre compte a échoué \uD83E\uDD7A. <br /> Peut-être avez-vous déjà activé votre compte ? Sinon essayez de vous inscrire à nouveau.",
     "Activation_succeed": "Votre compte est activé, vous êtes connecté",
+    "You_should_close_the_other_tabs": "Vous devriez fermer les autres onglets.",
     "Map_is_over_here": "Pour la carte, c'est par ici",
     "Registration_confirmation": "Confirmation d'inscription"
   },
@@ -791,7 +797,7 @@
     "Table_of_content": "Sommaire",
     "Back_to_top": "Retour en haut",
     "Open_in_a_new_tab": "Ouvrir dans un nouvel onglet",
-    "Everything_you_need_to_know_about_Abc-Map": "Tout ce que vous devez savoir sur Abc-Map !",
+    "Everything_you_need_to_know_about_Abc-Map": "Tout ce que vous devez savoir sur Abc-Map !",
     "Previous": "Précédent",
     "This_page_is_not_loading": "Cette page ne se charge pas",
     "Zoom": "Zoom"
@@ -889,7 +895,8 @@
     "Map_data": "Données de la carte",
     "Beautiful_data_ready_to_use": "De belle données, prêtes à être utilisées",
     "See_you_on": "Rendez-vous sur",
-    "Lets_go": "C'est parti !"
+    "Lets_go": "C'est parti !",
+    "Et_voila": "Et voilà !"
   },
   "PromptVariablesModal": {
     "About_credential_storage": "A propos du stockage des identifiants",
@@ -1113,7 +1120,8 @@
     "Invalid_projection_code": "Code de projection invalide. Utilisez 'EPSG:...'",
     "Enter_the_new_projection_code": "Saisissez le nouveau code de projection",
     "Change_projection": "Changer de projection",
-    "Share_link": "Lien de partage"
+    "Share_link": "Lien de partage",
+    "Some_layers_are_not_saved_automatically_probably_because_they_have_a_lot_of_geometry": "Certains calques ne sont pas enregistrés automatiquement, probablement parce qu'ils comportent beaucoup de géométries:"
   },
   "SimplePromptModal": {
     "Cancel": "Annuler",
@@ -1147,7 +1155,12 @@
   "DataReader": {
     "Import_of": "Import n°{{n}} de {{hour}}",
     "Further_information": "Informations supplémentaires",
-    "You_must_full_in_this_form": "Pour importer cette couche, vous devez remplir ce formulaire."
+    "You_must_full_in_this_form": "Pour importer cette couche, vous devez remplir ce formulaire.",
+    "WKT_import": "Import WKT",
+    "TopoJSON_import": "Import TopoJSON",
+    "GeoJSON_import": "Import GeoJSON",
+    "KML_import": "Import KML",
+    "Shapefile_import": "Import Shapefile"
   },
   "LayerDataSource": {
     "Layer_without_name": "Couche sans nom"
@@ -1216,5 +1229,31 @@
     "Wait_a_few_seconds": "Patientez quelques secondes",
     "I_will_close_this_window": "Je vais fermer cette fenêtre",
     "Hide_this_message": "Masquer ce message"
+  },
+  "LayerExportModule": {
+    "Layer_export": "Export de couche",
+    "Which_layer_do_you_want_to_export": "Quel couche souhaitez vous exporter ?",
+    "Which_format": "Quel format ?",
+    "You_must_select_a_layer_with_data": "Vous devez sélectionner une couche qui contient des données",
+    "Export": "Exporter",
+    "Export_layers_for_use_in_other_software": "Exporter des couches pour les utiliser dans d'autres logiciels",
+    "GeoJSON": "GeoJSON",
+    "GPX": "GPX",
+    "KML": "KML",
+    "WKT": "WKT",
+    "This_layer_cannot_be_exported": "Cette couche ne peut pas être exportée.",
+    "Features_will_be_exported": "entité(s) seront exportées",
+    "There_is_nothing_to_export_in_this_layer": "Il n'y a rien a exporter dans cette couche"
+  },
+  "HeavyProjectWarning": {
+    "There_are_a_lot_of_layers": "Il y a beaucoup de couches ({{n}}).",
+    "The_recommended_maximum_number_of_layers_is": "Le nombre maximum de couches recommandé est de {{max}}.",
+    "These_layers_have_too_much_geometry": "Ces couches ont trop de géométries:",
+    "The_recommended_maximum_number_of_geometries_per_layer_is": "Le nombre maximum recommandé de géométries par couche est de {{max}}.",
+    "There_are_too_much_geometries_in_your_project": "Il y a trop de géométries dans votre projet ({{n}}).",
+    "The_recommended_maximum_number_of_geometries_is": "Le nombre maximum recommandé de géométries est de {{max}}.",
+    "Your_project_is_a_bit_heavy": "Votre projet est un peu lourd",
+    "Your_project_is_a_bit_heavy_If_you_use_a_lot_of_data_you_risk_slowing_down_or_freezing_your_session": "Votre projet est un peu lourd. Si vous utilisez beaucoup de données, vous risquez de ralentir ou de geler votre session.",
+    "I_understand": "Je comprends"
   }
 }

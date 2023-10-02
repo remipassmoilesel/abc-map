@@ -1,0 +1,500 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`labels.js-txt example should work 1`] = `
+Array [
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Auvergne-Rhône-Alpes",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Bourgogne-Franche-Comté",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Bretagne",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Centre-Val de Loire",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Corse",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Grand Est",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Guadeloupe",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Guyane",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Hauts-de-France",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "La Réunion",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Martinique",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Mayotte",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Normandie",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Nouvelle-Aquitaine",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Occitanie",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Pays de la Loire",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Provence-Alpes-Côte d'Azur",
+    },
+    "zIndex": undefined,
+  },
+  Object {
+    "fill": Object {
+      "color1": "rgba(18,90,147,0.30)",
+      "color2": "rgba(255,255,255,0.60)",
+      "pattern": "abc:style:fill:hatching:oblique:right",
+    },
+    "point": Object {
+      "color": undefined,
+      "icon": undefined,
+      "size": undefined,
+    },
+    "stroke": Object {
+      "color": "rgba(18,90,147,0.60)",
+      "width": 3,
+    },
+    "text": Object {
+      "alignment": undefined,
+      "color": undefined,
+      "font": undefined,
+      "offsetX": undefined,
+      "offsetY": undefined,
+      "rotation": undefined,
+      "size": 15,
+      "value": "Île-de-France",
+    },
+    "zIndex": undefined,
+  },
+]
+`;
+
+exports[`labels.js-txt setup should work 1`] = `
+Array [
+  "OpenStreetMap",
+  "Geometries",
+  "Regions of France",
+]
+`;

@@ -11,6 +11,7 @@ Vous pouvez importer:
 - des fichiers GPX
 - des fichiers KML
 - des fichiers GeoJSON
+- des fichiers TopoJSON
 - des fichiers Shapefile
 
 Les fichiers sont systématiquement importés dans de nouvelles couches, avec le style par défaut.

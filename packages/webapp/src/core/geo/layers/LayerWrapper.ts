@@ -497,6 +497,11 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return Promise.reject(new Error(`Unhandled layer type: ${commonMeta.type}`));
   }
 
+  /**
+   * Return layer projection, if any is set on layer.
+   *
+   * On vector layers projection can be unset, map view projection appears to be used.
+   */
   public getProjection(): AbcProjection | undefined {
     // Projection is nullable, even if not typed as such
     const projection = this.layer.getSource()?.getProjection()?.getCode();

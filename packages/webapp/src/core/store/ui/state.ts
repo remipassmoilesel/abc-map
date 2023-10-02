@@ -69,7 +69,7 @@ export interface UiState {
 
 export type InformationKey = keyof UiState['informations'];
 
-export const DefaultFavoriteModules = [BundledModuleId.DataStore, BundledModuleId.StaticExport, BundledModuleId.SharedMapSettings];
+export const DefaultFavoriteModules = [BundledModuleId.DataStore, BundledModuleId.MapExport, BundledModuleId.SharedMapSettings];
 
 export interface ServiceWorkerUiState {
   present: boolean;

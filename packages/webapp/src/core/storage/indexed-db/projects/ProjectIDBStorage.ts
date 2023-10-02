@@ -38,7 +38,7 @@ export class ProjectIDBStorage {
   }
 
   constructor(
-    private getClient: () => IndexedDbClient,
+    private getClient: () => IndexedDbClient | undefined,
     private layers: LayerIDBStorage,
     private layouts: GenericReduxIDBStorage<AbcLayout>,
     private sharedViews: GenericReduxIDBStorage<AbcSharedView>,
@@ -47,16 +47,31 @@ export class ProjectIDBStorage {
 
   public async exists(projectId: string): Promise<boolean> {
     const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot check existence of ' + projectId);
+      return false;
+    }
+
     return client.exists(ObjectStore.Projects, projectId);
   }
 
   public async put(project: ProjectIDBEntry): Promise<void> {
     const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot save project.');
+      return;
+    }
+
     await client.putAll(ObjectStore.Projects, [{ key: project.metadata.id, value: project }]);
   }
 
   public async get(projectId: string): Promise<ProjectIDBEntry | undefined> {
     const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot get project ' + projectId);
+      return;
+    }
+
     return client.get(ObjectStore.Projects, projectId);
   }
 

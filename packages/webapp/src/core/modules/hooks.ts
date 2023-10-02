@@ -22,6 +22,8 @@ import { ModuleRegistryContext } from './registry/context';
 import { Logger, Module, ModuleId } from '@abc-map/module-api';
 import { useAppSelector } from '../../core/store/hooks';
 import { BundledModuleId } from '@abc-map/shared';
+import { matchRoutes, useLocation } from 'react-router-dom';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('hooks.ts');
 
@@ -36,8 +38,20 @@ export function useModuleRegistry(): ModuleRegistry {
   return registry;
 }
 
+export function useActiveModule(): { module: Module | undefined } {
+  // We cannot use useMatch() here, this hook can be called from outside a Route element
+  // See: https://github.com/remix-run/react-router/issues/7026
+  const registry = useModuleRegistry();
+  const location = useLocation();
+  const params = matchRoutes([{ path: Routes.module().raw() }], location.pathname);
+
+  const moduleId = params && params.length && params[0].params.moduleId;
+  const module = moduleId ? registry.getModules().find((module) => module.getId() === moduleId) : undefined;
+  return { module };
+}
+
 export function useEssentialModules(): Module[] {
-  const moduleIds: ModuleId[] = [BundledModuleId.DataStore, BundledModuleId.StaticExport, BundledModuleId.SharedMapSettings];
+  const moduleIds: ModuleId[] = [BundledModuleId.DataStore, BundledModuleId.MapExport, BundledModuleId.SharedMapSettings];
 
   const registry = useModuleRegistry();
   const modules = registry.getModules();

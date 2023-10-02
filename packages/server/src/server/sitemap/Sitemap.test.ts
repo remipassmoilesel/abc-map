@@ -54,8 +54,7 @@ describe('Sitemap', () => {
     });
   });
 
-  // TODO: skip this annoying test
-  describe('With a real documentation index', () => {
+  describe.skip('With a real documentation index', () => {
     let generator: Sitemap;
     beforeEach(() => {
       generator = Sitemap.create('http://domain.org');

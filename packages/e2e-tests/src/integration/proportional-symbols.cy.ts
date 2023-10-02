@@ -23,6 +23,7 @@ import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
 import { Modules } from '../helpers/Modules';
 import { FilePrompt } from '../helpers/FilePrompt';
+import { BundledModuleId } from '@abc-map/shared';
 
 describe('Proportional symbols', function () {
   beforeEach(() => {
@@ -31,7 +32,7 @@ describe('Proportional symbols', function () {
 
   it('User can create proportional symbols', () => {
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open('proportional-symbols'))
+      .then(() => Modules.open(BundledModuleId.ProportionalSymbols))
       // Data source parameters
       .get('[data-cy=data-source-file]')
       .click()

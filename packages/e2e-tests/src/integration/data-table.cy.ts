@@ -21,6 +21,7 @@ import { DataStore } from '../helpers/DataStore';
 import { Download } from '../helpers/Download';
 import { Modules } from '../helpers/Modules';
 import { FilePrompt } from '../helpers/FilePrompt';
+import { BundledModuleId } from '@abc-map/shared';
 
 describe('Data table', function () {
   beforeEach(() => {
@@ -29,7 +30,7 @@ describe('Data table', function () {
 
   it('User can display layer data', () => {
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open('data-table'))
+      .then(() => Modules.open(BundledModuleId.DataTable))
       .get('[data-cy=layer-selector] > option')
       .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
@@ -73,7 +74,7 @@ describe('Data table', function () {
 
   it('User can export as CSV', () => {
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open('data-table'))
+      .then(() => Modules.open(BundledModuleId.DataTable))
       .get('[data-cy=layer-selector] > option')
       .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
@@ -92,7 +93,7 @@ describe('Data table', function () {
 
     // We import from data store
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open('data-table'))
+      .then(() => Modules.open(BundledModuleId.DataTable))
       .get('[data-cy=layer-selector] > option')
       .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
