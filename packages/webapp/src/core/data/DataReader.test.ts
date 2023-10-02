@@ -25,6 +25,9 @@ import { TestData } from '../../assets/test-data/TestData';
 import { newTestServices, TestServices } from '../utils/test/TestServices';
 import { LayerWrapper, VectorLayerWrapper } from '../geo/layers/LayerWrapper';
 import { ReadStatus } from './ReadResult';
+import { logger } from './readers/normalizeFeatures';
+
+logger.disable();
 
 describe('DataReader', function () {
   const testData = new TestData();
@@ -80,7 +83,7 @@ describe('DataReader', function () {
       expect(vectorLayer1.getSource().getFeatures()).toHaveLength(189);
 
       const vectorLayer2 = layers[1] as VectorLayerWrapper;
-      expect(vectorLayer2.getSource().getFeatures()).toHaveLength(20);
+      expect(vectorLayer2.getSource().getFeatures()).toHaveLength(19);
 
       const vectorLayer3 = layers[2] as VectorLayerWrapper;
       expect(vectorLayer3.getSource().getFeatures()).toHaveLength(91);
@@ -138,7 +141,7 @@ describe('DataReader', function () {
 
       const vectorLayer = layers[0] as VectorLayerWrapper;
       const features = vectorLayer.getSource().getFeatures();
-      expect(features).toHaveLength(20);
+      expect(features).toHaveLength(19);
       features.forEach((f) => expect(f.getId()).toBeDefined());
     });
   });
@@ -167,6 +170,62 @@ describe('DataReader', function () {
       const vectorLayer = layers[0] as VectorLayerWrapper;
       const features = vectorLayer.getSource().getFeatures();
       expect(features).toHaveLength(91);
+      features.forEach((f) => expect(f.getId()).toBeDefined());
+    });
+  });
+
+  describe('WKT', () => {
+    it('should read', async () => {
+      // Prepare
+      const content = await testData.getSampleWkt();
+      const files: AbcFile<Blob>[] = [
+        {
+          path: 'test.wkt',
+          content,
+        },
+      ];
+
+      // Act
+      const result = await reader.read(files, projection);
+
+      // Assert
+      expect(result.status).toEqual(ReadStatus.Succeed);
+
+      const layers = result.layers as LayerWrapper[];
+      expect(layers).toHaveLength(1);
+      expect(layers[0].unwrap()).toBeInstanceOf(VectorImageLayer);
+
+      const vectorLayer = layers[0] as VectorLayerWrapper;
+      const features = vectorLayer.getSource().getFeatures();
+      expect(features).toHaveLength(91);
+      features.forEach((f) => expect(f.getId()).toBeDefined());
+    });
+  });
+
+  describe('TopoJSON', () => {
+    it('should read', async () => {
+      // Prepare
+      const content = await testData.getSampleTopoJSON();
+      const files: AbcFile<Blob>[] = [
+        {
+          path: 'test.topojson',
+          content,
+        },
+      ];
+
+      // Act
+      const result = await reader.read(files, projection);
+
+      // Assert
+      expect(result.status).toEqual(ReadStatus.Succeed);
+
+      const layers = result.layers as LayerWrapper[];
+      expect(layers).toHaveLength(1);
+      expect(layers[0].unwrap()).toBeInstanceOf(VectorImageLayer);
+
+      const vectorLayer = layers[0] as VectorLayerWrapper;
+      const features = vectorLayer.getSource().getFeatures();
+      expect(features).toHaveLength(635);
       features.forEach((f) => expect(f.getId()).toBeDefined());
     });
   });

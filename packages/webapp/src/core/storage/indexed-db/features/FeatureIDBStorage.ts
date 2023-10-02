@@ -44,7 +44,7 @@ export class FeatureIDBStorage {
     return new FeatureIDBStorage(getMainDbClient);
   }
 
-  constructor(private client: () => IndexedDbClient) {}
+  constructor(private getClient: () => IndexedDbClient | undefined) {}
 
   public watch(layer: VectorLayerWrapper): void {
     const source = layer.getSource();
@@ -70,7 +70,7 @@ export class FeatureIDBStorage {
         .filter((f): f is Feature => !!f)
         .map((feature) => FeatureWrapper.from(feature).toGeoJSON());
 
-      this.deleteAll(layerId, features)
+      this.deleteAll(features)
         .catch((err) => logger.error('Storage error: ', err))
         .finally(() => logger.debug(`Saved features in ${Date.now() - start}ms`, { features, layerId }));
     };
@@ -104,6 +104,12 @@ export class FeatureIDBStorage {
   }
 
   public async putAll(layerId: string, features: GeoJSONFeature[]): Promise<void> {
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot save features.');
+      return;
+    }
+
     const updates: KvPair<FeatureIDBEntry>[] = features
       .map<KvPair | null>((feature) => {
         if (!feature.id) {
@@ -116,19 +122,31 @@ export class FeatureIDBStorage {
       })
       .filter((u): u is KvPair<FeatureIDBEntry> => !!u);
 
-    await this.client().putAll<FeatureIDBEntry>(ObjectStore.Features, updates);
+    await client.putAll<FeatureIDBEntry>(ObjectStore.Features, updates);
   }
 
-  public async deleteAll(layerId: string, features: GeoJSONFeature[]): Promise<void> {
+  public async deleteAll(features: GeoJSONFeature[]): Promise<void> {
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot delete features.');
+      return;
+    }
+
     const featureIds = features.map((feature) => feature.id).filter((id): id is string | number => typeof id !== 'undefined');
-    await this.client().deleteAll(ObjectStore.Features, featureIds);
+    await client.deleteAll(ObjectStore.Features, featureIds);
   }
 
-  public getAllByLayerId(layerId: string): Promise<GeoJSONFeature[]> {
+  public async getAllByLayerId(layerId: string): Promise<GeoJSONFeature[]> {
+    const client = this.getClient();
+    if (!client) {
+      logger.warn('Not connected, cannot get features.');
+      return [];
+    }
+
     const result: GeoJSONFeature[] = [];
 
     return new Promise<GeoJSONFeature[]>((resolve, reject) => {
-      this.client().openIndexCursor<FeatureIDBEntry>(
+      client.openIndexCursor<FeatureIDBEntry>(
         ObjectStore.Features,
         Features_LayerIdIndex,
         IDBKeyRange.only(layerId),

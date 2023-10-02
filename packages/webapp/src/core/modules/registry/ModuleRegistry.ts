@@ -23,20 +23,20 @@ import { errorMessage, Logger } from '@abc-map/shared';
 import { LoadingStatus, ModuleLoadingFailed, ModuleLoadingStatus, ModuleLoadingSucceed } from './ModuleLoadingStatus';
 import { getModuleApi } from './getModuleApi';
 import { isRemoteModule, RemoteModule, RemoteModuleWrapper } from './RemoteModule';
-import { localModulesFactory } from '../../../modules';
+import { bundledModulesFactory } from '../../../modules';
 import { UiActions } from '../../store/ui/actions';
 import { SearchIndex } from '../../utils/SearchIndex';
 
 const logger = Logger.get('ModuleRegistry.ts');
 
-export type LocalModulesFactory = (services: Services, store: MainStore) => Module[];
+export type BundledModulesFactory = (services: Services, store: MainStore) => Module[];
 
 let instance: ModuleRegistry | undefined;
 
 export class ModuleRegistry {
   public static get(): ModuleRegistry {
     if (!instance) {
-      instance = new ModuleRegistry(getServices(), mainStore, localModulesFactory);
+      instance = new ModuleRegistry(getServices(), mainStore, bundledModulesFactory);
     }
 
     return instance;
@@ -52,9 +52,9 @@ export class ModuleRegistry {
    *
    * @param services
    * @param store
-   * @param localModuleFactory
+   * @param bundledModulesFactory
    */
-  constructor(private services: Services, private store: MainStore, private localModuleFactory: LocalModulesFactory) {}
+  constructor(private services: Services, private store: MainStore, private bundledModulesFactory: BundledModulesFactory) {}
 
   /**
    * Initialize registry by loading local and remote modules.
@@ -66,7 +66,7 @@ export class ModuleRegistry {
     const remoteUrls = this.store.getState().ui.remoteModuleUrls;
 
     // We initialize local modules
-    this.modules = localModulesFactory(this.services);
+    this.modules = bundledModulesFactory(this.services);
 
     // Then we load remote modules if any
     if (remoteUrls.length) {
@@ -87,7 +87,7 @@ export class ModuleRegistry {
    *
    */
   public resetModules() {
-    const modules = this.localModuleFactory(this.services, this.store);
+    const modules = this.bundledModulesFactory(this.services, this.store);
     this.updateModules(modules);
   }
 
@@ -142,7 +142,7 @@ export class ModuleRegistry {
       .map((s) => s.trim())
       .join('\n');
 
-    const api = getModuleApi();
+    const api = getModuleApi(getServices());
 
     // We use a noops require function, modules must be autonomous
     const require = function (...args: any[]) {

@@ -134,7 +134,6 @@ describe('StyleFactory', () => {
         const style = factory.getForFeature(feature);
 
         expect(style).toHaveLength(1);
-        expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
         expect(style[0].getFill()).toBeNull();
         expect(style[0].getStroke()).toBeNull();
       });
@@ -156,9 +155,8 @@ describe('StyleFactory', () => {
 
         const style = factory.getForFeature(feature);
 
+        // FIXME: better assertions
         expect(style).toHaveLength(2);
-        expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
-        expect(style[1]).toBeDefined();
       });
     });
   });

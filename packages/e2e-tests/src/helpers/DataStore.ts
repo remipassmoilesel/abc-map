@@ -18,10 +18,11 @@
 
 import { Toasts } from './Toasts';
 import { Modules } from './Modules';
+import { BundledModuleId } from '@abc-map/shared';
 
 export class DataStore {
   public static importByName(name: string): Cypress.Chainable<any> {
-    return Modules.open('data-store')
+    return Modules.open(BundledModuleId.DataStore)
       .get('[data-cy=data-store-search]')
       .type(name)
       .type('{enter}')

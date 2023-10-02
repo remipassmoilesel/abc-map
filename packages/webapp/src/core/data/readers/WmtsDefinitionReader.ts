@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractDataReader } from './AbstractDataReader';
+import { ReaderImplementation } from './ReaderImplementation';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { AbcFile, BlobIO, Logger, normalizedProjectionName, WmtsDefinitionManifest } from '@abc-map/shared';
 import * as yaml from 'js-yaml';
@@ -35,10 +35,8 @@ const logger = Logger.get('WmtsDefinitionReader.ts');
 
 const t = prefixedTranslation('DataReader:');
 
-export class WmtsDefinitionReader extends AbstractDataReader {
-  constructor(private geo: GeoService, private modals: ModalService) {
-    super();
-  }
+export class WmtsDefinitionReader implements ReaderImplementation {
+  constructor(private geo: GeoService, private modals: ModalService) {}
 
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.WMTS_DEFINITION).length > 0;

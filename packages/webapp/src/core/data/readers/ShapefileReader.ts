@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractDataReader } from './AbstractDataReader';
+import { ReaderImplementation } from './ReaderImplementation';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { Logger } from '@abc-map/shared';
@@ -31,15 +31,19 @@ import proj4 from 'proj4';
 import { WktParser } from '../wkt/WktParser';
 import { register } from 'ol/proj/proj4';
 import { ReadResult, ReadStatus } from '../ReadResult';
+import { normalizeFeatures } from './normalizeFeatures';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('ShapefileReader.ts');
 
-export class ShapefileReader extends AbstractDataReader {
+const t = prefixedTranslation('DataReader:');
+
+export class ShapefileReader implements ReaderImplementation {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE).length > 0;
   }
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
+  public async read(files: AbcFile<Blob>[], targetProjection: AbcProjection): Promise<ReadResult> {
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE);
     if (_files.length > 2) {
       return Promise.reject(new Error('Cannot parse more than one shapefile at once'));
@@ -65,13 +69,13 @@ export class ShapefileReader extends AbstractDataReader {
 
     // We load Openlayers features
     const format = new GeoJSON();
-    const features = format.readFeatures(featureColl, { dataProjection: prjParsed?.wkt.srsCode, featureProjection: projection.name });
-    this.prepareFeatures(features);
+    let features = format.readFeatures(featureColl, { featureProjection: targetProjection.name, dataProjection: prjParsed?.wkt.srsCode });
+    features = normalizeFeatures(features);
 
     const layer = LayerFactory.newVectorLayer(new VectorSource({ features }));
     const metadata: VectorMetadata = {
       id: uuid(),
-      name: 'Couche Shapefile',
+      name: t('Shapefile_import'),
       type: LayerType.Vector,
       active: false,
       opacity: 1,

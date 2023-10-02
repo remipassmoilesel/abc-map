@@ -32,6 +32,7 @@ export enum BundledModuleId {
   ProportionalSymbols = 'proportional-symbols',
   Scripts = 'scripts',
   SharedMapSettings = 'shared-map-settings',
-  StaticExport = 'static-export',
+  MapExport = 'map-export',
   Documentation = 'documentation',
+  LayerExport = 'layer-export',
 }

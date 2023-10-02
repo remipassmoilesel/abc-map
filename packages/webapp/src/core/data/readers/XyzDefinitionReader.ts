@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractDataReader } from './AbstractDataReader';
+import { ReaderImplementation } from './ReaderImplementation';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { AbcFile, BlobIO, Logger, XyzDefinitionManifest } from '@abc-map/shared';
 import * as yaml from 'js-yaml';
@@ -33,10 +33,8 @@ const logger = Logger.get('XyzDefinitionReader.ts');
 
 const t = prefixedTranslation('DataReader:');
 
-export class XyzDefinitionReader extends AbstractDataReader {
-  constructor(private geo: GeoService, private modals: ModalService) {
-    super();
-  }
+export class XyzDefinitionReader implements ReaderImplementation {
+  constructor(private geo: GeoService, private modals: ModalService) {}
 
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.XYZ_DEFINITION).length > 0;

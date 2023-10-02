@@ -28,12 +28,13 @@ import { isExperimentalFeatureEnabled } from '../core/ui/useExperimentalFeature'
 import { ArtefactGenerator } from '../experimental-features';
 import { ArtefactGeneratorModule } from './artefact-generator/ArtefactGeneratorModule';
 import { DataStoreModule } from './data-store/DataStoreModule';
-import { StaticExport } from './static-export/StaticExport';
+import { MapExport } from './map-export/MapExport';
 import { SharedMapSettings } from './shared-map-settings/SharedMapSettings';
 import { ProjectManagement } from './projects/ProjectManagement';
 import { DocumentationModule } from './documentation/DocumentationModule';
+import { LayerExport } from './layer-export/LayerExport';
 
-export function localModulesFactory(services: Services): Module[] {
+export function bundledModulesFactory(services: Services): Module[] {
   const modules: Module[] = [
     new ColorGradientsModule(services),
     new DataStoreModule(),
@@ -44,8 +45,9 @@ export function localModulesFactory(services: Services): Module[] {
     new ProportionalSymbolsModule(services),
     new ScriptsModule(),
     new SharedMapSettings(),
-    new StaticExport(),
+    new MapExport(),
     new DocumentationModule(),
+    new LayerExport(),
   ];
 
   // Add experimental modules

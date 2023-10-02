@@ -4,7 +4,6 @@ const ResizeObserver = require('resize-observer-polyfill');
 global.URL.createObjectURL = sinon.stub();
 global.URL.revokeObjectURL = sinon.stub();
 
-// FIXME: Remove after NodeJS upgrade
 global.fetch = sinon.stub();
 window.fetch = sinon.stub();
 

@@ -21,9 +21,9 @@ import { BundledModuleId } from '@abc-map/shared';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 
-export type ShowDataTableViewFunc = (layerId?: string) => void;
+export type ReturnType = (layerId?: string) => void;
 
-export function useShowDataTableModule(): ShowDataTableViewFunc {
+export function useShowDataTableModule(): ReturnType {
   const navigate = useNavigate();
 
   return useMemo(

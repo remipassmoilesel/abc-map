@@ -19,7 +19,7 @@
 import { Feature as GeoJsonFeature, GeoJsonProperties, Geometry as GeoJsonGeometry } from 'geojson';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { Point, Polygon } from 'ol/geom';
+import { LineString, Point, Polygon } from 'ol/geom';
 import {
   AbcArtefact,
   AbcLayout,
@@ -455,6 +455,18 @@ export class TestHelper {
     layer.getSource().addFeatures(features);
 
     return layer;
+  }
+
+  public static samplePoint(): Point {
+    return new Point([1, 2]);
+  }
+
+  public static sampleLine(): LineString {
+    return new LineString([
+      [0, 0],
+      [100, 100],
+      [200, 200],
+    ]);
   }
 
   public static samplePolygon(): Polygon {

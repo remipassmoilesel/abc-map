@@ -94,7 +94,7 @@ function dispatchVisit(store: MainStore) {
 async function initProject(services: Services, store: MainStore) {
   const { project: projectService, geo, history, authentication } = services;
 
-  await initMainDatabase();
+  await initMainDatabase().catch((err) => logger.error('Unable to initialize main database:', err));
 
   // When project loaded, we clean style cache and undo/redo history
   projectService.addProjectLoadedListener((ev) => {
@@ -112,42 +112,30 @@ async function initProject(services: Services, store: MainStore) {
     projectService.setView(view);
   });
 
-  const isSharedMapRoute = matchRoutes([{ path: Routes.sharedMap().raw() }], window.location);
+  try {
+    // There are always a new project loaded, even at a fresh start.
+    // If we are displaying a shared map we skip project loading, it will be loaded by SharedMapView.
+    // If not a project may have been stored locally or remotely, we try to load it if any.
+    const isSharedMapRoute = matchRoutes([{ path: Routes.sharedMap().raw() }], window.location);
+    const userIsAuthenticated = authentication.getUserStatus() === UserStatus.Authenticated;
 
-  // If we are displaying a shared map, we do not need to load a project, project will be loaded by SharedMapView
-  // We initialize a new project because in app we assume that a project is always loaded
-  if (isSharedMapRoute) {
+    if (!isSharedMapRoute) {
+      const previous = store.getState().project.metadata;
+      if (await projectService.isStoredLocally(previous.id)) {
+        await projectService.loadLocalProject(previous.id);
+      }
+      // Otherwise we try to find it online
+      else if (userIsAuthenticated) {
+        await projectService.loadRemotePrivateProject(previous.id);
+      }
+      // Otherwise we initialize a new project
+      else {
+        await projectService.newProject();
+      }
+    }
+  } catch (err) {
+    logger.error(`Local project init error:`, err);
     await projectService.newProject();
-  }
-
-  // A project may have been stored locally or remotely, we load it if any
-  else {
-    const prevProject = store.getState().project.metadata;
-    if (await projectService.isStoredLocally(prevProject.id)) {
-      try {
-        await projectService.loadLocalProject(prevProject.id);
-      } catch (err) {
-        logger.error(`Local project init error:`, err);
-        await projectService.newProject();
-      }
-    }
-    // Otherwise we try to find it online
-    else {
-      // We create a new project or load an existing one
-      // We must load an existing one only if user is authenticated
-      const userIsAuthenticated = authentication.getUserStatus() === UserStatus.Authenticated;
-      try {
-        if (userIsAuthenticated) {
-          await projectService.loadRemotePrivateProject(prevProject.id);
-        } else {
-          await projectService.newProject();
-        }
-      } catch (err) {
-        // No need to notify user, a new project is created
-        logger.error(`Remote project init error:`, err);
-        await projectService.newProject();
-      }
-    }
   }
 
   // We must not save before project loading

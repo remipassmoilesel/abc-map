@@ -29,8 +29,6 @@
     "Map": "Map",
     "Data_store": "Data store",
     "Data_processing": "Data processing",
-    "Export": "Export",
-    "Share": "Share",
     "Documentation": "Documentation",
     "Support_AbcMap": "Support Abc-Map",
     "Menu": "Menu",
@@ -234,7 +232,8 @@
     "Settings": "Settings",
     "Geometry": "Geometry",
     "More": "More",
-    "Invalid_feature": "Invalid feature"
+    "Invalid_feature": "Invalid feature",
+    "Export": "Export"
   },
   "Scale": {
     "Scale": "Scale"
@@ -551,16 +550,21 @@
     "Output": "Sortie",
     "Executed_without_errors": "Script executed without errors",
     "Error": "Execution error",
-    "Default_content": "Default content"
+    "Do_you_want_to_load_an_example": "Do you want to load an example ? They show the possibilities of scripts:",
+    "Classification": "Classification",
+    "Color_gradients": "Color gradients",
+    "Buffers": "Tampons",
+    "Example_loaded": "Example loaded"
   },
   "ArtefactGeneratorModule": {
     "Artefact_generator": "Artefact generator",
     "Generate_data_store_artefacts": "Generate data store artifacts. Unless you are administering an Abc-Map instance, this module is useless."
   },
-  "StaticExport": {
+  "MapExport": {
     "Format": "Format",
     "List_of_layouts_displayed_here": "The list of layouts will be displayed here.",
     "Layouts": "Layouts",
+    "Map_export": "Map export",
     "Export": "Export",
     "Create_layout_to_export": "Create a layout to export your map to PDF or PNG",
     "New_layout": "New layout",
@@ -584,7 +588,8 @@
     "Export_in_progress": "Export in progress ...",
     "Connect_to_the_Internet_to_export_your_map": "Connect to the Internet to <br/>export your map",
     "Nothing_to_delete": "There is nothing to delete",
-    "Show_AbcMap_attributions": "Show Abc-Map attributions"
+    "Show_AbcMap_attributions": "Show Abc-Map attributions",
+    "Hide_AbcMap_attributions": "Hide Abc-Map attributions"
   },
   "TextFrameControls": {
     "New_text_frame": "New text frame",
@@ -632,7 +637,7 @@
     "Links": "Links",
     "Source_code": "Source code",
     "Author_personal_website": "Author's personal website",
-    "Fund_Abc-map": "Fund Abc-Map !",
+    "Fund_Abc-map": "Fund Abc-Map !",
     "Fund_a_little_piece_of_free_internet": "Fund a little piece of free internet \uD83D\uDC8C",
     "What_budget": "What budget ?",
     "The_budget_is_manually_updated_every_month": "The budget is manually updated every month",
@@ -747,6 +752,7 @@
     "This_account_is_already_activated": "This email address has already been activated \uD83E\uDD37 <br /> Log in or request a password reset.",
     "Activation_failed": "Your account activation failed \uD83E\uDD7A. <br/> You may have already activated your account ? Otherwise try register again.",
     "Activation_succeed": "Your account is activated, you are logged in",
+    "You_should_close_the_other_tabs": "You should close the other tabs.",
     "Map_is_over_here": "For the map, it's over here",
     "Registration_confirmation": "Registration confirmation"
   },
@@ -788,7 +794,7 @@
     "Table_of_content": "Table of content",
     "Back_to_top": "Back to top",
     "Open_in_a_new_tab": "Open in a new tab",
-    "Everything_you_need_to_know_about_Abc-Map": "Everything you need to know about Abc-Map !",
+    "Everything_you_need_to_know_about_Abc-Map": "Everything you need to know about Abc-Map !",
     "Previous": "Previous",
     "This_page_is_not_loading": "This page is not loading",
     "Zoom": "Zoom"
@@ -886,7 +892,8 @@
     "Map_data": "Map data",
     "Beautiful_data_ready_to_use": "Beautiful data, ready to use",
     "See_you_on": "See you on",
-    "Lets_go": "Let's go !"
+    "Lets_go": "Let's go !",
+    "Et_voila": "Et voilà !"
   },
   "PromptVariablesModal": {
     "About_credential_storage": "About credential storage",
@@ -1110,7 +1117,8 @@
     "Invalid_projection_code": "Invalid projection code. Use 'EPSG:...'",
     "Enter_the_new_projection_code": "Enter the new projection code",
     "Change_projection": "Change projection",
-    "Share_link": "Share link"
+    "Share_link": "Share link",
+    "Some_layers_are_not_saved_automatically_probably_because_they_have_a_lot_of_geometry": "Some layers are not saved automatically, probably because they have a lot of geometry:"
   },
   "SimplePromptModal": {
     "Cancel": "Cancel",
@@ -1144,7 +1152,12 @@
   "DataReader": {
     "Import_of": "Import n°{{n}} of {{hour}}",
     "Further_information": "Further information",
-    "You_must_full_in_this_form": "To import this layer, you must fill in this form."
+    "You_must_full_in_this_form": "To import this layer, you must fill in this form.",
+    "WKT_import": "WKT import",
+    "TopoJSON_import": "TopoJSON import",
+    "GeoJSON_import": "GeoJSON import",
+    "KML_import": "KML import",
+    "Shapefile_import": "Shapefile import"
   },
   "LayerDataSource": {
     "Layer_without_name": "Layer without name"
@@ -1213,5 +1226,31 @@
     "Wait_a_few_seconds": "Wait a few seconds",
     "I_will_close_this_window": "I will close this window",
     "Hide_this_message": "Hide this message"
+  },
+  "LayerExportModule": {
+    "Layer_export": "Layer export",
+    "Which_layer_do_you_want_to_export": "Which layer do you want to export ?",
+    "Which_format": "Which format ?",
+    "You_must_select_a_layer_with_data": "You must select a layer that contains data",
+    "Export": "Export",
+    "Export_layers_for_use_in_other_software": "Export layers for use in other software",
+    "GeoJSON": "GeoJSON",
+    "GPX": "GPX",
+    "KML": "KML",
+    "WKT": "WKT",
+    "This_layer_cannot_be_exported": "This layer cannot be exported.",
+    "Features_will_be_exported": "feature(s) will be exported",
+    "There_is_nothing_to_export_in_this_layer": "There is nothing to export in this layer"
+  },
+  "HeavyProjectWarning": {
+    "There_are_a_lot_of_layers": "There are a lot of layers ({{n}}).",
+    "The_recommended_maximum_number_of_layers_is": "The recommended maximum number of layers is {{max}}.",
+    "These_layers_have_too_much_geometry": "These layers have too much geometry:",
+    "The_recommended_maximum_number_of_geometries_per_layer_is": "The recommended maximum number of geometries per layer is {{max}}.",
+    "There_are_too_much_geometries_in_your_project": "There are too much geometries in your project ({{n}}).",
+    "The_recommended_maximum_number_of_geometries_is": "The recommended maximum number of geometries is {{max}}.",
+    "Your_project_is_a_bit_heavy": "Your project is a bit heavy",
+    "Your_project_is_a_bit_heavy_If_you_use_a_lot_of_data_you_risk_slowing_down_or_freezing_your_session": "Your project is a bit heavy. If you use a lot of data, you risk slowing down or freezing your session.",
+    "I_understand": "I understand"
   }
 }

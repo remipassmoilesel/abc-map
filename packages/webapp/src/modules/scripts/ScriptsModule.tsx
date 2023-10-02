@@ -18,12 +18,15 @@
 
 import { ScriptsView } from './view/ScriptsView';
 import React from 'react';
-import { errorMessage, Logger } from '@abc-map/shared';
-import { ChromiumErrorRegexp, ErrorPosition, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
+import { BundledModuleId, errorMessage, Logger } from '@abc-map/shared';
+import { ScriptContext } from './script-api/ScriptContext';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { getModuleApi } from '../../core/modules/registry/getModuleApi';
+import { createScript } from './script-api/createScript';
+import { getServices } from '../../core/Services';
+import { parseError, ScriptError } from './script-api/errors';
+import { getScriptApi } from './script-api/ScriptApi';
 
 const t = prefixedTranslation('ScriptsModule:');
 
@@ -46,21 +49,22 @@ export class ScriptsModule extends ModuleAdapter {
     return <ScriptsView onProcess={this.process} />;
   }
 
-  public process = (content: string): string[] => {
+  public process = async (scriptContent: string): Promise<string[]> => {
     const output: string[] = [];
     function log(data: object | undefined) {
       output.push(data?.toString() || 'undefined');
     }
 
-    const args: ScriptArguments = {
-      moduleApi: getModuleApi(),
+    const context: ScriptContext = {
+      moduleApi: getModuleApi(getServices()),
+      scriptApi: getScriptApi(getServices()),
       log,
     };
 
-    const script = createScript(args, content);
+    const script = createScript(scriptContent);
 
     try {
-      script(...Object.values(args));
+      await script(context);
       return output;
     } catch (err) {
       const position = parseError(err);
@@ -75,28 +79,4 @@ export class ScriptsModule extends ModuleAdapter {
       throw new ScriptError(message, output);
     }
   };
-}
-
-export function createScript(args: ScriptArguments, content: string): Function {
-  const header = `"use strict";\n`;
-  // eslint-disable-next-line no-new-func
-  return new Function(...Object.keys(args), header + content);
-}
-
-export function parseError(error: Error | unknown | any): ErrorPosition | undefined {
-  const stack = error?.stack;
-  if (typeof stack !== 'string') {
-    return;
-  }
-
-  const ffMatch = stack.match(FirefoxErrorRegexp);
-  const chMatch = stack.match(ChromiumErrorRegexp);
-  const match = ffMatch || chMatch;
-  if (!match) {
-    return;
-  }
-
-  const line = parseInt(match[1]) - 3; // 3 is the default offset
-  const column = parseInt(match[2]);
-  return { line, column };
 }

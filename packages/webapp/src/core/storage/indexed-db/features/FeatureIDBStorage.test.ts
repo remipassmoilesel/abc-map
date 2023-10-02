@@ -63,7 +63,7 @@ describe('FeatureIDBStorage', () => {
     await storage.putAll(layerId1, features1);
 
     // Act
-    await storage.deleteAll(layerId1, features1.slice(0, 2));
+    await storage.deleteAll(features1.slice(0, 2));
 
     // Assert
     const fetched = await storage.getAllByLayerId(layerId1);

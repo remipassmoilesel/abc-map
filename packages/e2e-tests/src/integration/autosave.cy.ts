@@ -17,7 +17,7 @@
  */
 
 import 'cypress-file-upload';
-import { AbcProjectMetadata, LayerType, MapTool } from '@abc-map/shared';
+import { AbcProjectMetadata, BundledModuleId, LayerType, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { LayerControls } from '../helpers/LayerControls';
@@ -39,7 +39,7 @@ describe('Auto save', function () {
       cy.visit(Routes.map().format())
         .then(() => Project.newProject())
         // We rename project
-        .then(() => Modules.open('project-management'))
+        .then(() => Modules.open(BundledModuleId.ProjectManagement))
         .get('[data-cy=edit-project-name]')
         .click()
         .get('[data-cy=prompt-input]')

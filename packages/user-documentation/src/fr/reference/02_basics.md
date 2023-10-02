@@ -32,7 +32,7 @@ Les projets exportés ont l'extension de fichier `.abm2`. Il ne sont utilisables
 <a href="https://fr.wikipedia.org/wiki/ZIP_(format_de_fichier)" target="_blank">archives Zip</a> contenant toutes les informations de votre projet dans un
 format proche de GeoJSON.
 
-### Identifiants
+## Identifiants
 
 Si votre projet contient des identifiants d'accès à des services tiers (par exemple des identifiants de couches de tuiles XYZ), alors ces identifiants seront
 sauvegardés avec votre projet.

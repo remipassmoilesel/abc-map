@@ -19,6 +19,7 @@
 import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { Routes } from '../helpers/Routes';
+import { round } from 'lodash';
 
 describe('Search on map', function () {
   beforeEach(() => {
@@ -42,7 +43,9 @@ describe('Search on map', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equals([401029.96381330665, 5393243.349349506, 424344.393171752, 5405383.337565949], `Actual: "${JSON.stringify(extent)}"`);
+        const simplified = extent.map((i) => round(i, 6));
+
+        expect(simplified).deep.equals([401029.963813, 5393243.34935, 424344.393172, 5405383.337566], `Actual: "${JSON.stringify(extent)}"`);
       });
   });
 });

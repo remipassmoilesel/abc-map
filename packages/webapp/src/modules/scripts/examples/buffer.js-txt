@@ -1,0 +1,17 @@
+// This is javascript code. Here you can modify map, layers and data.
+// See module source code for complete API: https://gitlab.com/abc-map/abc-map/-/tree/master/packages/webapp/src/modules/scripts
+
+const {getLayers, loadScript} = scriptApi;
+
+// We load an external library, Turf. See https://turfjs.org/docs/#buffer
+await loadScript("https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js");
+const {buffer} = turf;
+
+// We select data we want to use
+const sampleData = getLayers().find(layer => layer.name === 'Buffer sample data').getFeatures();
+
+// We update each geometries
+for (const feature of sampleData) {
+    const buffered = buffer(feature.getGeometry(), 100, {units: 'kilometers'});
+    feature.setGeometry(buffered.geometry);
+}

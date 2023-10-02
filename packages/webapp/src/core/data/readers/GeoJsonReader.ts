@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractDataReader } from './AbstractDataReader';
+import { ReaderImplementation } from './ReaderImplementation';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { GeoJSON } from 'ol/format';
@@ -27,25 +27,29 @@ import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { ReadResult, ReadStatus } from '../ReadResult';
+import { normalizeFeatures } from './normalizeFeatures';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
-export class GeoJsonReader extends AbstractDataReader {
+const t = prefixedTranslation('DataReader:');
+
+export class GeoJsonReader implements ReaderImplementation {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON).length > 0;
   }
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
+  public async read(files: AbcFile<Blob>[], targetProjection: AbcProjection): Promise<ReadResult> {
     const layers: LayerWrapper[] = [];
     const format = new GeoJSON();
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON);
     for (const file of _files) {
       const content = await BlobIO.asString(file.content);
-      const features = format.readFeatures(content, { featureProjection: projection.name });
-      this.prepareFeatures(features);
+      let features = format.readFeatures(content, { featureProjection: targetProjection.name, dataProjection: 'EPSG:4326' });
+      features = normalizeFeatures(features);
 
       const layer = LayerFactory.newVectorLayer(new VectorSource({ features }));
       const metadata: VectorMetadata = {
         id: uuid(),
-        name: 'Couche GeoJSON',
+        name: t('GeoJSON_import'),
         type: LayerType.Vector,
         active: false,
         opacity: 1,

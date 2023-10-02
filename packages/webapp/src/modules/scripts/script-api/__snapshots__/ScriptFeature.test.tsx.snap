@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ScriptFeature getGeometry() 1`] = `
+Object {
+  "coordinates": Array [
+    -41.30467214209378,
+    48.53131787315718,
+  ],
+  "type": "Point",
+}
+`;
+
+exports[`ScriptFeature setGeometry() 1`] = `
+Object {
+  "coordinates": Array [
+    -41,
+    49,
+  ],
+  "type": "Point",
+}
+`;
+
+exports[`ScriptFeature setGeometry() 2`] = `
+Array [
+  -4564099.122524217,
+  6274861.394006576,
+]
+`;

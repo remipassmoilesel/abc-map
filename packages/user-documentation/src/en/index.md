@@ -2,6 +2,7 @@
 title: Table of content 📚
 layout: main-layout.njk
 with_toc: false
+with_main_toc_button: false
 ---
 
 ## Quick reference
@@ -21,3 +22,7 @@ with_toc: false
 - [Quick troubleshooting](blog/2023-08-19/)
 - [Optional Abc-Map attribution](blog/2023-08-10/)
 - [New documentation engine](blog/2023-08-01/)
+- [Layer export](blog/2023-09-23/)
+- [Layer export](blog/2023-09-23/)
+- [Better scripting module](blog/2023-09-30/)
+- [Automatic saving of projects](blog/2023-10-02/)

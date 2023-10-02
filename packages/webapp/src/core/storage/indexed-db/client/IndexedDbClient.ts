@@ -65,6 +65,10 @@ export class IndexedDbClient {
     });
   }
 
+  public isConnected(): boolean {
+    return !!this.database;
+  }
+
   public disconnect(): void {
     if (!this.database) {
       throw new Error('Not connected');
@@ -77,6 +81,7 @@ export class IndexedDbClient {
     if (!this.database) {
       throw new Error('Not connected');
     }
+
     return this.database;
   }
 
@@ -239,10 +244,10 @@ export class IndexedDbClient {
   /**
    * Clear all database data. You do not need to reload app after.
    */
-  public async clearStores(ignoreNames: string[] = []) {
+  public async clearStores(options: { exclude?: string[] } = {}) {
     const db = this.getDatabase();
     for (const storeName of db.objectStoreNames) {
-      if (ignoreNames.includes(storeName)) {
+      if (options.exclude?.includes(storeName)) {
         continue;
       }
 

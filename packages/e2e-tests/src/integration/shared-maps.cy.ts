@@ -27,7 +27,7 @@ import { SharedMap } from '../helpers/SharedMap';
 import { Toasts } from '../helpers/Toasts';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
-import { MapTool } from '@abc-map/shared';
+import { BundledModuleId, MapTool } from '@abc-map/shared';
 import { Modules } from '../helpers/Modules';
 
 describe('Shared maps', function () {
@@ -47,7 +47,7 @@ describe('Shared maps', function () {
       .then(() => Draw.click(300, 300))
       .then(() => Draw.click(350, 350))
       // Show share settings, enable sharing
-      .then(() => Modules.open('shared-map-settings'))
+      .then(() => Modules.open(BundledModuleId.SharedMapSettings))
       .get('[data-cy=enable-sharing]')
       .click()
       .then(() => Toasts.assertText('Project saved !'))

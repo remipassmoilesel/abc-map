@@ -2,7 +2,15 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## ??/08/2023 - Project budget and optional attributions
+## 01/10/2023 - Better scripts, layer export, and bug fixes
+
+- The scripts module has a new API, easier to use. It is also possible to load examples with their data.
+- Layers can now be exported in GeoJSON, KML, GPX, and WKT format.
+- You can now import TopoJSON data.
+- Fixed user documentation.
+- Abc-Map will now display a modal if a project is too heavy.
+
+## 18/08/2023 - Project budget and optional attributions
 
 - Project budget is now displayed on solicitation modals
 - Abc-Map attributions are now optional on static exports !

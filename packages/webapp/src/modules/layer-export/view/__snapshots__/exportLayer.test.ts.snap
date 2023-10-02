@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`exportLayer() GPX 1`] = `"<gpx xmlns=\\"http://www.topografix.com/GPX/1/1\\" xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\" xsi:schemaLocation=\\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\\" version=\\"1.1\\" creator=\\"OpenLayers\\"><wpt lat=\\"43.57861000039307\\" lon=\\"-48.27190338547443\\"/><wpt lat=\\"24.33499925170213\\" lon=\\"-45.25493196288962\\"/><wpt lat=\\"-0.4824435253768513\\" lon=\\"-28.72192856712481\\"/><rte><rtept lat=\\"47.465691459816924\\" lon=\\"-31.49754227590284\\"/><rtept lat=\\"23.894412236869627\\" lon=\\"-32.10093656041982\\"/><rtept lat=\\"3.256840068241587\\" lon=\\"-15.567933164655011\\"/></rte><rte><rtept lat=\\"25.91917906895911\\" lon=\\"-14.48182345252448\\"/><rtept lat=\\"6.922397550614718\\" lon=\\"-10.86145774542271\\"/><rtept lat=\\"-11.684088217570377\\" lon=\\"-11.585530886843056\\"/></rte></gpx>"`;
+
+exports[`exportLayer() GeoJSON 1`] = `
+Object {
+  "features": Array [
+    Object {
+      "geometry": Object {
+        "coordinates": Array [
+          -48.27190338547443,
+          43.57861000039307,
+        ],
+        "type": "Point",
+      },
+      "id": "inzkwakyyX",
+      "properties": Object {
+        "abc:feature:selected": false,
+        "abc:style:point:color": "rgba(18,90,147,0.9)",
+        "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+        "abc:style:point:size": 90,
+      },
+      "type": "Feature",
+    },
+    Object {
+      "geometry": Object {
+        "coordinates": Array [
+          -45.25493196288962,
+          24.33499925170213,
+        ],
+        "type": "Point",
+      },
+      "id": "Ek3C9txfoI",
+      "properties": Object {
+        "abc:feature:selected": false,
+        "abc:style:point:color": "rgba(18,90,147,0.9)",
+        "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+        "abc:style:point:size": 90,
+      },
+      "type": "Feature",
+    },
+    Object {
+      "geometry": Object {
+        "coordinates": Array [
+          -28.72192856712481,
+          -0.4824435253768513,
+        ],
+        "type": "Point",
+      },
+      "id": "h5Lft_xAG9",
+      "properties": Object {
+        "abc:feature:selected": false,
+        "abc:style:point:color": "rgba(18,90,147,0.9)",
+        "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+        "abc:style:point:size": 90,
+      },
+      "type": "Feature",
+    },
+    Object {
+      "geometry": Object {
+        "coordinates": Array [
+          Array [
+            -31.49754227590284,
+            47.465691459816924,
+          ],
+          Array [
+            -32.10093656041982,
+            23.894412236869627,
+          ],
+          Array [
+            -15.567933164655011,
+            3.256840068241587,
+          ],
+        ],
+        "type": "LineString",
+      },
+      "id": "nzIpj1HQr3",
+      "properties": Object {
+        "abc:feature:selected": false,
+        "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+        "abc:style:stroke:width": 3,
+      },
+      "type": "Feature",
+    },
+    Object {
+      "geometry": Object {
+        "coordinates": Array [
+          Array [
+            -14.48182345252448,
+            25.91917906895911,
+          ],
+          Array [
+            -10.86145774542271,
+            6.922397550614718,
+          ],
+          Array [
+            -11.585530886843056,
+            -11.684088217570377,
+          ],
+        ],
+        "type": "LineString",
+      },
+      "id": "5OdMTSrfAR",
+      "properties": Object {
+        "abc:feature:selected": false,
+        "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+        "abc:style:stroke:width": 3,
+      },
+      "type": "Feature",
+    },
+    Object {
+      "geometry": Object {
+        "coordinates": Array [
+          Array [
+            Array [
+              -26.911745713573936,
+              -20.146988059052916,
+            ],
+            Array [
+              5.430187936535306,
+              -14.153983118218335,
+            ],
+            Array [
+              6.15426107795567,
+              -28.917615807384344,
+            ],
+            Array [
+              -26.911745713573936,
+              -20.146988059052916,
+            ],
+          ],
+        ],
+        "type": "Polygon",
+      },
+      "id": "pCEluZ7j--",
+      "properties": Object {
+        "abc:feature:selected": true,
+        "abc:style:fill:color1": "rgba(18,90,147,0.30)",
+        "abc:style:fill:color2": "rgba(255,255,255,0.60)",
+        "abc:style:fill:pattern": "abc:style:fill:hatching:oblique:right",
+        "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+        "abc:style:stroke:width": 3,
+      },
+      "type": "Feature",
+    },
+  ],
+  "type": "FeatureCollection",
+}
+`;
+
+exports[`exportLayer() KML 1`] = `"<kml xmlns=\\"http://www.opengis.net/kml/2.2\\" xmlns:gx=\\"http://www.google.com/kml/ext/2.2\\" xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\" xsi:schemaLocation=\\"http://www.opengis.net/kml/2.2 https://developers.google.com/kml/schema/kml22gx.xsd\\"><Document><Placemark id=\\"inzkwakyyX\\"><ExtendedData><Data name=\\"abc:feature:selected\\"><value>false</value></Data><Data name=\\"abc:style:point:color\\"><value>rgba(18,90,147,0.9)</value></Data><Data name=\\"abc:style:point:icon\\"><value>twbs/geo-alt-fill.inline.svg</value></Data><Data name=\\"abc:style:point:size\\"><value>90</value></Data></ExtendedData><Point><coordinates>-48.27190338547443,43.57861000039307</coordinates></Point></Placemark><Placemark id=\\"Ek3C9txfoI\\"><ExtendedData><Data name=\\"abc:feature:selected\\"><value>false</value></Data><Data name=\\"abc:style:point:color\\"><value>rgba(18,90,147,0.9)</value></Data><Data name=\\"abc:style:point:icon\\"><value>twbs/geo-alt-fill.inline.svg</value></Data><Data name=\\"abc:style:point:size\\"><value>90</value></Data></ExtendedData><Point><coordinates>-45.25493196288962,24.33499925170213</coordinates></Point></Placemark><Placemark id=\\"h5Lft_xAG9\\"><ExtendedData><Data name=\\"abc:feature:selected\\"><value>false</value></Data><Data name=\\"abc:style:point:color\\"><value>rgba(18,90,147,0.9)</value></Data><Data name=\\"abc:style:point:icon\\"><value>twbs/geo-alt-fill.inline.svg</value></Data><Data name=\\"abc:style:point:size\\"><value>90</value></Data></ExtendedData><Point><coordinates>-28.72192856712481,-0.4824435253768513</coordinates></Point></Placemark><Placemark id=\\"nzIpj1HQr3\\"><ExtendedData><Data name=\\"abc:feature:selected\\"><value>false</value></Data><Data name=\\"abc:style:stroke:color\\"><value>rgba(18,90,147,0.60)</value></Data><Data name=\\"abc:style:stroke:width\\"><value>3</value></Data></ExtendedData><LineString><coordinates>-31.49754227590284,47.465691459816924 -32.10093656041982,23.894412236869627 -15.567933164655011,3.256840068241587</coordinates></LineString></Placemark><Placemark id=\\"5OdMTSrfAR\\"><ExtendedData><Data name=\\"abc:feature:selected\\"><value>false</value></Data><Data name=\\"abc:style:stroke:color\\"><value>rgba(18,90,147,0.60)</value></Data><Data name=\\"abc:style:stroke:width\\"><value>3</value></Data></ExtendedData><LineString><coordinates>-14.48182345252448,25.91917906895911 -10.86145774542271,6.922397550614718 -11.585530886843056,-11.684088217570377</coordinates></LineString></Placemark><Placemark id=\\"pCEluZ7j--\\"><ExtendedData><Data name=\\"abc:feature:selected\\"><value>true</value></Data><Data name=\\"abc:style:fill:color1\\"><value>rgba(18,90,147,0.30)</value></Data><Data name=\\"abc:style:fill:color2\\"><value>rgba(255,255,255,0.60)</value></Data><Data name=\\"abc:style:fill:pattern\\"><value>abc:style:fill:hatching:oblique:right</value></Data><Data name=\\"abc:style:stroke:color\\"><value>rgba(18,90,147,0.60)</value></Data><Data name=\\"abc:style:stroke:width\\"><value>3</value></Data></ExtendedData><Polygon><outerBoundaryIs><LinearRing><coordinates>-26.911745713573936,-20.146988059052916 5.430187936535306,-14.153983118218335 6.15426107795567,-28.917615807384344 -26.911745713573936,-20.146988059052916</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>"`;
+
+exports[`exportLayer() WKT 1`] = `"GEOMETRYCOLLECTION(POINT(-48.27190338547443 43.57861000039307),POINT(-45.25493196288962 24.33499925170213),POINT(-28.72192856712481 -0.4824435253768513),LINESTRING(-31.49754227590284 47.465691459816924,-32.10093656041982 23.894412236869627,-15.567933164655011 3.256840068241587),LINESTRING(-14.48182345252448 25.91917906895911,-10.86145774542271 6.922397550614718,-11.585530886843056 -11.684088217570377),POLYGON((-26.911745713573936 -20.146988059052916,5.430187936535306 -14.153983118218335,6.15426107795567 -28.917615807384344,-26.911745713573936 -20.146988059052916)))"`;

@@ -18,7 +18,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Example } from '../typings';
+import range from 'lodash/range';
 
 type State = {
   script: string;
@@ -31,7 +31,9 @@ type Action = {
 export const usePersistentStore = create<State & Action>()(
   persist(
     (set) => ({
-      script: Example,
+      script: range(0, 15)
+        .map(() => '\n')
+        .join(''),
       setScript: (script) => set(() => ({ script })),
     }),
     { name: 'ABC_MAP_SCRIPTS_MODULE' }

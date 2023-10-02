@@ -19,6 +19,9 @@ import { getMainDbClient, MainDatabase } from './indexed-db/main-database';
 import { wait } from '../utils/wait';
 import { BeforeUnloadWarning } from '../../components/warning-before-unload/BeforeUnloadWarning';
 import { ObjectStore } from './indexed-db/client/ObjectStore';
+import { Logger } from '@abc-map/shared';
+
+const logger = Logger.get('StorageService.ts');
 
 export enum StorageKey {
   REDUX_STATE = 'ABC_MAP_REDUX_STATE',
@@ -45,7 +48,12 @@ export class StorageService {
 
     localStorage.clear();
 
-    await getMainDbClient().clearStores([ObjectStore.Migrations]);
+    const idbClient = getMainDbClient();
+    if (!idbClient) {
+      logger.warn('Cannot clear IndexedDB: not connected.');
+    } else {
+      await idbClient.clearStores({ exclude: [ObjectStore.Migrations] });
+    }
   }
 
   /**
@@ -58,7 +66,13 @@ export class StorageService {
     await wait(500);
 
     localStorage.clear();
-    await getMainDbClient().dropDatabase(MainDatabase);
+
+    const idbClient = getMainDbClient();
+    if (!idbClient) {
+      logger.warn('Cannot clear IndexedDB: not connected.');
+    } else {
+      await idbClient.dropDatabase(MainDatabase);
+    }
 
     // We reload in order to reset indexed db schema
     BeforeUnloadWarning.get().setEnabled(false);

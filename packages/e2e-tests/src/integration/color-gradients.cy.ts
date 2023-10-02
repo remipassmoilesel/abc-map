@@ -25,6 +25,7 @@ import { Modules } from '../helpers/Modules';
 import { Routes } from '../helpers/Routes';
 import { Project } from '../helpers/Project';
 import { FilePrompt } from '../helpers/FilePrompt';
+import { BundledModuleId } from '@abc-map/shared';
 
 describe('Color gradients', function () {
   beforeEach(() => {
@@ -37,7 +38,7 @@ describe('Color gradients', function () {
       // Import layer
       .then(() => DataStore.importByName('Countries of the world'))
       // Open module
-      .then(() => Modules.open('color-gradients'))
+      .then(() => Modules.open(BundledModuleId.ColorGradients))
       // Data source parameters
       .get('[data-cy=data-source-file]')
       .click()

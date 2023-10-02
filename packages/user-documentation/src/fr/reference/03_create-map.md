@@ -17,7 +17,7 @@ Vous pouvez utiliser:
 
 <video controls src="../assets/add-predefined-layer.mp4" preload="none"></video>
 
-### Quelle couche choisir ?
+## Quelle couche choisir ?
 
 Essayez tout d'abord les `couches prédéfinies`, ce sont les plus simples à utiliser.
 
@@ -70,7 +70,7 @@ Ajoutez un titre et une description pour chaque forme utilisée sur votre carte.
 
 <video controls src="../assets/create-scale-legend.mp4" preload="none"></video>
 
-## Mettre en page et exporter
+## Mettre en page et exporter votre carte
 
 Sur la page "Mise en page", créez une ou plusieurs pages en fonction de vos besoins. Lorsque votre création est prête
 exportez-la au format `PDF` ou `PNG`:
@@ -79,6 +79,8 @@ exportez-la au format `PDF` ou `PNG`:
 - Le format PNG permet d'intégrer votre carte dans un document, par exemple dans un traitement de texte
 
 <video controls src="../assets/pdf-export.mp4" preload="none"></video>
+
+Vous pouvez aussi exporter les couches de géométries au format GeoJSON, KML ou GPX en utilisant le module d'export de couches.
 
 ## Partager votre carte
 

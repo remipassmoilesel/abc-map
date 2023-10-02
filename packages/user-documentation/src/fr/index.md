@@ -2,6 +2,7 @@
 title: Sommaire 📚
 layout: main-layout.njk
 with_toc: false
+with_main_toc_button: false
 ---
 
 ## Référence
@@ -21,3 +22,6 @@ with_toc: false
 - [Dépannage rapide](blog/2023-08-19/)
 - [Attribution Abc-Map optionnelle](blog/2023-08-10/)
 - [Nouveau moteur de documentation !](blog/2023-08-01/)
+- [Export de couche](blog/2023-09-23/)
+- [Meilleur module de scripts](blog/2023-09-30/)
+- [Enregistrement automatique des projets](blog/2023-10-02/)

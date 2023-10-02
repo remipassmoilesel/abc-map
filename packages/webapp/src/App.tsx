@@ -47,6 +47,7 @@ import { SimplePromptModal } from './components/simple-prompt-modal/SimplePrompt
 import { MultipleTabsWarning } from './components/multiple-tabs-warning/MultipleTabsWarning';
 import { IframeWarning } from './components/iframe-warning/IframeWarning';
 import { useRedirectLegacyRoutes } from './core/ui/useRedirectLegacyRoutes';
+import { HeavyProjectWarning } from './components/heavy-project-warning/HeavyProjectWarning';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -112,6 +113,7 @@ export function App() {
           <MultipleTabsWarning />
           <IframeWarning />
           <WarningBeforeUnload />
+          <HeavyProjectWarning />
         </>
       )}
 

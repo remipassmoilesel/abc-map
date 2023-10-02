@@ -35,20 +35,24 @@ exports[`FeatureExplorer should allow user to modify feature data 1`] = `
     <div
       class="d-flex flex-row mb-2"
     >
-      <select
-        class="form-select"
+      <div
+        class=""
       >
-        <option
-          value="None"
+        <select
+          class="form-select"
         >
-          Select a layer
-        </option>
-        <option
-          value="test-layer-id"
-        >
-          Geometries
-        </option>
-      </select>
+          <option
+            value="None"
+          >
+            Select a layer
+          </option>
+          <option
+            value="test-layer-id"
+          >
+            Geometries
+          </option>
+        </select>
+      </div>
     </div>
     <div
       class="d-flex flex-column mb-2"
@@ -524,20 +528,24 @@ exports[`FeatureExplorer should display feature data 1`] = `
     <div
       class="d-flex flex-row mb-2"
     >
-      <select
-        class="form-select"
+      <div
+        class=""
       >
-        <option
-          value="None"
+        <select
+          class="form-select"
         >
-          Select a layer
-        </option>
-        <option
-          value="test-layer-id"
-        >
-          Geometries
-        </option>
-      </select>
+          <option
+            value="None"
+          >
+            Select a layer
+          </option>
+          <option
+            value="test-layer-id"
+          >
+            Geometries
+          </option>
+        </select>
+      </div>
     </div>
     <div
       class="d-flex flex-column mb-2"
@@ -1000,20 +1008,24 @@ exports[`FeatureExplorer should display features and select automatically a feat
     <div
       class="d-flex flex-row mb-2"
     >
-      <select
-        class="form-select"
+      <div
+        class=""
       >
-        <option
-          value="None"
+        <select
+          class="form-select"
         >
-          Select a layer
-        </option>
-        <option
-          value="test-layer-id"
-        >
-          Geometries
-        </option>
-      </select>
+          <option
+            value="None"
+          >
+            Select a layer
+          </option>
+          <option
+            value="test-layer-id"
+          >
+            Geometries
+          </option>
+        </select>
+      </div>
     </div>
     <div
       class="d-flex flex-column mb-2"
@@ -1311,15 +1323,19 @@ exports[`FeatureExplorer should display nothing if no active layer 1`] = `
     <div
       class="d-flex flex-row mb-2"
     >
-      <select
-        class="form-select"
+      <div
+        class=""
       >
-        <option
-          value="None"
+        <select
+          class="form-select"
         >
-          Select a layer
-        </option>
-      </select>
+          <option
+            value="None"
+          >
+            Select a layer
+          </option>
+        </select>
+      </div>
     </div>
     <div
       class="d-flex flex-column mb-2"
@@ -1405,20 +1421,24 @@ exports[`FeatureExplorer should display nothing if no feature 1`] = `
     <div
       class="d-flex flex-row mb-2"
     >
-      <select
-        class="form-select"
+      <div
+        class=""
       >
-        <option
-          value="None"
+        <select
+          class="form-select"
         >
-          Select a layer
-        </option>
-        <option
-          value="test-layer-id"
-        >
-          Geometries
-        </option>
-      </select>
+          <option
+            value="None"
+          >
+            Select a layer
+          </option>
+          <option
+            value="test-layer-id"
+          >
+            Geometries
+          </option>
+        </select>
+      </div>
     </div>
     <div
       class="d-flex flex-column mb-2"
@@ -1501,20 +1521,24 @@ exports[`FeatureExplorer should filter features on search 1`] = `
     <div
       class="d-flex flex-row mb-2"
     >
-      <select
-        class="form-select"
+      <div
+        class=""
       >
-        <option
-          value="None"
+        <select
+          class="form-select"
         >
-          Select a layer
-        </option>
-        <option
-          value="test-layer-id"
-        >
-          Geometries
-        </option>
-      </select>
+          <option
+            value="None"
+          >
+            Select a layer
+          </option>
+          <option
+            value="test-layer-id"
+          >
+            Geometries
+          </option>
+        </select>
+      </div>
     </div>
     <div
       class="d-flex flex-column mb-2"
@@ -1637,20 +1661,24 @@ exports[`FeatureExplorer should use selected title field 1`] = `
     <div
       class="d-flex flex-row mb-2"
     >
-      <select
-        class="form-select"
+      <div
+        class=""
       >
-        <option
-          value="None"
+        <select
+          class="form-select"
         >
-          Select a layer
-        </option>
-        <option
-          value="test-layer-id"
-        >
-          Geometries
-        </option>
-      </select>
+          <option
+            value="None"
+          >
+            Select a layer
+          </option>
+          <option
+            value="test-layer-id"
+          >
+            Geometries
+          </option>
+        </select>
+      </div>
     </div>
     <div
       class="d-flex flex-column mb-2"

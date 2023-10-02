@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-54.33511333595118, 41.037918345344195]
+      },
+      "properties": {
+        "abc:style:point:icon": "twbs/0_circle-fill.inline.svg",
+        "abc:style:point:size": 10,
+        "abc:style:point:color": "rgba(18,90,147,0.9)",
+        "abc:feature:selected": true
+      },
+      "id": "7usssi8KSl"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-54.25582818652511, 37.79253407736135]
+      },
+      "properties": {
+        "abc:style:point:icon": "twbs/0_circle-fill.inline.svg",
+        "abc:style:point:size": 10,
+        "abc:style:point:color": "rgba(18,90,147,0.9)",
+        "abc:feature:selected": true
+      },
+      "id": "mAH_hNzUfQ"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-54.176543037099044, 33.54331733584951]
+      },
+      "properties": {
+        "abc:style:point:icon": "twbs/0_circle-fill.inline.svg",
+        "abc:style:point:size": 10,
+        "abc:style:point:color": "rgba(18,90,147,0.9)",
+        "abc:feature:selected": true
+      },
+      "id": "S8omvtuklq"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-49.181578623256875, 41.037918345344195],
+          [-42.28377062318911, 41.097694000914345],
+          [-49.02300832440474, 34.0703495475547],
+          [-41.17377853122419, 34.52883071026585]
+        ]
+      },
+      "properties": {
+        "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+        "abc:style:stroke:width": 3,
+        "abc:feature:selected": true
+      },
+      "id": "vsIrtUazwK"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-37.605946807051204, 41.037918345344195],
+            [-36.813095312790544, 34.91981709783845],
+            [-29.677431864444586, 41.573941428760264],
+            [-29.122435818462122, 35.17944535786134],
+            [-37.605946807051204, 41.037918345344195]
+          ]
+        ]
+      },
+      "properties": {
+        "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+        "abc:style:stroke:width": 3,
+        "abc:style:fill:color1": "rgba(18,90,147,0.30)",
+        "abc:style:fill:color2": "rgba(255,255,255,0.60)",
+        "abc:style:fill:pattern": "abc:style:fill:hatching:oblique:right",
+        "abc:feature:selected": true
+      },
+      "id": "Yq9sRa6ell"
+    }
+  ]
+}

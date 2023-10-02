@@ -19,6 +19,7 @@ Vous pouvez utiliser dans ce logiciel:
 - des fichiers GPX
 - des fichiers KML
 - des fichiers GeoJSON
+- des fichiers TopoJSON
 - des fichiers Shapefile
 - des couches WMS
 - des couches WMTS
@@ -48,3 +49,24 @@ Créez une <a href="https://gitlab.com/abc-map/abc-map/-/issues/new?issue" targe
 ## Où est le code source d'Abc-Map ?
 
 Le code source de l'application est disponible <a target="_blank" href="https://gitlab.com/abc-map/abc-map">ici</a>.
+
+## Les nombres que j'utilise ne fonctionnent pas
+
+Si vous utilisez des données numériques et que les résultats de traitement sont bizarres, vous devez peut-être vérifier le format de vos
+nombres.
+
+Ces formats fonctionnent:
+
+```
+123
+1 234
+1 123.123
+1 123,123
+```
+
+Mais ces formats ne fonctionnent pas:
+
+```
+1,123,123
+1,123,123.123
+```

@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const markdownIt = require('markdown-it');
 const anchor = require('markdown-it-anchor');
-const pluginTOC = require('eleventy-plugin-toc');
+const pluginTOC = require('eleventy-plugin-nesting-toc');
 const slugify = require('slugify');
 
 console.log(`
@@ -39,7 +39,11 @@ module.exports = function (eleventyConfig) {
 
   eleventyConfig.setLibrary('md', markdownIt(markdownItOptions).use(anchor, markdownItAnchorOptions));
 
-  eleventyConfig.addPlugin(pluginTOC, { wrapper: 'div' });
+  eleventyConfig.addPlugin(pluginTOC, {
+    wrapper: 'div',
+    flat: false,
+    tags: ['h2', 'h3', 'h4', 'h5'],
+  });
 
   // When watching, after each build we copy results to server
   eleventyConfig.on('eleventy.after', async ({ dir, results, runMode, outputMode }) => {

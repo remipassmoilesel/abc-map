@@ -66,7 +66,7 @@ export function ProjectSection(props: Props) {
 
       <ActionButton label={t('Export_project')} icon={IconDefs.faDownload} onClick={handleExportProject} data-cy={'export-project'} />
 
-      <ActionButton label={t('See_more')} icon={IconDefs.faDownload} onClick={handleShowMore} data-cy={'see-more'} />
+      <ActionButton label={t('See_more')} icon={IconDefs.faGear} onClick={handleShowMore} data-cy={'see-more'} />
 
       {userAuthenticated && (
         <ActionButton label={t('Save_online')} icon={IconDefs.faPenAlt} disabled={!userAuthenticated} onClick={handleSaveProjectOnline} data-cy={'see-more'} />

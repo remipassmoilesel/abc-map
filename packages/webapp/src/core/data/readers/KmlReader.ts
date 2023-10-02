@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractDataReader } from './AbstractDataReader';
+import { ReaderImplementation } from './ReaderImplementation';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { KML } from 'ol/format';
@@ -27,25 +27,29 @@ import uuid from 'uuid-random';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { ReadResult, ReadStatus } from '../ReadResult';
+import { normalizeFeatures } from './normalizeFeatures';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
-export class KmlReader extends AbstractDataReader {
+const t = prefixedTranslation('DataReader:');
+
+export class KmlReader implements ReaderImplementation {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.KML).length > 0;
   }
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
+  public async read(files: AbcFile<Blob>[], targetProjection: AbcProjection): Promise<ReadResult> {
     const layers: LayerWrapper[] = [];
     const format = new KML();
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.KML);
     for (const file of _files) {
       const content = await BlobIO.asString(file.content);
-      const features = format.readFeatures(content, { featureProjection: projection.name });
-      this.prepareFeatures(features);
+      let features = format.readFeatures(content, { featureProjection: targetProjection.name, dataProjection: 'EPSG:4326' });
+      features = normalizeFeatures(features);
 
       const layer = LayerFactory.newVectorLayer(new VectorSource({ features }));
       const metadata: VectorMetadata = {
         id: uuid(),
-        name: 'Couche KML',
+        name: t('KML_import'),
         type: LayerType.Vector,
         active: false,
         opacity: 1,

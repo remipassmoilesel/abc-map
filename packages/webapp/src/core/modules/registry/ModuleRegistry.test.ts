@@ -20,7 +20,7 @@ import { SinonStub } from 'sinon';
 import { ModuleRegistry } from './ModuleRegistry';
 import { MainStore, storeFactory } from '../../../core/store/store';
 import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
-import { localModulesFactory } from '../../../modules';
+import { bundledModulesFactory } from '../../../modules';
 import { UiActions } from '../../store/ui/actions';
 import { BundledModuleId } from '@abc-map/shared';
 import { disableSearchIndexLogging } from '../../utils/SearchIndex';
@@ -35,7 +35,7 @@ describe('ModuleRegistry', () => {
   beforeEach(() => {
     services = newTestServices();
     store = storeFactory();
-    registry = new ModuleRegistry(services, store, localModulesFactory);
+    registry = new ModuleRegistry(services, store, bundledModulesFactory);
   });
 
   describe('initialize()', () => {

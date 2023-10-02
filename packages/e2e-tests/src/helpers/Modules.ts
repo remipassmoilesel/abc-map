@@ -17,22 +17,10 @@
  */
 
 import { TopBar } from './TopBar';
-
-export type ModuleId =
-  | 'artefact-generator'
-  | 'color-gradients'
-  | 'count-points-in-polygon'
-  | 'data-store'
-  | 'data-table'
-  | 'different-symbols'
-  | 'project-management'
-  | 'proportional-symbols'
-  | 'scripts'
-  | 'shared-map-settings'
-  | 'static-export';
+import { BundledModuleId } from '@abc-map/shared';
 
 export class Modules {
-  public static open(moduleId: ModuleId) {
+  public static open(moduleId: BundledModuleId) {
     return (
       TopBar.moduleIndex()
         // Search for module id

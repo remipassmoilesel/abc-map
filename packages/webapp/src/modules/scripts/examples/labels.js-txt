@@ -1,0 +1,14 @@
+// This is javascript code. Here you can modify map, layers and data.
+// See module source code for complete API: https://gitlab.com/abc-map/abc-map/-/tree/master/packages/webapp/src/modules/scripts
+
+// In this script, we will iterate the regions of France and add a label to them
+
+// We select features we want to use
+const {getLayers} = scriptApi;
+const regionsOfFrance = getLayers().find(layer => layer.name === 'Regions of France').getFeatures();
+
+// We iterate regions to add a text label
+for (const region of regionsOfFrance) {
+    const name = region.getProperties().name;
+    region.setStyle({text: {value: name, size: 15}});
+}

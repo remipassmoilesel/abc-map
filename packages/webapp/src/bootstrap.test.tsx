@@ -157,7 +157,6 @@ describe('bootstrap()', () => {
         expect(services.project.loadLocalProject.callCount).toEqual(0);
         expect(services.project.loadRemotePrivateProject.callCount).toEqual(0);
         expect(services.project.enableProjectAutoSave.callCount).toEqual(1);
-        expect(services.project.newProject.callCount).toEqual(1);
       });
 
       it('should load local project if any', async () => {

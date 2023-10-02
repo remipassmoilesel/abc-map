@@ -25,6 +25,7 @@ import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
 import { Modules } from '../helpers/Modules';
 import { TopBar } from '../helpers/TopBar';
+import { BundledModuleId } from '@abc-map/shared';
 
 describe('Projection', () => {
   beforeEach(() => {
@@ -37,7 +38,7 @@ describe('Projection', () => {
       // Delete geometry layer
       .then(() => LayerControls.deleteActiveLayer())
       // Change projection
-      .then(() => Modules.open('project-management'))
+      .then(() => Modules.open(BundledModuleId.ProjectManagement))
       .get('[data-cy=edit-projection]')
       .click()
       .get('[data-cy=prompt-input]')
@@ -52,7 +53,7 @@ describe('Projection', () => {
         const extent = map.getViewExtent();
         expect(extent).deep.equal([-6099007.132605841, 3199319.9486759407, 7041350.893871974, 10041597.284685347], `Actual: "${JSON.stringify(extent)}"`);
       })
-      .then(() => Modules.open('static-export'))
+      .then(() => Modules.open(BundledModuleId.MapExport))
       .get('[data-cy=add-layout]')
       .click()
       .then(() => LayoutPreviewMap.getReference())

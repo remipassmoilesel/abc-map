@@ -18,7 +18,7 @@
 
 import { ModuleAdapter } from '@abc-map/module-api';
 import { BundledModuleId } from '@abc-map/shared';
-import SharedMapSettingsView from './SharedMapSettingsView';
+import SharedMapSettingsView from './view/SharedMapSettingsView';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('SharedMapSettingsModule:');

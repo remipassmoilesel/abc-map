@@ -4,6 +4,7 @@ description: Abc-Map documentation - All you need to know about Abc-Map !
 keywords: gis,map,software,free
 with_toc: true
 with_title: true
+with_main_toc_button: true
 ---
 <!DOCTYPE html>
 <html lang="{{ lang }}">
@@ -33,10 +34,10 @@ with_title: true
 </head>
 <body>
 <div class="top-bar">
-    <div class="brand">
+    <a href="/" class="brand">
         <img src="/documentation/assets/main-icon.png" alt="Logo"/>
         <span>Abc-Map</span>
-    </div>
+    </a>
 
     <button type="button" onclick="abc.openInMainApp()" data-cy="open-in-app" class="btn btn-outline-secondary me-4">
         🌍 <span data-i18n="Open_in_app">Open in app</span>
@@ -58,19 +59,19 @@ with_title: true
         {% endif %}
 
         {% if with_toc %}
-        <div>
             <div class="mb-4">
                 {{ content | toc | safe }}
             </div>
+        {% endif %}
 
-            <div class="d-flex hidden-in-webapp">
+        {% if with_main_toc_button %}
+            <div class="d-flex hidden-in-webapp mb-2">
                 <button type="button" onclick="abc.tableOfContent()"
-                        class="btn btn-outline-primary me-2 mb-4"
+                        class="btn btn-outline-primary me-2"
                         data-cy="go-to-table-of-content">
                     📖 <span data-i18n="Table_of_content">Table of content</span>
                 </button>
             </div>
-        </div>
         {% endif %}
 
         {{ content | safe }}

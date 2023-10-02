@@ -21,17 +21,15 @@ import { ConfirmAccountTokenParam, ConfirmationStatus, Logger } from '@abc-map/s
 import { Link, useSearchParams } from 'react-router-dom';
 import { HttpError } from '../../core/http/HttpError';
 import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
 import { useServices } from '../../core/useServices';
 import Cls from './ConfirmAccountView.module.scss';
 
 const logger = Logger.get('ConfirmAccountView.tsx');
 
-const t = prefixedTranslation('ConfirmAccountView:');
-
 function ConfirmAccountView() {
+  const { t } = useTranslation('ConfirmAccountView');
   const { authentication, toasts } = useServices();
   const [status, setStatus] = useState(ConfirmationStatus.InProgress);
   const [searchParams] = useSearchParams();
@@ -41,7 +39,7 @@ function ConfirmAccountView() {
     addNoIndexMeta();
 
     return () => removeNoIndexMeta();
-  }, []);
+  }, [t]);
 
   const confirmationInProgress = useRef(false);
   useEffect(() => {
@@ -99,7 +97,8 @@ function ConfirmAccountView() {
         <>
           <h3 className={'mb-4'} dangerouslySetInnerHTML={{ __html: t('And_voila_welcome') }} />
           <div data-cy={'account-enabled'}>
-            {t('Activation_succeed')} ✨<br />
+            <div className={'mb-3'}>{t('You_should_close_the_other_tabs')}</div>
+            <div>{t('Activation_succeed')} ✨</div>
             <Link to={Routes.map().format()}>{t('Map_is_over_here')}</Link>
           </div>
         </>

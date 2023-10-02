@@ -11,7 +11,7 @@
   </a>
 </div>
 
-Abc-Map is a tool for processing geographic information that is easy to understand and use.
+Abc-Map is a geographic information processing tool that is easy to understand and use.
 
 Use cases:
 

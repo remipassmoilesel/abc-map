@@ -1,6 +1,7 @@
 ---
 title: 🔥 Help !
 layout: main-layout.njk
+with_toc: false
 ---
 
 ## Can't do what you want ?
