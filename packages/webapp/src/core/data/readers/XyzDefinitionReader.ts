@@ -67,7 +67,7 @@ export class XyzDefinitionReader implements ReaderImplementation {
 
       // We create layer
       const url = variableExpansion(definition.xyz.url, variables);
-      layers.push(LayerFactory.newXyzLayer(url, definition.xyz.projection));
+      layers.push(LayerFactory.newXyzLayer({ url, projection: definition.xyz.projection }));
     }
 
     return { status: ReadStatus.Succeed, layers };

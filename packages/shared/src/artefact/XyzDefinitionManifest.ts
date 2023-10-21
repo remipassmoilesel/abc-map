@@ -24,6 +24,8 @@ export interface XyzDefinitionManifest {
   xyz: {
     url: string;
     projection?: AbcProjection;
+    minZoom?: number;
+    maxZoom?: number;
     prompt?: {
       name: string;
       type: 'string' | 'number';

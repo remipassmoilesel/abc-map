@@ -26,7 +26,6 @@ import DeviceWarningModal from './components/device-warning-modal/DeviceWarningM
 import { EditPropertiesModal } from './components/edit-properties-modal/EditPropertiesModal';
 import { SolicitationModal } from './components/solicitation-modal/SolicitationModal';
 import LoginModal from './components/login-modal/LoginModal';
-import RegistrationModal from './components/registration-modal/RegistrationModal';
 import PasswordLostModal from './components/password-lost-modal/PasswordLostModal';
 import SetPasswordModal from './components/set-password-modal/SetPasswordModal';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
@@ -48,6 +47,8 @@ import { MultipleTabsWarning } from './components/multiple-tabs-warning/Multiple
 import { IframeWarning } from './components/iframe-warning/IframeWarning';
 import { useRedirectLegacyRoutes } from './core/ui/useRedirectLegacyRoutes';
 import { HeavyProjectWarning } from './components/heavy-project-warning/HeavyProjectWarning';
+import { WarningModal } from './components/warning-modal/WarningModal';
+import { RegistrationModal } from './components/registration-modal/RegistrationModal';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -114,6 +115,7 @@ export function App() {
           <IframeWarning />
           <WarningBeforeUnload />
           <HeavyProjectWarning />
+          <WarningModal />
         </>
       )}
 

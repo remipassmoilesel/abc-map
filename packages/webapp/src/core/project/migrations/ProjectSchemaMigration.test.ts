@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { logger, ProjectUpdater } from './ProjectUpdater';
+import { logger, ProjectSchemaMigration } from './ProjectSchemaMigration';
 import { MigrationProject, ProjectMigration } from './typings';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { TestHelper } from '../../utils/test/TestHelper';
@@ -26,16 +26,16 @@ import { AbcProjectManifest, ProjectConstants } from '@abc-map/shared';
 
 logger.disable();
 
-describe('ProjectUpdater', () => {
+describe('ProjectSchemaMigration', () => {
   describe('With fake migrations', () => {
     let migration1: TestProjectMigration;
     let migration2: TestProjectMigration;
-    let updater: ProjectUpdater;
+    let updater: ProjectSchemaMigration;
 
     beforeEach(() => {
       migration1 = new TestProjectMigration();
       migration2 = new TestProjectMigration();
-      updater = new ProjectUpdater(() => [migration1, migration2]);
+      updater = new ProjectSchemaMigration(() => [migration1, migration2]);
     });
 
     it('update() should do nothing if project is up to date', async () => {
@@ -62,7 +62,7 @@ describe('ProjectUpdater', () => {
 
       // Assert
       expect(migration2.migrate.callCount).toEqual(1);
-      expect(migration2.migrate.args[0]).toEqual([manifest, []]);
+      expect(migration2.migrate.args[0]).toEqual([manifest, [], { silent: false }]);
     });
 
     it('update() should pass migrated projects to next migration scripts', async () => {
@@ -80,19 +80,19 @@ describe('ProjectUpdater', () => {
 
       // Assert
       expect(migration1.migrate.callCount).toEqual(1);
-      expect(migration1.migrate.args[0]).toEqual([manifest, []]);
+      expect(migration1.migrate.args[0]).toEqual([manifest, [], { silent: false }]);
       expect(migration2.migrate.callCount).toEqual(1);
-      expect(migration2.migrate.args[0]).toEqual([afterMigration1.manifest, afterMigration1.files]);
+      expect(migration2.migrate.args[0]).toEqual([afterMigration1.manifest, afterMigration1.files, { silent: false }]);
     });
   });
 
   describe('With existing migrations', () => {
     let modal: SinonStubbedInstance<ModalService>;
-    let updater: ProjectUpdater;
+    let updater: ProjectSchemaMigration;
 
     beforeEach(() => {
       modal = sinon.createStubInstance(ModalService);
-      updater = ProjectUpdater.create(modal);
+      updater = ProjectSchemaMigration.create(modal);
     });
 
     it('should migrate', async () => {

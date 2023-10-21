@@ -18,8 +18,4 @@
 
 export enum PredefinedLayerModel {
   OSM = 'OSM',
-  StamenToner = 'StamenToner',
-  StamenTonerLite = 'StamenTonerLite',
-  StamenTerrain = 'StamenTerrain',
-  StamenWatercolor = 'StamenWatercolor',
 }

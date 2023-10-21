@@ -36,6 +36,7 @@ export interface FormValues {
 interface Props extends OnlineStatusProps {
   onSubmit: (values: FormValues) => void;
   onCancel: () => void;
+  errorMessage?: string;
 }
 
 interface State {
@@ -65,6 +66,7 @@ class RegistrationForm extends Component<Props, State> {
     const handleCancel = this.props.onCancel;
     const formState = this.state.formState;
     const offline = !this.props.onlineStatus;
+    const errorMessage = this.props.errorMessage;
 
     return (
       <>
@@ -112,7 +114,13 @@ class RegistrationForm extends Component<Props, State> {
 
         {/* Form validation */}
 
-        <FormValidationLabel state={formState} className={'mb-4'} />
+        <FormValidationLabel state={formState} className={'mb-3'} />
+
+        {errorMessage && (
+          <div className={'alert alert-warning mb-3'} data-cy={'registration-error-message'}>
+            {errorMessage}
+          </div>
+        )}
 
         {/* Action buttons */}
 

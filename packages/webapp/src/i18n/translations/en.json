@@ -81,8 +81,8 @@
     "Fullscreen": "Fullscreen",
     "Drop_your_files": "Drop your files to import them",
     "You_must_select_files": "You must select one or more files",
-    "You_must_import_project_with_import_control": "You need to import your project using the 'Import Project' control",
     "Formats_not_supported": "These file formats are not supported, no data has been imported",
+    "Project_imported": "Project imported !",
     "Layer_does_not_load": "Layer '{{name}}' may not be loading correctly.",
     "Layer_without_name": "*Layer without name*",
     "Zoom_in": "Zoom in",
@@ -115,20 +115,20 @@
     "New_layer": "Add a new layer",
     "What_kind_of_layer": "What type of layer ?",
     "Parameters": "Parameters",
-    "Select_basemap_you_want": "Select the basemap you want",
-    "Preview": "Preview",
-    "Origin_of_data_license": "Origin of data and license",
+    "OpenStreetMap_basemap": "OpenStreetMap basemap",
+    "What_is_this": "What is this ?",
     "Add_layer": "Add layer",
     "Cancel": "Cancel",
-    "Predefined_basemap": "Predefined basemap",
     "Geometry_layer": "Geometry layer",
     "XYZ_layer": "XYZ layer",
     "WMS_layer": "WMS layer",
     "WMTS_layer": "WMTS layer",
     "Nothing_to_configure_here": "Nothing to configure here",
     "Basemap_are_easy_to_use": "Predefined basemaps allow you to quickly and easily display a world map.",
-    "Geometry_layers_allow_to_draw": "Geometry layers allow you to draw shapes.",
-    "Cant_find_what_you_want": "Can not find what you want ?",
+    "Geometry_layers_contain_shapes": "Geometry layers contain shapes that can be modified with drawing tools.",
+    "A_XXX_layer_is_a_basemap_that_use": "An {{name}} layer is a basemap that uses the {{protocol}} protocol.",
+    "Cant_find_what_you_re_looking_for": "Can't find what you're looking for ?",
+    "Looking_for_another_basemap": "Looking for another basemap ?",
     "Try_data_store": "Try the data store.",
     "URL": "URL",
     "Username": "Username (optional)",
@@ -200,6 +200,7 @@
     "GPX_files": "GPX files",
     "KML_files": "KML files",
     "GeoJSON_files": "GeoJSON files",
+    "TopoJSON_files": "TopoJSON files",
     "Shapefiles": "Shapefiles",
     "WMS_layer_definitions": "WMS layer definitions",
     "WMTS_layer_definitions": "WMTS layer definitions",
@@ -233,7 +234,8 @@
     "Geometry": "Geometry",
     "More": "More",
     "Invalid_feature": "Invalid feature",
-    "Export": "Export"
+    "Export": "Export",
+    "Layer_type": "Layer type"
   },
   "Scale": {
     "Scale": "Scale"
@@ -269,7 +271,7 @@
     "Heavy_dataset": "Heavy dataset",
     "You_are_about_to_import_heavy_dataset": "You are about to import a large amount of data.",
     "AbcMap_not_yet_ready_for_heavy_dataset": "Abc-Map is not yet ready to process heavy datasets, you may slow down and block your session.",
-    "Prefer_small_dataset": "Prefer files of <code> less than 5 MB </code> and layers of <code> less than 1000 geometries </code>. In the near future, you will be able to use more data."
+    "Prefer_small_dataset": "Prefer files of <code>less than 5 MB</code> and layers of <code>less than 1000 geometries</code>. In the near future, you will be able to use more data."
   },
   "ConfirmationModal": {
     "Confirm": "Confirm",
@@ -660,6 +662,7 @@
     "Cancel": "Cancel",
     "Connect": "Login",
     "Invalid_credentials": "Your credentials are incorrect",
+    "Something_went_wrong": "Something went wrong",
     "You_are_connected": "You are connected !"
   },
   "RegistrationModal": {
@@ -674,7 +677,8 @@
     "Password_confirmation": "Password confirmation",
     "Cancel": "Cancel",
     "Register": "Register",
-    "This_email_address_is_already_in_use": "This email address is already in use"
+    "This_email_address_is_already_in_use": "This email address is already in use",
+    "Something_went_wrong": "Something went wrong"
   },
   "PasswordLostModal": {
     "Password_lost": "Password recovery",
@@ -854,7 +858,7 @@
     "Map_size": "Map size",
     "Full_page": "Full page",
     "About_map_size": "About map size",
-    "If_map_size_is_bigger_than_actual_window": "If the map size is larger than the window, it will be displayed in full screen",
+    "If_map_is_bigger_than_actual_window": "If the map is larger than the window, it will be displayed in full page",
     "Connect_to_the_Internet_to_share_your_map": "Connect to the Internet to <br/>share your map"
   },
   "SharingCodesModal": {
@@ -956,7 +960,7 @@
     "Link": "Link",
     "Create_or_edit_a_link": "Create / edit link",
     "Remove_a_link": "Remove a link",
-    "This_video_cannot_be_embedded": "This video cannot be embedded, click here to see it in a new window.",
+    "Launch_video_in_new_tab": "Launch video in new tab",
     "There_is_no_symbol_to_insert": "There is no symbol to insert"
   },
   "ChangelogView": {
@@ -1095,7 +1099,7 @@
     "This_project_is_password_protected": "This project is password protected",
     "This_project_is_public": "This project is public",
     "This_project_is_private": "This project is private",
-    "x_projects_saved_on_y_projects_allowed": "{{currently}} projects saved on {{allowed}} projects allowed.",
+    "You_can_save_up_to": "You can save up to {{total}} projects ({{remaining}} remaining)",
     "It_is_full": "It's full !",
     "Last_export": "Last export",
     "Last_online_save": "Last online save",
@@ -1118,7 +1122,8 @@
     "Enter_the_new_projection_code": "Enter the new projection code",
     "Change_projection": "Change projection",
     "Share_link": "Share link",
-    "Some_layers_are_not_saved_automatically_probably_because_they_have_a_lot_of_geometry": "Some layers are not saved automatically, probably because they have a lot of geometry:"
+    "Some_layers_are_not_saved_automatically_probably_because_they_have_a_lot_of_geometry": "Some layers are not saved automatically, probably because they have a lot of geometry:",
+    "Layouts": "Layouts"
   },
   "SimplePromptModal": {
     "Cancel": "Cancel",
@@ -1142,10 +1147,6 @@
   },
   "LayerFactory": {
     "OpenStreetMap": "OpenStreetMap",
-    "Stamen_Toner": "Stamen Toner",
-    "Stamen_Toner_Lite": "Stamen Toner Lite",
-    "Stamen_Terrain": "Stamen Terrain",
-    "Stamen_Watercolor": "Stamen Watercolor",
     "Geometries": "Geometries",
     "XYZ_layer": "XYZ layer"
   },
@@ -1240,7 +1241,8 @@
     "WKT": "WKT",
     "This_layer_cannot_be_exported": "This layer cannot be exported.",
     "Features_will_be_exported": "feature(s) will be exported",
-    "There_is_nothing_to_export_in_this_layer": "There is nothing to export in this layer"
+    "There_is_nothing_to_export_in_this_layer": "There is nothing to export in this layer",
+    "Export_all_layers": "Export all layers"
   },
   "HeavyProjectWarning": {
     "There_are_a_lot_of_layers": "There are a lot of layers ({{n}}).",
@@ -1252,5 +1254,10 @@
     "Your_project_is_a_bit_heavy": "Your project is a bit heavy",
     "Your_project_is_a_bit_heavy_If_you_use_a_lot_of_data_you_risk_slowing_down_or_freezing_your_session": "Your project is a bit heavy. If you use a lot of data, you risk slowing down or freezing your session.",
     "I_understand": "I understand"
+  },
+  "FromV130ToV140": {
+    "Changes_have_been_made_to_your_project": "Changes have been made to your project",
+    "Stamen_layers_are_no_longer_available_as_before": "Stamen layers are no longer available as before. <a target='_blank' href='https://abc-map.fr/documentation/en/blog/2023-10-16/'>To learn more, it's here \uD83D\uDD17</a>",
+    "The_Stamen_layers_in_your_project_have_been_replaced": "The Stamen layers in your project have been replaced."
   }
 }

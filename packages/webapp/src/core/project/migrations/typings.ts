@@ -25,7 +25,11 @@ export interface MigrationProject<ProjectManifest> {
 
 export interface ProjectMigration<From, To> {
   interestedBy(manifest: From, files: AbcFile<Blob>[]): Promise<boolean>;
-  migrate(manifest: From, files: AbcFile<Blob>[]): Promise<MigrationProject<To>>;
+  migrate(manifest: From, files: AbcFile<Blob>[], settings: ProjectMigrationSettings): Promise<MigrationProject<To>>;
+}
+
+export interface ProjectMigrationSettings {
+  silent: boolean;
 }
 
 export declare type MigrationsFactory = () => ProjectMigration<unknown, unknown>[];

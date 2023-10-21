@@ -42,7 +42,10 @@ export function SharedViewsSummary(props: Props) {
           <table className={Cls.table}>
             <tbody>
               {views.map((view) => {
-                const layerNames = view.layers.map((layA) => layers.find((layB) => layB.getId() === layA.layerId)).map((lay) => lay?.getName());
+                const layerNames: string[] = view.layers
+                  .map((layA) => layers.find((layB) => layB.getId() === layA.layerId))
+                  .map((lay) => lay?.getName())
+                  .filter((name): name is string => typeof name === 'string');
                 return (
                   <tr key={view.id}>
                     <td>{view.title}</td>

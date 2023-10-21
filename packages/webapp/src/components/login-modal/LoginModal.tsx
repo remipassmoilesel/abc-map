@@ -39,6 +39,7 @@ function LoginModal() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formState, setFormState] = useState(FormState.InvalidEmail);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const offline = useOfflineStatus();
 
@@ -68,6 +69,7 @@ function LoginModal() {
     setVisible(false);
     setEmail('');
     setPassword('');
+    setErrorMessage('');
 
     setTimeout(() => {
       modals.passwordLost().catch((err) => {
@@ -112,9 +114,9 @@ function LoginModal() {
         logger.error('Login error: ', err);
 
         if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
-          toasts.error(t('Invalid_credentials'));
+          setErrorMessage(t('Invalid_credentials'));
         } else {
-          toasts.genericError(err);
+          setErrorMessage(t('Something_went_wrong'));
         }
       });
   }, [authentication, email, modals, password, t, toasts, validateForm]);
@@ -191,7 +193,13 @@ function LoginModal() {
 
           {/* Form validation */}
 
-          <FormValidationLabel state={formState} className={'mb-5'} />
+          <FormValidationLabel state={formState} className={'mb-3'} />
+
+          {errorMessage && (
+            <div className={'alert alert-warning mb-3'} data-cy={'login-error-message'}>
+              {errorMessage}
+            </div>
+          )}
 
           {/* Action buttons */}
 

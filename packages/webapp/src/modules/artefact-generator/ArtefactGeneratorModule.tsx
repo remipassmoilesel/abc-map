@@ -125,7 +125,7 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
     // Include previews
     let images: Blob[] = [];
     if (params.previews.enabled && params.previews.views.length) {
-      const layer = LayerFactory.newXyzLayer(params.xyz.url);
+      const layer = LayerFactory.newXyzLayer({ url: params.xyz.url });
       images = await this.previewExporter.exportPreviews(layer, params.previews.views, previewDimensions());
       files.push(...images.map((image, i) => ({ path: `preview-${i}.png`, content: image })));
     }

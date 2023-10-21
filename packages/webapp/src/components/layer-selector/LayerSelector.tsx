@@ -46,6 +46,7 @@ interface Props {
    * If true, a lable will be shown
    */
   label?: string;
+  disabled?: boolean;
 
   'data-cy'?: string;
   'data-testid'?: string;
@@ -56,7 +57,7 @@ const None = 'None';
 
 export function LayerSelector(props: Props) {
   const { t } = useTranslation('VectorLayerSelector');
-  const { value, onSelected, onlyVector, 'data-cy': dataCy, 'data-testid': dataTestid, label, className } = props;
+  const { value, onSelected, onlyVector, disabled, 'data-cy': dataCy, 'data-testid': dataTestid, label, className } = props;
   const { layers } = useMapLayers();
 
   const handleSelection = useCallback(
@@ -85,7 +86,7 @@ export function LayerSelector(props: Props) {
   return (
     <div className={clsx(className)}>
       {label && <div className={'flex-grow-1'}>{label}</div>}
-      <select onChange={handleSelection} value={value?.getId()} className={'form-select'} data-cy={dataCy} data-testid={dataTestid}>
+      <select onChange={handleSelection} value={value?.getId()} disabled={disabled} className={'form-select'} data-cy={dataCy} data-testid={dataTestid}>
         <option value={None}>{t('Select_a_layer')}</option>
         {toDisplay.map((lay) => (
           <option key={lay.getId()} value={lay.getId()}>

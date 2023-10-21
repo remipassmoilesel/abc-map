@@ -16,68 +16,39 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger, PredefinedLayerModel } from '@abc-map/shared';
-import { LabeledPredefinedModels } from './LabeledPredefinedModels';
+import React, { useCallback } from 'react';
+import { BundledModuleId, Logger, PredefinedLayerModel } from '@abc-map/shared';
 import ControlButtons from '../_common/ControlButtons';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Cls from './PredefinedLayerPanel.module.scss';
+import { useServices } from '../../../../../core/useServices';
+import OsmPreview from './osm-preview.jpg';
+import { Link } from 'react-router-dom';
+import { Routes } from '../../../../../routes';
+import { FaIcon } from '../../../../../components/icon/FaIcon';
+import { IconDefs } from '../../../../../components/icon/IconDefs';
 
 const logger = Logger.get('PredefinedLayerPanel.tsx');
 
-interface Props extends ServiceProps {
+interface Props {
   value: PredefinedLayerModel;
   onChange: (m: PredefinedLayerModel) => void;
   onCancel: () => void;
   onConfirm: () => void;
 }
 
-const t = prefixedTranslation('MapView:');
+const byOsm = '<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
+const osmLicense = '<a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA 2.0</a>';
 
-class PredefinedLayerPanel extends Component<Props, {}> {
-  public render(): ReactNode {
-    const model = this.props.value;
-    const labelledModel = LabeledPredefinedModels.find(model);
-    const onCancel = this.props.onCancel;
+export function PredefinedLayerPanel(props: Props) {
+  const { value, onCancel, onConfirm } = props;
+  const { t } = useTranslation('MapView');
+  const { history } = useServices();
 
-    return (
-      <div className={'flex-grow-1 d-flex flex-column'}>
-        <div className={'mb-3'}>{t('Select_basemap_you_want')} :</div>
-        <select value={model} onChange={this.handleChange} className={'form-select mb-3'} data-cy={'predefined-model'}>
-          {LabeledPredefinedModels.All.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.label}
-            </option>
-          ))}
-        </select>
-
-        <div className={'mb-2'}>{t('Preview')} : </div>
-        <div className={'d-flex justify-content-center mb-4'}>
-          <img src={labelledModel?.preview} alt={labelledModel?.label} className={Cls.preview} />
-        </div>
-        <div className={'text-center'}>
-          {t('Origin_of_data_license')}:&nbsp;
-          <span dangerouslySetInnerHTML={{ __html: labelledModel?.by || '' }} />
-          <span className={'ml-2'} dangerouslySetInnerHTML={{ __html: labelledModel?.license || '' }} />
-        </div>
-
-        <div className={'flex-grow-1'} />
-
-        {/* Control buttons */}
-        <ControlButtons onCancel={onCancel} onConfirm={this.handleConfirm} />
-      </div>
-    );
-  }
-
-  private handleConfirm = () => {
-    const { history } = this.props.services;
-    const { value } = this.props;
-
+  const handleConfirm = useCallback(() => {
     const add = async () => {
       const layer = LayerFactory.newPredefinedLayer(value);
 
@@ -85,16 +56,35 @@ class PredefinedLayerPanel extends Component<Props, {}> {
       await cs.execute();
       history.register(HistoryKey.Map, cs);
 
-      this.props.onConfirm();
+      onConfirm();
     };
 
     add().catch((err) => logger.error('Cannot add layer', err));
-  };
+  }, [history, onConfirm, value]);
 
-  private handleChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-    const value = ev.target.value as PredefinedLayerModel;
-    this.props.onChange(value);
-  };
+  return (
+    <div className={'flex-grow-1 d-flex flex-column'}>
+      <div className={'mb-5'}>{t('Nothing_to_configure_here')} ✌️</div>
+
+      <div className={'d-flex justify-content-center mb-2'}>
+        <img src={OsmPreview} alt={t('OpenStreetMap_basemap')} className={Cls.preview} />
+      </div>
+
+      <small className={'text-center mb-5'}>
+        <span dangerouslySetInnerHTML={{ __html: byOsm }} />
+        <span className={'ms-2'} dangerouslySetInnerHTML={{ __html: osmLicense }} />
+      </small>
+
+      <div className={'alert alert-info d-flex align-items-center'}>
+        <FaIcon icon={IconDefs.faInfoCircle} className={'me-2'} />
+        {t('Looking_for_another_basemap')} &nbsp;
+        <Link to={Routes.module().withParams({ moduleId: BundledModuleId.DataStore })}>{t('Try_data_store')}</Link>
+      </div>
+
+      <div className={'flex-grow-1'} />
+
+      {/* Control buttons */}
+      <ControlButtons onCancel={onCancel} onConfirm={handleConfirm} />
+    </div>
+  );
 }
-
-export default withTranslation()(withServices(PredefinedLayerPanel));

@@ -7,18 +7,24 @@ layout: main-layout.njk
 
 You can import:
 
-- ABM2 files (Abc-Map projects)
 - GPX files
 - KML files
 - GeoJSON files
 - TopoJSON files
 - Shapefile files
+- ABM2 files (Abc-Map projects)
 
 The files are always imported in new layers, with the default style.
 
 <div class="alert alert-info">
 You can also use WMS, WMTS and XYZ layers by using the "Add layer" control
 </div>
+
+## How to import data?
+
+Drop your files on the map, they will be imported. You can also browse files on your terminal.
+
+<video controls src="../assets/data-import.mp4" preload="none"></video>
 
 ## Where to find data ?
 

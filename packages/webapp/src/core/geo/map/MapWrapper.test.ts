@@ -402,9 +402,14 @@ describe('MapWrapper', function () {
     it('with several layers', () => {
       const map = MapFactory.createNaked();
       map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
-      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
+      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setAttributions(['Map tiles by Stamen Design, under CC BY 3.0.']));
+      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setAttributions(['CC Somebody Somewhere']));
 
-      expect(map.getAttributions(AttributionFormat.Text)).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.']);
+      expect(map.getAttributions(AttributionFormat.Text)).toEqual([
+        '© OpenStreetMap contributors.',
+        'Map tiles by Stamen Design, under CC BY 3.0.',
+        'CC Somebody Somewhere',
+      ]);
     });
 
     it('with hidden layers', () => {
@@ -444,7 +449,6 @@ describe('MapWrapper', function () {
       // Prepare
       const map = MapFactory.createNaked();
       map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
-      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
 
       const event = new BaseEvent('tileloaderror');
       event.target = map.getLayers()[0].getSource();

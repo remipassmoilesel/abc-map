@@ -9,8 +9,8 @@ function initApi() {
   window.abc = {
     ...window.abc,
     openInMainApp: function () {
+      const lang = getLang();
       const parts = document.location.pathname.split('/').filter((v) => !!v.trim());
-      const lang = parts[1] || defaultLang;
       const path = parts.slice(2).join('/');
       const destination = '/' + [lang, 'modules/documentation', path].join('/');
 
@@ -18,12 +18,15 @@ function initApi() {
       document.location.href = destination;
     },
     tableOfContent: function () {
-      const parts = document.location.pathname.split('/').filter((v) => !!v.trim());
-      const lang = parts[1] || defaultLang;
+      const lang = getLang();
       const destination = '/documentation/' + lang + '/';
 
       console.log('Opening ' + destination);
       document.location.href = destination;
+    },
+    goToFunding() {
+      const lang = getLang();
+      document.location.href = `https://abc-map.fr/${lang}/funding`;
     },
   };
 }
@@ -64,4 +67,9 @@ function initImageZoom() {
       });
     });
   });
+}
+
+function getLang() {
+  const parts = document.location.pathname.split('/').filter((v) => !!v.trim());
+  return parts[1] || defaultLang;
 }

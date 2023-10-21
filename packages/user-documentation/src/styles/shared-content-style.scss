@@ -27,25 +27,25 @@ You can't use normal class selectors here, because of webapp CSS isolation. Use 
   h1 {
     font-size: 2.5rem;
     // We must keep a high padding value in order to show anchor links even if topbar is fixed
-    padding: 3rem 0 2rem 0;
+    padding: 3rem 0 1.3rem 0;
   }
 
   h2 {
     font-size: 2rem;
     // We must keep a high padding value in order to show anchor links even if topbar is fixed
-    padding: 3rem 0 2rem 0;
+    padding: 3rem 0 1.3rem 0;
   }
 
   h3 {
     font-size: 1.7rem;
     // We must keep a high padding value in order to show anchor links even if topbar is fixed
-    padding: 3rem 0 2rem 0;
+    padding: 3rem 0 1.3rem 0;
   }
 
   h4 {
     font-size: 1.6rem;
     // We must keep a high padding value in order to show anchor links even if topbar is fixed
-    padding: 3rem 0 2rem 0;
+    padding: 3rem 0 1.3rem 0;
   }
 
   [class='title-wrapper'] {
@@ -73,13 +73,15 @@ You can't use normal class selectors here, because of webapp CSS isolation. Use 
   figure {
     display: flex;
     flex-direction: column;
+
+    margin-left: 2rem;
   }
 
   figcaption {
     font-style: italic;
     font-size: 0.9rem;
-    text-align: center;
 
+    margin-left: 2rem;
     margin-bottom: 1rem;
   }
 

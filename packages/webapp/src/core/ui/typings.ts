@@ -47,6 +47,8 @@ export enum ModalEventType {
   PwaInstallClosed = 'PwaInstallClosed',
   ShowSimplePrompt = 'ShowSimplePrompt',
   SimplePromptClosed = 'SimplePromptClosed',
+  ShowWarning = 'ShowWarning',
+  WarningClosed = 'WarningClosed',
 }
 
 export enum ModalStatus {
@@ -194,6 +196,16 @@ export interface SimplePromptClosed {
   value: string;
 }
 
+export interface ShowWarning {
+  type: ModalEventType.ShowWarning;
+  title: string;
+  message: string;
+}
+
+export interface WarningClosed {
+  type: ModalEventType.WarningClosed;
+}
+
 export declare type ModalEvent =
   | ShowPasswordInputModal
   | PasswordInputClosedEvent
@@ -220,7 +232,9 @@ export declare type ModalEvent =
   | ShowPwaInstall
   | PwaInstallClosed
   | ShowSimplePrompt
-  | SimplePromptClosed;
+  | SimplePromptClosed
+  | ShowWarning
+  | WarningClosed;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

@@ -2,7 +2,13 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## 01/10/2023 - Better scripts, layer export, and bug fixes
+## 22/10/2023 - End of Stamen layers 😭 (git: master)
+
+- Removed Stamen layers from source code and data store
+- Added Stadia Maps layers in data store
+- Users can now open a project by drag and drop on main map
+
+## 01/10/2023 - Better scripts, layer export, and bug fixes (git: c4ac31d7)
 
 - The scripts module has a new API, easier to use. It is also possible to load examples with their data.
 - Layers can now be exported in GeoJSON, KML, GPX, and WKT format.
@@ -10,7 +16,7 @@ For the moment we use git hashes as version, since no one complained about it �
 - Fixed user documentation.
 - Abc-Map will now display a modal if a project is too heavy.
 
-## 18/08/2023 - Project budget and optional attributions
+## 18/08/2023 - Project budget and optional attributions (git: a123e83d)
 
 - Project budget is now displayed on solicitation modals
 - Abc-Map attributions are now optional on static exports !

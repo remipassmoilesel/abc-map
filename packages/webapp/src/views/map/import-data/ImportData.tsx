@@ -88,6 +88,7 @@ export function ImportData() {
           <li>{t('GPX_files')}</li>
           <li>{t('KML_files')}</li>
           <li>{t('GeoJSON_files')}</li>
+          <li>{t('TopoJSON_files')}</li>
           <li>{t('Shapefiles')}</li>
           <li>{t('WMS_layer_definitions')}</li>
           <li>{t('WMTS_layer_definitions')}</li>

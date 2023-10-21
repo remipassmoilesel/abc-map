@@ -20,19 +20,18 @@ import Cls from './ChangelogView.module.scss';
 import React, { useEffect, useState } from 'react';
 import { BlobIO, Logger } from '@abc-map/shared';
 import { pageSetup } from '../../core/utils/page-setup';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import axios from 'axios';
 
 const logger = Logger.get('ChangelogView.tsx');
 
-const t = prefixedTranslation('ChangelogView:');
-
 function ChangelogView() {
+  const { t } = useTranslation('ChangelogView');
+
   const [changelog, setChangelog] = useState('');
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => pageSetup(t('Changelog')), []);
+  useEffect(() => pageSetup(t('Changelog')), [t]);
 
   useEffect(() => {
     axios

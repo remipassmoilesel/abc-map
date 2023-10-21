@@ -177,6 +177,11 @@ export class ModalService {
     return this.modalPromise<PromptVariablesClosed>(input, ModalEventType.PromptVariablesClosed);
   }
 
+  public async warning(title: string, message: string): Promise<void> {
+    const input: ModalEvent = { type: ModalEventType.ShowWarning, title, message };
+    await this.modalPromise(input, ModalEventType.WarningClosed);
+  }
+
   private modalPromise<O extends ModalEvent>(input: ModalEvent, closeEventType: ModalEventType): Promise<O> {
     return new Promise<O>((resolve) => {
       const listener: ModalEventListener = (ev) => {

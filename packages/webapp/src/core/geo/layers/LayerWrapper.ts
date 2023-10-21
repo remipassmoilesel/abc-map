@@ -411,6 +411,8 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
 
     const remoteUrl: string | undefined = this.layer.get(XyzLayerProperties.Url);
     const projection: AbcProjection | undefined = this.layer.get(XyzLayerProperties.Projection);
+    const minZoom: number | undefined = this.layer.get(XyzLayerProperties.MinZoom);
+    const maxZoom: number | undefined = this.layer.get(XyzLayerProperties.MaxZoom);
     if (base.type !== LayerType.Xyz || !remoteUrl) {
       logger.error('Invalid layer: ', [this.layer, base]);
       return;
@@ -421,6 +423,8 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       type: LayerType.Xyz,
       remoteUrl,
       projection,
+      minZoom,
+      maxZoom,
     };
   }
 

@@ -30,6 +30,7 @@ import { AbcProjectManifest060 } from '../dependencies/060-project-types';
 import { AbcProjectManifest070 } from '../dependencies/070-project-types';
 import { AbcProjectManifest080 } from '../dependencies/080-project-types';
 import { AbcProjectManifest100 } from '../dependencies/100-project-types';
+import { AbcProjectManifest130 } from '../dependencies/130-project-types';
 
 export class TestData {
   public static async project01(): Promise<MigrationProject<AbcProjectManifest010>> {
@@ -78,6 +79,10 @@ export class TestData {
 
   public static async project110_public(): Promise<MigrationProject<AbcProjectManifest110>> {
     return this.readFile(`${__dirname}/project-1.1.0_public.abm2`) as Promise<MigrationProject<AbcProjectManifest110>>;
+  }
+
+  public static async project130(): Promise<MigrationProject<AbcProjectManifest130>> {
+    return this.readFile(`${__dirname}/project-1.3.0.abm2`) as Promise<MigrationProject<AbcProjectManifest130>>;
   }
 
   public static fakeProject<T>(version: string): T {

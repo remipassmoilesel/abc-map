@@ -82,4 +82,6 @@ export enum WmtsLayerProperties {
 export enum XyzLayerProperties {
   Url = 'abc:layer:xyz:url',
   Projection = 'abc:layer:xyz:projection',
+  MinZoom = 'abc:layer:xyz:min-zoom',
+  MaxZoom = 'abc:layer:xyz:max-zoom',
 }
