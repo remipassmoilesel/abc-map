@@ -195,11 +195,9 @@ export function FeatureExplorer() {
 
       <div className={clsx(Cls.list, 'p-1')}>
         {loading && <div className={'my-4'}>{t('Loading')}</div>}
-
         {!activeLayer && <div className={'my-3'}>{t('Select_a_vector_layer_to_view_its_data')}</div>}
         {activeLayer && !query && !displayedFeatures.length && !loading && <div>{t('This_layer_contains_no_data')}</div>}
         {activeLayer && query && !displayedFeatures.length && !loading && <div>{t('Nothing_match')}</div>}
-
         {activeLayer && !!displayedFeatures.length && (
           <FeatureList
             // Each time layer change we reset list and states

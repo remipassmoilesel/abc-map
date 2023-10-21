@@ -35,4 +35,11 @@ export interface WmtsSettings {
   auth?: BasicAuthentication;
 }
 
+export interface XyzSettings {
+  url: string;
+  minZoom?: number;
+  maxZoom?: number;
+  projection?: AbcProjection;
+}
+
 export type { WmtsSourceOptions };

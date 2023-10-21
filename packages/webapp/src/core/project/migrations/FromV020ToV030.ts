@@ -17,7 +17,7 @@
  */
 
 import { AbcFile, LayerType } from '@abc-map/shared';
-import { MigrationProject, ProjectMigration } from './typings';
+import { MigrationProject, ProjectMigration, ProjectMigrationSettings } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
@@ -38,7 +38,11 @@ export class FromV020ToV030 implements ProjectMigration<AbcProjectManifest020, A
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest020, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest030>> {
+  public async migrate(
+    manifest: AbcProjectManifest020,
+    files: AbcFile<Blob>[],
+    settings?: ProjectMigrationSettings
+  ): Promise<MigrationProject<AbcProjectManifest030>> {
     const wmsLayers = manifest.layers.filter((lay) => lay.metadata.type === LayerType.Wms) as unknown as AbcWmsLayer020[];
     const clearUrl = wmsLayers?.find((layer) => !layer.metadata.remoteUrl.startsWith('encrypted:'))?.metadata.remoteUrl;
 
@@ -54,6 +58,10 @@ export class FromV020ToV030 implements ProjectMigration<AbcProjectManifest020, A
         } as AbcProjectManifest030,
         files,
       };
+    }
+
+    if (settings?.silent) {
+      return Promise.reject(new Error('Cannot prompt password if silent'));
     }
 
     // We prompt user for a password

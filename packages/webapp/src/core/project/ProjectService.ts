@@ -42,7 +42,7 @@ import { HttpError } from '../http/HttpError';
 import { ToastService } from '../ui/ToastService';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
-import { ProjectUpdater } from './migrations/ProjectUpdater';
+import { ProjectSchemaMigration } from './migrations/ProjectSchemaMigration';
 import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
 import { TextFrameHelpers } from './TextFrameHelpers';
@@ -65,7 +65,7 @@ export type ExportResult = { manifest: AbcProjectManifest; files: AbcFile<Blob>[
 
 export class ProjectService {
   public static create(toasts: ToastService, geoService: GeoService, modals: ModalService) {
-    const updater = ProjectUpdater.create(modals);
+    const updater = ProjectSchemaMigration.create(modals);
     const storage = ProjectIDBStorage.create();
     return new ProjectService(ApiClient, DownloadClient, mainStore, toasts, geoService, updater, storage);
   }
@@ -79,7 +79,7 @@ export class ProjectService {
     private store: MainStore,
     private toasts: ToastService,
     private geoService: GeoService,
-    private updater: ProjectUpdater,
+    private migration: ProjectSchemaMigration,
     private storage: ProjectIDBStorage
   ) {}
 
@@ -236,8 +236,9 @@ export class ProjectService {
    * Load a zipped project.
    *
    * @param blob
+   * @param silent If true no prompt will be done
    */
-  public async loadBlobProject(blob: Blob): Promise<void> {
+  public async loadBlobProject(blob: Blob, silent = false): Promise<void> {
     // Unzip project
     const files = await Zipper.forBrowser().unzip(blob);
     const manifestFile = files.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
@@ -247,12 +248,12 @@ export class ProjectService {
 
     // Parse manifest
     const manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
-    return this.loadExtracted(manifest, files);
+    return this.loadExtracted(manifest, files, silent);
   }
 
-  private async loadExtracted(_manifest: AbcProjectManifest, _files: AbcFile<Blob>[]): Promise<void> {
+  private async loadExtracted(_manifest: AbcProjectManifest, _files: AbcFile<Blob>[], silent = false): Promise<void> {
     // Migrate project if necessary
-    const migrated = await this.updater.update(_manifest, _files);
+    const migrated = await this.migration.update(_manifest, _files, silent);
     let manifest = migrated.manifest;
     const files = migrated.files;
 

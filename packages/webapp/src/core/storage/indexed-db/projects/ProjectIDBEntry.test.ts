@@ -27,6 +27,7 @@ describe('ProjectIDBEntry', () => {
         ...template.metadata,
         id: 'test-project-id',
         name: 'Test project',
+        version: '1.3.0',
       },
       layouts: {
         layoutIds: ['layout-id-1', 'layout-id-2'],

@@ -79,10 +79,6 @@ export interface AbcPredefinedLayer extends AbcBaseLayer {
 
 export enum PredefinedLayerModel {
   OSM = 'OSM',
-  StamenToner = 'StamenToner',
-  StamenTonerLite = 'StamenTonerLite',
-  StamenTerrain = 'StamenTerrain',
-  StamenWatercolor = 'StamenWatercolor',
 }
 
 // WMS
@@ -121,6 +117,8 @@ export interface XyzMetadata extends BaseMetadata {
   type: LayerType.Xyz;
   projection?: AbcProjection;
   remoteUrl: string;
+  minZoom?: number;
+  maxZoom?: number;
 }
 
 export interface AbcXyzLayer extends AbcBaseLayer {

@@ -29,6 +29,7 @@ import { FromV100ToV110 } from './FromV100ToV110';
 import { ModalService } from '../../ui/ModalService';
 import { FromV110ToV120 } from './FromV110ToV120';
 import { FromV120ToV130 } from './FromV120ToV130';
+import { FromV130ToV140 } from './FromV130ToV140';
 
 export function getMigrations(modals: ModalService) {
   // Order of migrations is important
@@ -45,5 +46,6 @@ export function getMigrations(modals: ModalService) {
     new FromV100ToV110(),
     new FromV110ToV120(modals),
     new FromV120ToV130(),
+    new FromV130ToV140(modals),
   ];
 }

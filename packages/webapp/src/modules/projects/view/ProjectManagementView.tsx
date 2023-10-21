@@ -48,7 +48,7 @@ export function ProjectManagementView() {
 
   return (
     <div className={Cls.panel} data-cy={'project-management-module'}>
-      <ProjectStatus className={'mt-5 mb-3'} />
+      <ProjectStatus className={'mt-5 mb-4'} />
       <Actions className={'mb-3'} />
       <LayersSummary className={'mb-3'} />
       <LayoutsSummary className={'mb-3'} />

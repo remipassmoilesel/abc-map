@@ -20,7 +20,7 @@ Avec Abc-Map vous pouvez créer:
   <div class="mb-2">Abc-Map est en constante évolution, chaque semaine une amélioration est publiée.</div>
   <div>Il y a donc beaucoup de choses à améliorer, et cette documentation est peut-être partiellement obsolète.</div>
 
-  <a class="btn btn-link mt-3' onclick='abc.goToFunding()">
+  <a class="btn btn-link mt-3" onclick="abc.goToFunding()">
     Participez au financement d&apos;Abc-Map&nbsp;&nbsp;💌
   </a>
 </div>

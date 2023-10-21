@@ -17,7 +17,7 @@
  */
 
 import { AbcFile, Logger } from '@abc-map/shared';
-import { MigrationProject, ProjectMigration } from './typings';
+import { MigrationProject, ProjectMigration, ProjectMigrationSettings } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
@@ -41,10 +41,18 @@ export class FromV110ToV120 implements ProjectMigration<AbcProjectManifest110, A
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest110, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest120>> {
+  public async migrate(
+    manifest: AbcProjectManifest110,
+    files: AbcFile<Blob>[],
+    settings?: ProjectMigrationSettings
+  ): Promise<MigrationProject<AbcProjectManifest120>> {
     let migrated: AbcProjectManifest110 = { ...manifest };
 
     if (DeprecatedEncryption.manifestContainsCredentials(manifest)) {
+      if (settings?.silent) {
+        return Promise.reject(new Error('Cannot prompt password if silent'));
+      }
+
       // We prompt user for a password
       const t = prefixedTranslation('FromV110ToV120:');
       const title = t('End_of_project_passwords');

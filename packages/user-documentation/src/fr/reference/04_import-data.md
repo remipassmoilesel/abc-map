@@ -7,18 +7,24 @@ layout: main-layout.njk
 
 Vous pouvez importer:
 
-- des fichiers ABM2 (projets Abc-Map)
 - des fichiers GPX
 - des fichiers KML
 - des fichiers GeoJSON
 - des fichiers TopoJSON
 - des fichiers Shapefile
+- des fichiers ABM2 (projets Abc-Map)
 
 Les fichiers sont systématiquement importés dans de nouvelles couches, avec le style par défaut.
 
 <div class="alert alert-info">
 Vous pouvez également utiliser des couches WMS, WMTS et XYZ en utilisant le contrôle "Ajouter une couche"
 </div>
+
+## Comment importer des données ?
+
+Déposez vos fichiers sur la carte, ils seront importés. Vous pouvez aussi parcourir des fichiers sur votre terminal.
+
+<video controls src="../assets/data-import.mp4" preload="none"></video>
 
 ## Où trouver des données ?
 

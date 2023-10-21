@@ -21,26 +21,27 @@ import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
 import { getMigrations } from './index';
 import { ModalService } from '../../ui/ModalService';
 
-export const logger = Logger.get('ProjectUpdater.ts', 'debug');
+export const logger = Logger.get('ProjectSchemaMigration.ts', 'debug');
 
 /**
  * This class take a project and update its format to the latest version
  */
-export class ProjectUpdater {
+export class ProjectSchemaMigration {
   public static create(modals: ModalService) {
-    return new ProjectUpdater(() => getMigrations(modals));
+    return new ProjectSchemaMigration(() => getMigrations(modals));
   }
 
   constructor(private migrations: MigrationsFactory) {}
 
-  public async update(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject<AbcProjectManifest>> {
+  public async update(manifest: AbcProjectManifest, files: AbcFile<Blob>[], silent = false): Promise<MigrationProject<AbcProjectManifest>> {
     const migrations = this.migrations();
     let result = { manifest, files };
 
     for (const migration of migrations) {
       if (await migration.interestedBy(result.manifest, result.files)) {
         logger.warn(`Executing project migration: ${migration.constructor.name}`);
-        result = (await migration.migrate(result.manifest, result.files)) as MigrationProject<AbcProjectManifest>;
+        const options = { silent };
+        result = (await migration.migrate(result.manifest, result.files, options)) as MigrationProject<AbcProjectManifest>;
       }
     }
 

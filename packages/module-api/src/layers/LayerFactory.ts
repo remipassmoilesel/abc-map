@@ -29,7 +29,7 @@ export type LayerFactory = {
   newVectorLayer(source?: VectorSource<Geometry>): VectorLayerWrapper;
   newWmsLayer(settings: WmsSettings): WmsLayerWrapper;
   newWmtsLayer(settings: WmtsSettings): WmtsLayerWrapper;
-  newXyzLayer(url: string, projection?: AbcProjection): XyzLayerWrapper;
+  newXyzLayer(settings: XyzSettings): XyzLayerWrapper;
 };
 
 export interface WmsSettings {
@@ -46,4 +46,11 @@ export interface WmtsSettings {
   remoteLayerName: string;
   sourceOptions?: WmtsSourceOptions;
   auth?: BasicAuthentication;
+}
+
+export interface XyzSettings {
+  url: string;
+  minZoom?: number;
+  maxZoom?: number;
+  projection?: AbcProjection;
 }

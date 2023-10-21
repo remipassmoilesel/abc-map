@@ -16,15 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { LayerType, Logger } from '@abc-map/shared';
+import React from 'react';
+import { BundledModuleId, LayerType, Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Routes } from '../../../../../routes';
-import { IconDefs } from '../../../../../components/icon/IconDefs';
-import { FaIcon } from '../../../../../components/icon/FaIcon';
 import Cls from './HelpPanel.module.scss';
+import clsx from 'clsx';
 
 const logger = Logger.get('HelpPanel.tsx');
 
@@ -32,28 +30,26 @@ interface Props {
   type: LayerType;
 }
 
-const t = prefixedTranslation('MapView:');
+export function HelpPanel(props: Props) {
+  const { type } = props;
+  const { t } = useTranslation('MapView');
 
-class HelpPanel extends Component<Props, {}> {
-  public render(): ReactNode {
-    const type = this.props.type;
+  return (
+    <div className={Cls.help}>
+      <div className={'mb-2'}>{t('What_is_this')}</div>
 
-    return (
-      <div className={Cls.help}>
+      <div className={'mb-5'}>
         {type === LayerType.Predefined && <div>{t('Basemap_are_easy_to_use')}</div>}
-        {type === LayerType.Vector && <div>{t('Geometry_layers_allow_to_draw')}</div>}
-
-        <div className={Cls.datastoreAdvice}>
-          <FaIcon icon={IconDefs.faInfoCircle} className={'mr-3'} />
-          <div>
-            {t('Cant_find_what_you_want')}
-            <br />
-            <Link to={Routes.module().withParams({ moduleId: 'data-store' })}>{t('Try_data_store')}</Link>
-          </div>
-        </div>
+        {type === LayerType.Vector && <div>{t('Geometry_layers_contain_shapes')}</div>}
+        {type === LayerType.Wms && <div>{t('A_XXX_layer_is_a_basemap_that_use', { name: 'WMS', protocol: 'WMS' })}</div>}
+        {type === LayerType.Wmts && <div>{t('A_XXX_layer_is_a_basemap_that_use', { name: 'WMTS', protocol: 'WMTS' })}</div>}
+        {type === LayerType.Xyz && <div>{t('A_XXX_layer_is_a_basemap_that_use', { name: 'XYZ', protocol: 'HTTP REST' })}</div>}
       </div>
-    );
-  }
-}
 
-export default withTranslation()(HelpPanel);
+      <div className={clsx(Cls.datastoreAdvice, 'd-flex flex-row flex-wrap align-items-center mb-5')}>
+        <div className={'me-2'}>{t('Cant_find_what_you_re_looking_for')}</div>
+        <Link to={Routes.module().withParams({ moduleId: BundledModuleId.DataStore })}>{t('Try_data_store')}</Link>
+      </div>
+    </div>
+  );
+}

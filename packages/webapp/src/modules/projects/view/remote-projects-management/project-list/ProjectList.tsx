@@ -34,6 +34,7 @@ export function ProjectList(props: Props) {
   const { projects, quotas, selected, onSelect, onDelete } = props;
   const { t } = useTranslation('ProjectManagement');
 
+  const remaining = (quotas?.allowed ?? 0) - (quotas?.currently ?? 0);
   return (
     <div className={Cls.projectList}>
       <h5 className={'mb-3'}>{t('Online_projects')}</h5>
@@ -51,10 +52,9 @@ export function ProjectList(props: Props) {
 
       {/* Count and quotas */}
       {quotas && (
-        <div className={'mb-4'}>
-          {t('x_projects_saved_on_y_projects_allowed', { currently: quotas.currently, allowed: quotas.allowed })}
-          &nbsp;
-          {quotas.currently >= quotas.allowed && <b>{t('It_is_full')}</b>}
+        <div className={'d-flex mb-4'}>
+          <div className={'me-2'}>{t('You_can_save_up_to', { remaining, total: quotas.allowed })}</div>
+          {quotas.currently >= quotas.allowed && <div className={'fw-bold'}>{t('It_is_full')}</div>}
         </div>
       )}
     </div>

@@ -226,7 +226,12 @@ describe('LayerWrapper', () => {
 
     it('on XYZ layer', () => {
       // Prepare
-      const layer = LayerFactory.newXyzLayer('http://test-url', { name: 'EPSG:4326' });
+      const layer = LayerFactory.newXyzLayer({
+        url: 'http://test-url',
+        projection: { name: 'EPSG:4326' },
+        minZoom: 11,
+        maxZoom: 13,
+      });
       layer.setActive(true).setVisible(false).setOpacity(0.5);
 
       // Act
@@ -242,6 +247,8 @@ describe('LayerWrapper', () => {
       expect(metadata?.type).toEqual(LayerType.Xyz);
       expect(metadata?.remoteUrl).toEqual('http://test-url');
       expect(metadata?.projection).toEqual({ name: 'EPSG:4326' });
+      expect(metadata?.minZoom).toEqual(11);
+      expect(metadata?.maxZoom).toEqual(13);
     });
   });
 
@@ -297,7 +304,10 @@ describe('LayerWrapper', () => {
 
     it('with XYZ layer', async () => {
       // Prepare
-      const layer = LayerFactory.newXyzLayer('http://test-url', { name: 'EPSG:4326' }).setVisible(false).setOpacity(0.5).setActive(true);
+      const layer = LayerFactory.newXyzLayer({ url: 'http://test-url', projection: { name: 'EPSG:4326' } })
+        .setVisible(false)
+        .setOpacity(0.5)
+        .setActive(true);
 
       // Act
       const abcLayer = (await layer.toAbcLayer()) as AbcXyzLayer;
@@ -464,7 +474,7 @@ describe('shallowClone()', () => {
   it('with XYZ layer', () => {
     // Prepare
     const settings = TestHelper.sampleXyzLayer().metadata;
-    const layer = LayerFactory.newXyzLayer(settings.remoteUrl, settings.projection);
+    const layer = LayerFactory.newXyzLayer({ url: settings.remoteUrl, projection: settings.projection });
 
     // Act
     const clone = layer.shallowClone();

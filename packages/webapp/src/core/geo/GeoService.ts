@@ -152,7 +152,12 @@ export class GeoService {
 
     // Xyz layer
     else if (LayerType.Xyz === abcLayer.type) {
-      layer = LayerFactory.newXyzLayer(abcLayer.metadata.remoteUrl, abcLayer.metadata.projection);
+      layer = LayerFactory.newXyzLayer({
+        url: abcLayer.metadata.remoteUrl,
+        projection: abcLayer.metadata.projection,
+        minZoom: abcLayer.metadata.minZoom,
+        maxZoom: abcLayer.metadata.maxZoom,
+      });
       layer.setMetadata(abcLayer.metadata);
     }
 

@@ -1,3 +1,0 @@
-version: 0.0.1
-xyz:
-  url: https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png

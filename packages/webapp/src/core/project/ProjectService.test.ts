@@ -38,7 +38,7 @@ import { ToastService } from '../ui/ToastService';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEventType } from './ProjectEvent';
 import { LayerFactory } from '../geo/layers/LayerFactory';
-import { ProjectUpdater } from './migrations/ProjectUpdater';
+import { ProjectSchemaMigration } from './migrations/ProjectSchemaMigration';
 import { ProjectFactory } from './ProjectFactory';
 import { deepFreeze } from '../utils/deepFreeze';
 import { ProjectIDBStorage } from '../storage/indexed-db/projects/ProjectIDBStorage';
@@ -77,7 +77,7 @@ describe('ProjectService', function () {
     let store: MainStore;
     let geoMock: SinonStubbedInstance<GeoService>;
     let toastMock: SinonStubbedInstance<ToastService>;
-    let updater: SinonStubbedInstance<ProjectUpdater>;
+    let migration: SinonStubbedInstance<ProjectSchemaMigration>;
     let storage: SinonStubbedInstance<ProjectIDBStorage>;
     let projectService: ProjectService;
 
@@ -86,8 +86,8 @@ describe('ProjectService', function () {
       geoMock = sinon.createStubInstance(GeoService);
       storage = sinon.createStubInstance(ProjectIDBStorage);
 
-      updater = sinon.createStubInstance(ProjectUpdater);
-      updater.update.callsFake((manifest, files) => Promise.resolve({ manifest, files }));
+      migration = sinon.createStubInstance(ProjectSchemaMigration);
+      migration.update.callsFake((manifest, files) => Promise.resolve({ manifest, files }));
 
       projectService = new ProjectService(
         {} as any,
@@ -95,7 +95,7 @@ describe('ProjectService', function () {
         store,
         toastMock as unknown as ToastService,
         geoMock as unknown as GeoService,
-        updater as unknown as ProjectUpdater,
+        migration as unknown as ProjectSchemaMigration,
         storage as unknown as ProjectIDBStorage
       );
     });
@@ -108,7 +108,7 @@ describe('ProjectService', function () {
         store.dispatch(ProjectActions.setActiveLayout('test-layout-id'));
 
         const map = MapFactory.createNaked();
-        map.addLayer(LayerFactory.newXyzLayer('http://somewhere.net'));
+        map.addLayer(LayerFactory.newXyzLayer({ url: 'http://somewhere.net' }));
         geoMock.getMainMap.returns(map);
 
         // Act
@@ -195,8 +195,8 @@ describe('ProjectService', function () {
         await projectService.loadBlobProject(zippedProject.project);
 
         // Assert
-        expect(updater.update.callCount).toEqual(1);
-        expect(updater.update.args[0][0]).toEqual(manifest);
+        expect(migration.update.callCount).toEqual(1);
+        expect(migration.update.args[0][0]).toEqual(manifest);
       });
 
       it('should load projections', async () => {
@@ -268,7 +268,7 @@ describe('ProjectService', function () {
           };
           store.dispatch(ProjectActions.loadProject(originalManifest));
 
-          map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
+          map.addLayer(LayerFactory.newXyzLayer({ url: 'http://nowhere.net/{x}/{y}/{z}' }));
 
           const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
           const layers: AbcLayer[] = [originalLayer];
@@ -356,7 +356,7 @@ describe('ProjectService', function () {
     let geoService: SinonStubbedInstance<GeoService>;
     let toastMock: SinonStubbedInstance<ToastService>;
     let modals: SinonStubbedInstance<ModalService>;
-    let updater: ProjectUpdater;
+    let updater: ProjectSchemaMigration;
     let storage: ProjectIDBStorage;
     let projectService: ProjectService;
 
@@ -368,7 +368,7 @@ describe('ProjectService', function () {
       modals = sinon.createStubInstance(ModalService);
       storage = ProjectIDBStorage.create();
 
-      updater = ProjectUpdater.create(modals);
+      updater = ProjectSchemaMigration.create(modals);
 
       projectService = new ProjectService(
         ApiClient,
@@ -456,7 +456,7 @@ describe('ProjectService', function () {
         projectService.enableProjectAutoSave();
         await TestHelper.wait(20);
 
-        const newLayer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenTonerLite);
+        const newLayer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
         const layerIds = layers.map((lay) => lay.metadata.id).concat(newLayer.getId() as string);
 
         // Act

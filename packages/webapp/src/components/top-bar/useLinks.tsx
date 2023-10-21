@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { CSSProperties, ReactNode, useMemo } from 'react';
+import React, { CSSProperties, ReactNode, useEffect, useMemo, useState } from 'react';
 import { Routes } from '../../routes';
 import Grid from './grid.svg';
 import { useActiveModule, useFavoriteModules } from '../../core/modules/hooks';
@@ -42,16 +42,24 @@ export function useLinks(): Result {
   const imageSize: CSSProperties = useMemo(() => ({ width: '1.3rem' }), []);
   const { module: activeModule } = useActiveModule();
 
-  const activeModuleLinkDef: LinkDef | undefined = useMemo(() => {
+  // We keep track of the last non-favorite module used, in order to always display an active link in topbar and menu
+  const [lastNonFavoriteActiveLink, setLastNonFavoriteActiveLink] = useState<LinkDef>();
+  useEffect(() => {
     if (!activeModule) {
       return;
     }
 
-    return {
+    const activeLinkDef: LinkDef = {
       to: Routes.module().withParams({ moduleId: activeModule.getId() }),
       label: activeModule.getReadableName(),
     };
-  }, [activeModule]);
+
+    const isNotFavorite = !favoriteModules.find((module) => module.getId() === activeModule.getId());
+    const hasChanged = lastNonFavoriteActiveLink?.to !== activeLinkDef?.to;
+    if (isNotFavorite && hasChanged) {
+      setLastNonFavoriteActiveLink(activeLinkDef);
+    }
+  }, [activeModule, favoriteModules, lastNonFavoriteActiveLink?.to]);
 
   const funding: LinkDef = useMemo(() => {
     return {
@@ -94,7 +102,6 @@ export function useLinks(): Result {
 
   // Menu links
   // These links are used in side menu. Some links are static (Map, documentation, ...).
-  // We always include current module link in order to show module name even if it is not a favorite module.
   const menuLinks: LinkDef[] = useMemo(() => {
     const docRoute = Routes.module().withParams({ moduleId: BundledModuleId.Documentation });
     return uniqBy(
@@ -106,23 +113,22 @@ export function useLinks(): Result {
           dataCy: 'documentation',
         },
         ...favorites.filter((r) => r.to !== docRoute),
-        activeModuleLinkDef,
+        lastNonFavoriteActiveLink,
         moduleIndex,
         funding,
       ].filter((link): link is LinkDef => !!link),
       (value) => value.to
     );
-  }, [activeModuleLinkDef, favorites, funding, map, moduleIndex, t]);
+  }, [favorites, funding, lastNonFavoriteActiveLink, map, moduleIndex, t]);
 
   // Menu links
   // These links are used in top bar. Some links are static (Map, documentation, ...).
-  // We always include current module link in order to show module name even if it is not a favorite module.
   const topBarLinks: LinkDef[] = useMemo(() => {
     return uniqBy(
-      [map, ...favorites.slice(0, 5), activeModuleLinkDef, moduleIndex, funding].filter((link): link is LinkDef => !!link),
+      [map, ...favorites.slice(0, 5), lastNonFavoriteActiveLink, moduleIndex, funding].filter((link): link is LinkDef => !!link),
       (value) => value.to
     );
-  }, [activeModuleLinkDef, favorites, funding, map, moduleIndex]);
+  }, [favorites, funding, lastNonFavoriteActiveLink, map, moduleIndex]);
 
   return { menuLinks, topBarLinks };
 }

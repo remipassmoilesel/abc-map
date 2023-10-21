@@ -36,6 +36,7 @@ import { Scale } from '../../../components/scale/Scale';
 import { Preloader } from './preloader/Preloader';
 import clsx from 'clsx';
 import { MapRotation } from '../../../components/map-rotation/MapRotation';
+import { ModalStatus } from '../../../core/ui/typings';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -46,7 +47,7 @@ interface State {
   tileError: string;
 }
 
-// TODO: remove footer controls, not easily usable on mobile
+// TODO: Refactor, remove footer controls, not easily usable on mobile
 class MainMap extends Component<ServiceProps, State> {
   private map: MapWrapper;
   private mapRef = React.createRef<HTMLDivElement>();
@@ -161,7 +162,7 @@ class MainMap extends Component<ServiceProps, State> {
   };
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
-    const { toasts } = this.props.services;
+    const { toasts, project: projectService, modals } = this.props.services;
     const dataReader = DataReader.create();
 
     ev.preventDefault();
@@ -175,7 +176,19 @@ class MainMap extends Component<ServiceProps, State> {
 
     const project = files.find((f) => f.path.toLocaleLowerCase().endsWith(ProjectConstants.FileExtension));
     if (project) {
-      toasts.info(t('You_must_import_project_with_import_control'));
+      modals
+        .modificationsLostConfirmation()
+        .then((response) => {
+          if (response === ModalStatus.Confirmed) {
+            return projectService.loadBlobProject(project.content).then(() => {
+              toasts.info(t('Project_imported'));
+            });
+          }
+        })
+        .catch((err) => {
+          logger.error('Cannot import project: ', err);
+          toasts.genericError();
+        });
       return;
     }
 

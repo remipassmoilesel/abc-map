@@ -36,7 +36,7 @@ interface Props {
 export function ProjectStatus(props: Props) {
   const { className } = props;
   const { t } = useTranslation('ProjectManagement');
-  const { metadata, lastSaveOnline, lastExport } = useAppSelector((st) => st.project);
+  const { metadata } = useAppSelector((st) => st.project);
   const { modals, project, toasts } = useServices();
 
   const handleEditName = useCallback(() => {
@@ -65,20 +65,6 @@ export function ProjectStatus(props: Props) {
         <button onClick={handleEditName} title={t('Edit_project_name')} className={'btn btn-link'} data-cy="edit-project-name">
           <FaIcon icon={IconDefs.faPencilAlt} />
         </button>
-      </div>
-
-      {/* Last save */}
-      <div className={'mb-3'}>
-        {metadata.public && (
-          <div>
-            {t('Last_online_save')}: {lastSaveOnline ? lastSaveOnline.toFormat('HH:mm') : t('Project_not_saved')}
-          </div>
-        )}
-        {!metadata.public && (
-          <div>
-            {t('Last_export')}: {lastExport ? lastExport.toFormat('HH:mm') : t('Project_not_saved')}
-          </div>
-        )}
       </div>
     </div>
   );

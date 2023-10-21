@@ -17,30 +17,21 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { OSM, Stamen, TileWMS, WMTS, XYZ } from 'ol/source';
+import { OSM, TileWMS, WMTS, XYZ } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
 import { tileLoadingAuthenticated } from '../tiles/tileLoadingAuthenticated';
-import {
-  AbcProjection,
-  LayerType,
-  Logger,
-  PredefinedLayerModel,
-  PredefinedMetadata,
-  VectorMetadata,
-  WmsMetadata,
-  WmtsMetadata,
-  XyzMetadata,
-} from '@abc-map/shared';
+import { LayerType, Logger, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
 import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';
 import TileSource from 'ol/source/Tile';
 import { styleFunction } from '../styles/style-function';
 import { tileLoadingPublic } from '../tiles/tileLoadingPublic';
-import { WmsSettings, WmtsSettings } from './LayerFactory.types';
+import { WmsSettings, WmtsSettings, XyzSettings } from './LayerFactory.types';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
+import { XyzLayerProperties } from '@abc-map/shared';
 
 const t = prefixedTranslation('LayerFactory:');
 
@@ -54,22 +45,6 @@ export class LayerFactory {
       case PredefinedLayerModel.OSM:
         source = new OSM({ tileLoadFunction: tileLoadingPublic() });
         name = t('OpenStreetMap');
-        break;
-      case PredefinedLayerModel.StamenToner:
-        source = new Stamen({ layer: 'toner', tileLoadFunction: tileLoadingPublic() });
-        name = t('Stamen_Toner');
-        break;
-      case PredefinedLayerModel.StamenTonerLite:
-        source = new Stamen({ layer: 'toner-lite', tileLoadFunction: tileLoadingPublic() });
-        name = t('Stamen_Toner_Lite');
-        break;
-      case PredefinedLayerModel.StamenTerrain:
-        source = new Stamen({ layer: 'terrain', tileLoadFunction: tileLoadingPublic() });
-        name = t('Stamen_Terrain');
-        break;
-      case PredefinedLayerModel.StamenWatercolor:
-        source = new Stamen({ layer: 'watercolor', tileLoadFunction: tileLoadingPublic() });
-        name = t('Stamen_Watercolor');
         break;
       default:
         throw new Error(`Unhandled predefined layer type: ${model}`);
@@ -166,9 +141,17 @@ export class LayerFactory {
     return LayerWrapper.from<TileLayer<TileSource>, WMTS, WmtsMetadata>(olLayer).setMetadata(metadata);
   }
 
-  public static newXyzLayer(url: string, projection?: AbcProjection): XyzLayerWrapper {
-    const source = new XYZ({ url, projection: projection?.name, tileLoadFunction: tileLoadingPublic() });
+  public static newXyzLayer(settings: XyzSettings): XyzLayerWrapper {
+    const source = new XYZ({
+      url: settings.url,
+      projection: settings.projection?.name,
+      tileLoadFunction: tileLoadingPublic(),
+      minZoom: settings.minZoom,
+      maxZoom: settings.maxZoom,
+    });
     const olLayer = new TileLayer({ source });
+    olLayer.set(XyzLayerProperties.MinZoom, settings.minZoom);
+    olLayer.set(XyzLayerProperties.MaxZoom, settings.maxZoom);
 
     const metadata: XyzMetadata = {
       id: uuid(),
@@ -177,8 +160,10 @@ export class LayerFactory {
       active: false,
       opacity: 1,
       visible: true,
-      remoteUrl: url,
-      projection,
+      remoteUrl: settings.url,
+      projection: settings.projection,
+      minZoom: settings.minZoom,
+      maxZoom: settings.maxZoom,
     };
 
     return LayerWrapper.from<TileLayer<TileSource>, XYZ, XyzMetadata>(olLayer).setMetadata(metadata);

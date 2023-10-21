@@ -42,15 +42,7 @@ export class LayerControls {
   }
 
   public static addOsmLayer(): Cypress.Chainable<any> {
-    return cy
-      .get('[data-cy=add-layer]')
-      .click()
-      .get('[data-cy=add-layer-type]')
-      .select('Predefined basemap')
-      .get('[data-cy=predefined-model]')
-      .select('OpenStreetMap')
-      .get('[data-cy=add-layer-confirm]')
-      .click();
+    return cy.get('[data-cy=add-layer]').click().get('[data-cy=add-layer-type]').select('OpenStreetMap basemap').get('[data-cy=add-layer-confirm]').click();
   }
 
   public static addVectorLayer(): Cypress.Chainable<any> {

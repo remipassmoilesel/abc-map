@@ -18,7 +18,6 @@
 
 import { FileIO, InputResultType, InputType } from '../utils/FileIO';
 import { ModalStatus, OperationStatus } from '../ui/typings';
-import { Errors } from '../utils/Errors';
 import { useServices } from '../useServices';
 import { Logger, ProjectConstants } from '@abc-map/shared';
 import { useTranslation } from 'react-i18next';
@@ -74,14 +73,7 @@ export function useImportProject(): () => void {
       })
       .catch((err) => {
         logger.error('Cannot import project: ', err);
-
-        if (Errors.isWrongPassword(err)) {
-          toasts.error(t('Incorrect_password'));
-        } else if (Errors.isMissingPassword(err)) {
-          toasts.error(t('Password_is_mandatory'));
-        } else {
-          toasts.genericError();
-        }
+        toasts.genericError();
       })
       .finally(() => toasts.dismiss(firstToast));
   };

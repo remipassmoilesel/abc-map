@@ -19,7 +19,7 @@ import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 import { PredefinedLayerModel } from '@abc-map/shared';
 import { abcRender } from '../../../../core/utils/test/abcRender';
-import EditLayerModal from './EditLayerModal';
+import { EditLayerModal } from './EditLayerModal';
 import sinon, { SinonStub } from 'sinon';
 import userEvent from '@testing-library/user-event';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
@@ -39,7 +39,7 @@ describe('EditLayerModal', () => {
 
   beforeEach(() => {
     onHide = sinon.stub();
-    layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner);
+    layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     layer.setName('Layer 1').setOpacity(0.5).setAttributions(['<a href="http://world.company">© World company</a>', 'All rights reserved']);
 
     map = MapFactory.createNaked();

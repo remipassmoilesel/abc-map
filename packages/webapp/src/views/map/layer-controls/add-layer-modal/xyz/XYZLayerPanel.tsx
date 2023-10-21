@@ -61,7 +61,7 @@ function XYZLayerPanel(props: Props) {
 
   const handleConfirm = useCallback(() => {
     const add = async () => {
-      const layer = LayerFactory.newXyzLayer(url);
+      const layer = LayerFactory.newXyzLayer({ url });
 
       const cs = AddLayersChangeset.create([layer]);
       await cs.execute();

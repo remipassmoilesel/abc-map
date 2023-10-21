@@ -15,10 +15,8 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import Cls from './DefaultIntegration.module.scss';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   url: string;
@@ -26,11 +24,12 @@ interface Props {
 
 export function DefaultIntegration(props: Props) {
   const { url } = props;
+  const { t } = useTranslation('TextEditor');
 
   return (
     <div contentEditable={false} className={Cls.integration}>
       <a href={url} target={'_blank'} rel="noreferrer">
-        {t('This_video_cannot_be_embedded')}
+        🎬 {t('Launch_video_in_new_tab')}
       </a>
     </div>
   );

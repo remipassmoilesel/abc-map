@@ -20,7 +20,7 @@ With Abc-Map you can create:
   <div class="mb-2">Abc-Map is constantly evolving, every week an improvement is published.</div>
   <div>So there are a lot of things to improve, and this documentation may be partially outdated.</div>
 
-  <a class="btn btn-link mt-3' onclick='abc.goToFunding()">
+  <a class="btn btn-link mt-3" onclick="abc.goToFunding()">
     Help fund Abc-Map&nbsp;&nbsp;💌
   </a>
 </div>

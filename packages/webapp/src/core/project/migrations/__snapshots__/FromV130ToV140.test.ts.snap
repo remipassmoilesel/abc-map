@@ -1,0 +1,303 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FromV130ToV140 should migrate and warn only once 1`] = `
+Object {
+  "layers": Array [
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "Map tiles by <a href=\\"https://stamen.com/\\" target=\\"_blank\\">Stamen Design</a>, under <a href=\\"https://creativecommons.org/licenses/by/3.0/\\" target=\\"_blank\\">CC BY 3.0</a>.",
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "6263689c-dab9-4191-a056-0ae86cd39b95",
+        "model": "OSM",
+        "name": "Stamen Watercolor",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "Map tiles by <a href=\\"https://stamen.com/\\" target=\\"_blank\\">Stamen Design</a>, under <a href=\\"https://creativecommons.org/licenses/by/3.0/\\" target=\\"_blank\\">CC BY 3.0</a>.",
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "08c4e2f1-dab9-4191-a056-0ae86cd39b95",
+        "model": "OSM",
+        "name": "Stamen Watercolor",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "Map tiles by <a href=\\"https://stamen.com/\\" target=\\"_blank\\">Stamen Design</a>, under <a href=\\"https://creativecommons.org/licenses/by/3.0/\\" target=\\"_blank\\">CC BY 3.0</a>.",
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "08c4e2f1-dab9-4191-a056-2ae1a6381186",
+        "model": "OSM",
+        "name": "Stamen Watercolor",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "features": Object {
+        "features": Array [
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -456128.347198193,
+                6475397.832428156,
+              ],
+              "type": "Point",
+            },
+            "id": "P5YHbaiYDE",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -471123.821926691,
+                6452071.538406049,
+              ],
+              "type": "Point",
+            },
+            "id": "wQKWYEr5-B",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -449463.691763305,
+                6430411.408242662,
+              ],
+              "type": "Point",
+            },
+            "id": "6wPiMcLpa5",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+        ],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": true,
+        "id": "08c4e2f1-715a-4d90-8c33-2ae1a6381186",
+        "name": "Geometries",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+  ],
+  "layouts": Object {
+    "abcMapAttributionsEnabled": true,
+    "list": Array [],
+  },
+  "metadata": Object {
+    "id": "7f6381eb-3f87-4893-870a-e72e85679320",
+    "name": "Projet du 10/3/2023",
+    "public": false,
+    "version": "1.4.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [],
+    "mapDimensions": Object {
+      "height": 601,
+      "width": 1151,
+    },
+  },
+  "view": Object {
+    "center": Array [
+      -470972.352484989,
+      6429426.856871599,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 151.469441702,
+    "rotation": 0,
+  },
+}
+`;
+
+exports[`FromV130ToV140 should not warn if silent 1`] = `
+Object {
+  "layers": Array [
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "Map tiles by <a href=\\"https://stamen.com/\\" target=\\"_blank\\">Stamen Design</a>, under <a href=\\"https://creativecommons.org/licenses/by/3.0/\\" target=\\"_blank\\">CC BY 3.0</a>.",
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "6263689c-dab9-4191-a056-0ae86cd39b95",
+        "model": "OSM",
+        "name": "Stamen Watercolor",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "Map tiles by <a href=\\"https://stamen.com/\\" target=\\"_blank\\">Stamen Design</a>, under <a href=\\"https://creativecommons.org/licenses/by/3.0/\\" target=\\"_blank\\">CC BY 3.0</a>.",
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "08c4e2f1-dab9-4191-a056-0ae86cd39b95",
+        "model": "OSM",
+        "name": "Stamen Watercolor",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "Map tiles by <a href=\\"https://stamen.com/\\" target=\\"_blank\\">Stamen Design</a>, under <a href=\\"https://creativecommons.org/licenses/by/3.0/\\" target=\\"_blank\\">CC BY 3.0</a>.",
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "08c4e2f1-dab9-4191-a056-2ae1a6381186",
+        "model": "OSM",
+        "name": "Stamen Watercolor",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "features": Object {
+        "features": Array [
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -456128.347198193,
+                6475397.832428156,
+              ],
+              "type": "Point",
+            },
+            "id": "P5YHbaiYDE",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -471123.821926691,
+                6452071.538406049,
+              ],
+              "type": "Point",
+            },
+            "id": "wQKWYEr5-B",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -449463.691763305,
+                6430411.408242662,
+              ],
+              "type": "Point",
+            },
+            "id": "6wPiMcLpa5",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/geo-alt-fill.inline.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+        ],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": true,
+        "id": "08c4e2f1-715a-4d90-8c33-2ae1a6381186",
+        "name": "Geometries",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+  ],
+  "layouts": Object {
+    "abcMapAttributionsEnabled": true,
+    "list": Array [],
+  },
+  "metadata": Object {
+    "id": "7f6381eb-3f87-4893-870a-e72e85679320",
+    "name": "Projet du 10/3/2023",
+    "public": false,
+    "version": "1.4.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [],
+    "mapDimensions": Object {
+      "height": 601,
+      "width": 1151,
+    },
+  },
+  "view": Object {
+    "center": Array [
+      -470972.352484989,
+      6429426.856871599,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 151.469441702,
+    "rotation": 0,
+  },
+}
+`;

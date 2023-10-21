@@ -19,7 +19,7 @@
 import Cls from './LayerExportView.module.scss';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { BundledModuleId, Logger } from '@abc-map/shared';
-import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import { LayerWrapper, VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { useTranslation } from 'react-i18next';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
@@ -45,6 +45,7 @@ export function LayerExportView() {
   const searchParamKey = 'layerId';
   const layerId = searchParams.get(searchParamKey) || activeLayer?.getId();
   const layer = layers.find((lay) => lay.getId() === layerId);
+  const [exportAll, setExportAll] = useState(false);
 
   const [format, setFormat] = useState(Format.GeoJSON);
   const handleFormatSelected = useCallback((ev: ChangeEvent<HTMLSelectElement>) => setFormat(ev.target.value as Format), []);
@@ -61,31 +62,49 @@ export function LayerExportView() {
     [navigate]
   );
 
+  const handleExportAllChange = useCallback(() => setExportAll((st) => !st), []);
+
   // User clicks on export button
   const handleExport = useCallback(() => {
-    if (!layer || !layer.isVector()) {
-      toasts.error(t('You_must_select_a_layer_with_data'));
-      return;
-    }
+    const doExport = (layer: VectorLayerWrapper) => {
+      const projection = layer.getProjection() || map.getProjection();
+      exportLayer(layer, projection, format)
+        .then((files) => Promise.all(files.map((file) => FileIO.downloadBlob(file.content, file.path))))
+        .catch((err) => {
+          toasts.genericError(err);
+          logger.error('Export error: ', err);
+        });
+    };
 
-    const projection = layer.getProjection() || map.getProjection();
-    exportLayer(layer, projection, format)
-      .then((files) => Promise.all(files.map((file) => FileIO.downloadBlob(file.content, file.path))))
-      .catch((err) => {
-        toasts.genericError(err);
-        logger.error('Export error: ', err);
-      });
-  }, [format, layer, map, t, toasts]);
+    if (exportAll) {
+      map
+        .getLayers()
+        .filter((layer): layer is VectorLayerWrapper => layer.isVector())
+        .map((layer) => doExport(layer));
+    } else {
+      if (!layer || !layer.isVector()) {
+        toasts.error(t('You_must_select_a_layer_with_data'));
+        return;
+      }
+
+      doExport(layer);
+    }
+  }, [exportAll, format, layer, map, t, toasts]);
 
   const exportDisabled = !layer || !layer?.isVector();
   const featureNumber = layer?.isVector() && layer?.getSource().getFeatures().length;
 
   return (
     <div className={Cls.container}>
-      <ModuleTitle className={'my-3'}>{t('Layer_export')}</ModuleTitle>
+      <ModuleTitle className={'mt-3 mb-4'}>{t('Layer_export')}</ModuleTitle>
 
       <div className={'mb-2'}>{t('Which_layer_do_you_want_to_export')}</div>
-      <LayerSelector value={layer} onSelected={handleLayerSelected} className={'mb-2'} />
+      <LayerSelector value={layer} onSelected={handleLayerSelected} disabled={exportAll} className={'mb-2'} />
+
+      <label className={'d-flex align-items-center mb-3'}>
+        <input type={'checkbox'} onChange={handleExportAllChange} className={'me-2'} />
+        {t('Export_all_layers')}
+      </label>
 
       {layer && !layer?.isVector() && <div className={'alert alert-warning'}>{t('This_layer_cannot_be_exported')}</div>}
 

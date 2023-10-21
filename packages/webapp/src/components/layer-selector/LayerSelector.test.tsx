@@ -58,7 +58,7 @@ describe('LayerSelector', () => {
   it('should render with layers', () => {
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 1'));
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 2'));
-    map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
+    map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
 
     // Act
     abcRender(<LayerSelector value={undefined} onSelected={handleSelected} data-testid={'layer-selector'} />, { services });
@@ -71,7 +71,7 @@ describe('LayerSelector', () => {
   it('should watch layers', async () => {
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 1'));
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 2'));
-    map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
+    map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
 
     abcRender(<LayerSelector value={undefined} onSelected={handleSelected} data-testid={'layer-selector'} />, { services });
 
@@ -90,7 +90,7 @@ describe('LayerSelector', () => {
     const layer1 = LayerFactory.newVectorLayer().setName('Layer 1');
     map.addLayer(layer1);
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 2'));
-    map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
+    map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
 
     abcRender(<LayerSelector value={undefined} onSelected={handleSelected} data-testid={'layer-selector'} />, { services });
 

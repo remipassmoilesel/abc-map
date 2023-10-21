@@ -17,7 +17,7 @@
  */
 
 import Cls from './MapView.module.scss';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import MainMap from './main-map/MainMap';
 import { LayerControls } from './layer-controls/LayerControls';
 import { Logger } from '@abc-map/shared';
@@ -37,10 +37,6 @@ import { FullscreenButton } from './fullscreen-button/FullscreenButton';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
 import { MapGeolocation } from './geolocation/MapGeolocation';
 import { useMapLayers } from '../../core/geo/useMapLayers';
-import { FaIcon } from '../../components/icon/FaIcon';
-import { Routes } from '../../routes';
-import { BundledModuleId } from '@abc-map/shared';
-import { useNavigate } from 'react-router-dom';
 import { FeatureExplorer } from './feature-exporer/FeatureExplorer';
 
 const logger = Logger.get('MapView.tsx');
@@ -49,7 +45,6 @@ function MapView() {
   const { geo } = useServices();
   const { activeLayer } = useMapLayers();
   const { t } = useTranslation('MapView');
-  const navigate = useNavigate();
 
   // Page title
   useEffect(() => pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser')), [t]);
@@ -61,8 +56,6 @@ function MapView() {
 
     return () => listener.destroy();
   }, []);
-
-  const handleShowProjectManagement = useCallback(() => navigate(Routes.module().withParams({ moduleId: BundledModuleId.ProjectManagement })), [navigate]);
 
   return (
     <div className={Cls.mapView}>
@@ -108,19 +101,6 @@ function MapView() {
       >
         <div className={Cls.spacer} />
         <ImportData />
-
-        {/*TODO: remove after september 2023*/}
-        <div className={Cls.spacer} />
-        <div className={'m-3 alert alert-secondary'}>
-          <div>
-            {t('Are_you_looking_for_project_management')} <FaIcon icon={IconDefs.faArrowDown} />
-          </div>
-          <div className={'d-flex justify-content-end'}>
-            <button onClick={handleShowProjectManagement} className={'btn btn-sm btn-primary'}>
-              {t('Project_management')}
-            </button>
-          </div>
-        </div>
       </SideMenu>
 
       {/* Feature explorer menu */}

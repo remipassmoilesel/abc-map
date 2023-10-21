@@ -60,7 +60,8 @@ describe('Authentication', function () {
         .type(password)
         .get('button[data-cy=confirm-login]')
         .click()
-        .then(() => Toasts.assertText('Your credentials are incorrect'));
+        .get('[data-cy=login-error-message]')
+        .should('have.text', 'Your credentials are incorrect');
     });
 
     it('cannot login with incorrect password', function () {
@@ -78,7 +79,8 @@ describe('Authentication', function () {
         .type('wrong-password-123')
         .get('button[data-cy=confirm-login]')
         .click()
-        .then(() => Toasts.assertText('Your credentials are incorrect'));
+        .get('[data-cy=login-error-message]')
+        .should('have.text', 'Your credentials are incorrect');
     });
   });
 

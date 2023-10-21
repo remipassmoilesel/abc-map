@@ -1,5 +1,5 @@
 ---
-title: Export of GeoJSON / GPX / KML layers
+title: Export layers to GeoJSON and others
 layout: main-layout.njk
 ---
 

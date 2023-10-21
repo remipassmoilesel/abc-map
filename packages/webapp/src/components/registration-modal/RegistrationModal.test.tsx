@@ -21,7 +21,7 @@ import { ModalEvent, ModalEventType } from '../../core/ui/typings';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TestHelper } from '../../core/utils/test/TestHelper';
-import RegistrationModal from './RegistrationModal';
+import { RegistrationModal } from './RegistrationModal';
 
 describe('RegistrationModal', () => {
   let services: TestServices;

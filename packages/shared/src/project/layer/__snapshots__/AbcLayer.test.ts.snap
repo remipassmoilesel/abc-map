@@ -18,10 +18,6 @@ Object {
 exports[`AbcLayer PredefinedLayer should not change without migration 2`] = `
 Object {
   "OSM": "OSM",
-  "StamenTerrain": "StamenTerrain",
-  "StamenToner": "StamenToner",
-  "StamenTonerLite": "StamenTonerLite",
-  "StamenWatercolor": "StamenWatercolor",
 }
 `;
 

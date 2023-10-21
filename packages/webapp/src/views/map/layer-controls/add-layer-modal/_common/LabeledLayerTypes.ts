@@ -25,7 +25,7 @@ export interface LabeledLayerType {
 export class LabeledLayerTypes {
   public static readonly Predefined: LabeledLayerType = {
     id: LayerType.Predefined,
-    i18nLabel: 'Predefined_basemap',
+    i18nLabel: 'OpenStreetMap_basemap',
   };
 
   public static readonly Vector: LabeledLayerType = {

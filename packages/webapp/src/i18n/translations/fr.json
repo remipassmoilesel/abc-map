@@ -84,8 +84,8 @@
     "Fullscreen": "Plein écran",
     "Drop_your_files": "Déposez vos fichiers pour les importer",
     "You_must_select_files": "Vous devez sélectionner un ou plusieurs fichiers",
-    "You_must_import_project_with_import_control": "Vous devez importer votre projet à l'aide du contrôle 'Importer un projet'",
     "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée",
+    "Project_imported": "Projet importé !",
     "Layer_does_not_load": "La couche '{{name}}' ne charge peut être pas correctement.",
     "Layer_without_name": "*Couche sans nom*",
     "Zoom_in": "Zoom avant",
@@ -122,18 +122,18 @@
     "New_layer": "Ajouter une nouvelle couche",
     "What_kind_of_layer": "Quel type de couche ?",
     "Parameters": "Paramètres",
-    "Select_basemap_you_want": "Sélectionnez le fond de carte que vous souhaitez",
-    "Preview": "Aperçu",
-    "Origin_of_data_license": "Origine des données et licence",
-    "Predefined_basemap": "Fond de carte prédéfini",
+    "OpenStreetMap_basemap": "Fond de carte OpenStreetMap",
+    "What_is_this": "Qu'est-ce que c'est ?",
     "Geometry_layer": "Couche de géométries",
     "XYZ_layer": "Couche distante XYZ",
     "WMS_layer": "Couche distante WMS",
     "WMTS_layer": "Couche distante WMTS",
     "Nothing_to_configure_here": "Rien à paramétrer ici",
     "Basemap_are_easy_to_use": "Les fonds de carte prédéfinis permettent d'afficher facilement et rapidement une carte du monde.",
-    "Geometry_layers_allow_to_draw": "Les couches de géométries permettent de dessiner des formes.",
-    "Cant_find_what_you_want": "Vous ne trouvez pas ce que vous voulez ?",
+    "Geometry_layers_contain_shapes": "Les couches de géométries contiennent des formes que l'on peut modifier avec les outils de dessin.",
+    "A_XXX_layer_is_a_basemap_that_use": "Une couche {{name}} est un fond de carte qui utilise le protocole {{protocol}}.",
+    "Cant_find_what_you_re_looking_for": "Vous ne trouvez pas ce que vous chercher ?",
+    "Looking_for_another_basemap": "Vous cherchez un autre fond de carte ?",
     "Try_data_store": "Essayez le catalogue de données.",
     "URL": "URL",
     "Username": "Nom d'utilisateur (optionnel)",
@@ -203,6 +203,7 @@
     "GPX_files": "Des fichiers GPX",
     "KML_files": "Des fichiers KML",
     "GeoJSON_files": "Des fichiers GeoJSON",
+    "TopoJSON_files": "Des fichiers TopoJSON",
     "Shapefiles": "Des fichiers Shapefiles",
     "WMS_layer_definitions": "Des définitions de couches WMS",
     "WMTS_layer_definitions": "Des définitions de couches WMTS",
@@ -236,7 +237,8 @@
     "Geometry": "Géometrie",
     "More": "Plus",
     "Invalid_feature": "Entité invalide",
-    "Export": "Export"
+    "Export": "Export",
+    "Layer_type": "Type de couche"
   },
   "Scale": {
     "Scale": "Echelle"
@@ -663,6 +665,7 @@
     "Cancel": "Annuler",
     "Connect": "Connexion",
     "Invalid_credentials": "Vos identifiants sont incorrects",
+    "Something_went_wrong": "Quelque chose s'est mal passé",
     "You_are_connected": "Vous êtes connecté !"
   },
   "RegistrationModal": {
@@ -677,7 +680,8 @@
     "Password_confirmation": "Confirmation du mot de passe",
     "Cancel": "Annuler",
     "Register": "Inscription",
-    "This_email_address_is_already_in_use": "Cette adresse email est déjà utilisée"
+    "This_email_address_is_already_in_use": "Cette adresse email est déjà utilisée",
+    "Something_went_wrong": "Quelque chose s'est mal passé"
   },
   "PasswordLostModal": {
     "Password_lost": "Récupération de mot de passe",
@@ -857,7 +861,7 @@
     "Map_size": "Taille de la carte",
     "Full_page": "Pleine page",
     "About_map_size": "A propos de la taille de la carte",
-    "If_map_size_is_bigger_than_actual_window": "Si la taille de la carte est plus grande que la fenêtre, elle sera affichée en plein écran",
+    "If_map_is_bigger_than_actual_window": "Si la carte est plus grande que la fenêtre, elle sera affichée en pleine page",
     "Connect_to_the_Internet_to_share_your_map": "Connectez-vous à Internet pour <br/>partager votre carte"
   },
   "SharingCodesModal": {
@@ -931,7 +935,7 @@
     "Confirm": "Confirmer",
     "Embed_image": "Intégrer une image",
     "Embed_video": "Intégrer une vidéo",
-    "Address_of_video": "Addresse de la vidéo",
+    "Address_of_video": "Adresse de la vidéo",
     "Select_an_image": "Sélectionnez une image sur votre appareil",
     "Undo": "Annuler",
     "Redo": "Refaire",
@@ -960,6 +964,7 @@
     "Create_or_edit_a_link": "Créer / éditer un lien",
     "Remove_a_link": "Supprimer un lien",
     "This_video_cannot_be_embedded": "Cette vidéo ne peut pas être intégrée, cliquez ici pour la voir dans une nouvelle fenêtre.",
+    "Launch_video_in_new_tab": "Lancer la vidéo dans un nouvel onglet",
     "There_is_no_symbol_to_insert": "Il n'y a pas de symbole à insérer"
   },
   "ChangelogView": {
@@ -1098,7 +1103,7 @@
     "This_project_is_password_protected": "Ce projet est protégé par mot de passe",
     "This_project_is_public": "Ce projet est public",
     "This_project_is_private": "Ce projet est privé",
-    "x_projects_saved_on_y_projects_allowed": "{{currently}} projets enregistrés sur {{allowed}} projets autorisés.",
+    "You_can_save_up_to": "Vous pouvez enregistrer jusqu'à {{total}} projets ({{remaining}} restants)",
     "It_is_full": "C'est plein !",
     "Last_export": "Dernier export",
     "Last_online_save": "Dernier enregistrement en ligne",
@@ -1121,7 +1126,8 @@
     "Enter_the_new_projection_code": "Saisissez le nouveau code de projection",
     "Change_projection": "Changer de projection",
     "Share_link": "Lien de partage",
-    "Some_layers_are_not_saved_automatically_probably_because_they_have_a_lot_of_geometry": "Certains calques ne sont pas enregistrés automatiquement, probablement parce qu'ils comportent beaucoup de géométries:"
+    "Some_layers_are_not_saved_automatically_probably_because_they_have_a_lot_of_geometry": "Certains calques ne sont pas enregistrés automatiquement, probablement parce qu'ils comportent beaucoup de géométries:",
+    "Layouts": "Mises en page"
   },
   "SimplePromptModal": {
     "Cancel": "Annuler",
@@ -1145,10 +1151,6 @@
   },
   "LayerFactory": {
     "OpenStreetMap": "OpenStreetMap",
-    "Stamen_Toner": "Stamen Toner",
-    "Stamen_Toner_Lite": "Stamen Toner Lite",
-    "Stamen_Terrain": "Stamen Terrain",
-    "Stamen_Watercolor": "Stamen Watercolor",
     "Geometries": "Géométries",
     "XYZ_layer": "Couche XYZ"
   },
@@ -1232,7 +1234,7 @@
   },
   "LayerExportModule": {
     "Layer_export": "Export de couche",
-    "Which_layer_do_you_want_to_export": "Quel couche souhaitez vous exporter ?",
+    "Which_layer_do_you_want_to_export": "Quelle couche souhaitez vous exporter ?",
     "Which_format": "Quel format ?",
     "You_must_select_a_layer_with_data": "Vous devez sélectionner une couche qui contient des données",
     "Export": "Exporter",
@@ -1243,7 +1245,8 @@
     "WKT": "WKT",
     "This_layer_cannot_be_exported": "Cette couche ne peut pas être exportée.",
     "Features_will_be_exported": "entité(s) seront exportées",
-    "There_is_nothing_to_export_in_this_layer": "Il n'y a rien a exporter dans cette couche"
+    "There_is_nothing_to_export_in_this_layer": "Il n'y a rien a exporter dans cette couche",
+    "Export_all_layers": "Exporter toutes les couches"
   },
   "HeavyProjectWarning": {
     "There_are_a_lot_of_layers": "Il y a beaucoup de couches ({{n}}).",
@@ -1255,5 +1258,10 @@
     "Your_project_is_a_bit_heavy": "Votre projet est un peu lourd",
     "Your_project_is_a_bit_heavy_If_you_use_a_lot_of_data_you_risk_slowing_down_or_freezing_your_session": "Votre projet est un peu lourd. Si vous utilisez beaucoup de données, vous risquez de ralentir ou de geler votre session.",
     "I_understand": "Je comprends"
+  },
+  "FromV130ToV140": {
+    "Changes_have_been_made_to_your_project": "Des modifications ont été apportées à votre projet",
+    "Stamen_layers_are_no_longer_available_as_before": "Les couches Stamen ne sont plus disponibles comme avant. <a target='_blank' href='https://abc-map.fr/documentation/fr/blog/2023-10-16/'>Pour en savoir plus, c'est par ici \uD83D\uDD17</a>",
+    "The_Stamen_layers_in_your_project_have_been_replaced": "Les couches Stamen de votre projet ont été remplacées."
   }
 }
