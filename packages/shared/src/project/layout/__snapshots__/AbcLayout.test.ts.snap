@@ -38,6 +38,18 @@ Array [
     "orientation": "landscape",
     "width": 420,
   },
+  Object {
+    "height": 594,
+    "id": "A2_PORTRAIT",
+    "orientation": "portrait",
+    "width": 420,
+  },
+  Object {
+    "height": 420,
+    "id": "A2_LANDSCAPE",
+    "orientation": "landscape",
+    "width": 594,
+  },
 ]
 `;
 

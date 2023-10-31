@@ -106,6 +106,20 @@ export class LayoutFormats {
     orientation: 'landscape',
   };
 
+  public static readonly A2_PORTRAIT: LayoutFormat = {
+    id: 'A2_PORTRAIT',
+    width: 420,
+    height: 594,
+    orientation: 'portrait',
+  };
+
+  public static readonly A2_LANDSCAPE: LayoutFormat = {
+    id: 'A2_LANDSCAPE',
+    width: 594,
+    height: 420,
+    orientation: 'landscape',
+  };
+
   public static All: LayoutFormat[] = [
     LayoutFormats.A5_PORTRAIT,
     LayoutFormats.A5_LANDSCAPE,
@@ -113,5 +127,7 @@ export class LayoutFormats {
     LayoutFormats.A4_LANDSCAPE,
     LayoutFormats.A3_PORTRAIT,
     LayoutFormats.A3_LANDSCAPE,
+    LayoutFormats.A2_PORTRAIT,
+    LayoutFormats.A2_LANDSCAPE,
   ];
 }

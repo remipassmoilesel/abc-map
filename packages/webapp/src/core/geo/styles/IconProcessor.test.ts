@@ -17,10 +17,11 @@
  */
 
 import { IconProcessor, mountSvg } from './IconProcessor';
-import { PointIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon';
+import { PointIcon } from '../../../assets/point-icons/PointIcon';
 import sinon from 'sinon';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { IconCategory } from '../../../assets/point-icons/IconCategory';
+import { safeGetIcon } from '../../../assets/point-icons/helpers';
 
 describe('IconProcessor', () => {
   const fakeIcon: PointIcon = {

@@ -24,4 +24,5 @@ export enum IconCategory {
   Arrows = 'Arrows',
   Emojis = 'Emojis',
   Symbols = 'Symbols',
+  Iso7010 = 'Iso7010',
 }

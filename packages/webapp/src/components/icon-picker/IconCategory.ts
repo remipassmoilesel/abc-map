@@ -59,12 +59,18 @@ export class LabeledIconCategories {
     value: IconCategory.Symbols,
   };
 
+  public static Iso7010: LabeledIconCategory = {
+    i18nLabel: 'Iso7010',
+    value: IconCategory.Iso7010,
+  };
+
   /**
    * All labeled categories. They are displayed in icon picker in order.
    */
   public static All: LabeledIconCategory[] = [
     LabeledIconCategories.Pins,
     LabeledIconCategories.Geometries,
+    LabeledIconCategories.Iso7010,
     LabeledIconCategories.Symbols,
     LabeledIconCategories.Arrows,
     LabeledIconCategories.Emojis,

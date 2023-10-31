@@ -23,13 +23,13 @@ import { SelectionStyleFactory } from './SelectionStyleFactory';
 import { StyleCache, StyleCacheEntry } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
 import { IconProcessor } from './IconProcessor';
-import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { toRadians } from '../../utils/numbers';
 import { DefaultStyleOptions, StyleFactoryOptions } from './StyleFactoryOptions';
 import { Type } from 'ol/geom/Geometry';
 import { toAbcGeometryType } from '@abc-map/shared';
+import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/helpers';
 
 const logger = Logger.get('StyleFactory.ts');
 

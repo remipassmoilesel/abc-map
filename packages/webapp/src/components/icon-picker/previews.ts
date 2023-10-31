@@ -17,8 +17,9 @@
  */
 
 import { IconProcessor } from '../../core/geo/styles/IconProcessor';
-import { getAllIcons, PointIcon } from '../../assets/point-icons/PointIcon';
+import { PointIcon } from '../../assets/point-icons/PointIcon';
 import { IconCategory } from '../../assets/point-icons/IconCategory';
+import { getAllIcons } from '../../assets/point-icons/helpers';
 
 export interface IconPreview {
   icon: PointIcon;

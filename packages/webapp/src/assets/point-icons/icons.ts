@@ -536,8 +536,62 @@ import IconX from './twbs/x.inline.svg';
 import IconZoomIn from './twbs/zoom-in.inline.svg';
 import IconZoomOut from './twbs/zoom-out.inline.svg';
 import { IconCategory } from './IconCategory';
+import IconIso7010E002New from './iso7010/ISO-7010-E002-new.inline.svg';
+import IconIso7010E003FirstAidSign from './iso7010/ISO-7010-E003---First-aid-sign.inline.svg';
+import IconIso7010E004 from './iso7010/ISO-7010-E004.inline.svg';
+import IconIso7010E007 from './iso7010/ISO-7010-E007.inline.svg';
+import IconIso7010E009 from './iso7010/ISO-7010-E009.inline.svg';
+import IconIso7010E010 from './iso7010/ISO-7010-E010.inline.svg';
+import IconIso7010E011 from './iso7010/ISO-7010-E011.inline.svg';
+import IconIso7010E012 from './iso7010/ISO-7010-E012.inline.svg';
+import IconIso7010E013 from './iso7010/ISO-7010-E013.inline.svg';
+import IconIso7010E016 from './iso7010/ISO-7010-E016.inline.svg';
+import IconIso7010E017 from './iso7010/ISO-7010-E017.inline.svg';
+import IconIso7010F001 from './iso7010/ISO-7010-F001.inline.svg';
+import IconIso7010F002 from './iso7010/ISO-7010-F002.inline.svg';
+import IconIso7010F003 from './iso7010/ISO-7010-F003.inline.svg';
+import IconIso7010F004 from './iso7010/ISO-7010-F004.inline.svg';
+import IconIso7010F005 from './iso7010/ISO-7010-F005.inline.svg';
+import IconIso7010F006 from './iso7010/ISO-7010-F006.inline.svg';
+import IconIso7010F007 from './iso7010/ISO-7010-F007.inline.svg';
+import IconIso7010W001 from './iso7010/ISO-7010-W001.inline.svg';
+import IconIso7010W002 from './iso7010/ISO-7010-W002.inline.svg';
+import IconIso7010W003 from './iso7010/ISO-7010-W003.inline.svg';
+import IconIso7010W004 from './iso7010/ISO-7010-W004.inline.svg';
+import IconIso7010W005 from './iso7010/ISO-7010-W005.inline.svg';
+import IconIso7010W007 from './iso7010/ISO-7010-W007.inline.svg';
+import IconIso7010W008 from './iso7010/ISO-7010-W008.inline.svg';
+import IconIso7010W009 from './iso7010/ISO-7010-W009.inline.svg';
+import IconIso7010W012 from './iso7010/ISO-7010-W012.inline.svg';
+import IconIso7010W013 from './iso7010/ISO-7010-W013.inline.svg';
+import IconIso7010W014 from './iso7010/ISO-7010-W014.inline.svg';
+import IconIso7010W016 from './iso7010/ISO-7010-W016.inline.svg';
+import IconIso7010W019 from './iso7010/ISO-7010-W019.inline.svg';
+import IconIso7010W026 from './iso7010/ISO-7010-W026.inline.svg';
+import IconIso7010W027 from './iso7010/ISO-7010-W027.inline.svg';
+import IconIso7010W028 from './iso7010/ISO-7010-W028.inline.svg';
+import IconIso7010W044WarningSlipway from './iso7010/ISO-7010-W044-warning-slipway.inline.svg';
+import IconIso7010W051WarningNoGuardRailAndUnprotectedEdges from './iso7010/ISO-7010-W051-warning-no-guard-rail-and-unprotected-edges.inline.svg';
+import IconIso7010W052WarningUnstableCliffEdge from './iso7010/ISO-7010-W052-warning-unstable-cliff-edge.inline.svg';
+import IconIso7010W053WarningUnstableCliff from './iso7010/ISO-7010-W053-warning-unstable-cliff.inline.svg';
+import IconIso7010W054WarningSharks from './iso7010/ISO-7010-W054-warning-sharks.inline.svg';
+import IconIso7010W055WarningSewageEffluentOutfall from './iso7010/ISO-7010-W055-warning-sewage-effluent-outfall.inline.svg';
+import IconIso7010W056WarningTsunamiHazardZone from './iso7010/ISO-7010-W056-warning-tsunami-hazard-zone.inline.svg';
+import IconIso7010W057WarningStrongCurrents from './iso7010/ISO-7010-W057-warning-strong-currents.inline.svg';
+import IconIso7010W058WarningBoatingArea from './iso7010/ISO-7010-W058-warning-boating-area.inline.svg';
+import IconIso7010W059SandYachting from './iso7010/ISO-7010-W059-sand-yachting.inline.svg';
+import IconIso7010W060WarningIncomingTides from './iso7010/ISO-7010-W060-warning-incoming-tides.inline.svg';
+import IconIso7010W061WarningQuicksandMudDeepMudOrSilt from './iso7010/ISO-7010-W061-warning-quicksand-mud-deep-mud-or-silt.inline.svg';
+import IconIso7010W062WarningKiteSurfing from './iso7010/ISO-7010-W062-warning-kite-surfing.inline.svg';
+import IconIso7010W063WarningParasailing from './iso7010/ISO-7010-W063-warning-parasailing.inline.svg';
+import IconIso7010W064WarningStrongWinds from './iso7010/ISO-7010-W064-warning-strong-winds.inline.svg';
+import IconIso7010W065WarningHighSurfOrLargeBreakingWaves from './iso7010/ISO-7010-W065-warning-high-surf-or-large-breaking-waves.inline.svg';
+import IconIso7010W066WarningSuddenDropToDeepWater from './iso7010/ISO-7010-W066-warning-Sudden-drop-to-deep-water.inline.svg';
+import IconIso7010W067WarningAlligatorsCaymansAndCrocodiles from './iso7010/ISO-7010-W067-warning-alligators-caymans-and-crocodiles.inline.svg';
+import IconSignFirstAid from './iso7010/Sign-first-aid.inline.svg';
+import { PointIcon } from './PointIcon';
 
-export const AllIcons = [
+export const AllIcons: PointIcon[] = [
   { name: IconName.Icon0CircleFill, contentSvg: Icon0CircleFill, category: IconCategory.Geometries },
   { name: IconName.Icon0CircleHalf, contentSvg: Icon0CircleHalf, category: IconCategory.Geometries },
   { name: IconName.Icon0CircleSquare, contentSvg: Icon0CircleSquare, category: IconCategory.Geometries },
@@ -1056,4 +1110,97 @@ export const AllIcons = [
   { name: IconName.IconX, contentSvg: IconX, category: IconCategory.Symbols },
   { name: IconName.IconZoomIn, contentSvg: IconZoomIn, category: IconCategory.Objects },
   { name: IconName.IconZoomOut, contentSvg: IconZoomOut, category: IconCategory.Objects },
+  { name: IconName.IconIso7010E002New, contentSvg: IconIso7010E002New, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E003FirstAidSign, contentSvg: IconIso7010E003FirstAidSign, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E004, contentSvg: IconIso7010E004, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E007, contentSvg: IconIso7010E007, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E009, contentSvg: IconIso7010E009, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E010, contentSvg: IconIso7010E010, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E011, contentSvg: IconIso7010E011, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E012, contentSvg: IconIso7010E012, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E013, contentSvg: IconIso7010E013, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E016, contentSvg: IconIso7010E016, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010E017, contentSvg: IconIso7010E017, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010F001, contentSvg: IconIso7010F001, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010F002, contentSvg: IconIso7010F002, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010F003, contentSvg: IconIso7010F003, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010F004, contentSvg: IconIso7010F004, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010F005, contentSvg: IconIso7010F005, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010F006, contentSvg: IconIso7010F006, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010F007, contentSvg: IconIso7010F007, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W001, contentSvg: IconIso7010W001, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W002, contentSvg: IconIso7010W002, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W003, contentSvg: IconIso7010W003, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W004, contentSvg: IconIso7010W004, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W005, contentSvg: IconIso7010W005, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W007, contentSvg: IconIso7010W007, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W008, contentSvg: IconIso7010W008, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W009, contentSvg: IconIso7010W009, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W012, contentSvg: IconIso7010W012, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W013, contentSvg: IconIso7010W013, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W014, contentSvg: IconIso7010W014, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W016, contentSvg: IconIso7010W016, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W019, contentSvg: IconIso7010W019, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W026, contentSvg: IconIso7010W026, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W027, contentSvg: IconIso7010W027, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W028, contentSvg: IconIso7010W028, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W044WarningSlipway, contentSvg: IconIso7010W044WarningSlipway, category: IconCategory.Iso7010, staticColors: true },
+  {
+    name: IconName.IconIso7010W051WarningNoGuardRailAndUnprotectedEdges,
+    contentSvg: IconIso7010W051WarningNoGuardRailAndUnprotectedEdges,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  {
+    name: IconName.IconIso7010W052WarningUnstableCliffEdge,
+    contentSvg: IconIso7010W052WarningUnstableCliffEdge,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  { name: IconName.IconIso7010W053WarningUnstableCliff, contentSvg: IconIso7010W053WarningUnstableCliff, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W054WarningSharks, contentSvg: IconIso7010W054WarningSharks, category: IconCategory.Iso7010, staticColors: true },
+  {
+    name: IconName.IconIso7010W055WarningSewageEffluentOutfall,
+    contentSvg: IconIso7010W055WarningSewageEffluentOutfall,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  {
+    name: IconName.IconIso7010W056WarningTsunamiHazardZone,
+    contentSvg: IconIso7010W056WarningTsunamiHazardZone,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  { name: IconName.IconIso7010W057WarningStrongCurrents, contentSvg: IconIso7010W057WarningStrongCurrents, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W058WarningBoatingArea, contentSvg: IconIso7010W058WarningBoatingArea, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W059SandYachting, contentSvg: IconIso7010W059SandYachting, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W060WarningIncomingTides, contentSvg: IconIso7010W060WarningIncomingTides, category: IconCategory.Iso7010, staticColors: true },
+  {
+    name: IconName.IconIso7010W061WarningQuicksandMudDeepMudOrSilt,
+    contentSvg: IconIso7010W061WarningQuicksandMudDeepMudOrSilt,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  { name: IconName.IconIso7010W062WarningKiteSurfing, contentSvg: IconIso7010W062WarningKiteSurfing, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W063WarningParasailing, contentSvg: IconIso7010W063WarningParasailing, category: IconCategory.Iso7010, staticColors: true },
+  { name: IconName.IconIso7010W064WarningStrongWinds, contentSvg: IconIso7010W064WarningStrongWinds, category: IconCategory.Iso7010, staticColors: true },
+  {
+    name: IconName.IconIso7010W065WarningHighSurfOrLargeBreakingWaves,
+    contentSvg: IconIso7010W065WarningHighSurfOrLargeBreakingWaves,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  {
+    name: IconName.IconIso7010W066WarningSuddenDropToDeepWater,
+    contentSvg: IconIso7010W066WarningSuddenDropToDeepWater,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  {
+    name: IconName.IconIso7010W067WarningAlligatorsCaymansAndCrocodiles,
+    contentSvg: IconIso7010W067WarningAlligatorsCaymansAndCrocodiles,
+    category: IconCategory.Iso7010,
+    staticColors: true,
+  },
+  { name: IconName.IconSignFirstAid, contentSvg: IconSignFirstAid, category: IconCategory.Iso7010, staticColors: true },
 ];
