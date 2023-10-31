@@ -16,10 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DefaultIcon, getAllIcons, safeGetIcon } from './PointIcon';
 import { mountSvg } from '../../core/geo/styles/IconProcessor';
 import { IconName } from './IconName';
-import { IconNamesWitness } from './PointIcon.test.data';
+import { DefaultIcon, getAllIcons, safeGetIcon } from './helpers';
 
 describe('PointIcon', () => {
   it('safeGetIcon()', () => {
@@ -50,6 +49,6 @@ describe('PointIcon', () => {
   });
 
   it('Icon change require migration', () => {
-    expect(IconName).toEqual(IconNamesWitness);
+    expect(IconName).toMatchSnapshot();
   });
 });

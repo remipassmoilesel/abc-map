@@ -259,7 +259,8 @@
     "Weather": "Météo",
     "Arrows": "Flêches",
     "Emojis": "Emojis",
-    "Symbols": "Symboles"
+    "Symbols": "Symboles divers",
+    "Iso7010": "Symboles de sécurité standards (ISO 7010)"
   },
   "DeviceWarningModal": {
     "Hello": "Bonjour",
@@ -582,6 +583,8 @@
     "A4_landscape": "A4 paysage",
     "A3_portrait": "A3 portrait",
     "A3_landscape": "A3 paysage",
+    "A2_portrait": "A2 portrait",
+    "A2_landscape": "A2 paysage",
     "Move_up": "Monter la page",
     "Move_Down": "Descendre la page",
     "Delete_all": "Supprimer tout",

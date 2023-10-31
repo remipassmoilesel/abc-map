@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { AllIcons } from './icons';
 import { IconName } from './IconName';
 import { IconCategory } from './IconCategory';
 
@@ -23,24 +22,5 @@ export interface PointIcon {
   name: IconName;
   contentSvg: string;
   category: IconCategory;
-}
-
-/**
- * Default icon is used when an icon is not found
- */
-export const DefaultIcon = AllIcons[0];
-
-/**
- * This function return icon with specified name.
- *
- * This method never fail, if icon was not found, we return the default one.
- *
- * @param name
- */
-export function safeGetIcon(name: IconName | string): PointIcon {
-  return AllIcons.find((i) => i.name === name) || DefaultIcon;
-}
-
-export function getAllIcons(): PointIcon[] {
-  return AllIcons;
+  staticColors?: boolean;
 }

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`previews should work 1`] = `
+Array [
+  "Arrows",
+  "Emojis",
+  "Geometries",
+  "Iso7010",
+  "Objects",
+  "Pins",
+  "Symbols",
+  "Weather",
+]
+`;
+
+exports[`previews should work 2`] = `
+Array [
+  73,
+  22,
+  25,
+  53,
+  258,
+  10,
+  65,
+  65,
+]
+`;

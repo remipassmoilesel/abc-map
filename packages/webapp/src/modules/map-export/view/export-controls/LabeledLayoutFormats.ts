@@ -54,6 +54,16 @@ export class LabeledLayoutFormats {
     format: LayoutFormats.A3_LANDSCAPE,
   };
 
+  public static readonly A2_PORTRAIT: LabeledLayoutFormat = {
+    i18nLabel: 'A2_portrait',
+    format: LayoutFormats.A2_PORTRAIT,
+  };
+
+  public static readonly A2_LANDSCAPE: LabeledLayoutFormat = {
+    i18nLabel: 'A2_landscape',
+    format: LayoutFormats.A2_LANDSCAPE,
+  };
+
   public static All = [
     LabeledLayoutFormats.A5_PORTRAIT,
     LabeledLayoutFormats.A5_LANDSCAPE,
@@ -61,5 +71,7 @@ export class LabeledLayoutFormats {
     LabeledLayoutFormats.A4_LANDSCAPE,
     LabeledLayoutFormats.A3_PORTRAIT,
     LabeledLayoutFormats.A3_LANDSCAPE,
+    LabeledLayoutFormats.A2_PORTRAIT,
+    LabeledLayoutFormats.A2_LANDSCAPE,
   ];
 }

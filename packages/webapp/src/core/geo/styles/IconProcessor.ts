@@ -65,19 +65,21 @@ export class IconProcessor {
       svg.setAttribute('fill', color);
     }
 
-    // We set colors
-    const children = svg.getElementsByTagName('*');
-    for (let i = 0; i < children.length; i++) {
-      const child = children.item(i);
-      if (!child || !(child instanceof SVGElement)) {
-        continue;
-      }
+    // We set colors if needed
+    if (!icon.staticColors) {
+      const children = svg.getElementsByTagName('*');
+      for (let i = 0; i < children.length; i++) {
+        const child = children.item(i);
+        if (!child || !(child instanceof SVGElement)) {
+          continue;
+        }
 
-      if (child.style.fill && child.style.fill !== 'none') {
-        child.style.fill = color;
-      }
-      if (child.style.color && child.style.color !== 'none') {
-        child.style.color = color;
+        if (child.style.fill && child.style.fill !== 'none') {
+          child.style.fill = color;
+        }
+        if (child.style.color && child.style.color !== 'none') {
+          child.style.color = color;
+        }
       }
     }
 

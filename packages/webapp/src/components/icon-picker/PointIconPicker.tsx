@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { PointIcon, safeGetIcon } from '../../assets/point-icons/PointIcon';
+import { PointIcon } from '../../assets/point-icons/PointIcon';
 import { IconProcessor } from '../../core/geo/styles/IconProcessor';
 import { IconName } from '../../assets/point-icons/IconName';
 import { LabeledIconCategories } from './IconCategory';
@@ -27,6 +27,7 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './PointIconPicker.module.scss';
 import { IconCategory } from '../../assets/point-icons/IconCategory';
+import { safeGetIcon } from '../../assets/point-icons/helpers';
 
 interface Props {
   value: IconName | undefined;

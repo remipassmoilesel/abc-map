@@ -24,8 +24,9 @@ describe('previews', function () {
 
     const keys = Array.from(previews.keys()).sort();
     const valuesCount = keys.map((k) => previews.get(k)?.length);
-    expect(keys).toEqual(['Arrows', 'Emojis', 'Geometries', 'Objects', 'Pins', 'Symbols', 'Weather']);
-    expect(valuesCount).toEqual([73, 22, 25, 258, 10, 65, 65]);
+    expect(keys).toMatchSnapshot();
+    expect(valuesCount).toMatchSnapshot();
+
     keys
       .flatMap((k) => previews.get(k))
       .forEach((p) => {
