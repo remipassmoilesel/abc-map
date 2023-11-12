@@ -18,7 +18,7 @@
 
 import * as fs from 'fs';
 import { MigrationProject } from '../typings';
-import { ProjectHelper, Zipper } from '@abc-map/shared';
+import { AbcProjectManifest, ProjectHelper, Zipper } from '@abc-map/shared';
 import { AbcProjectManifest010 } from '../dependencies/010-project-types';
 import { AbcProjectManifest030 } from '../dependencies/030-project-types';
 import { AbcProjectManifest020 } from '../dependencies/020-project-types';
@@ -83,6 +83,10 @@ export class TestData {
 
   public static async project130(): Promise<MigrationProject<AbcProjectManifest130>> {
     return this.readFile(`${__dirname}/project-1.3.0.abm2`) as Promise<MigrationProject<AbcProjectManifest130>>;
+  }
+
+  public static async project140(): Promise<MigrationProject<AbcProjectManifest>> {
+    return this.readFile(`${__dirname}/project-1.4.0.abm2`) as Promise<MigrationProject<AbcProjectManifest>>;
   }
 
   public static fakeProject<T>(version: string): T {

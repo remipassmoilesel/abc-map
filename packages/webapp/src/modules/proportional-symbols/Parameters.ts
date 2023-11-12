@@ -19,7 +19,7 @@
 import { DataSource } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { ScaleAlgorithm } from '../../core/modules/Algorithm';
-import { IconName } from '../../assets/point-icons/IconName';
+import { IconName } from '@abc-map/point-icons';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('ProportionalSymbolsModule:');

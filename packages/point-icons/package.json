@@ -1,0 +1,46 @@
+{
+  "name": "@abc-map/point-icons",
+  "version": "1.0.0",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "main": "build/index.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf build",
+    "clean-build": "pnpm run clean && pnpm run build",
+    "coverage": "CI=true jest src --coverage",
+    "dependency-check": "depcruise -c .dependency-cruiser.js src",
+    "lint": "prettier --loglevel warn --check . && eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 && sort-package-json --check",
+    "lint:fix": "prettier --loglevel warn --write . && eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 --fix && sort-package-json",
+    "package": "./scripts/package.js",
+    "prepare-icons": "ts-node scripts/prepare-icons.ts",
+    "test": "CI=true jest src --verbose",
+    "test:interactive": "jest src --watch",
+    "watch": "tsc --watch | sed -u 's/\\x1Bc//g'"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.21.5",
+    "@types/jest": "^27.5.1",
+    "@types/node": "^18.18.8",
+    "@typescript-eslint/eslint-plugin": "^5.60.0",
+    "@typescript-eslint/parser": "^5.60.0",
+    "babel-jest": "^27.5.1",
+    "camelcase": "^6.3.0",
+    "dependency-cruiser": "^13.0.4",
+    "eslint": "^8.43.0",
+    "eslint-plugin-no-only-tests": "^3.1.0",
+    "fast-xml-parser": "^4.3.2",
+    "jest": "^27.5.1",
+    "jest-environment-jsdom": "^27.5.1",
+    "prettier": "^2.8.8",
+    "sort-package-json": "^2.4.1",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

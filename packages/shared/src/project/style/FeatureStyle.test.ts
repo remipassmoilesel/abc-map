@@ -39,7 +39,7 @@ describe('FeatureStyle', () => {
         rotation: 0,
       },
       point: {
-        icon: 'twbs/0_circle-fill.inline.svg',
+        icon: 'twbs/0_circle-fill.svg',
         size: 10,
       },
       zIndex: 9999,

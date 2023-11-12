@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg width="52.917mm" height="52.917mm" viewBox="0 0 52.917 52.917" version="1.1" id="svg25501" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <defs id="defs25498"/>
+  <g id="layer1" transform="translate(39.536133,17.166496)">
+    <g id="g26004">
+      <rect style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2.01819" id="rect70551" width="52.917" height="52.917" x="-39.536133" y="-17.166496"/>
+      <path id="path5774" style="display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m -23.8966,-2.01211 v 6.76393 6.96391 1.13068 c 0.006,0.556 1.09234,2.80768 3.50366,2.81689 h 14.23789 c 2.29794,0.003 3.49628,-1.89732 3.50418,-2.81689 V 11.71573 8.65804 h 1.43092 c 2.94028,0 5.3361,-2.39378 5.3361,-5.33404 0,-2.94028 -2.39582,-5.33559 -5.3361,-5.33559 h -1.43092 v -5.2e-4 z m 21.24573,1.79937 h 1.43092 c 1.97421,0 3.53518,1.56252 3.53518,3.53674 0,1.97423 -1.56097,3.53518 -3.53518,3.53518 H -2.65087 V 4.75182 Z m -28.21792,17.39015 c 0.0269,1.03335 2.7562,3.44974 5.61413,3.4184 h 7.48016 9.39375 7.48016 c 2.85793,0.0313 5.58726,-2.38505 5.61412,-3.4184 h -13.59606 -8.39019 z"/>
+    </g>
+  </g>
+</svg>

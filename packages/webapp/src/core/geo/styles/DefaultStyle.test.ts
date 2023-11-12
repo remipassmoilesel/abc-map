@@ -17,12 +17,11 @@
  */
 
 import { DefaultStyle } from '@abc-map/shared';
-import { AllIcons } from '../../../assets/point-icons/icons';
+import { AllPointIcons } from '@abc-map/point-icons';
 
 describe('DefaultStyle', function () {
   it('Default icon should exists', () => {
-    const defaultIcon = AllIcons.find((i) => i.name === DefaultStyle.point.icon);
-
+    const defaultIcon = AllPointIcons.find((i) => i.name === DefaultStyle.point.icon);
     expect(defaultIcon).toBeDefined();
   });
 });

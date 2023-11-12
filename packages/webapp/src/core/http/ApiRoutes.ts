@@ -109,3 +109,9 @@ export class ProjectionRoutes {
     return `/api/projections/${code}`;
   }
 }
+
+export class PointIconsRoutes {
+  public static getIcons(): string {
+    return `/api/point-icons`;
+  }
+}

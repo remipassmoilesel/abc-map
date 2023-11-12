@@ -67,7 +67,7 @@ export class ProjectService {
   public static create(toasts: ToastService, geoService: GeoService, modals: ModalService) {
     const updater = ProjectSchemaMigration.create(modals);
     const storage = ProjectIDBStorage.create();
-    return new ProjectService(ApiClient, DownloadClient, mainStore, toasts, geoService, updater, storage);
+    return new ProjectService(ApiClient(), DownloadClient(), mainStore, toasts, geoService, updater, storage);
   }
 
   private eventTarget = document.createDocumentFragment();

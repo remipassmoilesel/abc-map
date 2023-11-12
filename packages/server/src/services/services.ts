@@ -30,6 +30,7 @@ import { FeedbackService } from '../feedback/FeedbackService';
 import { MetricsService } from '../metrics/MetricsService';
 import { EmailService } from '../email/EmailService';
 import { ProjectionService } from '../projections/ProjectionService';
+import { PointIconsService } from '../point-icons/PointIconsService';
 
 const logger = Logger.get('services.ts');
 
@@ -47,6 +48,7 @@ export interface Services {
   metrics: MetricsService;
   emails: EmailService;
   projections: ProjectionService;
+  pointIcons: PointIconsService;
   shutdown: ShutdownFunc;
 }
 
@@ -62,6 +64,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
   const feedback = FeedbackService.create(mongodb);
   const metrics = MetricsService.create();
   const projections = ProjectionService.create(config, mongodb);
+  const pointIcons = PointIconsService.create(config);
 
   const services: Services = {
     project,
@@ -74,6 +77,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     metrics,
     emails,
     projections,
+    pointIcons,
     shutdown: () => undefined,
   };
 

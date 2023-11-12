@@ -27,7 +27,7 @@ const logger = Logger.get('DataStoreService.ts');
 
 export class DataStoreService {
   public static create(toasts: ToastService): DataStoreService {
-    return new DataStoreService(ApiClient, DownloadClient, toasts);
+    return new DataStoreService(ApiClient(), DownloadClient(), toasts);
   }
 
   constructor(private apiClient: AxiosInstance, private downloadClient: AxiosInstance, private toasts: ToastService) {}

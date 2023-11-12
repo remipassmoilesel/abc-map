@@ -30,7 +30,7 @@ NoContent.innerHTML = 'No content found. This is probably a bug 🐛. If this pr
 
 export class DocumentationService {
   public static create(toasts: ToastService) {
-    return new DocumentationService(DownloadClient, toasts);
+    return new DocumentationService(DownloadClient(), toasts);
   }
 
   constructor(private client: AxiosInstance, private toasts: ToastService) {}

@@ -22,8 +22,8 @@ import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import OptionRow from '../../_common/option-row/OptionRow';
-import PointIconPicker from '../../../../../components/icon-picker/PointIconPicker';
-import { IconName } from '../../../../../assets/point-icons/IconName';
+import { PointIconPicker } from '../../../../../components/point-icon-picker/PointIconPicker';
+import { IconName } from '@abc-map/point-icons';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 

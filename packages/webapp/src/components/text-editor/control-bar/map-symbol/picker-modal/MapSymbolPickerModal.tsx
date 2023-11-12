@@ -19,15 +19,12 @@
 import React, { useCallback, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { StyleFactory } from '../../../../../core/geo/styles/StyleFactory';
-import MapSymbolButton from './MapSymbolButton';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { MapSymbolButton } from './MapSymbolButton';
+import { useTranslation, withTranslation } from 'react-i18next';
 import Cls from './MapSymbolPickerModal.module.scss';
 import { FaIcon } from '../../../../icon/FaIcon';
 import { IconDefs } from '../../../../icon/IconDefs';
 import { StyleCacheEntry } from '../../../../../core/geo/styles/StyleCache';
-
-const t = prefixedTranslation('MapSymbolPickerModal:');
 
 interface Props {
   onSelected: (style: StyleCacheEntry) => void;
@@ -36,8 +33,8 @@ interface Props {
 
 function MapSymbolPickerModal(props: Props) {
   const { onSelected, onCancel } = props;
+  const { t } = useTranslation('MapSymbolPickerModal');
   const [styles] = useState(() => StyleFactory.get().getAvailableStyles(1));
-
   const handleSymbolSelected = useCallback((style: StyleCacheEntry) => onSelected(style), [onSelected]);
 
   return (
@@ -51,8 +48,8 @@ function MapSymbolPickerModal(props: Props) {
       <Modal.Body>
         <div className={'mb-4'}>{t('Here_are_the_geometry_styles_used_on_the_map')}:</div>
         <div className={Cls.symbolContainer}>
-          {styles.map((st) => (
-            <MapSymbolButton key={st.id} style={st} onClick={handleSymbolSelected} />
+          {styles.map((entry) => (
+            <MapSymbolButton key={entry.id} style={entry} onClick={handleSymbolSelected} />
           ))}
           {!styles.length && (
             <div className={Cls.noSymbol}>

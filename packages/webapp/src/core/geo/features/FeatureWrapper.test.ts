@@ -23,7 +23,7 @@ import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { IconName } from '../../../assets/point-icons/IconName';
+import { IconName } from '@abc-map/point-icons';
 import * as sinon from 'sinon';
 
 describe('FeatureWrapper', () => {

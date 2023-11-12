@@ -18,12 +18,12 @@
 
 import { StyleFactory } from './StyleFactory';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { Point } from 'ol/geom';
+import { LineString, Point } from 'ol/geom';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { StyleCache, StyleCacheEntry } from './StyleCache';
 import Style from 'ol/style/Style';
-import { IconName } from '../../../assets/point-icons/IconName';
+import { IconName } from '@abc-map/point-icons';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { DefaultStyleOptions } from './StyleFactoryOptions';
 import { AbcGeometryType } from '@abc-map/shared';
@@ -34,14 +34,25 @@ describe('StyleFactory', () => {
   describe('With a fake cache', () => {
     let cache: SinonStubbedInstance<StyleCache>;
     let factory: StyleFactory;
+
     beforeEach(() => {
       cache = sinon.createStubInstance(StyleCache);
       factory = new StyleFactory(cache as unknown as StyleCache);
     });
 
     describe('getForFeature()', () => {
+      let feature: FeatureWrapper;
+
+      beforeEach(() => {
+        feature = FeatureWrapper.create(
+          new LineString([
+            [1, 1],
+            [2, 2],
+          ])
+        );
+      });
+
       it('should create style then register in cache', () => {
-        const feature = FeatureWrapper.create(new Point([1, 1]));
         const properties = TestHelper.sampleStyleProperties();
         feature.setStyleProperties(properties);
         cache.get.returns(undefined);
@@ -51,14 +62,13 @@ describe('StyleFactory', () => {
         expect(styles.length).toEqual(1);
         expect(cache.get.callCount).toEqual(1);
         expect(cache.put.callCount).toEqual(1);
-        expect(cache.put.args[0][0]).toEqual('Point');
+        expect(cache.put.args[0][0]).toEqual('LineString');
         expect(cache.put.args[0][1]).toEqual(properties);
         expect(cache.put.args[0][2]).toEqual({ ...DefaultStyleOptions, ratio: 4 });
         expect(cache.put.args[0][3]).toEqual(styles[0]);
       });
 
       it('should not create style', () => {
-        const feature = FeatureWrapper.create(new Point([1, 1]));
         const properties = TestHelper.sampleStyleProperties();
         feature.setStyleProperties(properties);
         const style = new Style();

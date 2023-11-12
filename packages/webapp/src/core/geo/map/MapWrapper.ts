@@ -46,6 +46,7 @@ import uuid from 'uuid-random';
 import { FeatureSelection } from '../feature-selection/FeatureSelection';
 import { getSelectionFromMap } from '../feature-selection/getSelectionFromMap';
 import { ToolChangedEvent, ToolProperty } from './properties';
+import { IconProcessor, IconProcessorEvent } from '../../point-icons/IconProcessor';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -83,10 +84,12 @@ export class MapWrapper {
 
   private constructor(private readonly internalMap: Map) {
     this.addLayerChangeListener(this.handleLayerChange);
+    this.addIconProcessorListener();
   }
 
   public dispose() {
     this.removeLayerChangeListener(this.handleLayerChange);
+    this.removeIconProcessorListener();
 
     this.mapSizeObserver?.disconnect();
     this.mapSizeObserver = undefined;
@@ -503,6 +506,23 @@ export class MapWrapper {
     const features = this.getSelection().getFeatures();
     return features.map((f) => FeatureWrapper.from(f));
   }
+
+  private addIconProcessorListener() {
+    IconProcessor.get().addEventListener(this.handleIconProcessorEvent);
+  }
+
+  private removeIconProcessorListener() {
+    IconProcessor.get().addEventListener(this.handleIconProcessorEvent);
+  }
+
+  private handleIconProcessorEvent = (ev: IconProcessorEvent) => {
+    logger.debug('Icon processor event: ', ev);
+
+    // We trigger a rerender in order to redraw icons. map.render() does not work here.
+    this.getLayers().forEach((layer) => {
+      layer.isVector() && layer.getSource().changed();
+    });
+  };
 
   public unwrap(): Map {
     return this.internalMap;

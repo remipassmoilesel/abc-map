@@ -28,7 +28,7 @@ import { MapWrapper } from '../../../../../core/geo/map/MapWrapper';
 import { VectorLayerWrapper } from '../../../../../core/geo/layers/LayerWrapper';
 import { FillPatterns } from '@abc-map/shared';
 import { MainState } from '../../../../../core/store/reducer';
-import { IconName } from '../../../../../assets/point-icons/IconName';
+import { IconName } from '@abc-map/point-icons';
 import { TestHelper } from '../../../../../core/utils/test/TestHelper';
 
 describe('CommonActions', () => {
@@ -122,7 +122,7 @@ describe('CommonActions', () => {
         },
         point: {
           color: '#FF5733',
-          icon: 'twbs/geo-alt-fill.inline.svg',
+          icon: 'twbs/geo-alt-fill.svg',
           size: 30,
         },
         fill: {},
@@ -144,7 +144,7 @@ describe('CommonActions', () => {
 
       // Assert
       expect(style).toEqual({
-        point: { color: '#FF5733', icon: 'twbs/geo-alt-fill.inline.svg', size: 30 },
+        point: { color: '#FF5733', icon: 'twbs/geo-alt-fill.svg', size: 30 },
         fill: {},
         stroke: {},
         text: {},

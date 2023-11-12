@@ -17,7 +17,7 @@
  */
 
 import { FeatureStyle, FillPatterns } from '@abc-map/shared';
-import { IconName } from '../../../assets/point-icons/IconName';
+import { IconName } from '@abc-map/point-icons';
 
 export enum ActionType {
   SetFillColor1 = 'SetFillColor1',

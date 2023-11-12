@@ -20,10 +20,10 @@ import { toContext } from 'ol/render';
 import { LineString, Point, Polygon } from 'ol/geom';
 import { AbcGeometryType, Logger } from '@abc-map/shared';
 import { Style } from 'ol/style';
-import { StyleFactory } from '../../geo/styles/StyleFactory';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import ImageState from 'ol/ImageState';
 import { Type } from 'ol/geom/Geometry';
+import ImageStyle from 'ol/style/Image';
 
 const logger = Logger.get('MapSymbolRenderer.ts');
 
@@ -32,14 +32,36 @@ const logger = Logger.get('MapSymbolRenderer.ts');
  */
 export const DefaultSymbolSize: DimensionsPx = { width: 35, height: 35 };
 
+/**
+ * This class is used to render map symbols on HTML5 canvas, out of a HTML5 map.
+ */
 export class MapSymbolRenderer {
-  constructor(private styleFactory = StyleFactory.get(), private olContext = toContext) {}
+  constructor(private olContext = toContext) {}
 
-  public symbolSizeForStyle(style: Style, geom: Type | AbcGeometryType, styleRatio: number): DimensionsPx {
+  /**
+   * Return symbol size, or undefined if size is not available yet.
+   *
+   * @param style
+   * @param geom
+   * @param styleRatio
+   */
+  public async symbolSizeForStyle(style: Style, geom: Type | AbcGeometryType, styleRatio: number): Promise<DimensionsPx | undefined> {
     // Points have variable sizes and must keep them in legend
     if (AbcGeometryType.POINT === geom) {
-      const size = style.getImage().getImageSize();
-      return { width: size[0] + 5, height: size[1] + 5 };
+      // Openlayers typings are wrong, entities are nullable
+      const image = style.getImage() as ImageStyle | null;
+      if (image) {
+        await loadImage(image).catch((err) => logger.error('Loading error: ', err));
+
+        const size = image?.getImageSize() as [number, number] | null;
+        if (size) {
+          return { width: size[0] + 5, height: size[1] + 5 };
+        } else {
+          logger.debug('Invalid size: ', size);
+        }
+      } else {
+        logger.debug('No image style');
+      }
     }
     // Polygon and others does not keep their original sizes
     else {
@@ -66,22 +88,12 @@ export class MapSymbolRenderer {
 
     // Point rendering
     if (AbcGeometryType.POINT === geom || AbcGeometryType.MULTI_POINT === geom) {
-      // Style is image, and not loaded yet. Rendering is async 🤷
-      const image = style.getImage();
-      if (image && image.getImageState() !== ImageState.LOADED) {
-        return new Promise<void>((resolve) => {
-          const draw = () => {
-            vectorContext.drawPoint(new Point([centerX, centerY]));
-            image.unlistenImageChange(draw);
-            resolve();
-          };
-          image.listenImageChange(draw);
-          image.load();
-        });
-      }
-      // Style is not image, or already loaded
-      else {
+      const image = style.getImage() as ImageStyle | null;
+      if (image) {
+        await loadImage(image).catch((err) => logger.error('Loading error: ', err));
         vectorContext.drawPoint(new Point([centerX, centerY]));
+      } else {
+        logger.debug('No image style to draw');
       }
     }
 
@@ -114,5 +126,27 @@ export class MapSymbolRenderer {
     else {
       logger.error(`Unhandled geometry type for legend rendering: ${geom}`, { style, geom });
     }
+  }
+}
+
+/**
+ * Load the style image if necessary. Images are often not ready when we need them.
+ *
+ * @param image
+ */
+async function loadImage(image: ImageStyle): Promise<void> {
+  if (image.getImageState() !== ImageState.LOADED) {
+    return new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Timeout waiting for image')), 2000);
+
+      const handleImageLoaded = () => {
+        image.unlistenImageChange(handleImageLoaded);
+        clearTimeout(timeout);
+        resolve();
+      };
+
+      image.listenImageChange(handleImageLoaded);
+      image.load();
+    });
   }
 }

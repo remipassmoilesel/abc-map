@@ -371,8 +371,8 @@ describe('ProjectService', function () {
       updater = ProjectSchemaMigration.create(modals);
 
       projectService = new ProjectService(
-        ApiClient,
-        DownloadClient,
+        ApiClient(),
+        DownloadClient(),
         store,
         toastMock as unknown as ToastService,
         geoService as unknown as GeoService,

@@ -31,6 +31,7 @@ import { SitemapController } from './sitemap/SitemapController';
 import { LegalMentionsController } from './LegalMentionsController';
 import { DocumentationController } from '../documentation/DocumentationController';
 import { LegacyRoutesRedirectionController } from './LegacyRoutesRedirectionController';
+import { PointIconsController } from '../point-icons/PointIconsController';
 
 /**
  * Routes exposed in these controllers are public and do not need a valid authentication
@@ -62,5 +63,6 @@ export function privateControllers(config: Config, services: Services): Controll
     new DataStoreController(services),
     new FeedbackController(config, services),
     new ProjectionController(services),
+    new PointIconsController(services),
   ];
 }

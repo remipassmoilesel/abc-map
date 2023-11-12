@@ -54,7 +54,7 @@ export declare type StyleTransformFunc = (x: FeatureStyle, f: FeatureWrapper) =>
 
 export class GeoService {
   public static create(toasts: ToastService, history: HistoryService): GeoService {
-    return new GeoService(ApiClient, ExternalClient, toasts, history, mainStore);
+    return new GeoService(ApiClient(), ExternalClient(), toasts, history, mainStore);
   }
 
   private mainMap = MapFactory.createDefault(true);

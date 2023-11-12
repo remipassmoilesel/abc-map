@@ -39,7 +39,7 @@ export function setTileImage(tile: Tile, blob: Blob) {
     return;
   }
 
-  const image = tile.getImage();
+  const image = tile.getImage() as HTMLImageElement | null;
   if (image && image instanceof HTMLImageElement) {
     // This is necessary for exports
     image.crossOrigin = 'Anonymous';

@@ -89,16 +89,6 @@ export function EditLayerModal(props: Props) {
       </Modal.Header>
       <Modal.Body>
         <div className={`p-3`}>
-          {/* Type of layer */}
-          <div className={'mb-2'}>{t('Layer_type')}:</div>
-          <input
-            type={'text'}
-            value={t(LabeledLayerTypes.find(layer.getType() ?? '')?.i18nLabel ?? '<unsupported-type>')}
-            readOnly={true}
-            disabled={true}
-            className={'form-control mb-4'}
-          />
-
           {/* Name of layer */}
           <div className={'mb-2'}>{t('Name_of_layer')}:</div>
           <input
@@ -108,6 +98,16 @@ export function EditLayerModal(props: Props) {
             className={'form-control mb-4'}
             data-testid={'name-input'}
             data-cy={'name-input'}
+          />
+
+          {/* Type of layer */}
+          <div className={'mb-2'}>{t('Layer_type')}:</div>
+          <input
+            type={'text'}
+            value={t(LabeledLayerTypes.find(layer.getType() ?? '')?.i18nLabel ?? '<unsupported-type>')}
+            readOnly={true}
+            disabled={true}
+            className={'form-control mb-4'}
           />
 
           {/* Opacity */}

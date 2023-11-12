@@ -21,7 +21,7 @@ import { StorageService, StorageKey } from '../../storage/StorageService';
 import sinon, { SinonStub } from 'sinon';
 import { FillPatterns, ProjectConstants, UserStatus } from '@abc-map/shared';
 import { MainState } from '../reducer';
-import { IconName } from '../../../assets/point-icons/IconName';
+import { IconName } from '@abc-map/point-icons';
 import { deepFreeze } from '../../utils/deepFreeze';
 import { DateTime } from 'luxon';
 import { CURRENT_STATE_VERSION } from '../state';
