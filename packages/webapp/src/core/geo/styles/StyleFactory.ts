@@ -19,28 +19,27 @@
 import Style from 'ol/style/Style';
 import { Fill, Icon, Stroke, Text } from 'ol/style';
 import { AbcGeometryType, DefaultStyle, FeatureStyle, Logger } from '@abc-map/shared';
+import { DefaultIcon, getSafeIconName, IconName } from '@abc-map/point-icons';
 import { SelectionStyleFactory } from './SelectionStyleFactory';
 import { StyleCache, StyleCacheEntry } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
-import { IconProcessor } from './IconProcessor';
-import { IconName } from '../../../assets/point-icons/IconName';
+import { IconProcessor } from '../../point-icons/IconProcessor';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { toRadians } from '../../utils/numbers';
 import { DefaultStyleOptions, StyleFactoryOptions } from './StyleFactoryOptions';
 import { Type } from 'ol/geom/Geometry';
 import { toAbcGeometryType } from '@abc-map/shared';
-import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/helpers';
 
 const logger = Logger.get('StyleFactory.ts');
 
-export class StyleFactory {
-  private static instance: StyleFactory | undefined;
+let instance: StyleFactory | undefined;
 
+export class StyleFactory {
   public static get(): StyleFactory {
-    if (!this.instance) {
-      this.instance = new StyleFactory();
+    if (!instance) {
+      instance = new StyleFactory();
     }
-    return this.instance;
+    return instance;
   }
 
   private fillPattern = new FillPatternFactory();
@@ -69,13 +68,16 @@ export class StyleFactory {
   public getForProperties(properties: FeatureStyle, type: Type | AbcGeometryType, _options?: Partial<StyleFactoryOptions>): Style {
     const options: StyleFactoryOptions = { ...DefaultStyleOptions, ..._options };
 
-    let style = this.cache.get(toAbcGeometryType(type), properties, options);
-    if (!style) {
-      style = this.createStyle(type, properties, options);
-      this.cache.put(toAbcGeometryType(type), properties, options, style);
+    const style = this.cache.get(toAbcGeometryType(type), properties, options);
+    if (style) {
+      return style;
     }
 
-    return style;
+    const { style: newStyle, cacheable } = this.createStyle(type, properties, options);
+    if (cacheable) {
+      this.cache.put(toAbcGeometryType(type), properties, options, newStyle);
+    }
+    return newStyle;
   }
 
   public getAvailableStyles(ratio: number): StyleCacheEntry[] {
@@ -122,7 +124,7 @@ export class StyleFactory {
     this.cache.clear();
   }
 
-  private createStyle(type: Type, properties: FeatureStyle, options: StyleFactoryOptions): Style {
+  private createStyle(type: Type, properties: FeatureStyle, options: StyleFactoryOptions): { style: Style; cacheable: boolean } {
     const { ratio } = options;
 
     // Text can apply to all geometries
@@ -136,23 +138,23 @@ export class StyleFactory {
       const size = (properties.point?.size || 10) * ratio;
       const name = (properties.point?.icon as IconName) || DefaultIcon;
       const color = properties.point?.color || '#000000';
-      const icon = IconProcessor.get().prepareCached(safeGetIcon(name), size, color);
-      // We need to use the "src" attribute here, otherwise there may be loading issues
-      const pointStyle = new Icon({ src: icon });
-      return new Style({ image: pointStyle, text: textStyle, zIndex: properties.zIndex });
+      const icon = IconProcessor.get().prepare(getSafeIconName(name), size, color);
+      const pointStyle = icon ? new Icon({ src: icon }) : undefined;
+
+      return { style: new Style({ image: pointStyle, text: textStyle, zIndex: properties.zIndex }), cacheable: !!icon };
     }
 
     // Line strings
     else if (AbcGeometryType.LINE_STRING === type || AbcGeometryType.MULTI_LINE_STRING === type || AbcGeometryType.LINEAR_RING === type) {
       const stroke = this.createStroke(properties, ratio);
-      return new Style({ stroke, text: textStyle, zIndex: properties.zIndex });
+      return { style: new Style({ stroke, text: textStyle, zIndex: properties.zIndex }), cacheable: true };
     }
 
     // Others
     else {
       const fill = this.createFill(properties);
       const stroke = this.createStroke(properties, ratio);
-      return new Style({ fill, stroke, text: textStyle, zIndex: properties.zIndex });
+      return { style: new Style({ fill, stroke, text: textStyle, zIndex: properties.zIndex }), cacheable: true };
     }
   }
 

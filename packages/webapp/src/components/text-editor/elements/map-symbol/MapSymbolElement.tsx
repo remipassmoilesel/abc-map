@@ -23,39 +23,55 @@ import { useEditor } from '../../useEditor';
 import { useEffect, useRef } from 'react';
 import { MapSymbolElement as MapSymbolElementDef, Logger } from '@abc-map/shared';
 import { StyleFactory } from '../../../../core/geo/styles/StyleFactory';
+import { IconProcessor } from '../../../../core/point-icons/IconProcessor';
 
-const logger = Logger.get('LegendItemElement.tsx');
+const logger = Logger.get('MapSymbolElement.tsx');
 
 type Props = RenderElementProps & { element: MapSymbolElementDef };
 
-const renderer = new MapSymbolRenderer();
 const styleFactory = StyleFactory.get();
 
 export function MapSymbolElement(props: Props) {
   const { attributes, children, element } = props;
   const { ratio } = useEditor();
-  const canvas = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!canvas.current) {
-      return;
-    }
+    const render = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        logger.warn('Not ready');
+        return;
+      }
 
-    const style = styleFactory.getForProperties(element.style, element.geometryType, {
-      ratio,
-      withSelection: false,
-    });
+      const style = styleFactory.getForProperties(element.style, element.geometryType, {
+        ratio,
+        withSelection: false,
+      });
 
-    const dimensions = renderer.symbolSizeForStyle(style, element.geometryType, ratio);
-    canvas.current.width = dimensions.width;
-    canvas.current.height = dimensions.height;
+      const renderer = new MapSymbolRenderer();
+      renderer
+        .symbolSizeForStyle(style, element.geometryType, ratio)
+        .then((dimensions) => {
+          // We render only if dimensions returned, otherwise image is not yet ready
+          if (dimensions) {
+            canvas.width = dimensions.width;
+            canvas.height = dimensions.height;
 
-    renderer.renderSymbol(style, element.geometryType, canvas.current, ratio).catch((err) => logger.error('Cannot render legend item: ', err));
+            return renderer.renderSymbol(style, element.geometryType, canvas, ratio);
+          }
+        })
+        .catch((err) => logger.error('Cannot render legend item: ', err));
+    };
+
+    render();
+    IconProcessor.get().addEventListener(render);
+    return () => IconProcessor.get().removeEventListener(render);
   }, [element.geometryType, element.style, ratio]);
 
   return (
     <span className={Cls.container} {...attributes}>
-      <canvas ref={canvas} width={0} height={0} className={Cls.canvas} />
+      <canvas ref={canvasRef} width={0} height={0} className={Cls.canvas} />
       {children}
     </span>
   );

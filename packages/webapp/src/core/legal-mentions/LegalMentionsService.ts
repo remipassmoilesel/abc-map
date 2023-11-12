@@ -23,7 +23,7 @@ import { BlobIO } from '@abc-map/shared';
 
 export class LegalMentionsService {
   public static create(toasts: ToastService): LegalMentionsService {
-    return new LegalMentionsService(DownloadClient, toasts);
+    return new LegalMentionsService(DownloadClient(), toasts);
   }
 
   constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}

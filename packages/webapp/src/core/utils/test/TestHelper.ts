@@ -56,7 +56,7 @@ import { TestDataSource } from '../../data/data-source/TestDataSource';
 import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
-import { IconName } from '../../../assets/point-icons/IconName';
+import { IconName } from '@abc-map/point-icons';
 import { nanoid } from 'nanoid';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { WmtsSettings } from '../../geo/layers/LayerFactory.types';

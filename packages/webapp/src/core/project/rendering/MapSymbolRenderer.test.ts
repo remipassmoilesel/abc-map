@@ -16,8 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { MapSymbolRenderer } from './MapSymbolRenderer';
-import { StyleFactory } from '../../geo/styles/StyleFactory';
-import { TestHelper } from '../../utils/test/TestHelper';
 import sinon, { SinonStub, SinonStubbedInstance } from 'sinon';
 import CanvasImmediateRenderer from 'ol/render/canvas/Immediate';
 import { CanvasRenderingContext2D } from 'canvas';
@@ -25,16 +23,15 @@ import { Point } from 'ol/geom';
 import { Icon } from 'ol/style';
 import ImageState from 'ol/ImageState';
 import { AbcGeometryType } from '@abc-map/shared';
+import Style from 'ol/style/Style';
 
 describe('MapSymbolRenderer', function () {
-  let styleFactory: SinonStubbedInstance<StyleFactory>;
   let toContext: SinonStub;
   let vectorContext: SinonStubbedInstance<CanvasImmediateRenderer>;
   let canvas: HTMLCanvasElement;
   let renderer: MapSymbolRenderer;
 
   beforeEach(() => {
-    styleFactory = sinon.createStubInstance(StyleFactory);
     toContext = sinon.stub();
     vectorContext = sinon.createStubInstance(CanvasImmediateRenderer);
     toContext.returns(vectorContext);
@@ -42,13 +39,13 @@ describe('MapSymbolRenderer', function () {
     canvas.width = 800;
     canvas.height = 600;
 
-    renderer = new MapSymbolRenderer(styleFactory as unknown as StyleFactory, toContext as any);
+    renderer = new MapSymbolRenderer(toContext as any);
   });
 
   describe('renderSymbol()', () => {
     it('Point, image not loaded', async () => {
       // Prepare
-      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), AbcGeometryType.POINT);
+      const style = new Style({ image: new Icon({ img: new Image(20, 20), imgSize: [20, 20] }) });
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADING);
@@ -75,7 +72,7 @@ describe('MapSymbolRenderer', function () {
 
     it('Point, image loaded', async () => {
       // Prepare
-      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), AbcGeometryType.POINT);
+      const style = new Style({ image: new Icon({ img: new Image(20, 20), imgSize: [20, 20] }) });
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADED);

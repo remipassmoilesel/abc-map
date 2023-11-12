@@ -101,10 +101,12 @@ export class ConfigLoader {
       return Promise.reject(new Error(`Configuration ${configPath} is not valid: ${Validation.formatErrors(Validation.ConfigInput)}`));
     }
 
+    const publicDir = path.resolve(__dirname, '../../public/');
     const config: Config = {
       ...input,
-      webappPath: path.resolve(__dirname, '../../public/webapp'),
-      userDocumentationPath: path.resolve(__dirname, '../../public/user-documentation'),
+      webappPath: path.resolve(publicDir, 'webapp'),
+      userDocumentationPath: path.resolve(publicDir, 'user-documentation'),
+      pointIconsPath: path.resolve(publicDir, 'point-icons'),
     };
 
     // We check if datastore is a directory

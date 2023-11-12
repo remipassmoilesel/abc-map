@@ -106,7 +106,7 @@ export const DefaultStyle = {
     rotation: 0,
   },
   point: {
-    icon: 'twbs/0_circle-fill.inline.svg',
+    icon: 'twbs/0_circle-fill.svg',
     size: 20,
     color: 'rgba(18,90,147,1)',
   },

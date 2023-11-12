@@ -16,49 +16,58 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { StyleCacheEntry } from '../../../../../core/geo/styles/StyleCache';
 import { Logger } from '@abc-map/shared';
 import { MapSymbolRenderer } from '../../../../../core/project/rendering/MapSymbolRenderer';
 import Cls from './MapSymbolButton.module.scss';
+import clsx from 'clsx';
+import { IconProcessor } from '../../../../../core/point-icons/IconProcessor';
 
-const logger = Logger.get('MapSymbolButton');
+const logger = Logger.get('MapSymbolButton.tsx');
 
 interface Props {
   style: StyleCacheEntry;
   onClick: (st: StyleCacheEntry) => void;
 }
 
-class MapSymbolButton extends Component<Props, {}> {
-  private renderer = new MapSymbolRenderer();
-  private canvas = React.createRef<HTMLCanvasElement>();
+export function MapSymbolButton(props: Props) {
+  const { style, onClick } = props;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  public render(): ReactNode {
-    return (
-      <button onClick={this.handleClick} className={`btn btn-outline-secondary ${Cls.button}`} data-cy={'map-symbol'}>
-        <canvas ref={this.canvas} />
-      </button>
-    );
-  }
+  useEffect(() => {
+    const render = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        logger.error('Cannot draw symbol button, canvas not ready');
+        return;
+      }
 
-  public componentDidMount() {
-    const canvas = this.canvas.current;
-    if (!canvas) {
-      logger.error('Cannot draw symbol button, canvas not ready');
-      return;
-    }
+      const renderer = new MapSymbolRenderer();
+      renderer
+        .symbolSizeForStyle(style.style, style.geomType, 1)
+        .then((dimensions) => {
+          // We render only if dimensions returned, otherwise image is not yet ready
+          if (dimensions) {
+            canvas.width = dimensions.width;
+            canvas.height = dimensions.height;
 
-    const style = this.props.style;
-    const dimensions = this.renderer.symbolSizeForStyle(style.style, style.geomType, 1);
-    canvas.width = dimensions.width;
-    canvas.height = dimensions.height;
+            return renderer.renderSymbol(style.style, style.geomType, canvas, 1);
+          }
+        })
+        .catch((err) => logger.error('Cannot render legend item: ', err));
+    };
 
-    this.renderer.renderSymbol(style.style, style.geomType, canvas, 1).catch((err) => logger.error('Render error: ', err));
-  }
+    render();
+    IconProcessor.get().addEventListener(render);
+    return () => IconProcessor.get().removeEventListener(render);
+  }, [style.geomType, style.style]);
 
-  private handleClick = () => {
-    this.props.onClick(this.props.style);
-  };
+  const handleClick = useCallback(() => onClick(style), [onClick, style]);
+
+  return (
+    <button onClick={handleClick} className={clsx(`btn btn-outline-secondary`, Cls.button)} data-cy={'map-symbol'}>
+      <canvas ref={canvasRef} />
+    </button>
+  );
 }
-
-export default MapSymbolButton;

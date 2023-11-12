@@ -249,6 +249,7 @@
     "Close": "Close"
   },
   "PointIconPicker": {
+    "Icons": "Icons",
     "Select": "Select",
     "Pins": "Pins",
     "Geometries": "Geometries",
@@ -256,8 +257,10 @@
     "Weather": "Weather",
     "Arrows": "Arrows",
     "Emojis": "Emojis",
-    "Symbols": "Miscellaneous symbols",
-    "Iso7010": "Standards safety symbols (ISO 7010)"
+    "Miscellaneous_symbols": "Miscellaneous symbols",
+    "Iso7010": "Standard safety symbols (ISO 7010)",
+    "Iso7001": "Standard symbols for public information (ISO 7001)",
+    "Loading": "Loading ..."
   },
   "DeviceWarningModal": {
     "Hello": "Hello",

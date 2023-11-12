@@ -22,6 +22,7 @@ export * from './commons';
 export * from './e2e';
 export * from './webapp';
 export * from './lang';
+export * from './point-icons';
 export * from './project';
 export * from './feedback';
 export * from './zip';

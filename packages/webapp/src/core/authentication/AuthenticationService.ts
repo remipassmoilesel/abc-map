@@ -51,7 +51,7 @@ const Disconnect = 'disconnect';
 
 export class AuthenticationService {
   public static create(): AuthenticationService {
-    return new AuthenticationService(ApiClient, mainStore);
+    return new AuthenticationService(ApiClient(), mainStore);
   }
 
   private eventTarget = document.createDocumentFragment();

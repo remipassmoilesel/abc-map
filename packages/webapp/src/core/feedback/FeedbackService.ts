@@ -26,7 +26,7 @@ import { ApiClient } from '../http/http-clients';
 
 export class FeedbackService {
   public static create(toasts: ToastService): FeedbackService {
-    return new FeedbackService(ApiClient, toasts);
+    return new FeedbackService(ApiClient(), toasts);
   }
 
   constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}

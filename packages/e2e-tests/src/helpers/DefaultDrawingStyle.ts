@@ -37,7 +37,7 @@ export const DefaultDrawingStyle = {
     rotation: 0,
   },
   point: {
-    icon: 'twbs/geo-alt-fill.inline.svg',
+    icon: 'twbs/geo-alt-fill.svg',
     size: 30,
     color: 'rgba(18,90,147,0.9)',
   },

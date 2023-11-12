@@ -24,9 +24,9 @@ const logger = Logger.get('HttpClients.ts');
 
 export declare type HttpErrorHandler = (e: AxiosError | undefined) => void;
 
-export const ApiClient = httpApiClient(5_000);
-export const DownloadClient = httpDownloadClient(40_000);
-export const ExternalClient = httpExternalClient(20_000);
+export const ApiClient = () => httpApiClient(5_000);
+export const DownloadClient = () => httpDownloadClient(40_000);
+export const ExternalClient = () => httpExternalClient(20_000);
 
 /**
  * This client is configured for JSON requests and responses

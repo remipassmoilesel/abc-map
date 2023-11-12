@@ -65,6 +65,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileImport } from '@fortawesome/free-solid-svg-icons/faFileImport';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { faLockOpen } from '@fortawesome/free-solid-svg-icons/faLockOpen';
@@ -202,6 +203,7 @@ export const IconDefs = {
   faInfoCircle,
   faFile,
   faChevronDown,
+  faChevronUp,
   faChevronRight,
   faUserCircle,
   faLockOpen,

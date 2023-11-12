@@ -1,0 +1,214 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FromV140ToV150 should migrate 1`] = `
+Object {
+  "layers": Array [
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "260f9495-1c77-4760-8886-16bb73a8e8e3",
+        "model": "OSM",
+        "name": "OpenStreetMap",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "features": Object {
+        "features": Array [
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -179787.03250721976,
+                6388836.367064343,
+              ],
+              "type": "Point",
+            },
+            "id": "je-SEQoku4",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/exclamation-circle-fill.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -154167.03250721976,
+                6296116.367064343,
+              ],
+              "type": "Point",
+            },
+            "id": "yldVPyRp7s",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/exclamation-circle-fill.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -154777.03250721976,
+                6224136.367064343,
+              ],
+              "type": "Point",
+            },
+            "id": "Y-5RAmXvJg",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/exclamation-circle-fill.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                -334727.03250721976,
+                6207971.367064343,
+              ],
+              "type": "Point",
+            },
+            "id": "-2J8onDwq_",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(18,90,147,0.9)",
+              "abc:style:point:icon": "twbs/exclamation-circle-fill.svg",
+              "abc:style:point:size": 30,
+            },
+            "type": "Feature",
+          },
+        ],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [],
+        "id": "65115ddb-414e-4601-9ee0-dee2d6b83b71",
+        "name": "Points",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+    Object {
+      "features": Object {
+        "features": Array [
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                Array [
+                  -86616.97490618529,
+                  6285614.8363729045,
+                ],
+                Array [
+                  -152578.0568296929,
+                  6182248.99457814,
+                ],
+                Array [
+                  -289728.84302430315,
+                  6130364.972821234,
+                ],
+                Array [
+                  -389877.0710667018,
+                  6146855.243302111,
+                ],
+                Array [
+                  -402747.5260761667,
+                  6214425.132101802,
+                ],
+              ],
+              "type": "LineString",
+            },
+            "id": "QrFVT4qY7C",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+              "abc:style:stroke:width": 3,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                Array [
+                  -175905.756534348,
+                  6418341.403658011,
+                ],
+                Array [
+                  -311849.9375718209,
+                  6377316.828315342,
+                ],
+                Array [
+                  -403954.13123330404,
+                  6353586.926891641,
+                ],
+              ],
+              "type": "LineString",
+            },
+            "id": "NvXeuKMXJk",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+              "abc:style:stroke:width": 3,
+            },
+            "type": "Feature",
+          },
+        ],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": true,
+        "attributions": Array [],
+        "id": "89aaf6df-8a41-4d98-a81b-1b8cfcc3ce29",
+        "name": "Lignes",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+  ],
+  "layouts": Object {
+    "abcMapAttributionsEnabled": true,
+    "list": Array [],
+  },
+  "metadata": Object {
+    "id": "94db2542-8e38-4058-9615-1dd9735d804f",
+    "name": "Projet du 11/2/2023",
+    "public": false,
+    "version": "1.5.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [],
+    "mapDimensions": Object {
+      "height": 602,
+      "width": 1152,
+    },
+  },
+  "view": Object {
+    "center": Array [
+      -208081.89405801,
+      6269526.767611072,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 402.201719046,
+    "rotation": 0,
+  },
+}
+`;

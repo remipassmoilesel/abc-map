@@ -114,7 +114,13 @@ export class LayoutRenderer {
     return new Promise<HTMLCanvasElement>((resolve, reject) => {
       // We trigger map rendering
       renderingMap.unwrap().once('rendercomplete', () => {
-        html2canvas(rootElement, { backgroundColor: '#ffffff', imageTimeout: 0 }).then(resolve).catch(reject);
+        html2canvas(rootElement, {
+          backgroundColor: '#ffffff',
+          imageTimeout: 0,
+          allowTaint: true,
+        })
+          .then(resolve)
+          .catch(reject);
       });
 
       renderingMap.unwrap().render();

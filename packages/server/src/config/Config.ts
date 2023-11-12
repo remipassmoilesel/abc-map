@@ -46,6 +46,7 @@ export interface ConfigInput {
 export interface Config extends ConfigInput {
   webappPath: string;
   userDocumentationPath: string;
+  pointIconsPath: string;
 }
 
 export interface DevelopmentDataConfig {
