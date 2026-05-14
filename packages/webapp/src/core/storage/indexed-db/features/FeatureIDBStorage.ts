@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,15 +17,15 @@
  */
 
 import { Logger } from '@abc-map/shared';
-import { IndexedDbClient, KvPair } from '../client/IndexedDbClient';
+import type { IndexedDbClient, KvPair } from '../client/IndexedDbClient';
 import { ObjectStore } from '../client/ObjectStore';
-import { Feature } from 'ol';
-import { VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
-import { VectorSourceEvent } from 'ol/source/Vector';
-import { Geometry } from 'ol/geom';
-import { CURRENT_VERSION, FeatureIDBEntry } from './FeatureIDBEntry';
+import type { Feature } from 'ol';
+import type { VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
+import type { VectorSourceEvent } from 'ol/source/Vector';
+import type { FeatureIDBEntry } from './FeatureIDBEntry';
+import { CURRENT_VERSION } from './FeatureIDBEntry';
 import { Features_LayerIdIndex, getMainDbClient } from '../main-database';
-import { GeoJSONFeature } from 'ol/format/GeoJSON';
+import type { GeoJSONFeature } from 'ol/format/GeoJSON';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import { throttleDbStorage } from '../client/throttleDbStorage';
 
@@ -55,7 +55,7 @@ export class FeatureIDBStorage {
 
     const serializeFeature = (f: Feature): GeoJSONFeature => FeatureWrapper.from(f).clone().setSelected(false).toGeoJSON();
 
-    const addFeaturesHandler = (ev: VectorSourceEvent<Geometry>) => {
+    const addFeaturesHandler = (ev: VectorSourceEvent<Feature>) => {
       const start = Date.now();
       const features: GeoJSONFeature[] = [ev.feature, ...(ev.features ?? [])].filter((f): f is Feature => !!f).map(serializeFeature);
 
@@ -64,7 +64,7 @@ export class FeatureIDBStorage {
         .finally(() => logger.debug(`Saved features in ${Date.now() - start}ms`, { features, layerId }));
     };
 
-    const removeFeaturesHandler = (ev: VectorSourceEvent<Geometry>) => {
+    const removeFeaturesHandler = (ev: VectorSourceEvent<Feature>) => {
       const start = Date.now();
       const features: GeoJSONFeature[] = [ev.feature, ...(ev.features ?? [])]
         .filter((f): f is Feature => !!f)
@@ -161,7 +161,7 @@ export class FeatureIDBStorage {
         },
         (err) => {
           reject(err);
-        }
+        },
       );
     });
   }

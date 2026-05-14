@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,13 @@
  */
 
 import { disableStorageMigrationLogs, StorageUpdater } from './StorageUpdater';
-import { IndexedDbMigration } from './IndexedDbMigration';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import type { IndexedDbMigration } from './IndexedDbMigration';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { IndexedDbClient } from '../client/IndexedDbClient';
-import { MigrationIDBEntry } from './MigrationIDBEntry';
+import type { MigrationIDBEntry } from './MigrationIDBEntry';
 import { ObjectStore } from '../client/ObjectStore';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 disableStorageMigrationLogs();
 

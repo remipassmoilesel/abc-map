@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,9 @@
  */
 
 import Cls from './I18nInput.module.scss';
-import { I18nText, Language } from '@abc-map/shared';
-import { ChangeEvent, useCallback } from 'react';
+import type { I18nText, Language } from '@abc-map/shared';
+import type { ChangeEvent } from 'react';
+import { useCallback } from 'react';
 import clsx from 'clsx';
 
 interface Props {
@@ -41,7 +42,7 @@ export function I18nInput(props: Props) {
       });
       onChange(updated);
     },
-    [onChange, value]
+    [onChange, value],
   );
 
   return (

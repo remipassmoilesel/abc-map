@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,20 +17,17 @@
  */
 
 import Cls from './ImageSlider.module.scss';
-import { MouseEvent, useEffect } from 'react';
+import type { MouseEvent } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { useCallback, useState } from 'react';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useServices } from '../../../../core/useServices';
 import { Logger } from '@abc-map/shared';
 import { BlueLoader } from '../../../../components/blue-loader/BlueLoader';
 
 const logger = Logger.get('ImageSlider.tsx');
-
-const t = prefixedTranslation('DataStoreModule:');
 
 interface Props {
   urls: string[];
@@ -41,6 +38,7 @@ interface Props {
 }
 
 function ImageSlider(props: Props) {
+  const { t } = useTranslation('DataStoreModule');
   const { dataStore, toasts } = useServices();
   const { urls, attributions, onClick, className, buttonSize } = props;
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -93,7 +91,7 @@ function ImageSlider(props: Props) {
 
       setActiveIndex(index);
     },
-    [activeIndex, urls]
+    [activeIndex, urls],
   );
 
   const handlePrevious = useCallback(
@@ -101,7 +99,7 @@ function ImageSlider(props: Props) {
       ev.stopPropagation();
       changePreview(-1);
     },
-    [changePreview]
+    [changePreview],
   );
 
   const handleNext = useCallback(
@@ -109,7 +107,7 @@ function ImageSlider(props: Props) {
       ev.stopPropagation();
       changePreview(1);
     },
-    [changePreview]
+    [changePreview],
   );
 
   return (

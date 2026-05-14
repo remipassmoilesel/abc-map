@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -22,12 +22,12 @@ import { Modal } from 'react-bootstrap';
 import React from 'react';
 import { CopyToClipboardButton } from '../copy-to-clipboard-button/CopyToClipboardButton';
 import { QrCode } from '../qrcode/QrCode';
-import { useAppSelector } from '../../core/store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { adaptMapDimensions } from '../../core/project/adaptMapDimensions';
 import { SmallAdvice } from '../small-advice/SmallAdvice';
 import { classicIframeIntegration, responsiveIframeIntegration } from './integrations';
 import { useTranslation } from 'react-i18next';
-import { AbcProjectMetadata } from '@abc-map/shared';
+import type { AbcProjectMetadata } from '@abc-map/shared';
 
 interface Props {
   project: AbcProjectMetadata;

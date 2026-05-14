@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,16 +17,16 @@
  */
 
 import { useCallback, useState } from 'react';
-import { ImportResult } from './ImportResult';
+import type { ImportResult } from './ImportResult';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { CsvParser } from '../../../core/data/csv-parser/CsvParser';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
-import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { useServices } from '../../../core/useServices';
 import { Logger } from '@abc-map/shared';
-import { CsvRow } from '../../../core/data/csv-parser/typings';
+import type { CsvRow } from '../../../core/data/csv-parser/typings';
 import { asNumberOrString } from '../../../core/utils/numbers';
-import { DataRow } from '../../../core/data/data-source/DataSource';
+import type { DataRow } from '../../../core/data/data-source/DataSource';
 
 const logger = Logger.get('useCsv.ts');
 

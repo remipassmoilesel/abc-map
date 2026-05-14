@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,21 +18,23 @@
 
 import { abcRender } from '../../../core/utils/test/abcRender';
 import { FeatureExplorer, logger } from './FeatureExplorer';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import type { TestServices } from '../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../core/utils/test/TestServices';
+import type { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { disableSearchIndexLogging } from '../../../core/utils/SearchIndex';
 import VectorSource from 'ol/source/Vector';
 import { disableFeatureWrapperLogging, FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
-import { GeoJSONFeature } from 'ol/format/GeoJSON';
+import type { GeoJSONFeature } from 'ol/format/GeoJSON';
 import userEvent from '@testing-library/user-event';
 import { ModalEventType, ModalStatus } from '../../../core/ui/typings';
-import { replaceAriaAttributes } from '../../../core/utils/replaceAriaAttributes';
 import { disableUseFeatureLogging } from './useFeatures';
-import { act } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { act } from 'react';
+import { screen } from '@testing-library/react';
 
-jest.mock('../../../core/ui/getRemSize', () => ({ getRemSize: () => 15 }));
+vi.mock('../../../core/ui/getRemSize', () => ({ getRemSize: () => 15 }));
 
 logger.disable();
 
@@ -49,115 +51,153 @@ describe('FeatureExplorer', () => {
     map = MapFactory.createNaked();
 
     services.geo.getMainMap.returns(map);
+
+    mockElementForVirtualTanStack();
   });
 
-  it('should display nothing if no active layer', () => {
-    const { container } = abcRender(<FeatureExplorer />, { services });
+  it('should display nothing if no active layer', async () => {
+    await act(async () => {
+      abcRender(<FeatureExplorer />, { services });
+    });
 
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
+    expect(getDisplayedFeatures()).toEqual([]);
   });
 
-  it('should display nothing if no feature', () => {
+  it('should display nothing if no feature', async () => {
     // Prepare
     const layer = LayerFactory.newVectorLayer();
-    layer.setId('test-layer-id');
+    layer.setId('test-layer-id-1');
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
     // Act
-    const { container } = abcRender(<FeatureExplorer />, { services });
+    await act(async () => {
+      abcRender(<FeatureExplorer />, { services });
+    });
 
     // Assert
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
+
+    const selectorValue = screen.getByTestId('layer-selector');
+    const value = (selectorValue as HTMLSelectElement).value;
+    expect(value).toEqual('test-layer-id-1');
   });
 
-  it('should display features and select automatically a feature title', () => {
+  it('should display features and select automatically a feature title', async () => {
     // Prepare
     const source = testDataSource();
     const layer = LayerFactory.newVectorLayer(source);
-    layer.setId('test-layer-id');
+    layer.setId('test-layer-id-1');
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
     // Act
-    const { container } = abcRender(<FeatureExplorer />, { services });
+    await act(async () => {
+      abcRender(<FeatureExplorer />, { services });
+    });
 
     // Assert
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
+
+    const features = getDisplayedFeatures();
+    expect(features.length).toEqual(6);
+    expect(features.map((f) => f.getAttribute('title'))).toMatchSnapshot();
   });
 
   it('should use selected title field', async () => {
     // Prepare
     const source = testDataSource();
     const layer = LayerFactory.newVectorLayer(source);
-    layer.setId('test-layer-id');
+    layer.setId('test-layer-id-1');
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
-    const { container, getByTestId } = abcRender(<FeatureExplorer />, { services });
+    await act(async () => {
+      abcRender(<FeatureExplorer />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.click(getByTestId('settings'));
-    });
-
-    await act(async () => {
-      await userEvent.click(getByTestId('candidate-osm_id'));
-    });
-
-    await act(async () => {
-      await userEvent.click(getByTestId('confirm'));
-    });
+    await userEvent.click(screen.getByTestId('settings'));
+    await userEvent.click(screen.getByTestId('candidate-osm_id'));
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
+
+    const features = getDisplayedFeatures();
+    expect(features.length).toEqual(6);
+    expect(features.map((f) => f.getAttribute('title'))).toMatchSnapshot();
   });
 
   it('should filter features on search', async () => {
     // Prepare
     const source = testDataSource();
     const layer = LayerFactory.newVectorLayer(source);
-    layer.setId('test-layer-id');
+    layer.setId('test-layer-id-1');
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
-    const { container, getByTestId } = abcRender(<FeatureExplorer />, { services });
-
-    // Act
     await act(async () => {
-      await userEvent.clear(getByTestId('search-query'));
-      await userEvent.type(getByTestId('search-query'), 'Cordillera');
+      abcRender(<FeatureExplorer />, { services });
     });
 
+    // Act
+    await userEvent.clear(screen.getByTestId('search-query'));
+    await userEvent.type(screen.getByTestId('search-query'), 'Cordillera');
+
     // Assert
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
+
+    const features = getDisplayedFeatures();
+    expect(features.length).toEqual(1);
+    expect(features.map((f) => f.getAttribute('title'))).toMatchSnapshot();
   });
 
   it('should display feature data', async () => {
     // Prepare
     const source = testDataSource();
     const layer = LayerFactory.newVectorLayer(source);
-    layer.setId('test-layer-id');
+    layer.setId('test-layer-id-1');
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
-    const { container, getAllByTestId } = abcRender(<FeatureExplorer />, { services });
-
-    // Act
     await act(async () => {
-      await userEvent.click(getAllByTestId('feature')[0]);
+      abcRender(<FeatureExplorer />, { services });
     });
 
+    // Act
+    await userEvent.click(screen.getAllByTestId('feature')[0]);
+
     // Assert
-    replaceAriaAttributes(container);
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
+
+    const dataCells = Array.from(document.querySelectorAll('td')).map((c) => (c as HTMLElement).innerHTML);
+    expect(dataCells).toEqual([
+      'osm_id',
+      '-4511221',
+      'boundary',
+      'administrative',
+      'admin_level',
+      '6',
+      'parents',
+      '-3360565,-252645',
+      'name',
+      'Provincia Cordillera',
+      'local_name',
+      'Provincia Cordillera',
+      'name_en',
+      'Undefined value',
+      'Geometry',
+      'MultiPolygon',
+    ]);
   });
 
   it('should allow user to modify feature data', async () => {
     // Prepare
     const source = testDataSource();
     const layer = LayerFactory.newVectorLayer(source);
-    layer.setId('test-layer-id');
+    layer.setId('test-layer-id-1');
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
@@ -176,26 +216,60 @@ describe('FeatureExplorer', () => {
       },
     });
 
-    const { container, getByTestId, getAllByTestId } = abcRender(<FeatureExplorer />, { services });
+    await act(async () => {
+      abcRender(<FeatureExplorer />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.click(getAllByTestId('feature')[0]);
-    });
-
-    await act(async () => {
-      await userEvent.click(getAllByTestId('feature-actions')[0]);
-    });
-
-    await act(async () => {
-      await userEvent.click(getByTestId('edit-data'));
-    });
+    await userEvent.click(screen.getAllByTestId('feature')[0]);
+    await userEvent.click(screen.getAllByTestId('feature-actions')[0]);
+    await userEvent.click(screen.getByTestId('edit-data'));
 
     // Assert
-    replaceAriaAttributes(container);
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
+
+    const dataCells = Array.from(document.querySelectorAll('td')).map((c) => (c as HTMLElement).innerHTML);
+    expect(dataCells).toEqual([
+      'osm_id',
+      '-4511221',
+      'boundary',
+      'administrative',
+      'admin_level',
+      '6',
+      'parents',
+      '-3360565,-252645',
+      'name',
+      'Updated name',
+      'local_name',
+      'Updated name',
+      'name_en',
+      'Undefined value',
+      'newVariable',
+      'New value',
+      'Geometry',
+      'MultiPolygon',
+    ]);
   });
 });
+
+function getDisplayedFeatures() {
+  try {
+    return screen.getAllByTestId('feature');
+  } catch {
+    return [];
+  }
+}
+
+// In order to use @tanstack/react-virtual with Vitest/jsdom, we must mock properties.
+// See: https://github.com/TanStack/virtual/issues/641#issuecomment-2851908893
+function mockElementForVirtualTanStack() {
+  Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+    value: 800,
+  });
+  Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+    value: 600,
+  });
+}
 
 function testDataSource() {
   const data = {
@@ -3437,7 +3511,7 @@ function testDataSource() {
 
   const source = new VectorSource();
 
-  const features = data.features.map((feature) => FeatureWrapper.fromGeoJSON(feature as GeoJSONFeature).unwrap());
+  const features = data.features.flatMap((feature) => FeatureWrapper.fromGeoJSON(feature as GeoJSONFeature)).map((f) => f.unwrap());
   source.addFeatures(features);
 
   return source;

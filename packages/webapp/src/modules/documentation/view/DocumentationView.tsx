@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { CSSProperties, useCallback, useEffect, useMemo, useRef } from 'react';
-import { getAbcWindow, Logger } from '@abc-map/shared';
+import type { CSSProperties } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { getAbcWindow, isE2eTests, Logger, ModuleId } from '@abc-map/shared';
 import Cls from './DocumentationView.module.scss';
 import { useTranslation, withTranslation } from 'react-i18next';
 import { useServices } from '../../../core/useServices';
@@ -26,10 +27,7 @@ import { Routes } from '../../../routes';
 import clsx from 'clsx';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import { getLang } from '../../../i18n/i18n';
-import { BundledModuleId } from '@abc-map/shared';
-import { Env } from '../../../core/utils/Env';
-import { isExternalURL, rewriteAssetsUrls, rewriteContentPath } from './helpers';
+import { isExternalURL, rewriteAssetsUrls, rewriteContentPath, toDocumentationUrl } from './helpers';
 import { usePersistentStore } from '../state';
 import { WindowNames } from '../../../core/ui/WindowNames';
 
@@ -37,7 +35,7 @@ const logger = Logger.get('DocumentationView.tsx');
 
 function DocumentationView() {
   const { t } = useTranslation('DocumentationModule');
-  const { documentation } = useServices();
+  const { documentation, toasts } = useServices();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -49,11 +47,11 @@ function DocumentationView() {
 
   // We MUST ensure that module is initially loaded with a terminal '/', otherwise relative links may be broken
   useEffect(() => {
-    const docRoute = Routes.module().withParams({ moduleId: BundledModuleId.Documentation });
+    const docRoute = Routes.module().withParams({ moduleId: ModuleId.Documentation });
     if (location.pathname.endsWith(docRoute)) {
-      navigate(docRoute + '/', { replace: true });
+      navigate(docRoute + '/', { replace: true })?.catch((err) => toasts.genericError(err));
     }
-  }, [location.pathname, navigate]);
+  }, [location.pathname, navigate, toasts]);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -86,7 +84,7 @@ function DocumentationView() {
         const element = container?.querySelector(href);
 
         ev.preventDefault();
-        navigate(href);
+        navigate(href)?.catch((err) => toasts.genericError(err));
         element?.scrollIntoView({ behavior: 'smooth' });
         return;
       }
@@ -99,13 +97,13 @@ function DocumentationView() {
       // In app links are processed by react router
       else if (href) {
         ev.preventDefault();
-        navigate(href);
+        navigate(href)?.catch((err) => toasts.genericError(err));
       }
     }
 
     container.addEventListener('click', interceptClick);
     return () => container.removeEventListener('click', interceptClick);
-  }, [location.hash, location.pathname, navigate]);
+  }, [location.hash, location.pathname, navigate, toasts]);
 
   // Each time path change we load appropriate page
   useEffect(() => {
@@ -155,25 +153,20 @@ function DocumentationView() {
   }, [documentation, location.pathname, navigate, t]);
 
   const handleOpenInNewTab = useCallback(() => {
-    // Example: http://localhost:3005/fr/modules/documentation/01_presentation/#Hello?test=false"
-    const route = document.location.href
-      // We remove webapp lang scheme
-      .replace('/' + getLang() + '/modules', '')
-      // We add documentation lang scheme
-      .replace('/documentation/', '/documentation/' + getLang() + '/');
+    const docUrl = toDocumentationUrl(document.location.href);
 
-    if (!Env.isE2e()) {
-      window.open(route, WindowNames.Documentation);
+    if (!isE2eTests()) {
+      window.open(docUrl, WindowNames.Documentation);
     }
     // In E2E we cannot handle another tab
     else {
-      window.location.assign(route);
+      window.location.href = docUrl;
     }
   }, []);
 
   const handleGoToToc = useCallback(() => {
-    navigate(Routes.module().withParams({ moduleId: BundledModuleId.Documentation }));
-  }, [navigate]);
+    navigate(Routes.module().withParams({ moduleId: ModuleId.Documentation }))?.catch((err) => toasts.genericError(err));
+  }, [navigate, toasts]);
 
   const { zoom, setZoom } = usePersistentStore();
   const handleZoom = useCallback(() => {
@@ -193,7 +186,7 @@ function DocumentationView() {
       transformOrigin: '0% 0%',
       transform: 'scale(' + zoom + ')',
     }),
-    [zoom]
+    [zoom],
   );
 
   return (

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 @import 'src/styles/variables';
 @import 'src/styles/mixins';
-@import '~@abc-map/user-documentation/src/styles/shared-content-style';
+@import '@abc-map/user-documentation/src/styles/shared-content-style';
 
 .documentation {
   display: flex;
@@ -54,6 +54,7 @@
 
 .contentWrapper {
   padding: 2rem 25vw;
+
   @include media-breakpoint-down(xl) {
     padding: 1rem;
   }

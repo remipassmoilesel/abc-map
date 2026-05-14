@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,10 @@
  */
 
 import { LayerType } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { MainMap } from '../helpers/MainMap';
-import { WmtsConstants } from 'helpers/WmtsConstants';
-import { Routes } from '../helpers/Routes';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { WmtsConstants } from '../helpers/WmtsConstants.js';
+import { Routes } from '../helpers/Routes.js';
 
 describe('Wmts layers', function () {
   beforeEach(() => {

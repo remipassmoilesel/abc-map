@@ -1,14 +1,15 @@
 {
-  "name": "@abc-map/root",
+  "name": "@abc-map/monorepo",
   "private": true,
+  "type": "module",
   "scripts": {
-    "lint": "prettier --loglevel warn --check . && sort-package-json --check",
-    "lint:fix": "prettier --loglevel warn --write . && sort-package-json"
+    "lint": "prettier --log-level warn --check . && sort-package-json --check",
+    "lint:fix": "prettier --log-level warn --write . && sort-package-json"
   },
   "devDependencies": {
-    "prettier": "^2.8.8",
-    "sort-package-json": "^2.4.1",
-    "turbo": "^1.10.16"
+    "prettier": "3.8.1",
+    "sort-package-json": "^3.6.1",
+    "turbo": "^2.9.6"
   },
-  "packageManager": "pnpm@8.6.4"
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
 }

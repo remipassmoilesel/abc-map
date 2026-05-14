@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,11 @@
  */
 
 import { ModalService } from './ModalService';
-import { ModalEvent, ModalEventType, ModalStatus, OperationStatus } from './typings';
-import * as sinon from 'sinon';
+import type { ModalEvent } from './typings';
+import { ModalEventType, ModalStatus, OperationStatus } from './typings';
+import sinon from 'sinon';
 import { TestHelper } from '../utils/test/TestHelper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('ModalService', function () {
   const event: ModalEvent = { type: ModalEventType.FeaturePropertiesClosed, properties: {}, status: ModalStatus.Confirmed };

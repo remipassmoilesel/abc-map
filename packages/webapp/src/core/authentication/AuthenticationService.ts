@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,29 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
 import { AuthenticationRoutes as Api } from '../http/ApiRoutes';
-import {
-  AnonymousUser,
+import type {
   AuthenticationRequest,
   AuthenticationResponse,
   AuthenticationToken,
   DeleteAccountRequest,
-  Logger,
   PasswordLostRequest,
   RegistrationConfirmationRequest,
   RegistrationConfirmationResponse,
   RegistrationRequest,
   RegistrationResponse,
-  RegistrationStatus,
   RenewResponse,
   ResetPasswordRequest,
   UpdatePasswordRequest,
-  UserStatus,
 } from '@abc-map/shared';
-import { AuthenticationActions } from '../store/authentication/actions';
-import jwtDecode from 'jwt-decode';
-import { mainStore, MainStore } from '../store/store';
+import { AnonymousUser, Logger, RegistrationStatus, UserStatus } from '@abc-map/shared';
+import { AuthenticationActions } from '../../store/authentication/actions';
+import { jwtDecode } from 'jwt-decode';
+import type { MainStore } from '../../store/store';
+import { mainStore } from '../../store/store';
 import { TokenHelper } from './TokenHelper';
 import { HttpError } from '../http/HttpError';
 import { getLang } from '../../i18n/i18n';
@@ -57,16 +55,22 @@ export class AuthenticationService {
   private eventTarget = document.createDocumentFragment();
   private tokenInterval: any;
 
-  constructor(private apiClient: AxiosInstance, private store: MainStore) {
+  constructor(
+    private apiClient: AxiosInstance,
+    private store: MainStore,
+  ) {
     window.addEventListener('online', () => this.renewToken());
   }
 
   public watchToken() {
-    this.tokenInterval = setInterval(() => {
-      this.renewToken()
-        .then(() => logger.info('Token renewed'))
-        .catch((err) => logger.error('Cannot renew token: ', err));
-    }, 5 * 60 * 1000);
+    this.tokenInterval = setInterval(
+      () => {
+        this.renewToken()
+          .then(() => logger.info('Token renewed'))
+          .catch((err) => logger.error('Cannot renew token: ', err));
+      },
+      5 * 60 * 1000,
+    );
   }
 
   public unwatchToken() {

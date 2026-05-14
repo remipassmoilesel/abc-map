@@ -1,6 +1,8 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "$schema": "https://turborepo.dev/schema.json",
+  "ui": "stream",
+  "globalEnv": ["CI", "ABC_CONFIGURATION", "CYPRESS_CACHE_FOLDER", "NODE_OPTIONS"],
+  "tasks": {
     "lint": {},
     "lint:fix": {},
     "write-version": {
@@ -19,6 +21,9 @@
     },
     "test": {
       "dependsOn": ["^test"]
+    },
+    "test:with-servers": {
+      "dependsOn": ["^test:with-servers"]
     },
     "start": {
       "cache": false,

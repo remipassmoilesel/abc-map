@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  */
 
 import { MapTool, StyleProperties } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { ModeName, ToolSelector } from '../helpers/ToolSelector';
-import { Draw } from '../helpers/Draw';
-import { MainMap } from '../helpers/MainMap';
-import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
-import { Routes } from '../helpers/Routes';
-import { Project } from '../helpers/Project';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector.js';
+import { Draw } from '../helpers/Draw.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle.js';
+import { Routes } from '../helpers/Routes.js';
+import { Project } from '../helpers/Project.js';
 
 describe('Tool Point', function () {
   beforeEach(() => {
@@ -43,7 +43,7 @@ describe('Tool Point', function () {
         const viewExtent = map.getViewExtent();
         expect(viewExtent).deep.equal(
           [-9337374.525717169, -4155721.4739821013, 10034825.9228779, 5931520.274756039],
-          `Actual: "${JSON.stringify(viewExtent)}"`
+          `Actual: "${JSON.stringify(viewExtent)}"`,
         );
       });
   });
@@ -75,7 +75,7 @@ describe('Tool Point', function () {
             [-1608062.225520147, 2115783.82276004, -1608062.225520147, 2115783.82276004],
             [-1118865.2444950193, 1626586.8417349122, -1118865.2444950193, 1626586.8417349122],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       });
   });

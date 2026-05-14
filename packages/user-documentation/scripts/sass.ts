@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  *
  */
 
-const { execSync } = require('child_process');
+import { execSync } from 'child_process';
 
 const outputPath = 'build';
 const inputPaths = ['src'];
@@ -32,5 +32,5 @@ function main() {
   const cliInputs = inputPaths.map((input) => input + ':' + outputPath).join(' ');
   const command = ['./node_modules/.bin/sass', watch ? '--watch' : '', cliInputs].filter((v) => !!v).join(' ');
   console.log(`\n 🛠️   ${command} \n`);
-  execSync(command, { shell: true, stdio: 'inherit' });
+  execSync(command, { shell: '/bin/bash', stdio: 'inherit' });
 }

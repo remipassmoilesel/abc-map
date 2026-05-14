@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,10 +19,8 @@
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import React, { useCallback } from 'react';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { AbcNorth } from '@abc-map/shared';
-
-const t = prefixedTranslation('NorthControls:');
+import type { AbcNorth } from '@abc-map/shared';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   disabled: boolean;
@@ -33,6 +31,7 @@ interface Props {
 
 export function NorthControls(props: Props) {
   const { hasNorth, disabled, onAddNorth, onRemoveNorth } = props;
+  const { t } = useTranslation('NorthControls');
 
   const handleToggleNorth = useCallback(() => {
     if (hasNorth) {

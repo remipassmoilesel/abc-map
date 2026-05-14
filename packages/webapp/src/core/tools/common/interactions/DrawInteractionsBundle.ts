@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,24 +16,25 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcGeometryType, FeatureStyle, Logger } from '@abc-map/shared';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, Logger } from '@abc-map/shared';
 import { Draw, Modify, Snap } from 'ol/interaction';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import { DrawEvent } from 'ol/interaction/Draw';
+import type { DrawEvent } from 'ol/interaction/Draw';
 import { AddFeaturesChangeset } from '../../../history/changesets/features/AddFeaturesChangeset';
-import { ModifyEvent } from 'ol/interaction/Modify';
-import { UpdateGeometriesChangeset, UpdateItem } from '../../../history/changesets/features/UpdateGeometriesChangeset';
-import VectorSource from 'ol/source/Vector';
-import { Changeset } from '../../../history/Changeset';
+import type { ModifyEvent } from 'ol/interaction/Modify';
+import type { UpdateItem } from '../../../history/changesets/features/UpdateGeometriesChangeset';
+import { UpdateGeometriesChangeset } from '../../../history/changesets/features/UpdateGeometriesChangeset';
+import type { Changeset } from '../../../history/Changeset';
 import { styleFunction } from '../../../geo/styles/style-function';
 import { createEditingStyle } from 'ol/style/Style';
 import { UndoCallbackChangeset } from '../../../history/changesets/features/UndoCallbackChangeset';
-import Geometry from 'ol/geom/Geometry';
-import Map from 'ol/Map';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import type Map from 'ol/Map';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
 import { DefaultStyleOptions } from '../../../geo/styles/StyleFactoryOptions';
-import { FeatureSelection } from '../../../geo/feature-selection/FeatureSelection';
+import type { FeatureSelection } from '../../../geo/feature-selection/FeatureSelection';
 import { getSelectionFromMap } from '../../../geo/feature-selection/getSelectionFromMap';
+import type { DefaultVectorSource } from '../../../geo/layers/LayerWrapper';
 
 const logger = Logger.get('DrawInteraction');
 
@@ -48,9 +49,9 @@ const editingStyle = createEditingStyle();
 export interface Options {
   type: ToolType;
   getStyle: GetStyleFunc;
-  drawCondition: (ev: MapBrowserEvent<UIEvent>) => boolean;
-  modifyCondition: (ev: MapBrowserEvent<UIEvent>) => boolean;
-  deleteVertex?: (ev: MapBrowserEvent<UIEvent>) => boolean;
+  drawCondition: (ev: MapBrowserEvent) => boolean;
+  modifyCondition: (ev: MapBrowserEvent) => boolean;
+  deleteVertex?: (ev: MapBrowserEvent) => boolean;
 }
 
 /**
@@ -76,7 +77,7 @@ export class DrawInteractionsBundle {
   private draw?: Draw;
 
   private map?: Map;
-  private source?: VectorSource<Geometry>;
+  private source?: DefaultVectorSource;
   private selection?: FeatureSelection;
 
   private drawingStartChangeset?: Changeset;
@@ -87,7 +88,7 @@ export class DrawInteractionsBundle {
 
   constructor(private options: Options) {}
 
-  public setup(map: Map, source: VectorSource<Geometry>) {
+  public setup(map: Map, source: DefaultVectorSource) {
     this.map = map;
     this.source = source;
     this.selection = getSelectionFromMap(map);
@@ -127,7 +128,7 @@ export class DrawInteractionsBundle {
         modified.push(clone);
       });
 
-      this.onModifyStart && this.onModifyStart();
+      if (this.onModifyStart) this.onModifyStart();
     });
 
     // Create a changeset
@@ -158,10 +159,10 @@ export class DrawInteractionsBundle {
         })
         .filter((item): item is UpdateItem => !!item);
 
-      this.onNewChangeset && this.onNewChangeset(new UpdateGeometriesChangeset(items));
+      if (this.onNewChangeset) this.onNewChangeset(new UpdateGeometriesChangeset(items));
       modified = [];
 
-      this.onModifyEnd && this.onModifyEnd();
+      if (this.onModifyEnd) this.onModifyEnd();
     });
 
     this.map?.addInteraction(this.modify);
@@ -206,9 +207,9 @@ export class DrawInteractionsBundle {
 
       // Register changeset for drawing start
       this.drawingStartChangeset = new UndoCallbackChangeset(() => this.abortDrawing());
-      this.onNewChangeset && this.onNewChangeset(this.drawingStartChangeset);
+      if (this.onNewChangeset) this.onNewChangeset(this.drawingStartChangeset);
 
-      this.onDrawStart && this.onDrawStart();
+      if (this.onDrawStart) this.onDrawStart();
     });
 
     this.draw.on('drawend', (ev: DrawEvent) => {
@@ -217,14 +218,14 @@ export class DrawInteractionsBundle {
       const feature = FeatureWrapper.from(ev.feature);
 
       // When draw is confirmed, we replace changeset
-      this.drawingStartChangeset && this.onDeleteChangeset && this.onDeleteChangeset(this.drawingStartChangeset);
+      if (this.drawingStartChangeset && this.onDeleteChangeset) this.onDeleteChangeset(this.drawingStartChangeset);
       this.drawingStartChangeset = undefined;
 
-      this.onNewChangeset && this.onNewChangeset(new AddFeaturesChangeset(source, [feature]));
+      if (this.onNewChangeset) this.onNewChangeset(new AddFeaturesChangeset(source, [feature]));
 
-      this.onFeatureAdded && this.onFeatureAdded(feature);
+      if (this.onFeatureAdded) this.onFeatureAdded(feature);
 
-      this.onDrawEnd && this.onDrawEnd();
+      if (this.onDrawEnd) this.onDrawEnd();
     });
 
     this.map?.addInteraction(this.draw);
@@ -235,16 +236,16 @@ export class DrawInteractionsBundle {
   }
 
   public abortDrawing() {
-    this.drawingStartChangeset && this.onDeleteChangeset && this.onDeleteChangeset(this.drawingStartChangeset);
+    if (this.drawingStartChangeset && this.onDeleteChangeset) this.onDeleteChangeset(this.drawingStartChangeset);
     this.drawingStartChangeset = undefined;
     this.creating = false;
 
-    const featuresInDrawOverlay = this.draw?.getOverlay().getSource().getFeatures().length || 0;
+    const featuresInDrawOverlay = this.draw?.getOverlay().getSource()?.getFeatures().length || 0;
     if (featuresInDrawOverlay > 1) {
       this.draw?.abortDrawing();
     }
 
-    this.onDrawAborted && this.onDrawAborted();
+    if (this.onDrawAborted) this.onDrawAborted();
   }
 
   // If Escape key is pressed and if user is drawing, we cancel drawing
@@ -271,6 +272,6 @@ export class DrawInteractionsBundle {
       }
     });
 
-    this.escapeKeyListener && document.body.removeEventListener('keydown', this.escapeKeyListener);
+    if (this.escapeKeyListener) document.body.removeEventListener('keydown', this.escapeKeyListener);
   }
 }

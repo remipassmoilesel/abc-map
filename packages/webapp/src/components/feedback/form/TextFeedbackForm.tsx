@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import type { InputEvent } from 'react';
+import React, { useCallback, useState } from 'react';
 import Cls from './TextFeedbackForm.module.scss';
 import { useServices } from '../../../core/useServices';
 import { Logger } from '@abc-map/shared';
-import { prefixedTranslation } from '../../../i18n/i18n';
 import { useOfflineStatus } from '../../../core/pwa/OnlineStatusContext';
 import { FormOfflineIndicator } from '../../offline-indicator/FormOfflineIndicator';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('TextFeedbackForm.tsx');
-
-const t = prefixedTranslation('TextFeedbackForm:');
 
 interface Props {
   onDone: () => void;
@@ -39,9 +38,10 @@ function TextFeedbackForm(props: Props) {
   const { onDone, onCancel, className } = props;
   const [feedbackValue, setFeedbackValue] = useState('');
 
+  const { t } = useTranslation('TextFeedbackForm');
   const offline = useOfflineStatus();
 
-  const handleFeedbackChange = useCallback((ev: ChangeEvent<HTMLTextAreaElement>) => setFeedbackValue(ev.target.value), []);
+  const handleFeedbackChange = useCallback((ev: InputEvent<HTMLTextAreaElement>) => setFeedbackValue((ev.target as HTMLInputElement).value), []);
 
   const handleConfirm = useCallback(() => {
     if (!feedbackValue || feedbackValue.length < 15) {
@@ -54,7 +54,7 @@ function TextFeedbackForm(props: Props) {
       .then(() => toasts.info(`${t('Thank_you')} 👌`))
       .catch((err) => logger.error('Feedback error: ', err))
       .finally(() => onDone());
-  }, [feedback, feedbackValue, onDone, toasts]);
+  }, [feedback, feedbackValue, onDone, t, toasts]);
 
   return (
     <div className={`w-100 ${className || ''}`}>

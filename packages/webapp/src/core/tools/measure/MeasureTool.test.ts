@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,30 +19,27 @@
 import { Map } from 'ol';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { MeasureTool } from './MeasureTool';
-import VectorSource from 'ol/source/Vector';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('MeasureTool', () => {
   let map: Map;
   let tool: MeasureTool;
-  let source: VectorSource;
 
   beforeEach(() => {
     map = new Map();
     map.getInteractions().clear();
 
-    source = new VectorSource();
-
     tool = new MeasureTool();
   });
 
   it('setup()', () => {
-    tool.setup(map, source);
+    tool.setup(map);
 
     expect(TestHelper.interactionNames(map)).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom', 'Select']);
   });
 
   it('dispose()', () => {
-    tool.setup(map, source);
+    tool.setup(map);
     tool.dispose();
 
     expect(TestHelper.interactionNames(map)).toEqual([]);

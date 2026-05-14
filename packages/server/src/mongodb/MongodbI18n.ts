@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { I18nList, I18nText, Language } from '@abc-map/shared';
+import type { I18nList, I18nText } from '@abc-map/shared';
+import { Language } from '@abc-map/shared';
 
 export enum MongoLanguage {
   English = 'english',

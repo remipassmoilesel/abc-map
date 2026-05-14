@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModeName, ToolSelector } from '../helpers/ToolSelector';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector.js';
 import { MapTool } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { MainMap } from '../helpers/MainMap';
-import { Draw } from '../helpers/Draw';
-import { Routes } from '../helpers/Routes';
-import { Project } from '../helpers/Project';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { Draw } from '../helpers/Draw.js';
+import { Routes } from '../helpers/Routes.js';
+import { Project } from '../helpers/Project.js';
 
 describe('Draw features history', function () {
   beforeEach(() => {
@@ -50,7 +50,7 @@ describe('Draw features history', function () {
             [-3564850.149620659, 3583374.765835424, -3075653.168595531, 4072571.746860552],
             [-2586456.1875704033, 2604980.803785168, -2097259.206545275, 3094177.7848102963],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       })
       // First undo
@@ -98,7 +98,7 @@ describe('Draw features history', function () {
             [-3564850.149620659, 3583374.765835424, -3075653.168595531, 4072571.746860552],
             [-2586456.1875704033, 2604980.803785168, -2097259.206545275, 3094177.7848102963],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       });
   });
@@ -128,7 +128,7 @@ describe('Draw features history', function () {
 
         expect(extents).deep.equals(
           [[-2586456.1875704033, 1137389.8607097836, -629668.2634698907, 3094177.7848102963]],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       })
       // First undo
@@ -175,7 +175,7 @@ describe('Draw features history', function () {
 
         expect(extents).deep.equals(
           [[-2586456.1875704033, 1137389.8607097836, -629668.2634698907, 3094177.7848102963]],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       });
   });

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { LayerControls } from '../helpers/LayerControls';
-import { MainMap } from '../helpers/MainMap';
-import { LayoutPreviewMap } from '../helpers/LayoutPreviewMap';
-import { Download } from '../helpers/Download';
-import { LongOperation } from '../helpers/LongOperation';
-import { Routes } from '../helpers/Routes';
-import { Modules } from '../helpers/Modules';
-import { TopBar } from '../helpers/TopBar';
-import { BundledModuleId } from '@abc-map/shared';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { LayerControls } from '../helpers/LayerControls.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { LayoutPreviewMap } from '../helpers/LayoutPreviewMap.js';
+import { Download } from '../helpers/Download.js';
+import { LongOperation } from '../helpers/LongOperation.js';
+import { Routes } from '../helpers/Routes.js';
+import { Modules } from '../helpers/Modules.js';
+import { TopBar } from '../helpers/TopBar.js';
+import { ModuleId } from '@abc-map/shared';
 
 describe('Projection', () => {
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('Projection', () => {
       // Delete geometry layer
       .then(() => LayerControls.deleteActiveLayer())
       // Change projection
-      .then(() => Modules.open(BundledModuleId.ProjectManagement))
+      .then(() => Modules.open(ModuleId.ProjectManagement))
       .get('[data-cy=edit-projection]')
       .click()
       .get('[data-cy=prompt-input]')
@@ -53,7 +53,7 @@ describe('Projection', () => {
         const extent = map.getViewExtent();
         expect(extent).deep.equal([-6099007.132605841, 3199319.9486759407, 7041350.893871974, 10041597.284685347], `Actual: "${JSON.stringify(extent)}"`);
       })
-      .then(() => Modules.open(BundledModuleId.MapExport))
+      .then(() => Modules.open(ModuleId.MapExport))
       .get('[data-cy=add-layout]')
       .click()
       .then(() => LayoutPreviewMap.getReference())

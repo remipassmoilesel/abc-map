@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './AuthenticationRequest';
-export * from './DeleteAccountRequest';
-export * from './PasswordLostRequest';
-export * from './RegistrationConfirmationRequest';
-export * from './RegistrationRequest';
-export * from './ResetPasswordRequest';
-export * from './UpdatePasswordRequest';
+export * from './AuthenticationRequest.js';
+export * from './DeleteAccountRequest.js';
+export * from './PasswordLostRequest.js';
+export * from './RegistrationConfirmationRequest.js';
+export * from './RegistrationRequest.js';
+export * from './ResetPasswordRequest.js';
+export * from './UpdatePasswordRequest.js';

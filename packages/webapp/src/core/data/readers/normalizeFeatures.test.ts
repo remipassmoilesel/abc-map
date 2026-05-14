@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ import { GeometryCollection, Point } from 'ol/geom';
 import { logger, normalizeFeatures } from './normalizeFeatures';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import uniq from 'lodash/uniq';
+import { describe, expect, it } from 'vitest';
 
 logger.disable();
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,19 +17,13 @@
  */
 
 import React from 'react';
-import { Logger } from '@abc-map/shared';
-import TextFormat from '../_common/text-format/TextFormat';
-import { withTranslation } from 'react-i18next';
+import { TextFormat } from '../_common/text-format/TextFormat';
 import Cls from './TextToolPanel.module.scss';
 
-const logger = Logger.get('TextToolPanel.tsx');
-
-function TextToolPanel() {
+export function TextToolPanel() {
   return (
     <div className={Cls.textPanel}>
       <TextFormat />
     </div>
   );
 }
-
-export default withTranslation()(TextToolPanel);

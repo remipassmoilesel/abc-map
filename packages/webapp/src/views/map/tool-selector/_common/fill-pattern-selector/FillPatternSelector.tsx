@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,18 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { FillPatterns } from '@abc-map/shared';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { FillPatterns } from '@abc-map/shared';
 import { LabeledFillPatterns } from './LabeledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
-import { MainState } from '../../../../../core/store/reducer';
-import { MapActions } from '../../../../../core/store/map/actions';
-import { connect, ConnectedProps } from 'react-redux';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
+import type { MainState } from '../../../../../store/reducer';
+import { MapActions } from '../../../../../store/map/actions';
+import type { ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
+import type { ServiceProps } from '../../../../../core/withServices';
+import { withServices } from '../../../../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import FillPatternButton from './FillPatternButton';
 import OptionRow from '../option-row/OptionRow';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: MainState) => ({
@@ -40,14 +43,12 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type Props = ConnectedProps<typeof connector> & ServiceProps;
+type Props = ConnectedProps<typeof connector> & ServiceProps & WithTranslation;
 
 interface State {
   patternFactory: FillPatternFactory;
   modal: boolean;
 }
-
-const t = prefixedTranslation('MapView:');
 
 class FillPatternSelector extends Component<Props, State> {
   constructor(props: Props) {
@@ -59,6 +60,7 @@ class FillPatternSelector extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const pattern = this.props.fill.pattern;
     const color1 = this.props.fill.color1;
     const color2 = this.props.fill.color2;
@@ -92,8 +94,10 @@ class FillPatternSelector extends Component<Props, State> {
   };
 
   private getPatternButtons(): ReactNode[] {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const color1 = this.props.fill?.color1 || 'white';
     const color2 = this.props.fill?.color2 || 'black';
+
     return LabeledFillPatterns.All.map((item) => {
       return (
         <div className={'d-flex align-items-center m-3'} key={item.value}>

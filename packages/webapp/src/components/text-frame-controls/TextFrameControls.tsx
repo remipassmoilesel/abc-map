@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,11 +20,9 @@ import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import CopyTextFrameModal from '../copy-text-frame-modal/CopyTextFrameModal';
 import React, { useCallback, useState } from 'react';
-import { AbcTextFrame } from '@abc-map/shared';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcTextFrame } from '@abc-map/shared';
 import { TextFrameFactory } from '../../core/project/TextFrameFactory';
-
-const t = prefixedTranslation('TextFrameControls:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   disabled: boolean;
@@ -33,6 +31,7 @@ interface Props {
 
 export function TextFrameControls(props: Props) {
   const { disabled, onAddTextFrame } = props;
+  const { t } = useTranslation('TextFrameControls');
   const [copyFrameModal, showCopyFrameModal] = useState(false);
 
   const handleNewTextFrame = useCallback(() => onAddTextFrame(TextFrameFactory.newFrame()), [onAddTextFrame]);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 import { FeatureSelection } from './FeatureSelection';
 import { FeatureWrapper } from '../features/FeatureWrapper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FeatureSelection', () => {
   let selection: FeatureSelection;
@@ -39,7 +40,7 @@ describe('FeatureSelection', () => {
       selection
         .getFeatures()
         .map((f) => f.getId())
-        .sort()
+        .sort(),
     ).toEqual(features.map((f) => f.getId()).sort());
   });
 
@@ -69,7 +70,7 @@ describe('FeatureSelection', () => {
       selection
         .getFeatures()
         .map((f) => f.getId())
-        .sort()
+        .sort(),
     ).toEqual(features.map((f) => f.getId()).sort());
   });
 

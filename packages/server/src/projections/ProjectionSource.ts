@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'path';
-import { AbcFile, Zipper } from '@abc-map/shared';
+import path from 'path';
+import type { AbcFile } from '@abc-map/shared';
+import { Zipper } from '@abc-map/shared';
 import { promises as fs } from 'fs';
 
 export class ProjectionSource {
-  private projectionArchive = path.resolve(__dirname, '../../resources/projections.zip');
+  private projectionArchive = path.resolve(import.meta.dirname, '../../resources/projections.zip');
   private files?: AbcFile<Buffer>[];
 
   public async init() {

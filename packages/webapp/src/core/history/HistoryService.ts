@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HistoryKey } from './HistoryKey';
-import { Changeset } from './Changeset';
+import type { HistoryKey } from './HistoryKey';
+import type { Changeset } from './Changeset';
 import { Logger } from '@abc-map/shared';
-import { UiActions } from '../store/ui/actions';
-import { mainStore, MainStore } from '../store/store';
+import { UiActions } from '../../store/ui/actions';
+import type { MainStore } from '../../store/store';
+import { mainStore } from '../../store/store';
 
 const logger = Logger.get('HistoryService.ts');
 
@@ -46,7 +47,11 @@ export class HistoryService {
     return new HistoryService(MaxHistoryStackSize, {}, mainStore);
   }
 
-  constructor(private maxSize: number, private history: History = {}, private store: MainStore) {}
+  constructor(
+    private maxSize: number,
+    private history: History = {},
+    private store: MainStore,
+  ) {}
 
   public resetHistory(): void {
     for (const key in this.history) {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import { IndexedDbClient } from './IndexedDbClient';
 import { nanoid } from 'nanoid';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const TestStore = 'TestStore';
 const IndexName = 'TestStore_notFoo';
@@ -111,7 +112,7 @@ describe('IndexedDbClient', () => {
             }
           }
         },
-        reject
+        reject,
       );
     });
   });
@@ -150,7 +151,7 @@ describe('IndexedDbClient', () => {
             }
           }
         },
-        reject
+        reject,
       );
     });
   });

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,8 @@
  *
  */
 
-import { rewriteAssetsUrls, rewriteContentPath } from './helpers';
+import { rewriteAssetsUrls, rewriteContentPath, toDocumentationUrl } from './helpers';
+import { describe, expect, it } from 'vitest';
 
 describe('helpers', () => {
   it('rewriteContentPath()', () => {
@@ -49,5 +50,15 @@ describe('helpers', () => {
 
     // Assert
     expect(content.innerHTML).toMatchSnapshot();
+  });
+
+  it('toDocumentationUrl()', () => {
+    expect(toDocumentationUrl('http://localhost:3005/en/modules/documentation/reference/03_create-map/#Which-layer-to-choose')).toEqual(
+      'http://localhost:3005/documentation/en/reference/03_create-map/#Which-layer-to-choose',
+    );
+
+    expect(toDocumentationUrl('https://staging.abc-map.fr/en/modules/documentation/reference/03_create-map')).toEqual(
+      'https://staging.abc-map.fr/documentation/en/reference/03_create-map',
+    );
   });
 });

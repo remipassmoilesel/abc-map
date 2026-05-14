@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,25 +16,31 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ReaderImplementation } from './ReaderImplementation';
+import type { ReaderImplementation } from './ReaderImplementation';
 import { FileFormat, FileFormats } from '../FileFormats';
-import { AbcFile, BlobIO, Logger, XyzDefinitionManifest } from '@abc-map/shared';
-import * as yaml from 'js-yaml';
-import { LayerWrapper } from '../../geo/layers/LayerWrapper';
+import type { AbcFile, XyzDefinitionManifest } from '@abc-map/shared';
+import { BlobIO, Logger } from '@abc-map/shared';
+import yaml from 'js-yaml';
+import type { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
-import { ModalService } from '../../ui/ModalService';
-import { variableExpansion, VariableMap } from '../../utils/variableExpansion';
+import type { ModalService } from '../../ui/ModalService';
+import type { VariableMap } from '../../utils/variableExpansion';
+import { variableExpansion } from '../../utils/variableExpansion';
 import { ModalStatus } from '../../ui/typings';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { ReadResult, ReadStatus } from '../ReadResult';
-import { GeoService } from '../../geo/GeoService';
+import type { ReadResult } from '../ReadResult';
+import { ReadStatus } from '../ReadResult';
+import type { GeoService } from '../../geo/GeoService';
 
 const logger = Logger.get('XyzDefinitionReader.ts');
 
-const t = prefixedTranslation('DataReader:');
+const t = prefixedTranslation('DataReader');
 
 export class XyzDefinitionReader implements ReaderImplementation {
-  constructor(private geo: GeoService, private modals: ModalService) {}
+  constructor(
+    private geo: GeoService,
+    private modals: ModalService,
+  ) {}
 
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.XYZ_DEFINITION).length > 0;

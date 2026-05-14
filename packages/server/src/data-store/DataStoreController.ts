@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller } from '../server/Controller';
-import { Services } from '../services/services';
-import { AbcArtefact, artefactFilterFromString, langFromString, PaginatedResponse } from '@abc-map/shared';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { Controller } from '../server/Controller.js';
+import type { Services } from '../services/services.js';
+import type { AbcArtefact, PaginatedResponse } from '@abc-map/shared';
+import { artefactFilterFromString, langFromString } from '@abc-map/shared';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyStatic from '@fastify/static';
-import { ByIdParams, GetByIdSchema, ListQuery, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';
-import { PaginationHelper } from '../server/helpers/PaginationHelper';
+import type { ByIdParams, ListQuery, SearchQuery } from './DataStoreController.schemas.js';
+import { GetByIdSchema, ListSchema, SearchSchema } from './DataStoreController.schemas.js';
+import { PaginationHelper } from '../server/helpers/PaginationHelper.js';
 
 export class DataStoreController extends Controller {
   constructor(private services: Services) {
@@ -50,7 +52,7 @@ export class DataStoreController extends Controller {
     const { limit, offset } = PaginationHelper.fromQuery(req);
     const filter = artefactFilterFromString(req.query.filter);
     if (!filter) {
-      reply.badRequest('Invalid "filter" parameter');
+      void reply.badRequest('Invalid "filter" parameter');
       return;
     }
 
@@ -74,13 +76,13 @@ export class DataStoreController extends Controller {
 
     const lang = langFromString(req.query.lang);
     if (!lang) {
-      reply.badRequest('Invalid "lang" parameter');
+      void reply.badRequest('Invalid "lang" parameter');
       return;
     }
 
     const filter = artefactFilterFromString(req.query.filter);
     if (!filter) {
-      reply.badRequest('Invalid "filter" parameter');
+      void reply.badRequest('Invalid "filter" parameter');
       return;
     }
 
@@ -104,7 +106,7 @@ export class DataStoreController extends Controller {
     if (result) {
       void reply.status(200).send(result);
     } else {
-      reply.notFound();
+      void reply.notFound();
     }
   };
 }

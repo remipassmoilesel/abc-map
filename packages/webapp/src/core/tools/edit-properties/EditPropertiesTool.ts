@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,23 +16,24 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../Tool';
+import type { Tool } from '../Tool';
 import { Logger, MapTool } from '@abc-map/shared';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/properties.inline.svg';
-import { MainStore } from '../../store/store';
-import { HistoryService } from '../../history/HistoryService';
-import { ModalService } from '../../ui/ModalService';
+import type { MainStore } from '../../../store/store';
+import type { HistoryService } from '../../history/HistoryService';
+import type { ModalService } from '../../ui/ModalService';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { ModalStatus } from '../../ui/typings';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeaturePropertiesChangeset } from '../../history/changesets/features/SetFeaturePropertiesChangeset';
-import { Interaction, Select } from 'ol/interaction';
+import type { Interaction } from 'ol/interaction';
+import { Select } from 'ol/interaction';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { DefaultTolerancePx } from '../common/constants';
 import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import isEqual from 'lodash/isEqual';
-import { ToolMode } from '../ToolMode';
+import type { ToolMode } from '../ToolMode';
 import { Conditions, Modes } from './Modes';
 import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
 
@@ -45,7 +46,11 @@ export class EditPropertiesTool implements Tool {
   private editSelect?: Select;
   private interactions: Interaction[] = [];
 
-  constructor(private store: MainStore, private history: HistoryService, private modals: ModalService) {}
+  constructor(
+    private store: MainStore,
+    private history: HistoryService,
+    private modals: ModalService,
+  ) {}
 
   public getId(): MapTool {
     return MapTool.EditProperties;

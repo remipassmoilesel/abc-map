@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { ScriptLayer } from './ScriptLayer';
-import { Services } from '../../../core/Services';
+import type { Services } from '../../../core/Services';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('ScriptApi.tsx');

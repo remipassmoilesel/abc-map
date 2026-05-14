@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -67,14 +67,14 @@ $height: 30vh;
   justify-content: center;
   align-items: center;
 
+  background: rgba(0, 0, 0, 0.5);
+
+  z-index: $zIndex-datastore-fullscreenPreview;
+
   h3 {
     color: white;
     margin-bottom: 2rem;
   }
-
-  background: rgba(0, 0, 0, 0.5);
-
-  z-index: $zIndex-datastore-fullscreenPreview;
 }
 
 .largePreview {

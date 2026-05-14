@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import Cls from './DataStoreView.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
-import { AbcArtefact, ArtefactFilter, Logger } from '@abc-map/shared';
+import type { AbcArtefact } from '@abc-map/shared';
+import { ArtefactFilter, Logger } from '@abc-map/shared';
 import ArtefactCard from './artefact-card/ArtefactCard';
 import { pageSetup } from '../../core/utils/page-setup';
 import { useTranslation, withTranslation } from 'react-i18next';
@@ -74,7 +75,7 @@ function DataStoreView() {
         .catch((err) => logger.error(err))
         .finally(() => setLoading(false));
     },
-    [dataStore, pageSize]
+    [dataStore, pageSize],
   );
 
   // Search artefacts on demand
@@ -88,7 +89,7 @@ function DataStoreView() {
         .catch((err) => logger.error(err))
         .finally(() => setLoading(false));
     },
-    [dataStore]
+    [dataStore],
   );
 
   // On mount, we list artefacts
@@ -104,7 +105,7 @@ function DataStoreView() {
       setOffset(offset);
       listArtefacts(filter, offset);
     },
-    [filter, listArtefacts]
+    [filter, listArtefacts],
   );
 
   // User clicks on search
@@ -117,7 +118,7 @@ function DataStoreView() {
         listArtefacts(filter, 0);
       }
     },
-    [filter, listArtefacts, searchArtefacts]
+    [filter, listArtefacts, searchArtefacts],
   );
 
   // User clicks on filter
@@ -131,7 +132,7 @@ function DataStoreView() {
         listArtefacts(filter, 0);
       }
     },
-    [listArtefacts, query, searchArtefacts]
+    [listArtefacts, query, searchArtefacts],
   );
 
   const handleQueryChange = useCallback((query: string) => setQuery(query), []);

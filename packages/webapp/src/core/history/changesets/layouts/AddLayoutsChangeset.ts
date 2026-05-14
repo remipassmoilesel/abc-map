@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { ProjectService } from '../../../project/ProjectService';
-import { AbcLayout } from '@abc-map/shared';
+import type { ProjectService } from '../../../project/ProjectService';
+import type { AbcLayout } from '@abc-map/shared';
 import { getServices } from '../../../Services';
 
 export class AddLayoutsChangeset extends Changeset {
@@ -29,7 +29,10 @@ export class AddLayoutsChangeset extends Changeset {
 
   private layouts: AbcLayout[];
 
-  constructor(private project: ProjectService, layouts: AbcLayout[]) {
+  constructor(
+    private project: ProjectService,
+    layouts: AbcLayout[],
+  ) {
     super();
     this.layouts = layouts.slice();
   }

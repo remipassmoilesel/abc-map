@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,17 +15,20 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Logger } from '../../commons';
-import { Language } from '../../lang';
+import { Logger } from '../../common/Logger.js';
+import type { Language } from '../../lang/Language.js';
 
 const logger = Logger.get('Route.ts');
 
 export declare type Params = { [k: string]: string | undefined };
 
-export class Route<T extends Params> {
+export class Route<T extends Params = Params> {
   private _replaceLang = true;
 
-  constructor(private readonly _raw: string, private lang: Language | (() => Language)) {}
+  constructor(
+    private readonly _raw: string,
+    private lang: Language | (() => Language),
+  ) {}
 
   public raw(): string {
     return this._raw;

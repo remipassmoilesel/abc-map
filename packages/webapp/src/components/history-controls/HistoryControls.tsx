@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,13 +18,13 @@
 
 import React, { useCallback } from 'react';
 import { Logger } from '@abc-map/shared';
-import { HistoryKey } from '../../core/history/HistoryKey';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { useAppSelector } from '../../core/store/hooks';
+import type { HistoryKey } from '../../core/history/HistoryKey';
+import { useAppSelector } from '../../store/hooks';
 import { useServices } from '../../core/useServices';
 import Cls from './HistoryControls.module.scss';
 import { IconDefs } from '../icon/IconDefs';
 import { FaIcon } from '../icon/FaIcon';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('HistoryControls.tsx');
 
@@ -32,12 +32,11 @@ interface Props {
   historyKey: HistoryKey;
 }
 
-const t = prefixedTranslation('HistoryControls:');
-
 function HistoryControls(props: Props) {
   const { historyKey } = props;
   const capabilities = useAppSelector((state) => state.ui.historyCapabilities)[historyKey];
   const { history, toasts } = useServices();
+  const { t } = useTranslation('HistoryControls');
 
   const canUndo = capabilities?.canUndo ?? false;
   const canRedo = capabilities?.canRedo ?? false;

@@ -56,7 +56,8 @@
     "Links": "Liens",
     "Try_fullscreen_mode": "Essayez le plein écran",
     "Close": "Fermer",
-    "New_version_available_Restart_Abc-Map": "Nouvelle version disponible ! Redémarrez Abc-Map",
+    "New_version_available": "Nouvelle version disponible !",
+    "Close_all_windows_then_reopen_abc-map": "Fermez tous les fenêtres, puis ouvrez à nouveau Abc-Map.",
     "You_can_use_abc-map_offline": "Vous pouvez utiliser Abc-map hors ligne",
     "You_cannot_use_abc-map_offline": "Vous ne pouvez pas utiliser Abc-map hors ligne",
     "About_this_platform": "A propos de cette plateforme",
@@ -71,7 +72,7 @@
     "Here_you_can_enable_features": "Ici vous pouvez activer des fonctionnalités qui ne sont pas encore stables.",
     "Close": "Fermer",
     "MapSharing": "Partage de carte",
-    "ArtefactGenerator": "Générateur d'artefact",
+    "ArtifactGenerator": "Générateur d'artefact (magasin de données)",
     "DevServiceWorker": "Service worker de développement",
     "DisableWarningBeforeUnload": "Désactiver l'avertissement avant rechargement de la page"
   },
@@ -91,6 +92,7 @@
     "Zoom_in": "Zoom avant",
     "Zoom_out": "Zoom arrière",
     "Import_in_progress": "Import en cours...",
+    "Import_done": "Import terminé !",
     "Done": "Import terminé !",
     "Preload_map": "Pré-charger la carte",
     "Cancel": "Annuler",
@@ -351,7 +353,7 @@
     "Download": "Télécharger",
     "Add_to_project": "Importer",
     "Close": "Fermer",
-    "Import_in_progress": "Import en cours",
+    "Import_in_progress": "Import en cours ...",
     "Download_in_progress": "Téléchargement en cours",
     "Select_an_artifact_to_see_what_it_contains": "Sélectionnez un artefact pour voir ce qu'il contient !",
     "Description": "Description",
@@ -649,13 +651,7 @@
     "Source_code": "Code source",
     "Author_personal_website": "Site personnel de l'auteur",
     "Fund_Abc-map": "Financez Abc-Map !",
-    "Fund_a_little_piece_of_free_internet": "Financez un petit bout d'Internet libre \uD83D\uDC8C",
-    "What_budget": "Quel budget ?",
-    "The_budget_is_manually_updated_every_month": "Le budget est mis à jour manuellement tous les mois",
-    "And_the_cost_of_labor": "Et le coût de la main d'oeuvre ?",
-    "A_year_of_development_costs_up_to": "Une année de développement coûte jusqu'à 250 000 €.",
-    "Expenses": "Dépenses",
-    "Income": "Revenu"
+    "Fund_a_little_piece_of_free_internet": "Financez un petit bout d'Internet libre \uD83D\uDC8C"
   },
   "FundingLinks": {
     "By_CB_paypal": "Par <b>Carte bleue</b> ou <b>Paypal</b>.",
@@ -728,9 +724,7 @@
     "Aouch": "Aïe Aïe Aïe",
     "Error_occurred": "Une erreur empêche l'application de fonctionner correctement. <br />Cet échec a été consigné, le développeur responsable de cette erreur vient de recevoir une lettre de démission.",
     "Reload_page": "Recharger la page",
-    "Recommended_action": "Action recommandée, <br /> mais vous perdrez les modifications non enregistrées.",
-    "Return_to_application": "Revenir à l'application",
-    "Application_will_be_unstable": "L'application sera peut-être instable, <br /> mais vous pourrez sauvegardez votre travail et recharger la page."
+    "Recommended_action": "Action recommandée, <br /> mais vous perdrez les modifications non enregistrées."
   },
   "SolicitationModal": {
     "So_how_was_it": "Alors, c'était comment ?",
@@ -743,8 +737,7 @@
     "Thanks_for_your_feedback": "Merci pour votre retour",
     "Support_project": "Faites-un don pour soutenir ce projet",
     "Close": "Fermer",
-    "What_happened": "Que s'est il passé ?️",
-    "For_the_moment_the_budget_is": "Pour le moment le budget est de:"
+    "What_happened": "Que s'est il passé ?️"
   },
   "ResetPasswordView": {
     "Reset_your_password": "Réinitialiser votre mot de passe",
@@ -779,7 +772,7 @@
     "This_feature_is_empty": "Cette entité est vide"
   },
   "EditPropertiesModal": {
-    "Properties": "Propriétés",
+    "Editable_properties": "Propriétés éditables ",
     "Cancel": "Annuler",
     "Save": "Enregistrer",
     "Delete_property": "Supprimer la propriété",
@@ -975,7 +968,6 @@
   },
   "ChangelogView": {
     "Changelog": "Journal de modifications",
-    "Follow_us_on_twitter": "Suivez nous sur Twitter",
     "Failed_to_load_log_try_again_later": "Impossible de charger le journal, réessayez plus tard"
   },
   "InstallAppModal": {
@@ -1009,7 +1001,8 @@
     "Offline": "Hors ligne"
   },
   "LargeOfflineIndicator": {
-    "You_are_offline": "Vous êtes hors ligne"
+    "You_are_offline": "Vous êtes hors ligne",
+    "Offline_icon": "Icône hors-ligne"
   },
   "NorthArrow": {
     "North": "Nord"
@@ -1031,25 +1024,10 @@
     "Favorite_modules": "Modules favoris",
     "Restore_default_modules": "Restaurer les modules par défaut",
     "Search_for_a_feature_or_module": "Rechercher une fonctionnalité ou un module",
-    "Add_a_module": "Ajouter un module",
     "What_do_you_want_to_do": "Que voulez-vous faire ?",
     "Nothing_matches": "Rien ne correspond !",
     "Try_rephrasing_or_browse_the_features_below": "Essayez de reformuler, ou parcourez les fonctionnalités ci-dessous.",
     "You_can_display_this_search_at_any_time_by_using_CTRL_M": "Vous pouvez afficher cette recherche à tout moment en utilisant CTRL+M",
-    "AddModuleModal": {
-      "Add_a_module": "Ajouter un module",
-      "Loading_done": "Chargement terminé !",
-      "Enter_module_addresses_then_confirm": "Saisissez des adresses de modules et confirmez:",
-      "Use_only_modules_whose_source_you_know": "N'utilisez que des modules dont vous connaissez la source. Un module malicieux peut par exemple voler les identifiants présents dans cette application.",
-      "Load_modules": "Charger les modules",
-      "Remote_modules": "Modules chargés",
-      "Remove_module": "Enlever le module",
-      "You_can_try": "Vous pouvez essayer",
-      "Close": "Fermer",
-      "Modules_loaded": "Modules chargés",
-      "Ok": "Ok",
-      "Error": "Erreur"
-    },
     "Click_on_stars": "Cliquez sur les étoiles pour marquer les modules comme favoris. Vous pouvez ensuite y accéder plus facilement.",
     "Remove_all": "Supprimer tout"
   },
@@ -1095,6 +1073,7 @@
     "Unknown_type": "Type inconnu",
     "No_layer": "Pas de couche",
     "Layers": "Couches",
+    "Layer_s": "couche(s)",
     "Features": "entités",
     "Type": "Type",
     "Login": "S'authentifier",

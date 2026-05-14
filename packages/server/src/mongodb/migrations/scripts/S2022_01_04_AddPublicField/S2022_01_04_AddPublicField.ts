@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DatabaseMigrationScript } from '../../DatabaseMigrationScript';
-import { MongodbClient } from '../../../MongodbClient';
-import { ProjectDao } from '../../../../projects/ProjectDao';
+import type { DatabaseMigrationScript } from '../../DatabaseMigrationScript.js';
+import type { MongodbClient } from '../../../MongodbClient.js';
+import { ProjectDao } from '../../../../projects/ProjectDao.js';
 
 /**
  * This script add public field to project document

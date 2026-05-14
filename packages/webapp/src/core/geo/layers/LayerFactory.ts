@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,19 +21,20 @@ import { OSM, TileWMS, WMTS, XYZ } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
 import { tileLoadingAuthenticated } from '../tiles/tileLoadingAuthenticated';
-import { LayerType, Logger, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
-import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
+import type { PredefinedMetadata, VectorMetadata, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
+import { LayerType, Logger, PredefinedLayerModel } from '@abc-map/shared';
+import type { DefaultVectorSource, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
+import { LayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import Geometry from 'ol/geom/Geometry';
-import TileSource from 'ol/source/Tile';
+import type TileSource from 'ol/source/Tile';
 import { styleFunction } from '../styles/style-function';
 import { tileLoadingPublic } from '../tiles/tileLoadingPublic';
-import { WmsSettings, WmtsSettings, XyzSettings } from './LayerFactory.types';
+import type { WmsSettings, WmtsSettings, XyzSettings } from './LayerFactory.types';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
 import { XyzLayerProperties } from '@abc-map/shared';
 
-const t = prefixedTranslation('LayerFactory:');
+const t = prefixedTranslation('LayerFactory');
 
 const logger = Logger.get('LayerFactory.ts');
 
@@ -65,7 +66,7 @@ export class LayerFactory {
     return LayerWrapper.from<TileLayer<TileSource>, TileSource, PredefinedMetadata>(olLayer).setMetadata(metadata);
   }
 
-  public static newVectorLayer(source?: VectorSource<Geometry>): VectorLayerWrapper {
+  public static newVectorLayer(source?: DefaultVectorSource): VectorLayerWrapper {
     const _source = source || new VectorSource();
     const vectorImageLayer = new VectorImageLayer({ style: (f) => styleFunction(DefaultStyleOptions, f), source: _source });
 
@@ -78,7 +79,7 @@ export class LayerFactory {
       visible: true,
     };
 
-    return LayerWrapper.from<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>(vectorImageLayer).setMetadata(metadata);
+    return LayerWrapper.from<VectorImageLayer<DefaultVectorSource>, DefaultVectorSource, VectorMetadata>(vectorImageLayer).setMetadata(metadata);
   }
 
   public static newWmsLayer(settings: WmsSettings): WmsLayerWrapper {

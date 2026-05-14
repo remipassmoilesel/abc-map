@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 /**
- * If true we are running in a PWA
+ * If true we are running in a PWA, not in a browser
  */
 export function useRunningAsPwa(): boolean {
   return window.matchMedia('(display-mode: standalone)').matches;

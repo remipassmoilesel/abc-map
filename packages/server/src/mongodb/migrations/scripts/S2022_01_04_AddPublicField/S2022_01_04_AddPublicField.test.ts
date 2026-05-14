@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { S2022_01_04_AddPublicField } from './S2022_01_04_AddPublicField';
-import { SinonStubbedInstance } from 'sinon';
-import * as sinon from 'sinon';
-import { assert } from 'chai';
-import { ProjectDao } from '../../../../projects/ProjectDao';
+import { S2022_01_04_AddPublicField } from './S2022_01_04_AddPublicField.js';
+import sinon from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import { assert, describe, it, beforeEach } from 'vitest';
+import { ProjectDao } from '../../../../projects/ProjectDao.js';
 
 describe('S2022_01_04_AddPublicField', function () {
   let projectDao: SinonStubbedInstance<ProjectDao>;

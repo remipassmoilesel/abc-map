@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,17 @@
  */
 
 import { ArtefactGeneratorModule } from './ArtefactGeneratorModule';
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
-import { Services } from '../../core/Services';
-import * as sinon from 'sinon';
-import { SinonStub, SinonStubbedInstance } from 'sinon';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
+import type { Services } from '../../core/Services';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { PreviewExporter } from './PreviewExporter';
-import { Parameters } from './typings';
-import { AbcFile, BlobIO, Language, LayerType } from '@abc-map/shared';
+import type { Parameters } from './typings';
+import type { AbcFile } from '@abc-map/shared';
+import { BlobIO, Language, LayerType } from '@abc-map/shared';
 import { wmsCapabilities, wmtsCapabilities } from './ArtefactGeneratorModule.test.data';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('ArtefactGeneratorModule', () => {
   const parameters: Parameters = {
@@ -97,7 +100,7 @@ describe('ArtefactGeneratorModule', () => {
 version: 0.0.1
 xyz:
   url: http://domain.com/{x}/{y}/{z}/
-`
+`,
     );
 
     // Previews (they are fake)
@@ -185,7 +188,7 @@ wms:
   remoteLayerName: first-layer
   projection:
     name: EPSG:4326
-`
+`,
     );
 
     // Artefact manifest
@@ -264,7 +267,7 @@ version: 0.0.1
 wmts:
   capabilitiesUrl: http://domain.com/wmts/
   remoteLayerName: layer-7328
-`
+`,
     );
 
     // Artefact manifest

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 import { ProjectFactory } from './ProjectFactory';
 import { Language, ProjectConstants } from '@abc-map/shared';
 import { setLang } from '../../i18n/i18n';
+import { afterEach, describe, expect, it } from 'vitest';
 
 describe('ProjectFactory', () => {
   afterEach(() => {

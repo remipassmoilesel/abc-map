@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,18 +17,18 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { ModalEvent, ModalEventType } from '../../core/ui/typings';
+import type { ModalEvent } from '../../core/ui/typings';
+import { ModalEventType } from '../../core/ui/typings';
 import { Logger } from '@abc-map/shared';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { useServices } from '../../core/useServices';
 import Cls from './LongOperationModal.module.scss';
 import { Loader } from './Loader';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('LongOperationModal.tsx');
 
-const t = prefixedTranslation('LongOperationModal:');
-
 function LongOperationModal() {
+  const { t } = useTranslation('LongOperationModal');
   const { modals } = useServices();
   const [visible, setVisible] = useState(false);
   const [processing, setProcessing] = useState(false);

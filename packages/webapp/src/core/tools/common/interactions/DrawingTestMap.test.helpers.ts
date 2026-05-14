@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -22,12 +22,12 @@ import MapBrowserEventType from 'ol/MapBrowserEventType';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import View from 'ol/View';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import Feature from 'ol/Feature';
+import type Feature from 'ol/Feature';
 import { LayerFactory } from '../../../geo/layers/LayerFactory';
-import { VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
-import { Geometry } from 'ol/geom';
+import type { DefaultVectorSource, VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
+import type { Geometry } from 'ol/geom';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
-import { OlGeometry } from '../../../geo/features/OlGeometry';
+import type { OlGeometry } from '../../../geo/features/OlGeometry';
 
 interface SimulatedEventOptions {
   shift?: boolean;
@@ -46,7 +46,7 @@ interface SimulatedEventOptions {
 export class DrawingTestMap {
   private target: HTMLDivElement;
   private map: Map;
-  private vectorSource: VectorSource<Geometry>;
+  private vectorSource: DefaultVectorSource;
   private layer: VectorLayerWrapper;
 
   private mapWidth = 800;
@@ -116,7 +116,7 @@ export class DrawingTestMap {
     return this.layer;
   }
 
-  public getVectorSource(): VectorSource<Geometry> {
+  public getVectorSource(): DefaultVectorSource {
     return this.vectorSource;
   }
 
@@ -161,7 +161,7 @@ export class DrawingTestMap {
    * @param options
    * @private
    */
-  private async simulateEvent(type: string, x: number, y: number, options?: SimulatedEventOptions): Promise<MapBrowserEvent<MouseEvent>> {
+  private async simulateEvent(type: string, x: number, y: number, options?: SimulatedEventOptions): Promise<MapBrowserEvent> {
     const viewport = this.map.getViewport();
     const position = this.target.getBoundingClientRect();
 

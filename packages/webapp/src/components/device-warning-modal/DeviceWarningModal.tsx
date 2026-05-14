@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,20 +18,18 @@
 
 import Cls from './DeviceWarningModal.module.scss';
 import React, { useEffect, useState } from 'react';
-import * as Bowser from 'bowser';
+import Bowser from 'bowser';
 import mainLogo from '../../assets/main-icon.png';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
-import { UiActions } from '../../core/store/ui/actions';
+import { useTranslation, withTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { UiActions } from '../../store/ui/actions';
 import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
-
-const t = prefixedTranslation('DeviceWarningModal:');
 
 function DeviceWarningModal() {
   const [visible, setVisible] = useState(false);
   const alreadyShown = useAppSelector((st) => st.ui.informations.riskyDevice);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation('DeviceWarningModal');
 
   useEffect(() => {
     function isRiskyDevice() {

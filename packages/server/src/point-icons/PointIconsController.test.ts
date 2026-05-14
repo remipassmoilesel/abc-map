@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HttpServer } from '../server/HttpServer';
-import { Services, servicesFactory } from '../services/services';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { assert, expect } from 'chai';
-import { Config } from '../config/Config';
-import { TestAuthentication } from '../utils/TestAuthentication';
-import { GetPointIconsResponse } from '@abc-map/shared';
+import { HttpServer } from '../server/HttpServer.js';
+import type { Services } from '../services/services.js';
+import { servicesFactory } from '../services/services.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import type { Config } from '../config/Config.js';
+import { TestAuthentication } from '../utils/TestAuthentication.js';
+import type { GetPointIconsResponse } from '@abc-map/shared';
+import { afterAll, assert, beforeAll, describe, expect, it } from 'vitest';
 
 describe('PointIconsController', () => {
   let config: Config;
@@ -30,7 +31,7 @@ describe('PointIconsController', () => {
   let testAuth: TestAuthentication;
   let server: HttpServer;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
@@ -44,7 +45,7 @@ describe('PointIconsController', () => {
     testAuth = new TestAuthentication(services);
   });
 
-  after(async () => {
+  afterAll(async () => {
     await services.shutdown();
     await server.shutdown();
   });

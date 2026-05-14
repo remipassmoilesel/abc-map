@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -22,22 +22,25 @@ import { TileWMS, WMTS } from 'ol/source';
 import { LayerProperties, LayerType, PredefinedLayerModel } from '@abc-map/shared';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { WmsSettings } from './LayerFactory.types';
+import type { WmsSettings } from './LayerFactory.types';
 import { TestHelper } from '../../utils/test/TestHelper';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import { tileLoadingAuthenticated } from '../tiles/tileLoadingAuthenticated';
 import { tileLoadingPublic } from '../tiles/tileLoadingPublic';
-import MockedFn = jest.MockedFn;
+import type { Mock } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 
-jest.mock('../tiles/tileLoadingPublic');
-jest.mock('../tiles/tileLoadingAuthenticated');
+vi.mock('../tiles/tileLoadingPublic');
+vi.mock('../tiles/tileLoadingAuthenticated');
 
 describe('LayerFactory', () => {
   beforeEach(() => {
-    /* eslint-disable @typescript-eslint/no-empty-function */
-    (tileLoadingPublic as MockedFn<any>).mockImplementation(() => function () {});
-    (tileLoadingAuthenticated as MockedFn<any>).mockImplementation(() => function () {});
-    /* eslint-enable @typescript-eslint/no-empty-function */
+    (tileLoadingPublic as Mock<any>).mockImplementation(() => function () {});
+    (tileLoadingAuthenticated as Mock<any>).mockImplementation(() => function () {});
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   describe('newPredefinedLayer()', () => {

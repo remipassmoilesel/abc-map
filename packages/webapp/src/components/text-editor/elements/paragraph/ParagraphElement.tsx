@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,10 @@
  */
 
 import Cls from './ParagraphElement.module.scss';
-import { RenderElementProps } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
 import clsx from 'clsx';
-import { ParagraphElement as ParagraphElementDef } from '@abc-map/shared';
-import { Element } from 'slate';
+import type { ParagraphElement as ParagraphElementDef } from '@abc-map/shared';
+import type { Element } from 'slate';
 
 type Props = RenderElementProps & { element: Element | ParagraphElementDef };
 
@@ -38,7 +38,7 @@ export function ParagraphElement(props: Props) {
     align === 'left' && Cls.alignLeft,
     align === 'center' && Cls.alignCenter,
     align === 'right' && Cls.alignRight,
-    align === 'justify' && Cls.alignJustify
+    align === 'justify' && Cls.alignJustify,
   );
   return (
     <div className={classes} data-testid={'paragraph'} {...attributes}>

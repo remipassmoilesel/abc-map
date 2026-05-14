@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
  */
 
 import { Language, WebappRoutes } from '@abc-map/shared';
-import { DocumentationIndex } from '../../documentation/DocumentationIndex';
+import { DocumentationIndex } from '../../documentation/DocumentationIndex.js';
 import { promises as fs } from 'fs';
-import * as path from 'path';
+import path from 'path';
 import { DateTime } from 'luxon';
 import { XMLBuilder } from 'fast-xml-parser';
 
@@ -56,11 +56,17 @@ export class Sitemap {
     return new Sitemap(baseUrl, languages, DocumentationIndex.get(), DefaultDocBlackList);
   }
 
-  constructor(private baseUrl: string, private languages: Language[], private index: DocumentationIndex, private docBlackListPatterns: string[]) {}
+  constructor(
+    private baseUrl: string,
+    private languages: Language[],
+    private index: DocumentationIndex,
+    private docBlackListPatterns: string[],
+  ) {}
 
   public async build(): Promise<string> {
-    const stats = await fs.stat(path.resolve(__dirname, '../../../package.json'));
-    const lastModification = DateTime.fromJSDate(stats.ctime).toISODate();
+    // We use the last modification date of a well known file
+    const stats = await fs.stat(path.resolve(import.meta.dirname, '../../../package.json'));
+    const lastModification = DateTime.fromJSDate(stats.ctime).toISODate() || DateTime.now().toISODate();
 
     const webAppUrls = this.getWebAppUrls(lastModification);
     const docUrls = await this.getStaticDocumentationUrls(lastModification);

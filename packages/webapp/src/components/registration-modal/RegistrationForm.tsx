@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
+import type { ChangeEvent, KeyboardEvent, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { FormState } from '../form-validation-label/FormState';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { FormOfflineIndicator } from '../offline-indicator/FormOfflineIndicator';
-import { OnlineStatusProps, withOnlineStatus } from '../../core/pwa/withOnlineStatus';
+import type { OnlineStatusProps } from '../../core/pwa/withOnlineStatus';
+import { withOnlineStatus } from '../../core/pwa/withOnlineStatus';
 
 const logger = Logger.get('RegistrationForm.tsx');
 
@@ -33,7 +35,7 @@ export interface FormValues {
   password: string;
 }
 
-interface Props extends OnlineStatusProps {
+interface Props extends OnlineStatusProps, WithTranslation {
   onSubmit: (values: FormValues) => void;
   onCancel: () => void;
   errorMessage?: string;
@@ -45,8 +47,6 @@ interface State {
   confirmation: string;
   formState: FormState;
 }
-
-const t = prefixedTranslation('RegistrationModal:');
 
 class RegistrationForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -60,6 +60,8 @@ class RegistrationForm extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'RegistrationModal');
+
     const email = this.state.email;
     const password = this.state.password;
     const confirmation = this.state.confirmation;

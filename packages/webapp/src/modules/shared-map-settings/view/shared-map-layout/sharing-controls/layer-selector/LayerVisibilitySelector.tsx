@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import { useCallback } from 'react';
-import { AbcSharedView, BaseMetadata, LayerMetadata, LayerState } from '@abc-map/shared';
+import type { AbcSharedView, BaseMetadata, LayerMetadata, LayerState } from '@abc-map/shared';
 import LayerListItem from './LayerListItem';
 import { useMapLayers } from '../../../../../../core/geo/useMapLayers';
 
@@ -49,7 +49,7 @@ function LayerVisibilitySelector(props: Props) {
 
       onUpdate({ ...view, layers });
     },
-    [onUpdate, view]
+    [onUpdate, view],
   );
 
   return (

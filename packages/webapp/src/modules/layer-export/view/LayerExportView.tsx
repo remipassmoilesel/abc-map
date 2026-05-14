@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,10 @@
  */
 
 import Cls from './LayerExportView.module.scss';
-import React, { ChangeEvent, useCallback, useState } from 'react';
-import { BundledModuleId, Logger } from '@abc-map/shared';
-import { LayerWrapper, VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useState } from 'react';
+import { ModuleId, Logger } from '@abc-map/shared';
+import type { LayerWrapper, VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { useTranslation } from 'react-i18next';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
@@ -55,11 +56,11 @@ export function LayerExportView() {
     (layer: LayerWrapper | undefined) => {
       const layerId = layer?.getId();
       navigate({
-        pathname: Routes.module().withParams({ moduleId: BundledModuleId.LayerExport }),
+        pathname: Routes.module().withParams({ moduleId: ModuleId.LayerExport }),
         search: layerId ? createSearchParams({ layerId }).toString() : undefined,
-      });
+      })?.catch((err) => toasts.genericError(err));
     },
-    [navigate]
+    [navigate, toasts],
   );
 
   const handleExportAllChange = useCallback(() => setExportAll((st) => !st), []);

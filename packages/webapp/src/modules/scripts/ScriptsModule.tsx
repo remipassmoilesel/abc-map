@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,23 +18,22 @@
 
 import { ScriptsView } from './view/ScriptsView';
 import React from 'react';
-import { BundledModuleId, errorMessage, Logger } from '@abc-map/shared';
-import { ScriptContext } from './script-api/ScriptContext';
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
+import { errorMessage, Logger, ModuleId } from '@abc-map/shared';
+import type { ScriptContext } from './script-api/ScriptContext';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { getModuleApi } from '../../core/modules/registry/getModuleApi';
 import { createScript } from './script-api/createScript';
 import { getServices } from '../../core/Services';
 import { parseError, ScriptError } from './script-api/errors';
 import { getScriptApi } from './script-api/ScriptApi';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('ScriptsModule:');
+const t = prefixedTranslation('ScriptsModule');
 
 export const logger = Logger.get('Scripts.tsx', 'warn');
 
-export class ScriptsModule extends ModuleAdapter {
-  public getId(): ModuleId {
-    return BundledModuleId.Scripts;
+export class ScriptsModule implements AbcModule {
+  public getId() {
+    return ModuleId.Scripts;
   }
 
   public getReadableName(): string {
@@ -46,7 +45,7 @@ export class ScriptsModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <ScriptsView onProcess={this.process} />;
+    return () => <ScriptsView onProcess={this.process} />;
   }
 
   public process = async (scriptContent: string): Promise<string[]> => {
@@ -56,7 +55,6 @@ export class ScriptsModule extends ModuleAdapter {
     }
 
     const context: ScriptContext = {
-      moduleApi: getModuleApi(getServices()),
       scriptApi: getScriptApi(getServices()),
       log,
     };

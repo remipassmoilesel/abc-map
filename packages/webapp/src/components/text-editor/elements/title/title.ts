@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ export const title = {
         type: isActive ? undefined : 'title',
         level: isActive ? undefined : level,
       },
-      { match: (n) => Editor.isBlock(editor, n) }
+      { match: (n) => Editor.isBlock(editor, n) },
     );
   },
 };

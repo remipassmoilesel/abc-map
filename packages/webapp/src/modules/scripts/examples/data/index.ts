@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
-import { FeatureCollection } from 'geojson';
-import franceRegionsGeojson from './france-regions.geojson';
-import bufferSampleData from './buffer-sample-data.geojson';
+import type { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+import type { FeatureCollection } from 'geojson';
+import franceRegionsGeojson from './france-regions.json';
+import bufferSampleData from './buffer-sample-data.json';
 import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
@@ -35,7 +35,7 @@ export async function setupFranceRegions(map: MapWrapper) {
   }
 
   // We fetch sample dataset and add it as a vector layer
-  const data: FeatureCollection | undefined = await fetch(franceRegionsGeojson).then((res) => res.json());
+  const data: FeatureCollection | undefined = franceRegionsGeojson as FeatureCollection | undefined;
   if (!data) {
     throw new Error('Invalid dataset');
   }
@@ -56,7 +56,7 @@ export async function setupBufferSampleData(map: MapWrapper) {
   }
 
   // We fetch sample dataset and add it as a vector layer
-  const data: FeatureCollection | undefined = await fetch(bufferSampleData).then((res) => res.json());
+  const data: FeatureCollection | undefined = bufferSampleData as FeatureCollection | undefined;
   if (!data) {
     throw new Error('Invalid dataset');
   }

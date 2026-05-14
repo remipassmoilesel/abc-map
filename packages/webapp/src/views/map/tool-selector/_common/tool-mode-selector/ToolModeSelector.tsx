@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 import ToolModeSwitch from './ToolModeSwitch';
 import { withTranslation } from 'react-i18next';
-import { ToolMode } from '../../../../../core/tools/ToolMode';
+import type { ToolMode } from '../../../../../core/tools/ToolMode';
 import { useCallback, useEffect, useState } from 'react';
 import Mousetrap from 'mousetrap';
 import { Logger } from '@abc-map/shared';

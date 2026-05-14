@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -28,11 +28,6 @@
   bottom: 1rem;
   width: 30rem;
 
-  @include media-breakpoint-down(xl) {
-    width: auto;
-    left: 1rem;
-  }
-
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -46,6 +41,11 @@
 
   overflow-x: hidden;
   overflow-y: auto;
+
+  @include media-breakpoint-down(xl) {
+    width: auto;
+    left: 1rem;
+  }
 
   h5 {
     font-size: 1.1rem;

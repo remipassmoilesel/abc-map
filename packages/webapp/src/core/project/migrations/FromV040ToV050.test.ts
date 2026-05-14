@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,10 @@
  */
 
 import { TestData } from './test-data/TestData';
-import { MigrationProject } from './typings';
+import type { MigrationProject } from './typings';
 import { FromV040ToV050 } from './FromV040ToV050';
-import { AbcProjectManifest040, AbcProjectMetadata040 } from './dependencies/040-project-types';
+import type { AbcProjectManifest040, AbcProjectMetadata040 } from './dependencies/040-project-types';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV040ToV050', () => {
   let sampleProject: MigrationProject<AbcProjectManifest040>;
@@ -62,7 +63,7 @@ describe('FromV040ToV050', () => {
           orientation: 'portrait',
           id: 'A3_PORTRAIT',
         },
-      ].sort()
+      ].sort(),
     );
   });
 });

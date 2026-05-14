@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { createHash } from 'crypto';
 import { Logger } from '@abc-map/shared';
 
-const logger = Logger.get('hashRequestSource.ts', 'trace');
+export const logger = Logger.get('hashRequestSource.ts');
 
-export function hashRequestSource(req: FastifyRequest, disableWarning = false): string {
+export function hashRequestSource(req: FastifyRequest, warn = false): string {
   const hasher = createHash('sha256');
 
   // We look for original client IP address and remove a part of it for privacy purposes
@@ -31,14 +31,14 @@ export function hashRequestSource(req: FastifyRequest, disableWarning = false): 
   // If no IP have been found, we choose a stable one.
   // We display a warning because it can be a server misconfiguration.
   if (!forwardedFor) {
-    !disableWarning &&
+    if (warn)
       logger.warn(
         [
           `No "x-forwarded-for" header found in request.`,
           'Request: ' + JSON.stringify({ method: req.method, url: req.url }),
           'Headers: ' + JSON.stringify(req.headers),
           'Stack: ' + new Error().stack,
-        ].join(' ')
+        ].join(' '),
       );
 
     forwardedFor = '000.000.000.000';

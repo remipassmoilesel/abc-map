@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,20 +15,23 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { logger } from './SharedMapView';
-import SharedMapView from './SharedMapView';
+import SharedMapView, { logger } from './SharedMapView';
 import { Route, Routes } from 'react-router-dom';
-import React, { ReactElement } from 'react';
-import { SinonStubbedInstance } from 'sinon';
-import { ProjectService } from '../../core/project/ProjectService';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { ReactElement } from 'react';
+import React from 'react';
+import type { SinonStubbedInstance } from 'sinon';
+import type { ProjectService } from '../../core/project/ProjectService';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { screen, waitFor } from '@testing-library/react';
-import { MainStore, storeFactory } from '../../core/store/store';
-import { ProjectActions } from '../../core/store/project/actions';
+import type { MainStore } from '../../store/store';
+import { storeFactory } from '../../store/store';
+import { ProjectActions } from '../../store/project/actions';
 import { TestHelper } from '../../core/utils/test/TestHelper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 

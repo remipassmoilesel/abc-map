@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,23 +18,22 @@
 
 import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { GradientClass } from '../../typings/GradientClass';
-import ColorPickerButton from '../../../../components/color-picker/ColorPickerButton';
-import { prefixedTranslation } from '../../../../i18n/i18n';
+import type { GradientClass } from '../../typings/GradientClass';
+import { ColorPickerButton } from '../../../../components/color-picker/ColorPickerButton';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import Cls from './ClassRow.module.scss';
 
 const logger = Logger.get('ClassRow.tsx');
 
-interface Props {
+interface Props extends WithTranslation {
   gradientClass: GradientClass;
   onChange: (gradientClass: GradientClass) => void;
 }
 
-const t = prefixedTranslation('ColorGradientsModule:');
-
-class ClassRow extends Component<Props, {}> {
+class ClassRow extends Component<Props, unknown> {
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorGradientsModule');
     const gradientClass = this.props.gradientClass;
 
     return (

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FastifyInstance } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import { Logger } from '@abc-map/shared';
-import * as fastifyStatic from '@fastify/static';
-import { Controller } from '../server/Controller';
-import { Config } from '../config/Config';
+import fastifyStatic from '@fastify/static';
+import { Controller } from '../server/Controller.js';
+import type { Config } from '../config/Config.js';
 
 export const logger = Logger.get('DocumentationController.ts');
 
@@ -38,7 +38,7 @@ export class DocumentationController extends Controller {
 
     // FIXME: we should return a specific 404 page here
     void app.register((childContext, _, done) => {
-      void childContext.register(fastifyStatic, {
+      void childContext.register(fastifyStatic.default, {
         root: userDocumentationPath,
         wildcard: false,
         etag: true,

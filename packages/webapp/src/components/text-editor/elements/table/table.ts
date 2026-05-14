@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import { Editor, Element, Transforms } from 'slate';
-import { TableElement, TableCellElement, TableRowElement } from '@abc-map/shared';
+import type { TableElement, TableCellElement, TableRowElement } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('table.ts');
@@ -94,7 +94,7 @@ export const table = {
           children: cells,
         },
       ],
-      { at: newPath }
+      { at: newPath },
     );
   },
 
@@ -176,7 +176,7 @@ export const table = {
         type: 'table',
         border: size,
       },
-      { match: (n) => Editor.isBlock(editor, n) && n.type === 'table' }
+      { match: (n) => Editor.isBlock(editor, n) && n.type === 'table' },
     );
   },
 };

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,11 +20,13 @@
  */
 
 import { parse, HTMLElement } from 'node-html-parser';
-import * as glob from 'fast-glob';
-import * as path from 'path';
-import * as fs from 'fs';
+import glob from 'fast-glob';
+import path from 'path';
+import fs from 'fs';
 import axios from 'axios';
 import { execSync } from 'child_process';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 main().catch((err) => {
   console.error(err);
@@ -39,7 +41,7 @@ async function main() {
 // HTML validation of build
 // We can not include html-validate in a "lint" task, because it needs documentation build
 async function htmlValidate() {
-  const pkgRoot = path.resolve(__dirname, '..');
+  const pkgRoot = path.resolve(import.meta.dirname, '..');
   const command = 'node_modules/.bin/html-validate "build/**/*.html"';
   console.log('Running: ' + command);
   execSync(command, { cwd: pkgRoot, stdio: 'inherit' });
@@ -73,9 +75,9 @@ async function checksUrls() {
   const ignoredSchemes = ['mailto:', 'ftp:'];
   const baseUrl = 'http://localhost:10082';
 
-  const logRoot = path.resolve(__dirname, `../logs`);
+  const logRoot = path.resolve(import.meta.dirname, `../logs`);
   const logFilePath = path.resolve(logRoot, `test-${Date.now()}.log`);
-  const buildRoot = path.resolve(__dirname, '../build');
+  const buildRoot = path.resolve(import.meta.dirname, '../build');
 
   // We parse all html documents
   const documents: Document[] = glob
@@ -158,7 +160,7 @@ async function checksUrls() {
             ...resultTemplate,
             response: { error },
           }));
-      })
+      }),
     );
 
     results = results.concat(iteration);
@@ -190,7 +192,7 @@ async function checksUrls() {
 
       const hasBadStatus = !(result.response.status + '').trim().startsWith('20');
       if (hasBadStatus) {
-        return formatError(result, 'Bad status: ' + result.response.status ?? '<INVALID_STATUS>');
+        return formatError(result, 'Bad status: ' + (result.response.status ?? '<INVALID_STATUS>'));
       }
 
       return '';

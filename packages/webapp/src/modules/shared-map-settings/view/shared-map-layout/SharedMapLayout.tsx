@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,11 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { AbcNorth, AbcScale, AbcTextFrame, AbcView, LayerState, Logger } from '@abc-map/shared';
+import type { AbcNorth, AbcScale, AbcTextFrame, AbcView, LayerState } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import SideMenu from '../../../../components/side-menu/SideMenu';
 import { IconDefs } from '../../../../components/icon/IconDefs';
-import { useAppSelector } from '../../../../core/store/hooks';
+import { useAppSelector } from '../../../../store/hooks';
 import { useServices } from '../../../../core/useServices';
 import SharingControls from './sharing-controls/SharingControls';
 import { nanoid } from 'nanoid';
@@ -65,7 +66,7 @@ function SharedMapLayout() {
           .catch((err) => logger.error('Cannot update shared view: ', err));
       }
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleNewView = useCallback(() => {
@@ -102,7 +103,7 @@ function SharedMapLayout() {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot add text frame:', err));
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleRemoveTextFrame = useCallback(
@@ -116,7 +117,7 @@ function SharedMapLayout() {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot remove text frame:', err));
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleTextFrameChangeDebounced = useMemo(
@@ -133,7 +134,7 @@ function SharedMapLayout() {
           .then(() => history.register(HistoryKey.SharedViews, cs))
           .catch((err) => logger.error('Cannot update text frame: ', err));
       }, 150),
-    [history, project]
+    [history, project],
   );
 
   const handleTextFrameChange = useCallback(
@@ -146,7 +147,7 @@ function SharedMapLayout() {
       project.updateTextFrame(after);
       handleTextFrameChangeDebounced(before, after);
     },
-    [activeView, handleTextFrameChangeDebounced, project]
+    [activeView, handleTextFrameChangeDebounced, project],
   );
 
   const handleAddScale = useCallback(
@@ -160,7 +161,7 @@ function SharedMapLayout() {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot add scale:', err));
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleRemoveScale = useCallback(() => {
@@ -185,7 +186,7 @@ function SharedMapLayout() {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleNorthChanged = useCallback(
@@ -199,7 +200,7 @@ function SharedMapLayout() {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleAddNorth = useCallback(
@@ -213,7 +214,7 @@ function SharedMapLayout() {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot add north:', err));
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleRemoveNorth = useCallback(() => {

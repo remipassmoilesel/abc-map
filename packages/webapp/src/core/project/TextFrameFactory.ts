@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcTextFrame } from '@abc-map/shared';
+import type { AbcTextFrame } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import { prefixedTranslation } from '../../i18n/i18n';
 
-const t = prefixedTranslation('TextFrameFactory:');
+const t = prefixedTranslation('TextFrameFactory');
 
 export class TextFrameFactory {
   public static newFrame(): AbcTextFrame {

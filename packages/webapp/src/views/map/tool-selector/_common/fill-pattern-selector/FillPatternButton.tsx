@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,10 @@
  */
 
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Logger } from '@abc-map/shared';
-import { FillPatterns } from '@abc-map/shared';
+import { FillPatterns, Logger } from '@abc-map/shared';
 import { LabeledFillPatterns } from './LabeledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import Cls from './FillPatternButton.module.scss';
 import { getRemSize } from '../../../../../core/ui/getRemSize';
 
@@ -37,10 +35,9 @@ export interface Props {
   factory?: FillPatternFactory;
 }
 
-const t = prefixedTranslation('MapView:');
-
 function FillPatternButton(props: Props) {
   const { size, onClick, pattern, color1, color2 } = props;
+  const { t } = useTranslation('MapView');
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const factoryRef = useRef(props.factory || new FillPatternFactory());

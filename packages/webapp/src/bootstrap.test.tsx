@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,25 +15,27 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { TestServices } from './core/utils/test/TestServices';
+import type { TestServices } from './core/utils/test/TestServices';
 import { UserStatus } from '@abc-map/shared';
 import { bootstrap, logger } from './bootstrap';
-import { MainStore, storeFactory } from './core/store/store';
+import type { MainStore } from './store/store';
+import { storeFactory } from './store/store';
 import { render } from './render';
 import { MapFactory } from './core/geo/map/MapFactory';
 import { mockServices } from './core/utils/test/mock-services';
 import { matchRoutes } from 'react-router-dom';
 import { disableSearchIndexLogging } from './core/utils/SearchIndex';
-import MockedFn = jest.MockedFn;
 import { disableStorageMigrationLogs } from './core/storage/indexed-db/migrations/StorageUpdater';
+import type { Mock } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 
 disableSearchIndexLogging();
 disableStorageMigrationLogs();
 
-jest.mock('./render');
+vi.mock('./render');
 
-jest.mock('react-router-dom', () => {
-  return { matchRoutes: jest.fn() };
+vi.mock('react-router-dom', () => {
+  return { matchRoutes: vi.fn() };
 });
 
 logger.disable();
@@ -52,6 +54,10 @@ describe('bootstrap()', () => {
     document.body.append(root);
 
     services.geo.getMainMap.returns(MapFactory.createNaked());
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
   describe('online', () => {
@@ -150,7 +156,7 @@ describe('bootstrap()', () => {
       });
 
       it('should not load project if app on shared map route', async () => {
-        (matchRoutes as MockedFn<any>).mockReturnValue([{ path: '/fr/shared-map' }]);
+        (matchRoutes as Mock<any>).mockReturnValue([{ path: '/fr/shared-map' }]);
 
         await bootstrap(services, store);
 

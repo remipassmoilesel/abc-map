@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'source-map-support/register';
-import { Logger } from './tools/Logger';
-import { Config } from './config/Config';
-import { Parser } from './parser/Parser';
-import { BuildService } from './BuildService';
-import { Banners } from './tools/Banners';
-import { CommandName } from './parser/Command';
-import { Help } from './Help';
-import * as path from 'path';
-import { Shell } from './tools/Shell';
-import { ChildProcess } from 'child_process';
+import 'source-map-support/register.js';
+import { Logger } from './tools/Logger.js';
+import { Config } from './config/Config.js';
+import { Parser } from './parser/Parser.js';
+import type { CiServers } from './BuildService.js';
+import { BuildService } from './BuildService.js';
+import { Banners } from './tools/Banners.js';
+import { CommandName } from './parser/Command.js';
+import { Help } from './Help.js';
 
 const logger = Logger.get('main.ts', 'info');
 
@@ -36,28 +34,22 @@ main(process.argv).catch((err) => {
 });
 
 async function main(args: string[]) {
-  const banners = new Banners();
   const config = new Config();
   const parser = new Parser();
   const service = BuildService.create(config);
-  const shell = new Shell(config);
 
   // We use node_modules bin from command line
   process.env.PATH = `${config.getCliRoot()}/node_modules/.bin/:${process.env.PATH}`;
 
-  if (process.env.CI === 'true') {
-    // NPM is used for @abc-map/create-module tests
-    logger.info('Configuring NPM for continuous integration ...');
-    shell.sync('npm config set cache ' + path.resolve(config.getProjectRoot(), '.npm-cache') + ' --global');
-  }
+  Banners.small();
 
-  banners.cli();
   const command = parser.parse(args);
 
   switch (command.name) {
     case CommandName.CI: {
+      service.printToolVersions();
       await service.continuousIntegration(command.light);
-      banners.bigDone();
+      Banners.bigDone();
       break;
     }
 
@@ -66,17 +58,17 @@ async function main(args: string[]) {
       break;
 
     case CommandName.LINT:
-      service.version();
+      service.writeVersions();
       service.lint(true);
       break;
 
     case CommandName.BUILD:
-      service.version();
+      service.writeVersions();
       service.build();
       break;
 
     case CommandName.DEPENDENCY_CHECK:
-      service.version();
+      service.writeVersions();
       service.dependencyCheck();
       break;
 
@@ -89,12 +81,12 @@ async function main(args: string[]) {
       break;
 
     case CommandName.E2E_TESTS: {
-      let servers: ChildProcess | undefined;
+      let servers: CiServers | undefined;
       try {
         servers = await service.startServersForCi();
         service.e2eTests();
       } finally {
-        servers?.kill('SIGTERM');
+        servers?.kill();
       }
       break;
     }
@@ -124,29 +116,28 @@ async function main(args: string[]) {
       break;
 
     case CommandName.DOCKER_BUILD:
-      service.dockerBuild(command.repository, command.tag);
+      await service.dockerBuild(command.repository, command.tag);
       break;
 
     case CommandName.DOCKER_PUSH:
-      service.dockerPush(command.repository, command.tag);
+      await service.dockerPush(command.repository, command.tag);
       break;
 
     case CommandName.DEPLOY:
-      service.deploy(command.configPath, !command.skipBuild);
+      await service.deploy(command.configPath, !command.skipBuild);
       break;
 
     case CommandName.HELP:
-      banners.big();
       Help.display();
       break;
 
     case CommandName.PERFORMANCE_TESTS: {
-      let servers: ChildProcess | undefined;
+      let servers: CiServers | undefined;
       try {
         servers = await service.startServersForCi();
         service.performanceTests();
       } finally {
-        servers?.kill('SIGTERM');
+        servers?.kill();
       }
       break;
     }

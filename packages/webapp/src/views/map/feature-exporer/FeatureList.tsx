@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
-import { FeatureRow, featureRowClosedHeight, FeatureRowPersistentState } from './feature-row/FeatureRow';
-import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
+import type { CSSProperties } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import type { FeatureRowPersistentState } from './feature-row/FeatureRow';
+import { FeatureRow, featureRowClosedHeight } from './feature-row/FeatureRow';
+import type { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { Logger } from '@abc-map/shared';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +46,8 @@ export function FeatureList(props: Props) {
   const [rowStates, setRowStates] = useState<RowStateMap>({});
 
   const containerRef = React.useRef<HTMLDivElement>(null);
+
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: features.length,
     getScrollElement: () => containerRef.current,
@@ -68,7 +72,7 @@ export function FeatureList(props: Props) {
       height: `100%`,
       overflow: 'auto',
     }),
-    []
+    [],
   );
 
   const innerStyle: CSSProperties = useMemo(
@@ -77,11 +81,11 @@ export function FeatureList(props: Props) {
       width: '100%',
       position: 'relative',
     }),
-    [virtualizer]
+    [virtualizer],
   );
 
   return (
-    <div ref={containerRef} style={listStyle}>
+    <div ref={containerRef} style={listStyle} data-testid={'feature-list'}>
       <div style={innerStyle}>
         {virtualizer.getVirtualItems().map((virtualItem) => {
           const index = virtualItem.index;

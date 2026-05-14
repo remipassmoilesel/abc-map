@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,19 +17,18 @@
  */
 
 import Cls from './Previews.module.scss';
-import { AbcArtefact, getTextByLang, Logger } from '@abc-map/shared';
-import { withTranslation } from 'react-i18next';
+import type { AbcArtefact } from '@abc-map/shared';
+import { getTextByLang, Logger } from '@abc-map/shared';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import { useCallback, useState } from 'react';
 import clsx from 'clsx';
-import { getLang, prefixedTranslation } from '../../../../i18n/i18n';
+import { getLang } from '../../../../i18n/i18n';
 import { attributionsVariableExpansion } from '../../../../core/utils/variableExpansion';
 import ImageSlider from './ImageSlider';
 
-const t = prefixedTranslation('DataStoreModule:');
-
-const logger = Logger.get('Previews');
+const logger = Logger.get('Previews.tsx');
 
 interface Props {
   artefact: AbcArtefact;
@@ -37,6 +36,7 @@ interface Props {
 }
 
 function Previews(props: Props) {
+  const { t } = useTranslation('DataStoreModule');
   const { artefact, className } = props;
   const [fullscreenPreview, showFullScreenPreview] = useState(false);
   const artefactName = getTextByLang(artefact.name, getLang());

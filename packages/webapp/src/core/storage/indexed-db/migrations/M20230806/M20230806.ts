@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IndexedDbMigration, StorageMigrationContext } from '../IndexedDbMigration';
-import { ProjectIDBEntryV0 } from '../typings/ProjectIDBEntryV0';
+import type { IndexedDbMigration, StorageMigrationContext } from '../IndexedDbMigration';
+import type { ProjectIDBEntryV0 } from '../typings/ProjectIDBEntryV0';
 import { ObjectStore } from '../../client/ObjectStore';
-import { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
-import { GenericReduxIDBEntry } from '../../redux/GenericReduxIDBEntry';
-import { AbcLayout, AbcSharedView, Logger } from '@abc-map/shared';
-import { FeatureIDBEntry } from '../../features/FeatureIDBEntry';
-import { KvPair } from '../../client/IndexedDbClient';
-import { TileIDBEntry } from '../../tiles/TileIDBEntry';
-import { LayerIDBEntry } from '../../layers/LayerIDBEntry';
-import { FeatureIDBEntryV0 } from '../typings/FeatureIDBEntryV0';
+import type { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
+import type { GenericReduxIDBEntry } from '../../redux/GenericReduxIDBEntry';
+import type { AbcLayout, AbcSharedView } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
+import type { FeatureIDBEntry } from '../../features/FeatureIDBEntry';
+import type { KvPair } from '../../client/IndexedDbClient';
+import type { TileIDBEntry } from '../../tiles/TileIDBEntry';
+import type { LayerIDBEntry } from '../../layers/LayerIDBEntry';
+import type { FeatureIDBEntryV0 } from '../typings/FeatureIDBEntryV0';
 
 const NEXT = 2;
 
@@ -72,7 +73,7 @@ export class M20230806 implements IndexedDbMigration {
     if (migratedProjects.length) {
       await client.putAll<ProjectIDBEntry>(
         ObjectStore.Projects,
-        migratedProjects.map((entry) => ({ key: entry.metadata.id, value: entry }))
+        migratedProjects.map((entry) => ({ key: entry.metadata.id, value: entry })),
       );
     }
 
@@ -91,7 +92,7 @@ export class M20230806 implements IndexedDbMigration {
     if (migratedLayouts.length) {
       await client.putAll<GenericReduxIDBEntry<AbcLayout>>(
         ObjectStore.Layouts,
-        migratedLayouts.map((entry) => ({ key: entry.id, value: entry }))
+        migratedLayouts.map((entry) => ({ key: entry.id, value: entry })),
       );
     }
 
@@ -109,7 +110,7 @@ export class M20230806 implements IndexedDbMigration {
     if (migratedLayers.length) {
       await client.putAll<LayerIDBEntry>(
         ObjectStore.Layers,
-        migratedLayers.map((entry) => ({ key: entry.layer.metadata.id, value: entry }))
+        migratedLayers.map((entry) => ({ key: entry.layer.metadata.id, value: entry })),
       );
     }
 
@@ -128,7 +129,7 @@ export class M20230806 implements IndexedDbMigration {
     if (migratedSharedViews.length) {
       await client.putAll<GenericReduxIDBEntry<AbcSharedView>>(
         ObjectStore.SharedViews,
-        migratedSharedViews.map((entry) => ({ key: entry.id, value: entry }))
+        migratedSharedViews.map((entry) => ({ key: entry.id, value: entry })),
       );
     }
 
@@ -156,7 +157,7 @@ export class M20230806 implements IndexedDbMigration {
 
             return { key: feature.feature.id, value: feature };
           })
-          .filter((u): u is KvPair<FeatureIDBEntry> => !!u)
+          .filter((u): u is KvPair<FeatureIDBEntry> => !!u),
       );
     }
 
@@ -182,7 +183,7 @@ export class M20230806 implements IndexedDbMigration {
         ObjectStore.Tiles,
         migratedTiles.map<KvPair<TileIDBEntry>>((tile) => {
           return { key: tile.url, value: tile };
-        })
+        }),
       );
     }
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../../routes';
 import { IconDefs } from '../../icon/IconDefs';
-import { useAppSelector } from '../../../core/store/hooks';
+import { useAppSelector } from '../../../store/hooks';
 import { useServices } from '../../../core/useServices';
 import { useIsUserAuthenticated } from '../../../core/authentication/useIsUserAuthenticated';
 import { useTranslation } from 'react-i18next';
@@ -49,7 +49,7 @@ export function AuthenticationSection(props: Props) {
         logger.error('Cannot open login modal', err);
         toasts.genericError();
       }),
-    [modals, toasts]
+    [modals, toasts],
   );
 
   const handlePasswordLost = useCallback(
@@ -58,7 +58,7 @@ export function AuthenticationSection(props: Props) {
         logger.error('Cannot open login modal', err);
         toasts.genericError();
       }),
-    [modals, toasts]
+    [modals, toasts],
   );
 
   const handleRegister = useCallback(
@@ -67,13 +67,13 @@ export function AuthenticationSection(props: Props) {
         logger.error('Cannot open registration modal', err);
         toasts.genericError();
       }),
-    [modals, toasts]
+    [modals, toasts],
   );
 
   const handleShowUserAccount = useCallback(() => {
-    navigate(Routes.userAccount().format());
+    navigate(Routes.userAccount().format())?.catch((err) => toasts.genericError(err));
     onToggleMenu();
-  }, [navigate, onToggleMenu]);
+  }, [navigate, onToggleMenu, toasts]);
 
   const handleLogout = useCallback(() => {
     modals
@@ -82,7 +82,7 @@ export function AuthenticationSection(props: Props) {
         if (ModalStatus.Confirmed === result) {
           return authentication.logout().then(() => {
             toasts.info(`${t('You_are_disconnected')} 👋`);
-            navigate(Routes.landing().format());
+            return navigate(Routes.landing().format());
           });
         }
       })

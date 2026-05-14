@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -22,9 +22,10 @@ import { FaIcon } from '../../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../../components/icon/IconDefs';
 import React, { useCallback, useState } from 'react';
 import { useServices } from '../../../../../core/useServices';
-import { AbcNorth, AbcScale, AbcSharedView, AbcTextFrame, Logger } from '@abc-map/shared';
+import type { AbcNorth, AbcScale, AbcSharedView, AbcTextFrame } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { SharingCodesModal } from '../../../../../components/sharing-codes-modal/SharingCodesModal';
-import { useAppSelector } from '../../../../../core/store/hooks';
+import { useAppSelector } from '../../../../../store/hooks';
 import LayerVisibilitySelector from './layer-selector/LayerVisibilitySelector';
 import { UpdateSharedViewsChangeset } from '../../../../../core/history/changesets/shared-views/UpdateSharedViewChangeset';
 import isEqual from 'lodash/isEqual';
@@ -106,7 +107,7 @@ function SharingControls(props: Props) {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot update view: ', err));
     },
-    [activeView, history]
+    [activeView, history],
   );
 
   const handleDimensionsChanged = useCallback((width: number, height: number) => projectService.setSharedMapDimensions(width, height), [projectService]);

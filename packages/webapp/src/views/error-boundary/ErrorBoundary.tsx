@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ReactNode } from 'react';
-import { ServiceProps, withServices } from '../../core/withServices';
+import type { ReactNode } from 'react';
+import React from 'react';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import Cls from './ErrorBoundary.module.scss';
 
-const logger = Logger.get('ErrorBoundary');
+const logger = Logger.get('ErrorBoundary.tsx');
 
-type Props = ServiceProps & { children: ReactNode | ReactNode[] };
+type Props = ServiceProps & WithTranslation & { children: ReactNode | ReactNode[] };
 
 // Errors with one of these messages are ignored by boundary
 const ignoredErrorMessages = [
@@ -39,8 +41,6 @@ interface State {
   hasError: boolean;
 }
 
-const t = prefixedTranslation('ErrorBoundary:');
-
 class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -48,18 +48,14 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ErrorBoundary');
+
     if (this.state.hasError) {
       return (
         <div className={Cls.errorScreen}>
           {/* Message */}
           <h1>{t('Aouch')} 😵</h1>
           <div className={'m-5 text-center'} dangerouslySetInnerHTML={{ __html: t('Error_occurred') }} />
-
-          {/* Return to app */}
-          <button className={'btn btn-primary mt-4'} onClick={this.handleClose}>
-            {t('Return_to_application')}
-          </button>
-          <div className={'mb-5 mt-2 text-center'} dangerouslySetInnerHTML={{ __html: t('Application_will_be_unstable') }} />
 
           {/* Reload page */}
           <button className={'btn btn-outline-primary mt-4'} onClick={this.handleRefresh}>
@@ -88,10 +84,6 @@ class ErrorBoundary extends React.Component<Props, State> {
       this.setState({ hasError: true });
     }
   }
-
-  private handleClose = () => {
-    this.setState({ hasError: false });
-  };
 
   private handleRefresh = () => {
     const { storage } = this.props.services;

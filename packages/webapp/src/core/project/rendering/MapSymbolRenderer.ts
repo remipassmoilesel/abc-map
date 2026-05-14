@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,11 +19,11 @@
 import { toContext } from 'ol/render';
 import { LineString, Point, Polygon } from 'ol/geom';
 import { AbcGeometryType, Logger } from '@abc-map/shared';
-import { Style } from 'ol/style';
-import { DimensionsPx } from '../../utils/DimensionsPx';
+import type { Style } from 'ol/style';
+import type { DimensionsPx } from '../../utils/DimensionsPx';
 import ImageState from 'ol/ImageState';
-import { Type } from 'ol/geom/Geometry';
-import ImageStyle from 'ol/style/Image';
+import type { Type } from 'ol/geom/Geometry';
+import type ImageStyle from 'ol/style/Image';
 
 const logger = Logger.get('MapSymbolRenderer.ts');
 

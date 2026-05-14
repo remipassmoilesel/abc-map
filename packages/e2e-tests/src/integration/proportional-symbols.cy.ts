@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { DataStore } from '../helpers/DataStore';
-import { TopBar } from '../helpers/TopBar';
-import { TestData } from '../test-data/TestData';
-import { MainMap } from '../helpers/MainMap';
-import { Modules } from '../helpers/Modules';
-import { FilePrompt } from '../helpers/FilePrompt';
-import { BundledModuleId } from '@abc-map/shared';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { DataStore } from '../helpers/DataStore.js';
+import { TopBar } from '../helpers/TopBar.js';
+import { TestData } from '../test-data/TestData.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { Modules } from '../helpers/Modules.js';
+import { FilePrompt } from '../helpers/FilePrompt.js';
+import { ModuleId } from '@abc-map/shared';
 
 describe('Proportional symbols', function () {
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Proportional symbols', function () {
 
   it('User can create proportional symbols', () => {
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open(BundledModuleId.ProportionalSymbols))
+      .then(() => Modules.open(ModuleId.ProportionalSymbols))
       // Data source parameters
       .get('[data-cy=data-source-file]')
       .click()

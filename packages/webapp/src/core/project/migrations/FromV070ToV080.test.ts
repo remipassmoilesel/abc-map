@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,12 +15,15 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import { MigrationProject } from './typings';
+import type { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV070ToV080 } from './FromV070ToV080';
-import { mockNanoid, restoreNanoid } from '../../utils/test/mock-nanoid';
-import { AbcProjectManifest070 } from './dependencies/070-project-types';
+import type { AbcProjectManifest070 } from './dependencies/070-project-types';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('nanoid', () => ({
+  nanoid: () => `###-FAKE-NANOID-###`,
+}));
 
 describe('FromV070ToV080', () => {
   let sampleProject: MigrationProject<AbcProjectManifest070>;
@@ -29,12 +32,6 @@ describe('FromV070ToV080', () => {
   beforeEach(async () => {
     sampleProject = await TestData.project070();
     migration = new FromV070ToV080();
-
-    mockNanoid();
-  });
-
-  afterEach(() => {
-    restoreNanoid();
   });
 
   it('interestedBy() should return true if version < 0.8', async () => {

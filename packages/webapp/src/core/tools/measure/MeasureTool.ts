@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../Tool';
+import type { Tool } from '../Tool';
 import { AbcGeometryType, MapTool } from '@abc-map/shared';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/measures.inline.svg';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
-import { ToolMode } from '../ToolMode';
+import type { ToolMode } from '../ToolMode';
 import { Conditions, Modes } from './Modes';
 
 /**
@@ -52,14 +50,14 @@ export class MeasureTool implements Tool {
     return 'Measures';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
+  public setup(map: Map): void {
     // Interactions for map view manipulation
     this.move = new MoveMapInteractionsBundle({ condition: Conditions.Move });
     this.move.setup(map);
 
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: Conditions.Select });
-    this.selection.setup(map, source, [AbcGeometryType.LINE_STRING, AbcGeometryType.MULTI_LINE_STRING, AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON]);
+    this.selection.setup(map, [AbcGeometryType.LINE_STRING, AbcGeometryType.MULTI_LINE_STRING, AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON]);
   }
 
   public modeChanged(): void {

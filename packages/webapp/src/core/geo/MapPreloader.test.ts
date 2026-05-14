@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import sinon, { SinonStub, SinonStubbedInstance } from 'sinon';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { MapWrapper } from './map/MapWrapper';
 import Map from 'ol/Map';
 import View from 'ol/View';
-import { logger, MapPreloader, PreloadEvent } from './MapPreloader';
+import type { PreloadEvent } from './MapPreloader';
+import { logger, MapPreloader } from './MapPreloader';
 import { TestHelper } from '../utils/test/TestHelper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 
@@ -143,7 +146,7 @@ describe('MapPreloader', () => {
         [[-50, 150]], [[-25, 150]], [[0, 150]], [[25, 150]], [[50, 150]],
         [[-50, 175]], [[-25, 175]], [[0, 175]], [[25, 175]], [[50, 175]],
         [[-50, 200]], [[-25, 200]], [[0, 200]], [[25, 200]], [[50, 200]],
-      ]
+      ],
     );
 
     expect(renderingView.setZoom.args).toEqual(
@@ -165,7 +168,7 @@ describe('MapPreloader', () => {
         [7], [7], [7], [7], [7],
         [7], [7], [7], [7], [7],
         [7], [7], [7], [7], [7],
-      ]
+      ],
     );
   });
 

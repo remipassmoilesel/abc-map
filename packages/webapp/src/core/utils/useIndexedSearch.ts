@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
  */
 import { useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
-import { IndexifyFunc, SearchIndex } from './SearchIndex';
+import type { IndexifyFunc } from './SearchIndex';
+import { SearchIndex } from './SearchIndex';
 
 interface Result<T> {
   search: (query: string) => void;

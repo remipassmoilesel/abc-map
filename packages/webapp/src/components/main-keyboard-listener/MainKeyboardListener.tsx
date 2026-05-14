@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,21 +20,23 @@ import { useEffect } from 'react';
 import Mousetrap from 'mousetrap';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../routes';
+import { useServices } from '../../core/useServices.ts';
 
 export function MainKeyboardListener() {
   const navigate = useNavigate();
+  const { toasts } = useServices();
 
   useEffect(() => {
     Mousetrap.bind('ctrl+m', showModuleIndex);
 
     function showModuleIndex() {
-      navigate(Routes.moduleIndex().format());
+      navigate(Routes.moduleIndex().format())?.catch((err) => toasts.genericError(err));
     }
 
     return () => {
       Mousetrap.unbind('ctrl+m');
     };
-  }, [navigate]);
+  }, [navigate, toasts]);
 
   return <></>;
 }

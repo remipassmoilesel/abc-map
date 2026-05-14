@@ -9,17 +9,17 @@ Try `help` command to know more:
     $ cd abc-map
     $ ./abc -cli help
 
-    🌍 `abc-cli` 🔨
+🌍 abc-cli 🔨
 
 
-      /$$$$$$  /$$                         /$$$$$$  /$$       /$$$$$$
-     /$$__  $$| $$                        /$$__  $$| $$      |_  $$_/
-    | $$  \ $$| $$$$$$$   /$$$$$$$       | $$  \__/| $$        | $$
-    | $$$$$$$$| $$__  $$ /$$_____//$$$$$$| $$      | $$        | $$
-    | $$__  $$| $$  \ $$| $$     |______/| $$      | $$        | $$
-    | $$  | $$| $$  | $$| $$             | $$    $$| $$        | $$
-    | $$  | $$| $$$$$$$/|  $$$$$$$       |  $$$$$$/| $$$$$$$$ /$$$$$$
-    |__/  |__/|_______/  \_______/        \______/ |________/|______/
+  /$$$$$$  /$$                         /$$$$$$  /$$       /$$$$$$
+ /$$__  $$| $$                        /$$__  $$| $$      |_  $$_/
+| $$  \ $$| $$$$$$$   /$$$$$$$       | $$  \__/| $$        | $$
+| $$$$$$$$| $$__  $$ /$$_____//$$$$$$| $$      | $$        | $$
+| $$__  $$| $$  \ $$| $$     |______/| $$      | $$        | $$
+| $$  | $$| $$  | $$| $$             | $$    $$| $$        | $$
+| $$  | $$| $$$$$$$/|  $$$$$$$       |  $$$$$$/| $$$$$$$$ /$$$$$$
+|__/  |__/|_______/  \_______/        \______/ |________/|______/
 
 
 
@@ -38,22 +38,22 @@ Try `help` command to know more:
 
     Other commands:
 
-      $ ./abc-cli install                     Init project and install dependencies.
-      $ ./abc-cli lint                        Analyse code with ESLint and fix things that can be fixed.
-      $ ./abc-cli dependency-check            Check dependencies and source code with Dependency Cruiser.
-      $ ./abc-cli build                       Build all packages.
-      $ ./abc-cli test                        Test all packages.
-      $ ./abc-cli e2e-tests                   Launch application and E2E tests.
-      $ ./abc-cli performance-tests           Launch application and performance tests.
-      $ ./abc-cli start-services              Start associated services.
-      $ ./abc-cli stop-services               Stop associated services.
-      $ ./abc-cli clean-restart-services      Stop associated services.
-      $ ./abc-cli clean                       Clean all build directories and dependencies.
-      $ ./abc-cli ci                          Execute continuous integration: lint, dependency-check, build, test, ...
-      $ ./abc-cli apply-license               Apply license to project files. Use: https://github.com/google/addlicense.
-      $ ./abc-cli docker-build REGISTRY TAG   Build project docker images.
-      $ ./abc-cli docker-push REGISTRY TAG    Push project docker images.
-      $ ./abc-cli deploy /path/to/config.js   Build, push project then deploy it. Use --skip-build to skip build steps.
-      $ ./abc-cli help                        Show this help.
+      $ ./abc-cli install                      Init project and install dependencies.
+      $ ./abc-cli lint                         Analyse code with ESLint and fix things that can be fixed.
+      $ ./abc-cli dependency-check             Check dependencies and source code with Dependency Cruiser.
+      $ ./abc-cli build                        Build all packages.
+      $ ./abc-cli test                         Test all packages.
+      $ ./abc-cli e2e-tests                    Launch application and E2E tests.
+      $ ./abc-cli performance-tests            Launch application and performance tests.
+      $ ./abc-cli start-services               Start associated services.
+      $ ./abc-cli stop-services                Stop associated services.
+      $ ./abc-cli clean-restart-services       Stop associated services.
+      $ ./abc-cli clean                        Clean all build directories and dependencies.
+      $ ./abc-cli ci                           Execute continuous integration: lint, dependency-check, build, test, ...
+      $ ./abc-cli apply-license                Apply license to project files. Use: https://github.com/google/addlicense.
+      $ ./abc-cli docker-build REGISTRY TAG    Build project docker images.
+      $ ./abc-cli docker-push REGISTRY TAG     Push project docker images.
+      $ ./abc-cli deploy /path/to/config.mjs   Build, push project then deploy it. Use --skip-build to skip build steps.
+      $ ./abc-cli help                         Show this help.
 
 ```

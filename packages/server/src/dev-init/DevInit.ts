@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Services } from '../services/services';
-import { UserInit } from './UserInit';
-import { ProjectInit } from './ProjectInit';
-import { Config, LOCAL_ENVIRONMENT, STAGING_ENVIRONMENT, TEST_ENVIRONMENT } from '../config/Config';
+import type { Services } from '../services/services.js';
+import { UserInit } from './UserInit.js';
+import { ProjectInit } from './ProjectInit.js';
+import type { Config } from '../config/Config.js';
+import { LOCAL_ENVIRONMENT, STAGING_ENVIRONMENT, CI_ENVIRONMENT } from '../config/Config.js';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('DevInit');
@@ -29,13 +30,16 @@ export class DevInit {
     return new DevInit(config, services);
   }
 
-  constructor(private config: Config, private services: Services) {}
+  constructor(
+    private config: Config,
+    private services: Services,
+  ) {}
 
   // TODO: test
   public async init(): Promise<void> {
     logger.warn(`/!\\ WARNING, development data will be created with parameters: ${JSON.stringify(this.config.development?.generateData)}`);
 
-    const authorizedEnvs = [LOCAL_ENVIRONMENT, TEST_ENVIRONMENT, STAGING_ENVIRONMENT];
+    const authorizedEnvs = [LOCAL_ENVIRONMENT, CI_ENVIRONMENT, STAGING_ENVIRONMENT];
     if (authorizedEnvs.indexOf(this.config.environmentName) === -1) {
       return Promise.reject(new Error("WARNING: do not enable 'development' configuration on an environment other than 'local' or 'test'"));
     }

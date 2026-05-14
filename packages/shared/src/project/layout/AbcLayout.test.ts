@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, LayoutFormats } from './AbcLayout';
+import type { AbcLayout } from './AbcLayout.js';
+import { LayoutFormats } from './AbcLayout.js';
+import { describe, expect, it } from 'vitest';
 
 /**
  * If this test fail, you should write a migration script then adapt it

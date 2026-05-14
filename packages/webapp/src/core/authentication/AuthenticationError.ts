@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -22,7 +22,10 @@ export enum ErrorType {
 }
 
 export class AuthenticationError extends Error {
-  constructor(public readonly type: ErrorType, message?: string) {
+  constructor(
+    public readonly type: ErrorType,
+    message?: string,
+  ) {
     super(`${type}: ${message || '<No message>'}`);
   }
 }

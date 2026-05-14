@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,28 +19,18 @@
 import Cls from './Table.module.scss';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { DataRow } from '../../../../core/data/data-source/DataSource';
+import type { DataRow } from '../../../../core/data/data-source/DataSource';
 import { getAllFieldNames } from '../../../../core/data/getFieldNames';
-import {
-  ColumnDef,
-  createColumnHelper,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  PaginationState,
-  SortingState,
-  Updater,
-  useReactTable,
-} from '@tanstack/react-table';
+import type { ColumnDef, PaginationState, SortingState, Updater } from '@tanstack/react-table';
+import { createColumnHelper, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { OnChangeFn } from '@tanstack/table-core';
-import { TableSettings } from '../state';
+import type { OnChangeFn } from '@tanstack/table-core';
+import type { TableSettings } from '../state';
 import { TableRow } from './TableRow';
 import { RowActions } from './RowActions';
 import { TableHeader } from './TableHeader';
 import { useTranslation } from 'react-i18next';
-import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { TableControls } from './TableControls';
 import { getAllColumSizes, getColumnSize } from './helpers';
 import { getRemSize } from '../../../../core/ui/getRemSize';
@@ -96,7 +86,7 @@ export function Table(props: Props) {
   const columns = useMemo(() => {
     // We add index column
     let columns: ColumnDef<DataRow, number>[] = [
-      columnHelper.accessor((row: DataRow, index) => index, {
+      columnHelper.accessor((_: DataRow, index) => index, {
         id: 'index',
         cell: (info) => info.getValue() + 1,
         header: () => <b>#</b>,
@@ -117,8 +107,8 @@ export function Table(props: Props) {
             enableMultiSort: true,
             size: sizes[fieldName],
             maxSize: sizes[fieldName],
-          })
-        )
+          }),
+        ),
       );
     }
     // If no data is found, we add a button to prompt the user to create some
@@ -128,7 +118,7 @@ export function Table(props: Props) {
           id: 'no_data',
           cell: (props) => <EmptyRowContent key={props.row.original.id} row={props.row.original} onEdit={handleEdit} />,
           size: emptyRowContentWidth(),
-        })
+        }),
       );
     }
 
@@ -139,7 +129,7 @@ export function Table(props: Props) {
         minSize: 150,
         maxSize: 150,
         cell: (props) => <RowActions row={props.row} onSelect={handleSelect} onEdit={handleEdit} onDelete={handleDelete} onShowOnMap={onShowOnMap} />,
-      })
+      }),
     );
 
     return columns;
@@ -156,7 +146,7 @@ export function Table(props: Props) {
 
       onSettingsChange({ ...settings, sorting: update });
     },
-    [onSettingsChange, settings]
+    [onSettingsChange, settings],
   );
 
   const handlePaginationChange: OnChangeFn<PaginationState> = useCallback(
@@ -170,10 +160,12 @@ export function Table(props: Props) {
 
       onSettingsChange({ ...settings, pagination: update });
     },
-    [onSettingsChange, settings]
+    [onSettingsChange, settings],
   );
 
   const debug = false;
+
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: rows,
     columns,

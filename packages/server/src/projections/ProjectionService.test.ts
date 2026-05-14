@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectionSource } from './ProjectionSource';
-import { SinonStubbedInstance } from 'sinon';
-import * as sinon from 'sinon';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { logger, ProjectionService } from './ProjectionService';
-import { ProjectionDao } from './ProjectionDao';
-import { ProjectionDocument } from './ProjectionDocument';
-import * as uuid from 'uuid-random';
-import * as _ from 'lodash';
-import { assert } from 'chai';
+import { ProjectionSource } from './ProjectionSource.js';
+import sinon from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
+import { logger, ProjectionService } from './ProjectionService.js';
+import { ProjectionDao } from './ProjectionDao.js';
+import type { ProjectionDocument } from './ProjectionDocument.js';
+import uuid from 'uuid-random';
+import _ from 'lodash';
+import { assert } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 
 logger.disable();
 
@@ -37,7 +38,7 @@ describe('ProjectionService', () => {
     let source: SinonStubbedInstance<ProjectionSource>;
     let service: ProjectionService;
 
-    before(async () => {
+    beforeAll(async () => {
       const config = await ConfigLoader.load();
       client = await MongodbClient.createAndConnect(config);
       dao = new ProjectionDao(config, client);
@@ -46,7 +47,7 @@ describe('ProjectionService', () => {
       service = new ProjectionService(dao, source as unknown as ProjectionSource);
     });
 
-    after(() => {
+    afterAll(() => {
       return client.disconnect();
     });
 
@@ -127,15 +128,15 @@ describe('ProjectionService', () => {
       assert.equal(dao.upsertByCode.callCount, 3);
       assert.deepEqual(
         dao.upsertByCode.args[0][0].map((proj) => proj._id),
-        fakeEntries.slice(0, 20).map((f) => f.path)
+        fakeEntries.slice(0, 20).map((f) => f.path),
       );
       assert.deepEqual(
         dao.upsertByCode.args[1][0].map((proj) => proj._id),
-        fakeEntries.slice(20, 40).map((f) => f.path)
+        fakeEntries.slice(20, 40).map((f) => f.path),
       );
       assert.deepEqual(
         dao.upsertByCode.args[2][0].map((proj) => proj._id),
-        fakeEntries.slice(40, 50).map((f) => f.path)
+        fakeEntries.slice(40, 50).map((f) => f.path),
       );
     });
   });

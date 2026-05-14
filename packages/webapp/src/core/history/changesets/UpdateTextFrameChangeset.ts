@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 
 import { Changeset } from '../Changeset';
 import { getServices } from '../../Services';
-import { ProjectService } from '../../project/ProjectService';
-import { AbcTextFrame } from '@abc-map/shared';
+import type { ProjectService } from '../../project/ProjectService';
+import type { AbcTextFrame } from '@abc-map/shared';
 
 export class UpdateTextFrameChangeset extends Changeset {
   public static create(before: AbcTextFrame, after: AbcTextFrame): UpdateTextFrameChangeset {
@@ -27,7 +27,11 @@ export class UpdateTextFrameChangeset extends Changeset {
     return new UpdateTextFrameChangeset(project, before, after);
   }
 
-  constructor(private project: ProjectService, private before: AbcTextFrame, private after: AbcTextFrame) {
+  constructor(
+    private project: ProjectService,
+    private before: AbcTextFrame,
+    private after: AbcTextFrame,
+  ) {
     super();
   }
 

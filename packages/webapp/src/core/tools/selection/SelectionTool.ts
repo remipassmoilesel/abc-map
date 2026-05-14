@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,34 +16,38 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../Tool';
+import type { Tool } from '../Tool';
 import { Logger, MapTool } from '@abc-map/shared';
-import { DragBox, Interaction, Translate } from 'ol/interaction';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
-import Map from 'ol/Map';
+import type { Interaction } from 'ol/interaction';
+import { DragBox, Translate } from 'ol/interaction';
+import type Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/selection.inline.svg';
 import { HistoryKey } from '../../history/HistoryKey';
-import { UpdateGeometriesChangeset, UpdateItem } from '../../history/changesets/features/UpdateGeometriesChangeset';
+import type { UpdateItem } from '../../history/changesets/features/UpdateGeometriesChangeset';
+import { UpdateGeometriesChangeset } from '../../history/changesets/features/UpdateGeometriesChangeset';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import { MapActions } from '../../store/map/actions';
-import { HistoryService } from '../../history/HistoryService';
-import { MainStore } from '../../store/store';
+import { MapActions } from '../../../store/map/actions';
+import type { HistoryService } from '../../history/HistoryService';
+import type { MainStore } from '../../../store/store';
 import { isWithinExtent } from '../common/helpers/isWithinExtent';
 import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
-import { ToolMode } from '../ToolMode';
+import type { ToolMode } from '../ToolMode';
 import { Conditions, Modes } from './Modes';
 import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
+import type { DefaultVectorSource } from '../../geo/layers/LayerWrapper';
 
 const logger = Logger.get('SelectionTool.ts');
 
 export class SelectionTool implements Tool {
   private map?: Map;
-  private source?: VectorSource<Geometry>;
+  private source?: DefaultVectorSource;
   private move?: MoveMapInteractionsBundle;
   private interactions: Interaction[] = [];
 
-  constructor(private store: MainStore, private history: HistoryService) {}
+  constructor(
+    private store: MainStore,
+    private history: HistoryService,
+  ) {}
 
   public getId(): MapTool {
     return MapTool.Selection;
@@ -61,7 +65,7 @@ export class SelectionTool implements Tool {
     return 'Select';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
+  public setup(map: Map, source: DefaultVectorSource): void {
     this.map = map;
     this.source = source;
 

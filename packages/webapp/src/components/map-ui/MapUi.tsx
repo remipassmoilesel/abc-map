@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { AbcView, Logger } from '@abc-map/shared';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { AbcView } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { DimensionsPx } from '../../core/utils/DimensionsPx';
-import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
+import type { DimensionsPx } from '../../core/utils/DimensionsPx';
+import type { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
 
 const logger = Logger.get('MapUi.tsx');
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,12 +21,10 @@ import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import { easeOut } from 'ol/easing';
 import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import Cls from './Zoom.module.scss';
-import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import clsx from 'clsx';
-
-const t = prefixedTranslation('MapView:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   map: MapWrapper;
@@ -38,6 +36,7 @@ interface Props {
  * @constructor
  */
 export function Zoom(props: Props) {
+  const { t } = useTranslation('MapView');
   const { map, className } = props;
 
   const zoom = useCallback(
@@ -61,7 +60,7 @@ export function Zoom(props: Props) {
         });
       }
     },
-    [map]
+    [map],
   );
 
   const handleZoomOut = useCallback(() => zoom(-1), [zoom]);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -26,7 +26,8 @@ import { quote } from './elements/quote/quote';
 import { backgroundColor } from './marks/background-color';
 import { table } from './elements/table/table';
 import { video } from './elements/video/video';
-import { Editor, Element, Text, Transforms } from 'slate';
+import type { Editor } from 'slate';
+import { Element, Text, Transforms } from 'slate';
 import { image } from './elements/image/image';
 import { align } from './marks/align';
 import { list } from './elements/list/list';

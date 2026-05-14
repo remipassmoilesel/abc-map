@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Params, Route } from './Route';
-import { Language } from '../../lang';
+import type { Params } from './Route.js';
+import { Route } from './Route.js';
+import { Language } from '../../lang/index.js';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 interface TestParams extends Params {
   param1: string;

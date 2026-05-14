@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,19 +19,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { toPrecision } from '../../../core/utils/numbers';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
 import { toLonLat } from 'ol/proj';
-import { Coordinate } from 'ol/coordinate';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import type { Coordinate } from 'ol/coordinate';
 import { useServices } from '../../../core/useServices';
 import throttle from 'lodash/throttle';
 import Cls from './CursorPosition.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('CursorPosition.tsx');
 
-const t = prefixedTranslation('MapView:');
-
 function CursorPosition() {
+  const { t } = useTranslation('MapView');
   const { geo } = useServices();
   const [position, setPosition] = useState<Coordinate | undefined>();
 
@@ -39,14 +38,14 @@ function CursorPosition() {
   const handlePointerMove = useMemo(
     () =>
       throttle(
-        (ev: MapBrowserEvent<MouseEvent>) => {
+        (ev: MapBrowserEvent) => {
           const pos = toLonLat(ev.coordinate, ev.map.getView().getProjection());
           setPosition(pos);
         },
         200,
-        { trailing: true }
+        { trailing: true },
       ),
-    []
+    [],
   );
 
   // Listen to cursor moves on map

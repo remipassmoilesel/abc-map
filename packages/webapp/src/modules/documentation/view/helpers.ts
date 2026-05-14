@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
  *
  *
  */
+import { getLang } from '../../../i18n/i18n.ts';
 
 const indexRegex = /index.html/gi;
 
@@ -60,4 +61,17 @@ function withTrailingSlash(str: string): string {
   }
 
   return str;
+}
+
+// Example:
+// - From: https://staging.abc-map.fr/en/modules/documentation/reference/03_create-map#anchor
+// - To: https://staging.abc-map.fr/documentation/en/reference/03_create-map#anchor
+export function toDocumentationUrl(url: string, lang = getLang()): string {
+  return (
+    url
+      // We remove webapp lang scheme
+      .replace('/' + lang + '/modules', '')
+      // We add documentation lang scheme
+      .replace('/documentation/', '/documentation/' + lang + '/')
+  );
 }

@@ -2,14 +2,14 @@
   "include": ["scripts/**/*.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ES2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "outDir": "build",
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "sourceMap": true,
-    "lib": ["es2019"]
+    "sourceMap": true
   }
 }

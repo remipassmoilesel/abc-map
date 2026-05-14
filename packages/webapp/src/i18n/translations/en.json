@@ -54,7 +54,8 @@
     "Links": "Links",
     "Try_fullscreen_mode": "Try fullscreen mode",
     "Close": "Close",
-    "New_version_available_Restart_Abc-Map": "New version available ! Restart Abc-Map",
+    "New_version_available": "New version available !",
+    "Close_all_windows_then_reopen_abc-map": "Close all windows, then reopen Abc-Map.",
     "You_can_use_abc-map_offline": "You can use Abc-map offline",
     "You_cannot_use_abc-map_offline": "You cannot use Abc-map offline",
     "About_this_platform": "About this platform",
@@ -68,7 +69,7 @@
     "Experimental_features": "Experimental features",
     "Here_you_can_enable_features": "Here you can enable features that are not yet stable.",
     "Close": "Close",
-    "ArtefactGenerator": "Artefact generator",
+    "ArtifactGenerator": "Artifact generator (data store)",
     "DevServiceWorker": "Development service worker",
     "DisableWarningBeforeUnload": "Disable warning before page unload"
   },
@@ -88,6 +89,7 @@
     "Zoom_in": "Zoom in",
     "Zoom_out": "Zoom out",
     "Import_in_progress": "Import in progress ...",
+    "Import_done": "Import done !",
     "Done": "Import done !",
     "Preload_map": "Preload map",
     "ALittle": "Load this view",
@@ -348,7 +350,7 @@
     "Download": "Download",
     "Add_to_project": "Import",
     "Close": "Close",
-    "Import_in_progress": "Import in progress",
+    "Import_in_progress": "Import in progress ...",
     "Download_in_progress": "Download in progress",
     "Select_an_artifact_to_see_what_it_contains": "Select an artifact to see what it contains !",
     "Description": "Description",
@@ -646,13 +648,7 @@
     "Source_code": "Source code",
     "Author_personal_website": "Author's personal website",
     "Fund_Abc-map": "Fund Abc-Map !",
-    "Fund_a_little_piece_of_free_internet": "Fund a little piece of free internet \uD83D\uDC8C",
-    "What_budget": "What budget ?",
-    "The_budget_is_manually_updated_every_month": "The budget is manually updated every month",
-    "And_the_cost_of_labor": "And the cost of labor ?",
-    "A_year_of_development_costs_up_to": "A year of development costs up to €250,000.",
-    "Expenses": "Expenses",
-    "Income": "Income"
+    "Fund_a_little_piece_of_free_internet": "Fund a little piece of free internet \uD83D\uDC8C"
   },
   "FundingLinks": {
     "By_CB_paypal": "By <b>Credit card</b> or <b>Paypal</b>.",
@@ -725,9 +721,7 @@
     "Aouch": "Aouch",
     "Error_occurred": "An error prevents the application from functioning correctly. <br />This failure has been logged, the developer responsible for this error has just received a letter of resignation.",
     "Reload_page": "Reload page",
-    "Recommended_action": "Recommended action, <br /> but you will lose unsaved changes.",
-    "Return_to_application": "Return to application",
-    "Application_will_be_unstable": "The application may be unstable, <br /> but you can save your work and reload the page."
+    "Recommended_action": "Recommended action, <br /> but you will lose unsaved changes."
   },
   "SolicitationModal": {
     "So_how_was_it": "So how was it ?",
@@ -740,8 +734,7 @@
     "Thanks_for_your_feedback": "Thanks for your feedback",
     "Support_project": "Make a donation to support this project",
     "Close": "Close",
-    "What_happened": "What happened ?️",
-    "For_the_moment_the_budget_is": "For the moment the budget is:"
+    "What_happened": "What happened ?️"
   },
   "ResetPasswordView": {
     "Reset_your_password": "Reset your password",
@@ -776,7 +769,7 @@
     "This_feature_is_empty": "This feature is empty"
   },
   "EditPropertiesModal": {
-    "Properties": "Properties",
+    "Editable_properties": "Editable properties",
     "Cancel": "Cancel",
     "Save": "Save",
     "Delete_property": "Delete property",
@@ -971,7 +964,6 @@
   },
   "ChangelogView": {
     "Changelog": "Changelog",
-    "Follow_us_on_twitter": "Follow us on Twitter",
     "Failed_to_load_log_try_again_later": "Failed to load log, try again later"
   },
   "InstallAppModal": {
@@ -1005,7 +997,8 @@
     "Offline": "Offline"
   },
   "LargeOfflineIndicator": {
-    "You_are_offline": "You are offline"
+    "You_are_offline": "You are offline",
+    "Offline_icon": "Offline icon"
   },
   "NorthArrow": {
     "North": "North"
@@ -1027,25 +1020,10 @@
     "Favorite_modules": "Favorite modules",
     "Restore_default_modules": "Restore default modules",
     "Search_for_a_feature_or_module": "Search for a feature or module",
-    "Add_a_module": "Add a module",
     "What_do_you_want_to_do": "What do you want to do ?",
     "Nothing_matches": "Nothing matches !",
     "Try_rephrasing_or_browse_the_features_below": "Try rephrasing, or browse the features below.",
     "You_can_display_this_search_at_any_time_by_using_CTRL_M": "You can display this search at any time by using CTRL+M",
-    "AddModuleModal": {
-      "Add_a_module": "Add a module",
-      "Loading_done": "Loading done !",
-      "Enter_module_addresses_then_confirm": "Enter module addresses then confirm:",
-      "Use_only_modules_whose_source_you_know": "Use only modules whose source you know. Per example, a malicious module can steal identifiers present in this application.",
-      "Load_modules": "Load modules",
-      "Remote_modules": "Modules loaded",
-      "Remove_module": "Remove module",
-      "You_can_try": "You can try",
-      "Close": "Close",
-      "Modules_loaded": "Modules loaded",
-      "Ok": "Ok",
-      "Error": "Error"
-    },
     "Click_on_stars": "Click on the stars to mark the modules as favorites. You can then access it more easily.",
     "Remove_all": "Remove all"
   },
@@ -1091,6 +1069,7 @@
     "Unknown_type": "Unknown type",
     "No_layer": "No layer",
     "Layers": "Layers",
+    "Layer_s": "layer(s)",
     "Features": "features",
     "Type": "Type",
     "Login": "Login",

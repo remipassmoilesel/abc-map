@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
  */
 
 import { logger, ProportionalSymbolsModule } from './ProportionalSymbolsModule';
-import { newParameters, Parameters } from './Parameters';
+import type { Parameters } from './Parameters';
+import { newParameters } from './Parameters';
 import { MapFactory } from '../../core/geo/map/MapFactory';
-import VectorSource from 'ol/source/Vector';
 import {
   featuresToComparableValues,
   testDataSource1,
@@ -29,16 +29,16 @@ import {
   testGeometryLayer2,
   testGeometryLayer3,
 } from './ProportionalSymbolsModule.test.data';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { ScaleAlgorithm } from '../../core/modules/Algorithm';
 import { IconName } from '@abc-map/point-icons';
-import { DataSource } from '../../core/data/data-source/DataSource';
-import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { DataSource } from '../../core/data/data-source/DataSource';
+import type { DefaultVectorSource, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { Status } from './ProcessingResult';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
-import Geometry from 'ol/geom/Geometry';
 import { mockServices, restoreServices } from '../../core/utils/test/mock-services';
+import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 
@@ -111,7 +111,7 @@ describe('ProportionalSymbolsModule', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New layer name');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       expect(features.length).toEqual(4);
 
       const comparable = featuresToComparableValues(features, 'code_reg');
@@ -149,7 +149,7 @@ describe('ProportionalSymbolsModule', () => {
       expect(map.getLayers().length).toEqual(1);
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New layer name');
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       expect(features.length).toEqual(4);
 
       const comparable = featuresToComparableValues(features, 'code_reg');
@@ -187,7 +187,7 @@ describe('ProportionalSymbolsModule', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New layer name');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       const comparable = featuresToComparableValues(features, 'code_reg');
       expect(comparable).toEqual([
         { size: 2, value: 164068, joinedBy: '04' },
@@ -245,7 +245,7 @@ describe('ProportionalSymbolsModule', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New layer name');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       const comparable = featuresToComparableValues(features, 'code');
       expect(comparable).toEqual([
         { size: 2, value: 377.730620008599, joinedBy: 1 },
@@ -295,7 +295,7 @@ describe('ProportionalSymbolsModule', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New layer name');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       const comparable = featuresToComparableValues(features, 'code');
       expect(comparable).toEqual([
         { size: 4, value: 2, joinedBy: 2 },
@@ -330,7 +330,7 @@ describe('ProportionalSymbolsModule', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New layer name');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       const comparable = featuresToComparableValues(features, 'code');
       expect(comparable).toEqual([
         { size: 27, value: 2, joinedBy: 2 },

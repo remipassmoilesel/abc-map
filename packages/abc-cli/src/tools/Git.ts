@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Shell } from './Shell';
-import { Config } from '../config/Config';
+import { Shell } from './Shell.js';
+import type { Config } from '../config/Config.js';
 
 export class Git {
   public static create(config: Config): Git {
@@ -30,7 +30,7 @@ export class Git {
     try {
       this.shell.sync('git diff --quiet', { stdio: 'pipe' });
       return false;
-    } catch (e) {
+    } catch {
       return true;
     }
   }

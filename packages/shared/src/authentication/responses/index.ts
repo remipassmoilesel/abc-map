@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,6 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './AuthenticationResponse';
-export * from './RegistrationConfirmationResponse';
-export * from './RegistrationResponse';
+export * from './AuthenticationResponse.js';
+export * from './RegistrationConfirmationResponse.js';
+export * from './RegistrationResponse.js';

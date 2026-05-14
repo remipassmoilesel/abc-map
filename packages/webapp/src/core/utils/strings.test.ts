@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@
  */
 
 import { linkify, prettyStringify } from './strings';
+import { describe, expect, it } from 'vitest';
 
 describe('strings', () => {
   it('prettyStringify()', () => {
@@ -32,10 +33,10 @@ describe('strings', () => {
   it('linkify()', () => {
     expect(linkify('Hello')).toEqual('Hello');
     expect(linkify('Hello click here: https://somewhere.net/section?q1=p1&q2=p2')).toEqual(
-      'Hello click here: <a href="https://somewhere.net/section?q1=p1&q2=p2" target="_blank">https://somewhere.net/section?q1=p1&q2=p2</a>'
+      'Hello click here: <a href="https://somewhere.net/section?q1=p1&q2=p2" target="_blank">https://somewhere.net/section?q1=p1&q2=p2</a>',
     );
     expect(linkify('Hello mail me here: somewhere@somebody.net')).toEqual(
-      'Hello mail me here: <a href="mailto:somewhere@somebody.net">somewhere@somebody.net</a>'
+      'Hello mail me here: <a href="mailto:somewhere@somebody.net">somewhere@somebody.net</a>',
     );
   });
 });

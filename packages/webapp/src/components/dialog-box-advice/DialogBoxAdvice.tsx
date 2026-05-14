@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,8 +20,8 @@ import Cls from './DialogBoxAdvice.module.scss';
 import React, { useCallback, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { AllTips } from '../../core/tips';
-import { getTipsLang, prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { getTipsLang } from '../../i18n/i18n';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { HelpIcon } from '../help-icon/HelpIcon';
 
 interface Props {
@@ -32,11 +32,10 @@ interface Props {
   size?: string;
 }
 
-const t = prefixedTranslation('DialogBoxAdvice:');
-
 function DialogBoxAdvice(props: Props) {
   const { id, label, className, size } = props;
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation('DialogBoxAdvice');
 
   const handleClick = useCallback(() => {
     setOpen(true);
@@ -47,7 +46,7 @@ function DialogBoxAdvice(props: Props) {
   const getTip = useCallback(() => {
     const tip = AllTips.find((bundle) => bundle.lang === getTipsLang())?.tips.find((tip) => tip.id === id);
     return tip?.content || t('This_tip_is_not_available');
-  }, [id]);
+  }, [id, t]);
 
   return (
     <>

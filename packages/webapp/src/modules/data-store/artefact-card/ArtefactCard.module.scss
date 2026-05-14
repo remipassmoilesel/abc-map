@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -29,14 +29,14 @@
   width: 28vw;
   max-width: 28vw;
 
+  cursor: pointer;
+  box-shadow: $box-shadow;
+
   @include media-breakpoint-down(xl) {
     width: 100%;
     min-width: 100%;
     max-width: 100%;
   }
-
-  cursor: pointer;
-  box-shadow: $box-shadow;
 
   &.selected {
     background: $gray-200;

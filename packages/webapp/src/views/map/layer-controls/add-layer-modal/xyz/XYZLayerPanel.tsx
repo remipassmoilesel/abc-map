@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import FormValidationLabel from '../../../../../components/form-validation-label/FormValidationLabel';
 import { ValidationHelper } from '../../../../../core/utils/ValidationHelper';
@@ -25,13 +26,10 @@ import ControlButtons from '../_common/ControlButtons';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
-import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { useServices } from '../../../../../core/useServices';
 
 const logger = Logger.get('XYZLayerPanel.tsx');
-
-const t = prefixedTranslation('MapView:');
 
 interface Props {
   url: string;
@@ -42,6 +40,7 @@ interface Props {
 
 function XYZLayerPanel(props: Props) {
   const { history } = useServices();
+  const { t } = useTranslation('MapView');
   const [formState, setFormState] = useState(FormState.InvalidHttpsUrl);
   const { url, onCancel, onConfirm, onChange } = props;
   const submitDisabled = formState !== FormState.Ok;
@@ -79,7 +78,7 @@ function XYZLayerPanel(props: Props) {
       setFormState(validateForm(value));
       onChange(ev.target.value);
     },
-    [onChange, validateForm]
+    [onChange, validateForm],
   );
 
   // We validate pre-existing URL

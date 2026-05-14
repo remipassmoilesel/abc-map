@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { LazyExoticComponent } from 'react';
 import DocumentationView from './view/DocumentationView';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('DocumentationModule:');
+const t = prefixedTranslation('DocumentationModule');
 
-export class DocumentationModule extends ModuleAdapter {
-  public getId(): ModuleId {
-    return BundledModuleId.Documentation;
+export class DocumentationModule implements AbcModule {
+  public getId() {
+    return ModuleId.Documentation;
   }
 
   public getReadableName(): string {
@@ -37,7 +36,7 @@ export class DocumentationModule extends ModuleAdapter {
     return t('Everything_you_need_to_know_about_Abc-Map');
   }
 
-  public getView(): JSX.Element | LazyExoticComponent<any> {
-    return <DocumentationView />;
+  public getView() {
+    return () => <DocumentationView />;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,8 @@ import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useServices } from '../../core/useServices';
-import { ModalEvent, ModalEventType } from '../../core/ui/typings';
+import type { ModalEvent } from '../../core/ui/typings';
+import { ModalEventType } from '../../core/ui/typings';
 
 export function WarningModal() {
   const { t } = useTranslation('WarningModal');

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,15 +18,19 @@
  *
  */
 
-import { Controller } from '../server/Controller';
+import { Controller } from '../server/Controller.js';
 import { Logger } from '@abc-map/shared';
-import { Services } from '../services/services';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { Services } from '../services/services.js';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { Config } from '../config/Config.js';
 
-const logger = Logger.get('MetricsController.ts');
+const logger = Logger.get('MetricsController.ts', 'info');
 
 export class MetricsController extends Controller {
-  constructor(private services: Services) {
+  constructor(
+    private config: Config,
+    private services: Services,
+  ) {
     super();
   }
 
@@ -36,6 +40,9 @@ export class MetricsController extends Controller {
 
   public setup = async (app: FastifyInstance): Promise<void> => {
     app.get('/', this.getMetrics);
+
+    const url = new URL(this.getRoot(), this.config.externalUrl).toString();
+    logger.info(`Prometheus metrics will be served on ${url}`);
   };
 
   private getMetrics = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {

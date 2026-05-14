@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { IconDefs } from '../icon/IconDefs';
 import { FaIcon } from '../icon/FaIcon';
 import Cls from './FoldingCard.module.scss';
 
-interface Props {
+interface Props extends WithTranslation {
   className?: string;
   title: string;
   children: ReactNode | ReactNode[];
@@ -33,8 +34,6 @@ interface State {
   isOpen: boolean;
 }
 
-const t = prefixedTranslation('FoldingCard:');
-
 class FoldingCard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -42,6 +41,8 @@ class FoldingCard extends Component<Props, State> {
   }
 
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'FoldingCard');
+
     const isOpen = this.state.isOpen;
     const toolTip = isOpen ? t('Close') : t('Open');
     const className = this.props.className;

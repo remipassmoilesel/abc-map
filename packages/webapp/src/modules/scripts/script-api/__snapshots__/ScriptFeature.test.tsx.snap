@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ScriptFeature getGeometry() 1`] = `
-Object {
-  "coordinates": Array [
+exports[`ScriptFeature > getGeometry() 1`] = `
+{
+  "coordinates": [
     -41.30467214209378,
     48.53131787315718,
   ],
@@ -10,9 +10,9 @@ Object {
 }
 `;
 
-exports[`ScriptFeature setGeometry() 1`] = `
-Object {
-  "coordinates": Array [
+exports[`ScriptFeature > setGeometry() 1`] = `
+{
+  "coordinates": [
     -41,
     49,
   ],
@@ -20,8 +20,8 @@ Object {
 }
 `;
 
-exports[`ScriptFeature setGeometry() 2`] = `
-Array [
+exports[`ScriptFeature > setGeometry() 2`] = `
+[
   -4564099.122524217,
   6274861.394006576,
 ]

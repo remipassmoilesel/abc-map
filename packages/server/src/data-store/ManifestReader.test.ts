@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,10 +15,11 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { FileModule, ManifestReader } from './ManifestReader';
-import * as sinon from 'sinon';
-import { SinonStub } from 'sinon';
-import { assert } from 'chai';
+import type { FileModule } from './ManifestReader.js';
+import { ManifestReader } from './ManifestReader.js';
+import sinon from 'sinon';
+import type { SinonStub } from 'sinon';
+import { assert, beforeEach, describe, it } from 'vitest';
 import { ArtefactType, Language } from '@abc-map/shared';
 
 describe('ManifestReader', () => {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import DataSourceSelector from './DataSourceSelector';
-import { DataRow, DataSource } from '../../core/data/data-source/DataSource';
-import { ServiceProps, withServices } from '../../core/withServices';
+import type { DataRow, DataSource } from '../../core/data/data-source/DataSource';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
 import DialogBoxAdvice from '../dialog-box-advice/DialogBoxAdvice';
 import FormLine from '../form-line/FormLine';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { getAllFieldNames } from '../../core/data/getFieldNames';
 import { SmallDataTable } from '../small-data-table/SmallDataTable';
@@ -37,7 +39,7 @@ export interface DataSourceFormValues {
   joinBy?: string;
 }
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   valuesFieldLabel: string;
   valuesFieldTip: string;
   values: DataSourceFormValues;
@@ -49,8 +51,6 @@ interface State {
   dataSamples: DataRow[];
 }
 
-const t = prefixedTranslation('DataSourceForm:');
-
 class DataSourceForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -61,6 +61,8 @@ class DataSourceForm extends Component<Props, State> {
   }
 
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'DataSourceForm');
+
     const source = this.props.values.source;
     const valueField = this.props.values.valueField;
     const joinBy = this.props.values.joinBy;
@@ -96,7 +98,7 @@ class DataSourceForm extends Component<Props, State> {
                   <option key={f} value={f}>
                     {f}
                   </option>
-                ))
+                )),
               )}
           </select>
         </FormLine>
@@ -122,7 +124,7 @@ class DataSourceForm extends Component<Props, State> {
                   <option key={f} value={f}>
                     {f}
                   </option>
-                ))
+                )),
               )}
           </select>
         </FormLine>

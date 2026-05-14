@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../Tool';
+import type { Tool } from '../Tool';
 import Icon from '../../../assets/tool-icons/move.inline.svg';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import { MapTool } from '@abc-map/shared';
 import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 

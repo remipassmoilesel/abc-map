@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import Cls from './FloatingTextFrame.module.scss';
-import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
-import { AbcTextFrame, AbcTextFrameStyle, Logger, TextFrameChild } from '@abc-map/shared';
+import type { CSSProperties } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import type { AbcTextFrame, AbcTextFrameStyle, TextFrameChild } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import TextEditor from '../text-editor/TextEditor';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import clsx from 'clsx';
 import { FrameControls } from './FrameControls';
-import { FloatingContainer, FloatingCtrDragCallback, FloatingCtrResizeCallback } from '../floating-container/FloatingContainer';
+import type { FloatingCtrDragCallback, FloatingCtrResizeCallback } from '../floating-container/FloatingContainer';
+import { FloatingContainer } from '../floating-container/FloatingContainer';
 
 const logger = Logger.get('TextFrame.tsx');
 
@@ -52,9 +55,9 @@ export function FloatingTextFrame(props: Props) {
         ...frame,
         position: { x, y },
       };
-      onChange && onChange(frame, updated);
+      if (onChange) onChange(frame, updated);
     },
-    [frame, onChange]
+    [frame, onChange],
   );
 
   // User resizes frame
@@ -65,18 +68,18 @@ export function FloatingTextFrame(props: Props) {
         position: { x, y },
         size: { width, height },
       };
-      onChange && onChange(frame, updated);
+      if (onChange) onChange(frame, updated);
     },
-    [frame, onChange]
+    [frame, onChange],
   );
 
   // User change frame content
   const handleContentChange = useCallback(
     (content: TextFrameChild[]) => {
       const updated: AbcTextFrame = { ...frame, content };
-      onChange && onChange(frame, updated);
+      if (onChange) onChange(frame, updated);
     },
-    [frame, onChange]
+    [frame, onChange],
   );
 
   // User edits frame in fullscreen
@@ -88,7 +91,7 @@ export function FloatingTextFrame(props: Props) {
   // User set frame style
   const handleStyleChange = useCallback(
     (style: AbcTextFrameStyle) => {
-      onChange &&
+      if (onChange)
         onChange(frame, {
           ...frame,
           style: {
@@ -97,7 +100,7 @@ export function FloatingTextFrame(props: Props) {
           },
         });
     },
-    [frame, onChange]
+    [frame, onChange],
   );
 
   const containerStyle: CSSProperties = useMemo(() => ({ background: style.background }), [style.background]);

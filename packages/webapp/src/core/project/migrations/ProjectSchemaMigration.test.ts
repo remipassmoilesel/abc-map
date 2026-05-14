@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,15 @@
  */
 
 import { logger, ProjectSchemaMigration } from './ProjectSchemaMigration';
-import { MigrationProject, ProjectMigration } from './typings';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import type { MigrationProject, ProjectMigration } from './typings';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { ModalService } from '../../ui/ModalService';
 import { TestData } from './test-data/TestData';
-import { AbcProjectManifest, ProjectConstants } from '@abc-map/shared';
+import type { AbcProjectManifest } from '@abc-map/shared';
+import { ProjectConstants } from '@abc-map/shared';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,10 +19,11 @@
 import Cls from './FloatingScale.module.scss';
 import { Scale } from '../scale/Scale';
 import React, { useCallback } from 'react';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { AbcScale } from '@abc-map/shared';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { AbcScale } from '@abc-map/shared';
 import clsx from 'clsx';
-import { FloatingContainer, FloatingCtrDragCallback } from '../floating-container/FloatingContainer';
+import type { FloatingCtrDragCallback } from '../floating-container/FloatingContainer';
+import { FloatingContainer } from '../floating-container/FloatingContainer';
 
 interface Props {
   map: MapWrapper;
@@ -39,9 +40,9 @@ export function FloatingScale(props: Props) {
 
   const handleDrag: FloatingCtrDragCallback = useCallback(
     (x, y) => {
-      onChange && onChange({ ...scale, x, y });
+      if (onChange) onChange({ ...scale, x, y });
     },
-    [onChange, scale]
+    [onChange, scale],
   );
 
   return (

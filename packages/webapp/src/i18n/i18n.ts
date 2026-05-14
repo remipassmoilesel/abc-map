@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import i18n, { TFunction } from 'i18next';
+import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { FallbackLang, Language, Logger } from '@abc-map/shared';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './translations/en.json';
 import fr from './translations/fr.json';
-import { TipsLang } from '../core/tips';
+import type { TipsLang } from '../core/tips';
 
 const logger = Logger.get('i18n.tsx');
 
@@ -46,39 +46,25 @@ i18n
       escapeValue: false,
     },
     returnNull: false,
+    showSupportNotice: false,
   })
   .catch((err) => logger.error('i18n init error:', err));
 
-export interface StringMap {
-  [k: string]: string | number;
-}
-
 /**
- * Use this function outside of react component to reduce translation boilerplate.
+ * Use this to obtain a prefixed translation function.
  *
- * Usage:
+ * This function will use the current language set by user in UI.
  *
- * ```
- *  const t = prefixedTranslation('Namespace:Parent.');
- *
- *  t('Key') // Will use 'Namespace:Parent.Key'
- * ```
- *
- * Do not use it in React components, use `keyPrefix` instead:
- *
- * ```
- *    const t = useTranslation('TopLevelNamespace', {keyPrefix: 'Nested.Namespaces'})
- * ```
- *
- * @param prefix
+ * You MUST NOT use this function in React contexts:
+ * - In React class components you can use:   const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorPicker');
+ * - In React FC you can use:   const { t } = useTranslation('useExportProject');
  */
-// TODO: terminate refactoring, remove bad usages
-export function prefixedTranslation(prefix: string) {
-  return prefixI18nTFunc(prefix, i18n.t);
-}
-
-export function prefixI18nTFunc(prefix: string, tFunc: TFunction) {
-  return (key: string, params?: StringMap) => tFunc(`${prefix}${key}`, params || {});
+export function prefixedTranslation(namespace: string): (s: string, args?: object | undefined) => string {
+  return (s, args) => {
+    const key = namespace + ':' + s;
+    // FIXME: Find better typings
+    return i18n.t(key, args as unknown as string);
+  };
 }
 
 export async function setLang(lang: Language): Promise<void> {

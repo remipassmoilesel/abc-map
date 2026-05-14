@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,9 @@
  */
 
 import Cls from './StaticAttributions.module.scss';
-import React, { CSSProperties, useMemo } from 'react';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { CSSProperties } from 'react';
+import React, { useMemo } from 'react';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { Logger } from '@abc-map/shared';
 import MainIcon from '../../assets/main-icon.png';
 import { AttributionFormat } from '../../core/geo/AttributionFormat';

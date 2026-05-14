@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import Cls from './LayoutList.module.scss';
 import React from 'react';
 import { Logger } from '@abc-map/shared';
-import { AbcLayout } from '@abc-map/shared';
+import type { AbcLayout } from '@abc-map/shared';
 import LayoutListItem from './LayoutListItem';
 import { useTranslation, withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../../components/icon/FaIcon';

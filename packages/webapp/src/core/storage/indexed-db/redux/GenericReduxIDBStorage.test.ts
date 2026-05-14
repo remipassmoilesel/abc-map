@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MainStore, storeFactory } from '../../../store/store';
-import { ProjectActions } from '../../../store/project/actions';
+import type { MainStore } from '../../../../store/store';
+import { storeFactory } from '../../../../store/store';
+import { ProjectActions } from '../../../../store/project/actions';
 import { TestHelper } from '../../../utils/test/TestHelper';
 import { initMainDatabase } from '../main-database';
-import { AbcLayout } from '@abc-map/shared';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import type { AbcLayout } from '@abc-map/shared';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { IndexedDbClient, toKvPair } from '../client/IndexedDbClient';
 import { ObjectStore } from '../client/ObjectStore';
 import { GenericReduxIDBStorage, logger } from './GenericReduxIDBStorage';
 import { disableStorageMigrationLogs } from '../migrations/StorageUpdater';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 disableStorageMigrationLogs();
 logger.disable();
@@ -107,7 +110,7 @@ describe('GenericReduxIDBStorage', () => {
         () => client,
         ObjectStore.Layouts,
         (st) => st.project.layouts.list,
-        4
+        4,
       );
     });
 

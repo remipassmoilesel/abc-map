@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../core/store/reducer';
-import { MapActions } from '../../core/store/map/actions';
-import ColorPicker from './ColorPickerButton';
-import { ServiceProps, withServices } from '../../core/withServices';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
+import type { MainState } from '../../store/reducer';
+import { MapActions } from '../../store/map/actions';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
 import OptionRow from '../../views/map/tool-selector/_common/option-row/OptionRow';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../i18n/i18n';
+import { ColorPickerButton } from './ColorPickerButton.tsx';
 
 export interface LocalProps {
   /**
@@ -60,15 +63,15 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
-
-const t = prefixedTranslation('ColorSelector:');
+type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps & WithTranslation;
 
 /**
  * Color selector is a group of color pickers used for drawing purposes
  */
-class ColorSelector extends Component<Props, {}> {
+class ColorSelector extends Component<Props, unknown> {
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorPicker');
+
     const strokeColor = this.props.stroke;
     const fillColor1 = this.props.fillColor1;
     const fillColor2 = this.props.fillColor2;
@@ -83,28 +86,28 @@ class ColorSelector extends Component<Props, {}> {
         {strokeColor && (
           <OptionRow>
             <div>{t('Line')}: </div>
-            <ColorPicker value={strokeProps?.color} onClose={this.handleStrokeColor} data-cy={'stroke-color'} />
+            <ColorPickerButton value={strokeProps?.color} onClose={this.handleStrokeColor} data-cy={'stroke-color'} />
           </OptionRow>
         )}
 
         {fillColor1 && (
           <OptionRow>
             <div>{t('Filling')}: </div>
-            <ColorPicker value={fillProps?.color1} onClose={this.handleFillColor1} data-cy={'fill-color1'} />
+            <ColorPickerButton value={fillProps?.color1} onClose={this.handleFillColor1} data-cy={'fill-color1'} />
           </OptionRow>
         )}
 
         {fillColor2 && (
           <OptionRow>
             <div>{t('Texture')}: </div>
-            <ColorPicker value={fillProps?.color2} onClose={this.handleFillColor2} data-cy={'fill-color2'} />
+            <ColorPickerButton value={fillProps?.color2} onClose={this.handleFillColor2} data-cy={'fill-color2'} />
           </OptionRow>
         )}
 
         {pointColor && (
           <OptionRow>
             <div>{t('Icon')}: </div>
-            <ColorPicker value={pointProps?.color} onClose={this.handlePointColor} data-cy={'point-color'} />
+            <ColorPickerButton value={pointProps?.color} onClose={this.handlePointColor} data-cy={'point-color'} />
           </OptionRow>
         )}
       </div>

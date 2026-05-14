@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,23 +17,16 @@
  */
 
 import { GeoService } from '../geo/GeoService';
-import { ProjectActions } from '../store/project/actions';
-import {
-  AbcLayer,
-  AbcProjectManifest,
-  AbcProjectMetadata,
-  AbcXyzLayer,
-  CompressedProject,
-  LayerType,
-  PredefinedLayerModel,
-  ProjectHelper,
-} from '@abc-map/shared';
+import { ProjectActions } from '../../store/project/actions';
+import type { AbcLayer, AbcProjectManifest, AbcProjectMetadata, AbcXyzLayer, CompressedProject } from '@abc-map/shared';
+import { LayerType, PredefinedLayerModel, ProjectHelper } from '@abc-map/shared';
 import { TestHelper } from '../utils/test/TestHelper';
 import { MapFactory } from '../geo/map/MapFactory';
-import { MainStore, storeFactory } from '../store/store';
+import type { MainStore } from '../../store/store';
+import { storeFactory } from '../../store/store';
 import { MapWrapper } from '../geo/map/MapWrapper';
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { ToastService } from '../ui/ToastService';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEventType } from './ProjectEvent';
@@ -48,14 +41,15 @@ import { LayerIDBStorage } from '../storage/indexed-db/layers/LayerIDBStorage';
 import { logger, ProjectService } from './ProjectService';
 import { throttleDbStorage } from '../storage/indexed-db/client/throttleDbStorage';
 import { disableGenericStorageLog } from '../storage/indexed-db/redux/GenericReduxIDBStorage';
-import { VectorLayerWrapper } from '../geo/layers/LayerWrapper';
+import type { VectorLayerWrapper } from '../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../geo/features/FeatureWrapper';
 import { disableFeatureStorageLog, FeatureIDBStorage } from '../storage/indexed-db/features/FeatureIDBStorage';
 import sortBy from 'lodash/sortBy';
-import MockedFn = jest.MockedFn;
 import { SharedViewIDBStorage } from '../storage/indexed-db/shared-views/SharedViewIDBStorage';
 import { LayoutIDBStorage } from '../storage/indexed-db/layouts/LayoutIDBStorage';
 import { disableStorageMigrationLogs } from '../storage/indexed-db/migrations/StorageUpdater';
+import type { Mock } from 'vitest';
+import { vi, afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 disableGenericStorageLog();
@@ -63,14 +57,14 @@ disableFeatureStorageLog();
 disableStorageMigrationLogs();
 
 // We disable throttling for tests
-jest.mock('../storage/indexed-db/client/throttleDbStorage', () => ({
-  throttleDbStorage: jest.fn(),
+vi.mock('../storage/indexed-db/client/throttleDbStorage', () => ({
+  throttleDbStorage: vi.fn(),
 }));
 
 describe('ProjectService', function () {
   // We disable throttling
   beforeEach(() => {
-    (throttleDbStorage as MockedFn<any>).mockImplementation((storageCb) => storageCb);
+    (throttleDbStorage as Mock<any>).mockImplementation((storageCb) => storageCb);
   });
 
   describe('Unit testing', () => {
@@ -85,6 +79,7 @@ describe('ProjectService', function () {
       store = storeFactory();
       geoMock = sinon.createStubInstance(GeoService);
       storage = sinon.createStubInstance(ProjectIDBStorage);
+      toastMock = sinon.createStubInstance(ToastService);
 
       migration = sinon.createStubInstance(ProjectSchemaMigration);
       migration.update.callsFake((manifest, files) => Promise.resolve({ manifest, files }));
@@ -96,7 +91,7 @@ describe('ProjectService', function () {
         toastMock as unknown as ToastService,
         geoMock as unknown as GeoService,
         migration as unknown as ProjectSchemaMigration,
-        storage as unknown as ProjectIDBStorage
+        storage as unknown as ProjectIDBStorage,
       );
     });
 
@@ -346,8 +341,8 @@ describe('ProjectService', function () {
     });
 
     it('getPublicLink()', () => {
-      expect(projectService.getPublicLink()).toMatch(/^http:\/\/localhost\/en\/shared-map\/[a-z0-9-]+$/i);
-      expect(projectService.getPublicLink('test-project-id')).toEqual('http://localhost/en/shared-map/test-project-id');
+      expect(projectService.getPublicLink()).toMatch(/^http:\/\/localhost:3000\/en\/shared-map\/[a-z0-9-]+$/i);
+      expect(projectService.getPublicLink('test-project-id')).toEqual('http://localhost:3000/en/shared-map/test-project-id');
     });
   });
 
@@ -364,6 +359,7 @@ describe('ProjectService', function () {
       await initMainDatabase();
 
       store = storeFactory();
+      toastMock = sinon.createStubInstance(ToastService);
       geoService = sinon.createStubInstance(GeoService);
       modals = sinon.createStubInstance(ModalService);
       storage = ProjectIDBStorage.create();
@@ -377,7 +373,7 @@ describe('ProjectService', function () {
         toastMock as unknown as ToastService,
         geoService as unknown as GeoService,
         updater,
-        storage
+        storage,
       );
     });
 
@@ -426,7 +422,7 @@ describe('ProjectService', function () {
           geoService
             .getMainMap()
             .getLayers()
-            .map((lay) => lay.toAbcLayer())
+            .map((lay) => lay.toAbcLayer()),
         );
         const layerIds = layers.map((lay) => lay.metadata.id);
 
@@ -450,7 +446,7 @@ describe('ProjectService', function () {
           geoService
             .getMainMap()
             .getLayers()
-            .map((lay) => lay.toAbcLayer())
+            .map((lay) => lay.toAbcLayer()),
         );
 
         projectService.enableProjectAutoSave();
@@ -491,8 +487,8 @@ describe('ProjectService', function () {
         expect(sortBy(featuresFromDb, 'id')).toEqual(
           sortBy(
             features.map((f) => f.toGeoJSON()),
-            'id'
-          )
+            'id',
+          ),
         );
       });
 

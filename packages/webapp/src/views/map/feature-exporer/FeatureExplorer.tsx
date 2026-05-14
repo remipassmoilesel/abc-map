@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import Cls from './FeatureExplorer.module.scss';
 import { useMapLayers } from '../../../core/geo/useMapLayers';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { useTranslation } from 'react-i18next';
 import { useServices } from '../../../core/useServices';
@@ -30,14 +31,14 @@ import { SetFeaturePropertiesChangeset } from '../../../core/history/changesets/
 import clsx from 'clsx';
 import { useIndexedSearch } from '../../../core/utils/useIndexedSearch';
 import { useFeatures } from './useFeatures';
-import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
+import type { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import { Settings } from './Settings';
+import type { Settings } from './Settings';
 import { SettingsModal } from './settings-modal/SettingsModal';
 import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
 import { LayerSelector } from '../../../components/layer-selector/LayerSelector';
-import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { FeatureList } from './FeatureList';
 
 export const logger = Logger.get('FeatureExplorer.ts', 'debug');
@@ -91,7 +92,7 @@ export function FeatureExplorer() {
         feature.setHighlighted(true, 1_500);
       }
     },
-    [geo]
+    [geo],
   );
 
   const handleDelete = useCallback(
@@ -106,7 +107,7 @@ export function FeatureExplorer() {
         .then(() => history.register(HistoryKey.Map, cs))
         .catch((err) => logger.error('Deletion error: ', err));
     },
-    [activeLayer, history]
+    [activeLayer, history],
   );
 
   const handleSelect = useCallback(
@@ -121,7 +122,7 @@ export function FeatureExplorer() {
         selection.add([feature.unwrap()]);
       }
     },
-    [geo]
+    [geo],
   );
 
   const handleEditFeature = useCallback(
@@ -140,7 +141,7 @@ export function FeatureExplorer() {
         })
         .catch((err) => logger.error('Error while editing feature properties:', err));
     },
-    [history, modals]
+    [history, modals],
   );
 
   const handleSearch = useCallback(
@@ -152,7 +153,7 @@ export function FeatureExplorer() {
         searchFeatures(query);
       }
     },
-    [searchFeatures]
+    [searchFeatures],
   );
 
   return (
@@ -168,7 +169,7 @@ export function FeatureExplorer() {
       </div>
 
       <div className={'d-flex flex-row mb-2'}>
-        <LayerSelector value={activeLayer} onSelected={handleLayerChange} onlyVector={true} />
+        <LayerSelector value={activeLayer} onSelected={handleLayerChange} onlyVector={true} data-testid={'layer-selector'} />
       </div>
 
       <div className={'d-flex flex-column mb-2'}>

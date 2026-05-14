@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,10 +19,10 @@
  *
  */
 
-import { DocumentationIndex } from './DocumentationIndex';
+import { DocumentationIndex } from './DocumentationIndex.js';
 import { promises as fs } from 'fs';
-import { Config } from '../config/Config';
-import * as path from 'path';
+import type { Config } from '../config/Config.js';
+import path from 'path';
 
 export const StartMark = '%%%append-to-body%%%';
 export const EndMark = '%%%end-append-to-body%%%';
@@ -34,7 +34,10 @@ export class DocumentationTemplating {
     return new DocumentationTemplating(config, DocumentationIndex.get());
   }
 
-  constructor(private config: Config, private index: DocumentationIndex) {}
+  constructor(
+    private config: Config,
+    private index: DocumentationIndex,
+  ) {}
 
   public async templatePages() {
     const docRoot = this.config.userDocumentationPath;

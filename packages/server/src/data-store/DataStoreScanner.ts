@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,29 +16,28 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ArtefactManifestWithPath } from './ArtefactManifestSchema';
-import { ManifestReader } from './ManifestReader';
-import * as util from 'util';
+import type { ArtefactManifestWithPath } from './ArtefactManifestSchema.js';
+import { ManifestReader } from './ManifestReader.js';
 import { Logger } from '@abc-map/shared';
 import { glob } from 'glob';
-const globPromise = util.promisify(glob);
 
 export const logger = Logger.get('DataStoreScanner');
-
-export declare type GlobFunction = typeof globPromise;
 
 /**
  * This class looks for artefact manifest in specified root, read them then return them.
  */
 export class DataStoreScanner {
   public static create(): DataStoreScanner {
-    return new DataStoreScanner(ManifestReader.create(), globPromise);
+    return new DataStoreScanner(ManifestReader.create(), glob);
   }
 
-  constructor(private reader: ManifestReader, private glob: GlobFunction) {}
+  constructor(
+    private reader: ManifestReader,
+    private globFn: typeof glob,
+  ) {}
 
   public async scan(root: string): Promise<ArtefactManifestWithPath[]> {
-    const paths = await this.glob(`{${root}/**/artefact.yml,${root}/**/artefact.yaml}`, { nocase: true });
+    const paths = await this.globFn(`{${root}/**/artefact.yml,${root}/**/artefact.yaml}`, { nocase: true });
 
     const manifests = Promise.all(paths.map((path) => this.reader.read(path).catch((err) => logger.error(`Invalid manifest: ${path}`, err))));
     return manifests.then((res) => res.filter((m): m is ArtefactManifestWithPath => !!m));

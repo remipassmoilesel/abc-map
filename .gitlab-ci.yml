@@ -9,7 +9,7 @@
 # If you want to run a full CI pipeline in a Gitlab Runner, set ABC_FULL_CI variable to "true
 #
 
-image: registry.gitlab.com/abc-map/abc-map/build-image:v0.25
+image: registry.gitlab.com/abc-map/abc-map/build-image:v0.29
 
 variables:
   CI: 'true'
@@ -18,24 +18,26 @@ cache:
   key: $CI_PROJECT_ID
   paths:
     - .cypress-cache
-    - .npm-cache
     - .pnpm-store
     - .turbo
     - packages/abc-cli/node_modules
-    - packages/e2e-tests/node_modules/
-    - packages/performance-tests/node_modules/
-    - packages/server/node_modules/
-    - packages/shared/node_modules/
-    - packages/user-documentation/node_modules/
-    - packages/webapp/node_modules/
+    - packages/e2e-tests/node_modules
+    - packages/fake-tile-server/node_modules
+    - packages/infrastructure/node_modules
+    - packages/performance-tests/node_modules
+    - packages/point-icons/node_modules
+    - packages/server/node_modules
+    - packages/shared/node_modules
+    - packages/user-documentation/node_modules
+    - packages/webapp/node_modules
 
 light continuous integration:
   script:
-    - source ci-env.sh
+    - source ci-setup.sh
     - ./abc-cli ci --light
   services:
-    - name: mongo:5.0.20-focal
-      alias: mongodb
+    - name: mongo:7
+      alias: abc-mongodb-server
   variables:
     MONGO_INITDB_ROOT_USERNAME: admin
     MONGO_INITDB_ROOT_PASSWORD: admin
@@ -51,11 +53,11 @@ light continuous integration:
 
 full continuous integration:
   script:
-    - source ci-env.sh
+    - source ci-setup.sh
     - ./abc-cli ci
   services:
-    - name: mongo:4.2-bionic
-      alias: mongodb
+    - name: mongo:7
+      alias: abc-mongodb-server
   variables:
     MONGO_INITDB_ROOT_USERNAME: admin
     MONGO_INITDB_ROOT_PASSWORD: admin

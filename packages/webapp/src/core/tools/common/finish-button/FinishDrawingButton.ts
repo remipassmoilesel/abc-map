@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,23 +18,23 @@
 
 import { Logger } from '@abc-map/shared';
 import { Interaction } from 'ol/interaction';
-import { FinishButton } from './FinishButton';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { Button } from './Button.ts';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import { getRemSize } from '../../../ui/getRemSize';
 
-export const logger = Logger.get('FinishButton.ts');
+export const logger = Logger.get('FinishDrawingButton.ts');
 
 export class FinishDrawingButton extends Interaction {
-  private button: FinishButton | undefined;
+  private button: Button | undefined;
   public onFinishDrawing?: () => void;
 
   constructor() {
     super(undefined);
   }
 
-  public handleEvent(event: MapBrowserEvent<any>): boolean {
+  public handleEvent(event: MapBrowserEvent): boolean {
     if (event.type === MapBrowserEventType.POINTERDOWN) {
       const map = event?.map as Map | undefined;
       const mapTarget = map?.getTarget() as HTMLDivElement | undefined;
@@ -47,7 +47,7 @@ export class FinishDrawingButton extends Interaction {
       const y = mapTarget.getBoundingClientRect().y + event?.pixel[1] + getRemSize() * 2;
 
       if (!this.button) {
-        this.button = new FinishButton();
+        this.button = new Button();
         this.button.show(x, y);
         this.button.onClick = () => this.onFinishDrawing && this.onFinishDrawing();
       } else {
@@ -69,6 +69,7 @@ export class FinishDrawingButton extends Interaction {
 
   public dispose() {
     this.hideButton();
+    this.button?.dispose();
     super.dispose();
   }
 }

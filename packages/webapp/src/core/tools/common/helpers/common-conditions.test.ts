@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,8 +21,9 @@ import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { withControlKey, withControlKeyOnly, withGeometryOfType, withShiftKey } from './common-conditions';
 import { LineString } from 'ol/geom';
 import Feature from 'ol/Feature';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import { AbcGeometryType } from '@abc-map/shared';
+import { describe, expect, it } from 'vitest';
 
 describe('Common conditions', () => {
   it('withShiftKey()', () => {
@@ -57,7 +58,7 @@ describe('Common conditions', () => {
       new LineString([
         [1, 1],
         [2, 2],
-      ])
+      ]),
     );
 
     expect(withGeometryOfType(feature1, [AbcGeometryType.LINE_STRING])).toBe(true);
@@ -68,8 +69,8 @@ describe('Common conditions', () => {
   });
 });
 
-function fakeEvent(initDict: MouseEventInit): MapBrowserEvent<UIEvent> {
+function fakeEvent(initDict: MouseEventInit): MapBrowserEvent {
   const map: Map = {} as any;
-  const original = new MouseEvent('pointerup', initDict);
+  const original = new PointerEvent('pointerup', initDict);
   return new MapBrowserEvent(MapBrowserEventType.POINTERUP, map, original);
 }

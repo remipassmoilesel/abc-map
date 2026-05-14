@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  */
 
 import { MapTool, StyleProperties } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { ModeName, ToolSelector } from '../helpers/ToolSelector';
-import { Draw } from '../helpers/Draw';
-import { MainMap } from '../helpers/MainMap';
-import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
-import { Routes } from '../helpers/Routes';
-import { Project } from '../helpers/Project';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector.js';
+import { Draw } from '../helpers/Draw.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle.js';
+import { Routes } from '../helpers/Routes.js';
+import { Project } from '../helpers/Project.js';
 
 describe('Tool LineString', function () {
   beforeEach(() => {
@@ -63,7 +63,7 @@ describe('Tool LineString', function () {
             [-3564850.149620659, 3583374.765835424, -3075653.168595531, 4072571.746860552],
             [-1608062.225520147, 1626586.8417349122, -1118865.2444950193, 2115783.82276004],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       });
   });

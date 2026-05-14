@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,13 +17,11 @@
  */
 
 import Cls from './LargeOfflineIndicator.module.scss';
-import { prefixedTranslation } from '../../i18n/i18n';
 import clsx from 'clsx';
 import OfflineIcon from './offline.svg';
 import { useOnlineStatus } from '../../core/pwa/OnlineStatusContext';
-import { ReactNode } from 'react';
-
-const t = prefixedTranslation('LargeOfflineIndicator:');
+import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   className?: string;
@@ -33,6 +31,7 @@ interface Props {
 export function LargeOfflineIndicator(props: Props) {
   const { children, className } = props;
   const online = useOnlineStatus();
+  const { t } = useTranslation('LargeOfflineIndicator');
 
   if (online) {
     return <></>;
@@ -41,7 +40,8 @@ export function LargeOfflineIndicator(props: Props) {
   return (
     <div className={clsx(Cls.indicator, className)}>
       <div className={Cls.inner}>
-        <img src={OfflineIcon} alt={t('You_are_offline')} />
+        {/* Image may appear broken if it has never been shown before due to lack of connection */}
+        <img src={OfflineIcon} alt={t('Offline_icon')} />
         <h1 className={'mb-4'}>{t('You_are_offline')}</h1>
 
         <div className={Cls.children}>{children}</div>

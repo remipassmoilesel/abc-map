@@ -1,9 +1,9 @@
-const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+import path from 'path';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
-module.exports = {
+export default {
   mode: 'production',
-  context: path.join(__dirname, 'src'),
+  context: path.join(import.meta.dirname, 'src'),
   target: 'web',
   externals: /^k6(\/.*)?/,
   stats: 'errors-warnings',
@@ -11,7 +11,7 @@ module.exports = {
     index: './index.ts',
   },
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(import.meta.dirname, 'build'),
     libraryTarget: 'commonjs',
     filename: '[name].js',
   },
@@ -28,4 +28,7 @@ module.exports = {
     ],
   },
   plugins: [new CleanWebpackPlugin()],
+  watchOptions: {
+    ignored: /build/,
+  },
 };

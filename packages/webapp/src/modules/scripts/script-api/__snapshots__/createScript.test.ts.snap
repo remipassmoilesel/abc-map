@@ -1,19 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createScript should work 1`] = `[Function]`;
+exports[`createScript > should work 1`] = `[Function]`;
 
-exports[`createScript should work 2`] = `
-Array [
-  Array [
+exports[`createScript > should work 2`] = `
+[
+  [
     "stub",
   ],
-  Array [
-    "{\\"type\\":\\"module-api\\"}",
+  [
+    "{"type":"script-api"}",
   ],
-  Array [
-    "{\\"type\\":\\"script-api\\"}",
-  ],
-  Array [
+  [
     "Waited",
   ],
 ]

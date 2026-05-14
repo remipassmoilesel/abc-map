@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile } from '@abc-map/shared';
+import type { AbcFile } from '@abc-map/shared';
 import { Views } from '../../geo/Views';
-import { MigrationProject, ProjectMigration } from './typings';
+import type { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcProjectManifest010 } from './dependencies/010-project-types';
-import { AbcProjectManifest020 } from './dependencies/020-project-types';
+import type { AbcProjectManifest010 } from './dependencies/010-project-types';
+import type { AbcProjectManifest020 } from './dependencies/020-project-types';
 
 /**
  * This migration add a view in project manifest

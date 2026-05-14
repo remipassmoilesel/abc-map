@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerWrapper, VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
-import { AbcLayer, LayerType, Logger } from '@abc-map/shared';
-import { IndexedDbClient } from '../client/IndexedDbClient';
+import type { LayerWrapper, VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
+import type { AbcLayer } from '@abc-map/shared';
+import { LayerType, Logger } from '@abc-map/shared';
+import type { IndexedDbClient } from '../client/IndexedDbClient';
 import { ObjectStore } from '../client/ObjectStore';
 import { getMainDbClient } from '../main-database';
-import { CURRENT_VERSION, LayerIDBEntry } from './LayerIDBEntry';
+import type { LayerIDBEntry } from './LayerIDBEntry';
+import { CURRENT_VERSION } from './LayerIDBEntry';
 import { FeatureIDBStorage } from '../features/FeatureIDBStorage';
 
 export const logger = Logger.get('LayerIDBStorage.ts');

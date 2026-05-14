@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DataSource } from '../../core/data/data-source/DataSource';
-import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { DataSource } from '../../core/data/data-source/DataSource';
+import type { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { ScaleAlgorithm } from '../../core/modules/Algorithm';
 import { IconName } from '@abc-map/point-icons';
 import { prefixedTranslation } from '../../i18n/i18n';
 
-const t = prefixedTranslation('ProportionalSymbolsModule:');
+const t = prefixedTranslation('ProportionalSymbolsModule');
 
 export interface Parameters {
   newLayerName: string;

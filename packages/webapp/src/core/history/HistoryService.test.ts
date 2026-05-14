@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,13 +17,15 @@
  */
 
 import { HistoryKey } from './HistoryKey';
-import { History, HistoryService } from './HistoryService';
-import { Changeset } from './Changeset';
-import * as sinon from 'sinon';
-import { SinonStub } from 'sinon';
+import type { History } from './HistoryService';
+import { HistoryService } from './HistoryService';
+import type { Changeset } from './Changeset';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import uuid from 'uuid-random';
 import { FakeChangeset, getRedoStackIds, getUndoStackIds } from './HistoryService.test.helpers';
 import { UndoCallbackChangeset } from './changesets/features/UndoCallbackChangeset';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('HistoryService', () => {
   let service: HistoryService;
@@ -59,7 +61,7 @@ describe('HistoryService', () => {
     expect(disposeStub.callCount).toEqual(6);
 
     expect(dispatchStub.callCount).toEqual(1);
-    expect(dispatchStub.args[0][0]).toEqual({ type: 'CleanHistoryCapabilities' });
+    expect(dispatchStub.args[0][0]).toEqual({ type: 'Ui-CleanHistoryCapabilities' });
   });
 
   describe('register()', () => {
@@ -72,7 +74,7 @@ describe('HistoryService', () => {
       expect(getRedoStackIds(fakeHistory, key)).toEqual([]);
 
       expect(dispatchStub.callCount).toEqual(1);
-      expect(dispatchStub.args[0][0]).toEqual({ key, canRedo: false, canUndo: true, type: 'SetHistoryCapabilities' });
+      expect(dispatchStub.args[0][0]).toEqual({ key, canRedo: false, canUndo: true, type: 'Ui-SetHistoryCapabilities' });
     });
 
     it('should stack changeset', async () => {
@@ -124,7 +126,7 @@ describe('HistoryService', () => {
       expect(undoStub.callCount).toEqual(1);
 
       expect(dispatchStub.callCount).toEqual(1);
-      expect(dispatchStub.args[0][0]).toEqual({ key: HistoryKey.Map, canRedo: true, canUndo: true, type: 'SetHistoryCapabilities' });
+      expect(dispatchStub.args[0][0]).toEqual({ key: HistoryKey.Map, canRedo: true, canUndo: true, type: 'Ui-SetHistoryCapabilities' });
     });
 
     it('undo() should stack changeset on redo stack', async () => {
@@ -156,7 +158,7 @@ describe('HistoryService', () => {
       expect(undoStub.callCount).toEqual(1);
 
       expect(dispatchStub.callCount).toEqual(1);
-      expect(dispatchStub.args[0][0]).toEqual({ key: HistoryKey.Map, canRedo: true, canUndo: true, type: 'SetHistoryCapabilities' });
+      expect(dispatchStub.args[0][0]).toEqual({ key: HistoryKey.Map, canRedo: true, canUndo: true, type: 'Ui-SetHistoryCapabilities' });
     });
 
     it('undo() should stack changeset on undo stack', async () => {

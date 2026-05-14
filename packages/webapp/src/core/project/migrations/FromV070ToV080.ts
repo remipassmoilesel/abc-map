@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayout, AbcSharedView, AbcTextFrame, Logger, TableElement, TableRowElement, TextFrameChild } from '@abc-map/shared';
-import { MigrationProject, ProjectMigration } from './typings';
+import type { AbcFile, AbcLayout, AbcSharedView, AbcTextFrame, TableElement, TableRowElement, TextFrameChild } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
+import type { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcLayout070, AbcProjectManifest070, AbcSharedView070 } from './dependencies/070-project-types';
-import { AbcLegend060, LegendDisplay } from './dependencies/060-legend-types';
+import type { AbcLayout070, AbcProjectManifest070, AbcSharedView070 } from './dependencies/070-project-types';
+import type { AbcLegend060 } from './dependencies/060-legend-types';
+import { LegendDisplay } from './dependencies/060-legend-types';
 import { nanoid } from 'nanoid';
-import { AbcProjectManifest080 } from './dependencies/080-project-types';
+import type { AbcProjectManifest080 } from './dependencies/080-project-types';
 
 const NEXT = '0.8.0';
 

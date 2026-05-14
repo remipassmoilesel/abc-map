@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AxiosInstance } from 'axios';
-import { AbcArtefact, AbcFile, ArtefactFilter, BlobIO, Logger, PaginatedResponse } from '@abc-map/shared';
+import type { AxiosInstance } from 'axios';
+import type { AbcArtefact, AbcFile, ArtefactFilter, PaginatedResponse } from '@abc-map/shared';
+import { BlobIO, Logger } from '@abc-map/shared';
 import { DatastoreRoutes as Api } from '../http/ApiRoutes';
-import { ToastService } from '../ui/ToastService';
+import type { ToastService } from '../ui/ToastService';
 import { getLang } from '../../i18n/i18n';
 import { ApiClient, DownloadClient } from '../http/http-clients';
 
@@ -30,7 +31,11 @@ export class DataStoreService {
     return new DataStoreService(ApiClient(), DownloadClient(), toasts);
   }
 
-  constructor(private apiClient: AxiosInstance, private downloadClient: AxiosInstance, private toasts: ToastService) {}
+  constructor(
+    private apiClient: AxiosInstance,
+    private downloadClient: AxiosInstance,
+    private toasts: ToastService,
+  ) {}
 
   public listArtefacts(filter: ArtefactFilter, limit = 50, offset = 0): Promise<PaginatedResponse<AbcArtefact>> {
     const params = { limit, offset, filter };

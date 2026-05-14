@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcPredefinedLayer, AbcVectorLayer, AbcWmsLayer, AbcXyzLayer, LayerType, PredefinedLayerModel } from './AbcLayer';
+import type { AbcPredefinedLayer, AbcVectorLayer, AbcWmsLayer, AbcXyzLayer } from './AbcLayer.js';
+import { LayerType, PredefinedLayerModel } from './AbcLayer.js';
+import { describe, expect, it } from 'vitest';
 
 /**
  * If this test fail, you should write a migration script then adapt it

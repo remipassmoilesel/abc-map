@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcArtefact, ArtefactType } from '@abc-map/shared';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { AbcArtefact } from '@abc-map/shared';
+import { ArtefactType } from '@abc-map/shared';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { IconDefs } from '../../components/icon/IconDefs';
 
 export function getArtefactIcon(artefact: AbcArtefact): IconDefinition {
-  return artefact.type === ArtefactType.BaseMap ? IconDefs.faImage : IconDefs.faVectorSquare;
+  return artefact.type === ArtefactType.BaseMap ? IconDefs.faImage : IconDefs.faDrawPolygon;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,13 @@
  */
 
 import Cls from './PropertiesForm.module.scss';
-import React, { ChangeEvent, useCallback } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback } from 'react';
 import { Logger } from '@abc-map/shared';
 import { useTranslation } from 'react-i18next';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
-import { Property } from './Property';
+import type { Property } from './Property';
 import { nanoid } from 'nanoid';
 import clsx from 'clsx';
 
@@ -47,7 +48,7 @@ export function PropertiesForm(props: Props) {
       });
       onChange(updated);
     },
-    [onChange, properties]
+    [onChange, properties],
   );
 
   const handleDelete = useCallback(
@@ -55,7 +56,7 @@ export function PropertiesForm(props: Props) {
       const updated: Property[] = properties.filter((prop) => prop.id !== property.id);
       onChange(updated);
     },
-    [onChange, properties]
+    [onChange, properties],
   );
 
   const handleNewProperty = useCallback(() => {
@@ -104,7 +105,7 @@ function PropertyRow(props: PropertyRowProps) {
       const name = ev.target.value;
       onChange({ ...property, name });
     },
-    [onChange, property]
+    [onChange, property],
   );
 
   const handleValueChange = useCallback(
@@ -112,7 +113,7 @@ function PropertyRow(props: PropertyRowProps) {
       const value = ev.target.value;
       onChange({ ...property, value });
     },
-    [onChange, property]
+    [onChange, property],
   );
 
   const handleDelete = useCallback(() => {

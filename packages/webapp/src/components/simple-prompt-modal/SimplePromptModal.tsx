@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventType, ModalStatus, ShowSimplePrompt } from '../../core/ui/typings';
+import type { ShowSimplePrompt } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { Logger } from '@abc-map/shared';
 import { useServices } from '../../core/useServices';
 import { useTranslation } from 'react-i18next';
@@ -67,7 +69,7 @@ export function SimplePromptModal() {
       setValue(ev.target.value);
       setValueValid(!!ev.target.value.match(validationRegexp));
     },
-    [validationRegexp]
+    [validationRegexp],
   );
 
   return (

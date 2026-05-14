@@ -5,7 +5,6 @@
 .turbo
 .vscode
 documentation
-node_modules
 node_modules/
 notes/
 packages/server/resources/dev-datastore

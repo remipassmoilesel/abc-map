@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,23 +16,28 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Services, servicesFactory } from '../services/services';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { HttpServer } from '../server/HttpServer';
-import { assert } from 'chai';
-import * as uuid from 'uuid-random';
-import { disableSmtpClientLogging } from '../email/SmtpClient';
-import { TestHelper } from '../utils/TestHelper';
-import { Config } from '../config/Config';
-import { PasswordHasher } from './PasswordHasher';
-import { AnonymousUser, AuthenticationRequest, Language, RegistrationConfirmationRequest, RegistrationRequest } from '@abc-map/shared';
-import * as jwt from 'jsonwebtoken';
-import { RegistrationDao } from './RegistrationDao';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { logger } from './AuthenticationController';
+import type { Services } from '../services/services.js';
+import { servicesFactory } from '../services/services.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { HttpServer } from '../server/HttpServer.js';
+import { assert } from 'vitest';
+import uuid from 'uuid-random';
+import { disableSmtpClientLogging } from '../email/SmtpClient.js';
+import { TestHelper } from '../utils/TestHelper.js';
+import type { Config } from '../config/Config.js';
+import { PasswordHasher } from './PasswordHasher.js';
+import type { AuthenticationRequest, RegistrationConfirmationRequest, RegistrationRequest } from '@abc-map/shared';
+import { AnonymousUser, Language } from '@abc-map/shared';
+import jwt from 'jsonwebtoken';
+import { RegistrationDao } from './RegistrationDao.js';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
+import { logger } from './AuthenticationController.js';
+import { afterAll, beforeAll, describe, it } from 'vitest';
+import { disableAuthenticationServiceLogs } from './AuthenticationService.js';
 
 logger.disable();
 disableSmtpClientLogging();
+disableAuthenticationServiceLogs();
 
 describe('AuthenticationController', () => {
   let config: Config;
@@ -42,7 +47,7 @@ describe('AuthenticationController', () => {
   let services: Services;
   let server: HttpServer;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
@@ -61,7 +66,7 @@ describe('AuthenticationController', () => {
     await server.initialize();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await mongodbClient.disconnect();
     await services.shutdown();
     await server.shutdown();
@@ -82,7 +87,7 @@ describe('AuthenticationController', () => {
       assert.equal(response.statusCode, 400);
       assert.equal(
         response.body,
-        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}'
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}',
       );
     });
 
@@ -119,7 +124,7 @@ describe('AuthenticationController', () => {
       assert.equal(response.statusCode, 400);
       assert.equal(
         response.body,
-        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'token\'"}'
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'token\'"}',
       );
     });
 
@@ -217,7 +222,7 @@ describe('AuthenticationController', () => {
       assert.equal(response.statusCode, 400);
       assert.equal(
         response.body,
-        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}'
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}',
       );
     });
 
@@ -309,7 +314,7 @@ describe('AuthenticationController', () => {
       assert.equal(response.statusCode, 400);
       assert.equal(
         response.body,
-        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'previousPassword\'"}'
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'previousPassword\'"}',
       );
     });
 
@@ -385,7 +390,7 @@ describe('AuthenticationController', () => {
       assert.equal(response.statusCode, 400);
       assert.equal(
         response.body,
-        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'token\'"}'
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'token\'"}',
       );
     });
 
@@ -447,7 +452,7 @@ describe('AuthenticationController', () => {
       assert.equal(response.statusCode, 400);
       assert.equal(
         response.body,
-        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}'
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}',
       );
     });
 
@@ -501,7 +506,7 @@ describe('AuthenticationController', () => {
       assert.equal(response.statusCode, 400);
       assert.equal(
         response.body,
-        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'password\'"}'
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'password\'"}',
       );
     });
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,25 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
 import { EditPropertiesModal, logger } from './EditPropertiesModal';
-import { act } from '@testing-library/react';
-import { ModalEvent, ModalEventType, ModalStatus } from '../../core/ui/typings';
-import { DataPropertiesMap } from '../../core/geo/features/FeatureWrapper';
+import { act } from 'react';
+import type { ModalEvent } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
+import type { DataPropertiesMap } from '../../core/geo/features/FeatureWrapper';
 import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 
 describe('EditPropertiesModal', () => {
   let services: TestServices;
+
   beforeEach(() => {
     services = newTestServices();
   });
 
   it('edit should work', async () => {
     // Prepare
-    const { getByTestId, getAllByTestId } = abcRender(<EditPropertiesModal />, { services });
+    await act(async () => {
+      abcRender(<EditPropertiesModal />, { services });
+    });
 
     // Act
     await openModal({
@@ -45,11 +52,9 @@ describe('EditPropertiesModal', () => {
       'Variable 5': undefined,
     });
 
-    await act(async () => {
-      await userEvent.clear(getAllByTestId('property-value')[0]);
-      await userEvent.type(getAllByTestId('property-value')[0], 'New value 1');
-      await userEvent.click(getByTestId('confirm'));
-    });
+    await userEvent.clear(screen.getAllByTestId('property-value')[0]);
+    await userEvent.type(screen.getAllByTestId('property-value')[0], 'New value 1');
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -72,7 +77,9 @@ describe('EditPropertiesModal', () => {
 
   it('edit should filter unsupported values', async () => {
     // Prepare
-    const { getByTestId, getAllByTestId } = abcRender(<EditPropertiesModal />, { services });
+    await act(async () => {
+      abcRender(<EditPropertiesModal />, { services });
+    });
 
     // Act
     await openModal({
@@ -83,11 +90,9 @@ describe('EditPropertiesModal', () => {
       } as any,
     });
 
-    await act(async () => {
-      await userEvent.clear(getAllByTestId('property-value')[0]);
-      await userEvent.type(getAllByTestId('property-value')[0], 'New value 1');
-      await userEvent.click(getByTestId('confirm'));
-    });
+    await userEvent.clear(screen.getAllByTestId('property-value')[0]);
+    await userEvent.type(screen.getAllByTestId('property-value')[0], 'New value 1');
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -106,18 +111,18 @@ describe('EditPropertiesModal', () => {
 
   it('edit should trim names', async () => {
     // Prepare
-    const { getByTestId, getAllByTestId } = abcRender(<EditPropertiesModal />, { services });
+    await act(async () => {
+      abcRender(<EditPropertiesModal />, { services });
+    });
 
     // Act
     await openModal({
       'Variable 1': 'Value 1',
     });
 
-    await act(async () => {
-      await userEvent.clear(getAllByTestId('property-name')[0]);
-      await userEvent.type(getAllByTestId('property-name')[0], '  VARIABLE_1  ');
-      await userEvent.click(getByTestId('confirm'));
-    });
+    await userEvent.clear(screen.getAllByTestId('property-name')[0]);
+    await userEvent.type(screen.getAllByTestId('property-name')[0], '  VARIABLE_1  ');
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -136,32 +141,26 @@ describe('EditPropertiesModal', () => {
 
   it('add properties should work', async () => {
     // Prepare
-    const { getByTestId, getAllByTestId } = abcRender(<EditPropertiesModal />, { services });
+    await act(async () => {
+      abcRender(<EditPropertiesModal />, { services });
+    });
 
     // Act
     await openModal({
       'Variable 1': 'Value 1',
     });
 
-    await act(async () => {
-      await userEvent.click(getByTestId('new-property-button'));
-    });
+    await userEvent.click(screen.getByTestId('new-property-button'));
 
-    await act(async () => {
-      await userEvent.type(getAllByTestId('property-name')[1], 'VARIABLE_2');
-      await userEvent.type(getAllByTestId('property-value')[1], 'VALUE 2');
-    });
+    await userEvent.type(screen.getAllByTestId('property-name')[1], 'VARIABLE_2');
+    await userEvent.type(screen.getAllByTestId('property-value')[1], 'VALUE 2');
 
-    await act(async () => {
-      await userEvent.click(getByTestId('new-property-button'));
-    });
+    await userEvent.click(screen.getByTestId('new-property-button'));
 
-    await act(async () => {
-      await userEvent.type(getAllByTestId('property-name')[2], 'VARIABLE_3');
-      await userEvent.type(getAllByTestId('property-value')[2], 'VALUE 3');
+    await userEvent.type(screen.getAllByTestId('property-name')[2], 'VARIABLE_3');
+    await userEvent.type(screen.getAllByTestId('property-value')[2], 'VALUE 3');
 
-      await userEvent.click(getByTestId('confirm'));
-    });
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -182,27 +181,24 @@ describe('EditPropertiesModal', () => {
 
   it('create properties should work', async () => {
     // Prepare
-    const { getByTestId, getAllByTestId } = abcRender(<EditPropertiesModal />, { services });
+    await act(async () => {
+      abcRender(<EditPropertiesModal />, { services });
+    });
 
     // Act
     await openModal({});
 
     // First property
-    await act(async () => {
-      await userEvent.type(getAllByTestId('property-name')[0], 'size');
-      await userEvent.type(getAllByTestId('property-value')[0], '12345');
-    });
+    await userEvent.type(screen.getAllByTestId('property-name')[0], 'size');
+    await userEvent.type(screen.getAllByTestId('property-value')[0], '12345');
 
     // Second property
-    await act(async () => {
-      await userEvent.click(getByTestId('new-property-button'));
-    });
-    await act(async () => {
-      await userEvent.type(getAllByTestId('property-name')[1], 'type');
-      await userEvent.type(getAllByTestId('property-value')[1], 'plain');
+    await userEvent.click(screen.getByTestId('new-property-button'));
 
-      await userEvent.click(getByTestId('confirm'));
-    });
+    await userEvent.type(screen.getAllByTestId('property-name')[1], 'type');
+    await userEvent.type(screen.getAllByTestId('property-value')[1], 'plain');
+
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -222,7 +218,9 @@ describe('EditPropertiesModal', () => {
 
   it('delete properties should work', async () => {
     // Prepare
-    const { getByTestId, getAllByTestId } = abcRender(<EditPropertiesModal />, { services });
+    await act(async () => {
+      abcRender(<EditPropertiesModal />, { services });
+    });
 
     // Act
     await openModal({
@@ -232,17 +230,11 @@ describe('EditPropertiesModal', () => {
     });
 
     // We click twice on second element
-    await act(async () => {
-      await userEvent.click(getAllByTestId('delete-button')[1]);
-    });
+    await userEvent.click(screen.getAllByTestId('delete-button')[1]);
 
-    await act(async () => {
-      await userEvent.click(getAllByTestId('delete-button')[1]);
-    });
+    await userEvent.click(screen.getAllByTestId('delete-button')[1]);
 
-    await act(async () => {
-      await userEvent.click(getByTestId('confirm'));
-    });
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);

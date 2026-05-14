@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  */
 
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -36,10 +36,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { MongodbCollection } from '../mongodb/MongodbCollection';
-import { AbcProjectManifest } from '@abc-map/shared';
-import { AbstractService } from '../services/AbstractService';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import { MongodbCollection } from '../mongodb/MongodbCollection.js';
+import type { AbcProjectManifest } from '@abc-map/shared';
+import { AbstractService } from '../services/AbstractService.js';
 import { Logger } from '@abc-map/shared';
 
 export enum HealthStatus {

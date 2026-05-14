@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { FastifyInstance } from 'fastify';
+import type { Config } from '../config/Config.js';
+import type { FastifyInstance } from 'fastify';
 import { Logger } from '@abc-map/shared';
-import { Controller } from './Controller';
+import type { Controller } from './Controller.js';
 
 export const logger = Logger.get('LegalMentionsController.ts');
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcView, BlobIO, Logger } from '@abc-map/shared';
+import type { AbcView } from '@abc-map/shared';
+import { BlobIO, Logger } from '@abc-map/shared';
 import { MapFactory } from '../../core/geo/map/MapFactory';
-import { DimensionsPx } from '../../core/utils/DimensionsPx';
-import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { DimensionsPx } from '../../core/utils/DimensionsPx';
+import type { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { Views } from '../../core/geo/Views';
 
 export const logger = Logger.get('PreviewExporter');

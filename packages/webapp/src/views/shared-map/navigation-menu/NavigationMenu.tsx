@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
  */
 
 import ListItem from './ListItem';
-import { AbcSharedView } from '@abc-map/shared';
+import type { AbcSharedView } from '@abc-map/shared';
 import { useServices } from '../../../core/useServices';
-import { useAppSelector } from '../../../core/store/hooks';
+import { useAppSelector } from '../../../store/hooks';
 import React, { useCallback } from 'react';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
@@ -49,7 +49,7 @@ function NavigationMenu(props: Props) {
       project.setActiveSharedView(view.id);
       onClose();
     },
-    [onClose, project]
+    [onClose, project],
   );
 
   return (

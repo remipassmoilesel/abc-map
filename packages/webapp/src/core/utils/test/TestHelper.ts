@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Feature as GeoJsonFeature, GeoJsonProperties, Geometry as GeoJsonGeometry } from 'geojson';
+import type { Feature as GeoJsonFeature, GeoJsonProperties, Geometry as GeoJsonGeometry } from 'geojson';
 import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
+import type Geometry from 'ol/geom/Geometry';
 import { LineString, Point, Polygon } from 'ol/geom';
-import {
+import type {
   AbcArtefact,
   AbcLayout,
   AbcPredefinedLayer,
@@ -32,39 +32,41 @@ import {
   AbcWmsLayer,
   AbcWmtsLayer,
   AbcXyzLayer,
-  ArtefactType,
   CompressedProject,
-  DEFAULT_PROJECTION,
   FeatureStyle,
+  ProjectionDto,
+  WmsMetadata,
+  XyzMetadata,
+} from '@abc-map/shared';
+import {
+  ArtefactType,
+  DEFAULT_PROJECTION,
   FillPatterns,
   Language,
   LayerType,
   LayoutFormats,
   PredefinedLayerModel,
   ProjectConstants,
-  ProjectionDto,
-  WmsMetadata,
-  XyzMetadata,
   Zipper,
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
-import { Coordinate } from 'ol/coordinate';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
-import Map from 'ol/Map';
+import type { Coordinate } from 'ol/coordinate';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
+import type Map from 'ol/Map';
 import { RegionsOfMetropolitanFrance, SampleWmsCapabilities, SampleWmtsCapabilities } from './TestHelper.data';
 import { TestDataSource } from '../../data/data-source/TestDataSource';
-import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
+import type { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { IconName } from '@abc-map/point-icons';
 import { nanoid } from 'nanoid';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { WmtsSettings } from '../../geo/layers/LayerFactory.types';
-import { WmtsCapabilities } from '../../geo/WmtsCapabilities';
+import type { WmtsSettings } from '../../geo/layers/LayerFactory.types';
+import type { WmtsCapabilities } from '../../geo/WmtsCapabilities';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
-import { WmsCapabilities } from '../../geo/WmsCapabilities';
-import { DeepPartial } from 'utility-types';
-import { DataRow } from '../../data/data-source/DataSource';
+import type { WmsCapabilities } from '../../geo/WmsCapabilities';
+import type { DeepPartial } from 'utility-types';
+import type { DataRow } from '../../data/data-source/DataSource';
 
 interface EventSettings {
   coordinate?: Coordinate;
@@ -380,7 +382,7 @@ export class TestHelper {
     };
   }
 
-  public static mapBrowserEvent(settings: EventSettings): MapBrowserEvent<any> {
+  public static mapBrowserEvent(settings: EventSettings): MapBrowserEvent {
     return {
       type: settings.type ?? MapBrowserEventType.POINTERDOWN,
       coordinate: settings.coordinate ?? [1, 1],
@@ -401,7 +403,7 @@ export class TestHelper {
           return settings.mapTarget;
         },
       },
-    } as unknown as MapBrowserEvent<UIEvent>;
+    } as unknown as MapBrowserEvent;
   }
 
   public static interactionCount(map: Map, name: string): number {
@@ -480,12 +482,13 @@ export class TestHelper {
   }
 
   public static sampleProjectionDto(): ProjectionDto {
-    /* eslint-disable */
     return {
       code: '2154',
       kind: 'CRS-PROJCRS',
       bbox: [51.56, -9.86, 41.15, 10.38],
+      /* eslint-disable max-len */
       wkt: 'PROJCS["RGF93 / Lambert-93",GEOGCS["RGF93",DATUM["Reseau_Geodesique_Francais_1993",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY["EPSG","6171"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4171"]],PROJECTION["Lambert_Conformal_Conic_2SP"],PARAMETER["standard_parallel_1",49],PARAMETER["standard_parallel_2",44],PARAMETER["latitude_of_origin",46.5],PARAMETER["central_meridian",3],PARAMETER["false_easting",700000],PARAMETER["false_northing",6600000],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["X",EAST],AXIS["Y",NORTH],AUTHORITY["EPSG","2154"]]',
+      /* eslint-enable max-len */
       unit: 'metre',
       proj4: '+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
       name: 'RGF93 / Lambert-93',
@@ -494,7 +497,6 @@ export class TestHelper {
       trans: [1671, 8573],
       accuracy: 1,
     };
-    /* eslint-enable */
   }
 
   public static sampleCsvFile(content: string): File {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Env } from './Env';
-import { Logger } from '@abc-map/shared';
+import { Logger, isE2eTests } from '@abc-map/shared';
 
 const logger = Logger.get('FileIO.ts');
 
@@ -42,6 +41,9 @@ export interface Canceled {
 
 export declare type FilePromptResult = FilesSelected | Canceled;
 
+let FileInput: HTMLInputElement | undefined;
+let FileOutput: HTMLAnchorElement | undefined;
+
 export class FileIO {
   /**
    * Open a file prompt.
@@ -53,36 +55,25 @@ export class FileIO {
    * @param accept
    */
   public static openPrompt(type = InputType.Single, accept?: string): Promise<FilePromptResult> {
-    // We remove an eventual previous element
-    const previous = document.querySelector('#abc-file-input');
-    if (previous) {
-      previous.remove();
-    }
+    const { input } = FileIO.getElements();
 
-    const fileNode = document.createElement('input');
-    fileNode.setAttribute('type', 'file');
-    fileNode.multiple = type === InputType.Multiple;
-    fileNode.style.display = 'none';
-    fileNode.dataset.cy = 'file-input';
-    fileNode.accept = accept || '';
-    fileNode.id = 'abc-file-input';
-    document.body.appendChild(fileNode);
+    input.multiple = type === InputType.Multiple;
+    input.accept = accept || '';
 
     return new Promise<FilePromptResult>((resolve, reject) => {
-      fileNode.onchange = () => {
-        const files = fileNode.files ? Array.from(fileNode.files) : [];
-        fileNode.remove();
+      input.onchange = () => {
+        const files = input.files ? Array.from(input.files) : [];
         resolve({ type: InputResultType.Confirmed, files: files || [] });
       };
 
-      fileNode.onerror = (err) => {
+      input.onerror = (err) => {
         logger.error('Error during file selection: ', err);
-        fileNode.remove();
+        input.remove();
         reject(new Error('Error during file selection'));
       };
 
-      if (!Env.isE2e()) {
-        fileNode.click();
+      if (!isE2eTests()) {
+        input.click();
       }
     });
   }
@@ -92,16 +83,32 @@ export class FileIO {
   }
 
   public static downloadDataString(dataStr: string, name: string): void {
-    const anchor = document.createElement('a');
-    anchor.style.display = 'none';
-    anchor.setAttribute('href', dataStr);
-    anchor.setAttribute('download', name);
-    anchor.dataset.cy = 'file-output';
+    const { output } = FileIO.getElements();
 
-    document.body.appendChild(anchor);
-    if (!Env.isE2e()) {
-      anchor.click();
-      anchor.remove();
+    output.setAttribute('href', dataStr);
+    output.setAttribute('download', name);
+
+    if (!isE2eTests()) {
+      output.click();
     }
+  }
+
+  private static getElements(): { input: HTMLInputElement; output: HTMLAnchorElement } {
+    if (!FileInput) {
+      FileInput = document.createElement('input');
+      FileInput.setAttribute('type', 'file');
+      FileInput.style.display = 'none';
+      FileInput.dataset.cy = 'file-input';
+      document.body.appendChild(FileInput);
+    }
+
+    if (!FileOutput) {
+      FileOutput = document.createElement('a');
+      FileOutput.style.display = 'none';
+      FileOutput.dataset.cy = 'file-output';
+      document.body.appendChild(FileOutput);
+    }
+
+    return { input: FileInput, output: FileOutput };
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,8 +20,8 @@
  */
 
 import { DownloadClient } from '../http/http-clients';
-import { AxiosInstance } from 'axios';
-import { ToastService } from '../ui/ToastService';
+import type { AxiosInstance } from 'axios';
+import type { ToastService } from '../ui/ToastService';
 import { BlobIO } from '@abc-map/shared';
 
 const NoContent = document.createElement('div');
@@ -33,7 +33,10 @@ export class DocumentationService {
     return new DocumentationService(DownloadClient(), toasts);
   }
 
-  constructor(private client: AxiosInstance, private toasts: ToastService) {}
+  constructor(
+    private client: AxiosInstance,
+    private toasts: ToastService,
+  ) {}
 
   public getContent(route: string): Promise<Element> {
     return this.client

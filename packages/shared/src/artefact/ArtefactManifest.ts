@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { I18nList, I18nText } from '../lang';
-import { ArtefactType } from './ArtefactType';
+import type { I18nList, I18nText } from '../lang/index.js';
+import type { ArtefactType } from './ArtefactType.js';
 
 /**
  * This interface represents an artefact yaml manifest file.

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,29 +16,33 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../Tool';
-import { AbcGeometryType, FeatureStyle, MapTool } from '@abc-map/shared';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
+import type { Tool } from '../Tool';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, MapTool } from '@abc-map/shared';
 import Icon from '../../../assets/tool-icons/point.inline.svg';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import { HistoryKey } from '../../history/HistoryKey';
-import { DrawInteractionsBundle, GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
-import { MainStore } from '../../store/store';
-import { HistoryService } from '../../history/HistoryService';
-import { MapActions } from '../../store/map/actions';
+import type { GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
+import { DrawInteractionsBundle } from '../common/interactions/DrawInteractionsBundle';
+import type { MainStore } from '../../../store/store';
+import type { HistoryService } from '../../history/HistoryService';
+import { MapActions } from '../../../store/map/actions';
 import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
-import { ToolMode } from '../ToolMode';
+import type { ToolMode } from '../ToolMode';
 import { CommonConditions, CommonModes } from '../common/common-modes';
 import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
+import type { DefaultVectorSource } from '../../geo/layers/LayerWrapper';
 
 export class PointTool implements Tool {
   private move?: MoveMapInteractionsBundle;
   private selection?: SelectionInteractionsBundle;
   private draw?: DrawInteractionsBundle;
 
-  constructor(private store: MainStore, private history: HistoryService) {}
+  constructor(
+    private store: MainStore,
+    private history: HistoryService,
+  ) {}
 
   public getId(): MapTool {
     return MapTool.Point;
@@ -56,7 +60,7 @@ export class PointTool implements Tool {
     return 'Points';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
+  public setup(map: Map, source: DefaultVectorSource): void {
     // Interactions for map view manipulation
     this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
@@ -66,7 +70,7 @@ export class PointTool implements Tool {
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ point: style.point }));
-    this.selection.setup(map, source, [AbcGeometryType.POINT, AbcGeometryType.MULTI_POINT]);
+    this.selection.setup(map, [AbcGeometryType.POINT, AbcGeometryType.MULTI_POINT]);
 
     // Draw interactions
     const getStyle: GetStyleFunc = () => {

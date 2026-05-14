@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,19 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from './config/Config';
-import { Shell } from './tools/Shell';
-import * as waitOn from 'wait-on';
-import { Logger } from './tools/Logger';
-import * as glob from 'fast-glob';
-import * as path from 'path';
-import { DockerConfig } from './config/DockerConfig';
-import { DeployConfig } from './config/DeployConfig';
-import { ChildProcess } from 'child_process';
-import { Git } from './tools/Git';
-import { errorMessage } from './tools/errorMessage';
+import type { Config } from './config/Config.js';
+import { Shell } from './tools/Shell.js';
+import waitOn from 'wait-on';
+import { Logger } from './tools/Logger.js';
+import glob from 'fast-glob';
+import path from 'path';
+import type { DockerConfig } from './config/DockerConfig.js';
+import type { DeployConfig } from './config/DeployConfig.js';
+import { Git } from './tools/Git.js';
+import { errorMessage } from './tools/errorMessage.js';
+import fs from 'fs/promises';
 
 const logger = Logger.get('Service.ts', 'info');
+
+export interface CiServers {
+  kill: () => void;
+}
 
 export class BuildService {
   public static create(config: Config) {
@@ -36,13 +40,17 @@ export class BuildService {
     return new BuildService(config, shell, Git.create(config));
   }
 
-  constructor(private config: Config, private shell: Shell, private git: Git) {}
+  constructor(
+    private config: Config,
+    private shell: Shell,
+    private git: Git,
+  ) {}
 
   public async continuousIntegration(light: boolean) {
     const start = new Date().getTime();
 
     this.install('development');
-    this.version();
+    this.writeVersions();
     this.lint(false);
     this.build();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
@@ -53,15 +61,12 @@ export class BuildService {
       return;
     }
 
-    let servers: ChildProcess | undefined;
+    let servers: CiServers | undefined;
     try {
       servers = await this.startServersForCi();
-      // FIXME: we should create a task "test:with-server" to run all kinds of tests
-      this.documentationTests();
-      this.performanceTests();
-      this.e2eTests();
+      this.shell.sync('turbo run test:with-servers --concurrency 1');
     } finally {
-      servers?.kill('SIGTERM');
+      servers?.kill();
     }
 
     const tookSec = Math.round((new Date().getTime() - start) / 1000);
@@ -86,14 +91,14 @@ export class BuildService {
     }
   }
 
-  public version(): void {
+  // Write git versions in concerned packages
+  public writeVersions(): void {
     this.shell.sync('turbo run write-version');
   }
 
   public build(): void {
-    // --no-daemon is a workaround for a known bug, see: https://github.com/vercel/turbo/issues/4137
-    this.shell.sync('turbo run clean-build --concurrency 1 --no-daemon');
-    this.shell.sync('turbo run package --concurrency 1 --no-daemon');
+    this.shell.sync('turbo run clean-build --concurrency 1');
+    this.shell.sync('turbo run package --concurrency 1');
   }
 
   public unitTest(): void {
@@ -101,15 +106,11 @@ export class BuildService {
   }
 
   public e2eTests(): void {
-    this.shell.sync('pnpm run e2e:ci', { cwd: this.config.getE2eRoot() });
+    this.shell.sync('turbo run test:with-servers --concurrency 1', { cwd: this.config.getE2eRoot() });
   }
 
   public performanceTests(): void {
-    this.shell.sync('pnpm run test:performance:ci', { cwd: this.config.getPerformanceTestsRoot() });
-  }
-
-  public documentationTests(): void {
-    this.shell.sync('pnpm run test:documentation:ci', { cwd: this.config.getUserDocRoot() });
+    this.shell.sync('turbo run test:with-servers --concurrency 1', { cwd: this.config.getPerformanceTestsRoot() });
   }
 
   /**
@@ -117,12 +118,10 @@ export class BuildService {
    *
    * Services should start in the closest possible conditions to production.
    */
-  public startServersForCi(): Promise<ChildProcess> {
+  public startServersForCi(): Promise<CiServers> {
     return new Promise((resolve, reject) => {
       const startCmd = this.shell.async('turbo run start:ci --parallel');
       startCmd.on('error', reject);
-
-      logger.info('Waiting for services readiness ...');
 
       const debug = process.env.DEBUG === 'true';
       const options: waitOn.WaitOnOptions = {
@@ -131,14 +130,20 @@ export class BuildService {
         log: debug,
         verbose: debug,
       };
+      const servers: CiServers = { kill: () => startCmd.kill() };
+
       waitOn(options)
         .then(() => {
           logger.info('Servers ready !');
           resolve(startCmd);
+          resolve(servers);
         })
         .catch((err) => {
-          startCmd.kill('SIGINT');
-          reject(err);
+          try {
+            servers.kill();
+          } finally {
+            reject(err);
+          }
         });
     });
   }
@@ -186,25 +191,25 @@ export class BuildService {
     this.shell.sync(`addlicense -f ${header} ${skip} packages`);
   }
 
-  public dockerBuild(repository: string, tag: string): void {
-    const images = this.getDockerConfigs();
+  public async dockerBuild(repository: string, tag: string): Promise<void> {
+    const images = await this.getDockerConfigs();
     for (const image of images) {
       const fullName = `${repository}/${image.imageName}:${tag}`;
       this.shell.sync(`docker build . -f ${path.join(image.root, 'Dockerfile')} -t ${fullName}`, { cwd: this.config.getProjectRoot() });
     }
   }
 
-  public dockerPush(repository: string, tag: string): void {
-    const images = this.getDockerConfigs();
+  public async dockerPush(repository: string, tag: string): Promise<void> {
+    const images = await this.getDockerConfigs();
     for (const image of images) {
       const fullName = `${repository}/${image.imageName}:${tag}`;
       this.shell.sync(`docker push ${fullName}`);
     }
   }
 
-  public deploy(configPath: string, buildImages: boolean): void {
+  public async deploy(configPath: string, buildImages: boolean): Promise<void> {
     const start = Date.now();
-    const config = this.loadDeployConfig(configPath);
+    const config = await this.loadDeployConfig(configPath);
 
     if (this.git.isRepoDirty()) {
       throw new Error('Repository is dirty, deployment canceled.');
@@ -214,13 +219,13 @@ export class BuildService {
     if (buildImages) {
       logger.info('\n 🛠️  Building ... 🛠️\n');
       this.install('development');
-      this.version();
+      this.writeVersions();
       this.build();
 
       // Package and push
       logger.info('\n 📦️ Packaging ... 🏋️‍♂️\n');
-      this.dockerBuild(config.registry, config.tag);
-      this.dockerPush(config.registry, config.tag);
+      await this.dockerBuild(config.registry, config.tag);
+      await this.dockerPush(config.registry, config.tag);
     } else {
       logger.info('\n⏩️ Skipping build. More time for 🍺️\n');
     }
@@ -239,9 +244,21 @@ export class BuildService {
     logger.info(`Ready ! Deployment took ${tookMin} minutes.`);
   }
 
-  private getDockerConfigs(): DockerConfig[] {
-    return this.getPackagesPaths()
-      .map((packagePath) => ({ packagePath, packageJson: require(packagePath) }))
+  private async getDockerConfigs(): Promise<DockerConfig[]> {
+    const packages = await Promise.all(
+      this.getPackagesPaths().map((packagePath) =>
+        fs
+          .readFile(packagePath)
+          .then((content) => {
+            return { packagePath, packageJson: JSON.parse(content.toString('utf-8')) };
+          })
+          .catch((err) => {
+            throw new Error(`Cannot parse file ${packagePath}: ${errorMessage(err)}`);
+          }),
+      ),
+    );
+
+    return packages
       .filter((pkg) => !!pkg.packageJson.docker)
       .map((pkg) => {
         const image: DockerConfig = pkg.packageJson.docker;
@@ -258,17 +275,16 @@ export class BuildService {
   private getPackagesPaths(): string[] {
     const packages = glob.sync('**/package.json', {
       cwd: this.config.getProjectRoot(),
-      ignore: ['**/node_modules/**'],
+      ignore: ['**/node_modules/**', '**/notes/**'],
     });
     return packages.map((paths) => path.resolve(this.config.getProjectRoot(), paths));
   }
 
-  private loadDeployConfig(configPath: string): DeployConfig {
+  private async loadDeployConfig(configPath: string): Promise<DeployConfig> {
     const _configPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath);
     logger.info(`Loading deployment configuration: ${_configPath}`);
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const config: DeployConfig = require(_configPath);
+    const config: DeployConfig = await import(_configPath).then((m) => m.default);
     logger.info(JSON.stringify(config, null, 2));
 
     if (!config.releaseName) {
@@ -292,5 +308,11 @@ export class BuildService {
     }
 
     return config;
+  }
+
+  public printToolVersions() {
+    this.shell.sync('node -v');
+    this.shell.sync('pnpm -v');
+    this.shell.sync('npm -v');
   }
 }

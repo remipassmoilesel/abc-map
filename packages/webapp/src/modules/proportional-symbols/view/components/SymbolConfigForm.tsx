@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { Algorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../../../core/modules/Algorithm';
+import type { Algorithm } from '../../../../core/modules/Algorithm';
+import { isScaleAlgorithm, ScaleAlgorithm } from '../../../../core/modules/Algorithm';
 import AlgorithmSelector from '../../../../components/algorithm-selector/AlgorithmSelector';
 import FormLine from '../../../../components/form-line/FormLine';
 import { ProportionalSymbolsTips } from '../../../../core/tips';
 import { PointIconPicker } from '../../../../components/point-icon-picker/PointIconPicker';
-import ColorPicker from '../../../../components/color-picker/ColorPickerButton';
-import { IconName } from '@abc-map/point-icons';
-import { prefixedTranslation } from '../../../../i18n/i18n';
+import { ColorPickerButton } from '../../../../components/color-picker/ColorPickerButton';
+import type { IconName } from '@abc-map/point-icons';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 
@@ -38,18 +41,17 @@ export interface SymbolConfigFormValues {
   algorithm: ScaleAlgorithm;
 }
 
-interface Props {
+interface Props extends WithTranslation {
   values: SymbolConfigFormValues;
   onChange: (config: SymbolConfigFormValues) => void;
 }
 
 const algorithms = Object.values(ScaleAlgorithm);
 
-const t = prefixedTranslation('ProportionalSymbolsModule:');
-
-class SymbolConfigForm extends Component<Props, {}> {
+class SymbolConfigForm extends Component<Props, unknown> {
   public render() {
     const values = this.props.values;
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ProportionalSymbolsModule');
 
     return (
       <>
@@ -71,7 +73,7 @@ class SymbolConfigForm extends Component<Props, {}> {
           <label htmlFor="symbol" className={'flex-grow-1'}>
             {t('Color')}:
           </label>
-          <ColorPicker value={values.color} onClose={this.handleColorChange} />
+          <ColorPickerButton value={values.color} onClose={this.handleColorChange} />
         </FormLine>
 
         <FormLine>
@@ -155,4 +157,4 @@ class SymbolConfigForm extends Component<Props, {}> {
   };
 }
 
-export default SymbolConfigForm;
+export default withTranslation()(SymbolConfigForm);

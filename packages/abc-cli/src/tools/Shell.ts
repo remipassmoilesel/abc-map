@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,35 +16,41 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as childProcess from 'child_process';
-import { Config } from '../config/Config';
-import { Logger } from './Logger';
-import { ChildProcess, ExecSyncOptions, SpawnOptions } from 'child_process';
+import childProcess from 'child_process';
+import type { Config } from '../config/Config.js';
+import { Logger } from './Logger.js';
+import type { ChildProcess, ExecSyncOptions, SpawnOptions } from 'child_process';
 
 const logger = Logger.get('Shell.ts', 'info');
 
 export class Shell {
   constructor(private config: Config) {}
 
-  public sync(cmd: string, options?: ExecSyncOptions): string | Buffer {
+  public sync(cmd: string, options?: ExecSyncOptions & { silent?: boolean }): string | Buffer {
     const _options: ExecSyncOptions = {
       stdio: 'inherit',
       cwd: this.config.getProjectRoot(),
       ...options,
     };
 
-    logger.info(`➡️  Running '${cmd.replace(/\s+/gi, ' ')}' with options ${JSON.stringify(_options)}`);
+    if (!options?.silent) {
+      logger.info(`➡️  Running '${cmd.replace(/\s+/gi, ' ')}' with options ${JSON.stringify(_options)}`);
+    }
+
     return childProcess.execSync(cmd, _options);
   }
 
-  public async(cmd: string, options?: SpawnOptions): ChildProcess {
+  public async(cmd: string, options?: SpawnOptions & { silent?: boolean }): ChildProcess {
     const _options: SpawnOptions = {
       stdio: 'inherit',
       cwd: this.config.getProjectRoot(),
       ...options,
     };
 
-    logger.info(`➡️  Spawning '${cmd.replace(/\s+/gi, ' ')}' with options ${JSON.stringify(_options)}`);
+    if (!options?.silent) {
+      logger.info(`➡️  Spawning '${cmd.replace(/\s+/gi, ' ')}' with options ${JSON.stringify(_options)}`);
+    }
+
     return childProcess.spawn('bash', ['-c', cmd], _options);
   }
 }

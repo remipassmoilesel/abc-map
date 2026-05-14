@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,22 +16,22 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { Services } from '../services/services';
-import { Controller } from './Controller';
-import { MetricsController } from '../metrics/MetricsController';
-import { HealthCheckController } from '../health/HealthCheckController';
-import { AuthenticationController } from '../authentication/AuthenticationController';
-import { ProjectController } from '../projects/ProjectController';
-import { DataStoreController } from '../data-store/DataStoreController';
-import { FeedbackController } from '../feedback/FeedbackController';
-import { ProjectionController } from '../projections/ProjectionController';
-import { WebappController } from './WebappController';
-import { SitemapController } from './sitemap/SitemapController';
-import { LegalMentionsController } from './LegalMentionsController';
-import { DocumentationController } from '../documentation/DocumentationController';
-import { LegacyRoutesRedirectionController } from './LegacyRoutesRedirectionController';
-import { PointIconsController } from '../point-icons/PointIconsController';
+import type { Config } from '../config/Config.js';
+import type { Services } from '../services/services.js';
+import type { Controller } from './Controller.js';
+import { MetricsController } from '../metrics/MetricsController.js';
+import { HealthCheckController } from '../health/HealthCheckController.js';
+import { AuthenticationController } from '../authentication/AuthenticationController.js';
+import { ProjectController } from '../projects/ProjectController.js';
+import { DataStoreController } from '../data-store/DataStoreController.js';
+import { FeedbackController } from '../feedback/FeedbackController.js';
+import { ProjectionController } from '../projections/ProjectionController.js';
+import { WebappController } from './WebappController.js';
+import { SitemapController } from './sitemap/SitemapController.js';
+import { LegalMentionsController } from './LegalMentionsController.js';
+import { DocumentationController } from '../documentation/DocumentationController.js';
+import { LegacyRoutesRedirectionController } from './LegacyRoutesRedirectionController.js';
+import { PointIconsController } from '../point-icons/PointIconsController.js';
 
 /**
  * Routes exposed in these controllers are public and do not need a valid authentication
@@ -44,7 +44,7 @@ export function publicControllers(config: Config, services: Services): Controlle
     new SitemapController(config),
     new LegalMentionsController(config),
     new DocumentationController(config),
-    new MetricsController(services),
+    new MetricsController(config, services),
     new HealthCheckController(services),
     new AuthenticationController(config, services),
     // Web app controller must be the last, it has a catch-all 404 handler

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,27 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { Download } from '../helpers/Download';
-import { LayerControls } from '../helpers/LayerControls';
-import { LongOperation } from '../helpers/LongOperation';
-import { Routes } from '../helpers/Routes';
-import { Modules } from '../helpers/Modules';
-import { MainMap } from '../helpers/MainMap';
-import { TestData } from '../test-data/TestData';
-import { Toasts } from '../helpers/Toasts';
-import { PngComparisonParams, PngComparisonResult } from '../plugins/PngComparison';
-import * as uuid from 'uuid-random';
-import { MainMenu } from '../helpers/MainMenu';
-import { FilePrompt } from '../helpers/FilePrompt';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { Download } from '../helpers/Download.js';
+import { LayerControls } from '../helpers/LayerControls.js';
+import { LongOperation } from '../helpers/LongOperation.js';
+import { Routes } from '../helpers/Routes.js';
+import { Modules } from '../helpers/Modules.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { TestData } from '../test-data/TestData.js';
+import { Toasts } from '../helpers/Toasts.js';
+import type { PngComparisonParams, PngComparisonResult } from '../plugins/PngComparison.js';
+import uuidRandom from 'uuid-random';
+import { MainMenu } from '../helpers/MainMenu.js';
+import { FilePrompt } from '../helpers/FilePrompt.js';
 import Chainable = Cypress.Chainable;
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 
 // Most of the time exports take about 5 seconds but sometimes if take much longer, probably
 // because of testing environment. So we set a long timeout in order to prevent anoying failures.
-const exportTimeoutMs = 3 * 60 * 1000;
+const ExportTimeoutMs = 3 * 60 * 1000;
 
-const defaultExportMinSize = 40_000;
+const DefaultExportMinSize = 40_000;
 
 describe('Map exports', function () {
   describe('As a visitor', function () {
@@ -45,7 +45,7 @@ describe('Map exports', function () {
     });
 
     it('can create layout, undo and redo', function () {
-      cy.visit(Routes.module().withParams({ moduleId: BundledModuleId.MapExport }))
+      cy.visit(Routes.module().withParams({ moduleId: ModuleId.MapExport }))
         .wait(500)
         // We create one layout with center button
         .get('[data-cy=new-layout]')
@@ -66,7 +66,7 @@ describe('Map exports', function () {
     });
 
     it('can change layout order, undo and redo', function () {
-      cy.visit(Routes.module().withParams({ moduleId: BundledModuleId.MapExport }))
+      cy.visit(Routes.module().withParams({ moduleId: ModuleId.MapExport }))
         .wait(500)
         // We create one layout
         .get('[data-cy=add-layout]')
@@ -95,7 +95,7 @@ describe('Map exports', function () {
     });
 
     it('can delete all layouts, undo and redo', function () {
-      cy.visit(Routes.module().withParams({ moduleId: BundledModuleId.MapExport }))
+      cy.visit(Routes.module().withParams({ moduleId: ModuleId.MapExport }))
         .wait(500)
         // We add one layout
         .get('[data-cy=add-layout]')
@@ -124,16 +124,16 @@ describe('Map exports', function () {
         .then(() => MainMap.fixedView2())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
-        .then(() => Modules.open(BundledModuleId.MapExport))
+        .then(() => Modules.open(ModuleId.MapExport))
         .get('[data-cy=add-layout]')
         .click()
         .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => LongOperation.done(ExportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(defaultExportMinSize);
+          expect(pdf.size).greaterThan(DefaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -145,16 +145,16 @@ describe('Map exports', function () {
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addXyzLayer())
-        .then(() => Modules.open(BundledModuleId.MapExport))
+        .then(() => Modules.open(ModuleId.MapExport))
         .get('[data-cy=add-layout]')
         .click()
         .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => LongOperation.done(ExportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(defaultExportMinSize);
+          expect(pdf.size).greaterThan(DefaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -166,16 +166,16 @@ describe('Map exports', function () {
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmsLayer())
-        .then(() => Modules.open(BundledModuleId.MapExport))
+        .then(() => Modules.open(ModuleId.MapExport))
         .get('[data-cy=add-layout]')
         .click()
         .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => LongOperation.done(ExportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(defaultExportMinSize);
+          expect(pdf.size).greaterThan(DefaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -187,16 +187,16 @@ describe('Map exports', function () {
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmtsLayer())
-        .then(() => Modules.open(BundledModuleId.MapExport))
+        .then(() => Modules.open(ModuleId.MapExport))
         .get('[data-cy=add-layout]')
         .click()
         .then(() => expectLayoutNames(['Page 1']))
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => LongOperation.done(ExportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(defaultExportMinSize);
+          expect(pdf.size).greaterThan(DefaultExportMinSize);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -205,7 +205,7 @@ describe('Map exports', function () {
     it('can export PNG with several sheets', function () {
       cy.visit(Routes.map().format())
         .then(() => MainMap.fixedView2())
-        .then(() => Modules.open(BundledModuleId.MapExport))
+        .then(() => Modules.open(ModuleId.MapExport))
         .get('[data-cy=add-layout]')
         .click()
         .then(() => expectLayoutNames(['Page 1']))
@@ -214,7 +214,7 @@ describe('Map exports', function () {
         .then(() => expectLayoutNames(['Page 1', 'Page 2']))
         .get('[data-cy=png-export]')
         .click()
-        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => LongOperation.done(ExportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(100_000);
@@ -226,7 +226,7 @@ describe('Map exports', function () {
     it('can create a text frame then export', () => {
       cy.visit(Routes.map().format())
         .then(() => MainMap.fixedView2())
-        .then(() => Modules.open(BundledModuleId.MapExport))
+        .then(() => Modules.open(ModuleId.MapExport))
         // Create layout
         .get('[data-cy=add-layout]')
         .click()
@@ -239,7 +239,7 @@ describe('Map exports', function () {
         .should('exist')
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => LongOperation.done(ExportTimeoutMs))
         .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(100_000);
@@ -254,7 +254,7 @@ describe('Map exports', function () {
      * If you know how to make it pass on all platforms, ping me !
      */
     it('rendering should be conform', function () {
-      const testId = uuid();
+      const testId = uuidRandom();
       const comparisonParams: PngComparisonParams = {
         actualZipPath: `generated/png-comparison-${testId}.zip`,
         expectedZipPath: `src/test-data/test-project-3.png.zip`,
@@ -271,10 +271,10 @@ describe('Map exports', function () {
         .then((file) => FilePrompt.select('project.abm2', file))
         .then(() => Toasts.assertText('Project loaded !'))
         .then(() => MainMenu.close())
-        .then(() => Modules.open(BundledModuleId.MapExport))
+        .then(() => Modules.open(ModuleId.MapExport))
         .get('[data-cy=png-export]')
         .click()
-        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => LongOperation.done(ExportTimeoutMs))
         .then(() => Download.writeCurrentFile(comparisonParams.actualZipPath))
         .then(() => cy.task<PngComparisonResult>('rendering-comparison', comparisonParams))
         .should((comparison) => expect(comparison.value).equal(0, `Rendering comparison failed. Message="${comparison.message}" Diff="${comparison.diff}".`));

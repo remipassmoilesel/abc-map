@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ export class MapFactory {
     });
 
     const map = MapWrapper.from(internal);
-    !empty && map.setDefaultLayers();
+    if (!empty) map.setDefaultLayers();
     map.setDefaultTool();
 
     return map;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,36 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as uuid from 'uuid-random';
-import * as jwt from 'jsonwebtoken';
-import { assert } from 'chai';
-import { TestHelper } from '../utils/TestHelper';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { AuthenticationService, logger } from './AuthenticationService';
-import { UserService } from '../users/UserService';
-import { Config } from '../config/Config';
-import {
-  AbcUser,
-  AnonymousUser,
-  AuthenticationStatus,
-  AuthenticationToken,
-  ConfirmationStatus,
-  Language,
-  RegistrationStatus,
-  RegistrationToken,
-  ResetPasswordToken,
-  UserStatus,
-} from '@abc-map/shared';
-import { PasswordHasher } from './PasswordHasher';
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
-import jwtDecode from 'jwt-decode';
-import { RegistrationDao } from './RegistrationDao';
-import { EmailService } from '../email/EmailService';
-import { RegistrationDocument } from './RegistrationDocument';
+import uuid from 'uuid-random';
+import jwt from 'jsonwebtoken';
+import { assert } from 'vitest';
+import { TestHelper } from '../utils/TestHelper.js';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { AuthenticationService, disableAuthenticationServiceLogs } from './AuthenticationService.js';
+import { UserService } from '../users/UserService.js';
+import type { Config } from '../config/Config.js';
+import type { AbcUser, AuthenticationToken, RegistrationToken, ResetPasswordToken } from '@abc-map/shared';
+import { AnonymousUser, AuthenticationStatus, ConfirmationStatus, Language, RegistrationStatus, UserStatus } from '@abc-map/shared';
+import { PasswordHasher } from './PasswordHasher.js';
+import sinon from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import { jwtDecode } from 'jwt-decode';
+import { RegistrationDao } from './RegistrationDao.js';
+import { EmailService } from '../email/EmailService.js';
+import type { RegistrationDocument } from './RegistrationDocument.js';
+import { beforeEach, beforeAll, describe, it, afterAll } from 'vitest';
 
-logger.disable();
+disableAuthenticationServiceLogs();
 
 describe('AuthenticationService', () => {
   let config: Config;
@@ -56,7 +47,7 @@ describe('AuthenticationService', () => {
   let registrations: RegistrationDao;
   let service: AuthenticationService;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     // We disable development option because we mock smtp client
     config.development = undefined;
@@ -80,7 +71,7 @@ describe('AuthenticationService', () => {
     emails.resetPassword.resolves();
   });
 
-  after(async () => {
+  afterAll(async () => {
     return mongodbClient.disconnect();
   });
 

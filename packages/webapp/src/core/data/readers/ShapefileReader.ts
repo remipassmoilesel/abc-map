@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ReaderImplementation } from './ReaderImplementation';
-import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared';
+import type { ReaderImplementation } from './ReaderImplementation';
+import type { AbcProjection, VectorMetadata } from '@abc-map/shared';
+import { LayerType } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { Logger } from '@abc-map/shared';
-import { AbcFile } from '@abc-map/shared';
-import * as shapefile from 'shapefile';
+import type { AbcFile } from '@abc-map/shared';
+import { read } from 'shapefile';
 import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
 import { BlobIO } from '@abc-map/shared';
@@ -30,13 +31,14 @@ import { LayerFactory } from '../../geo/layers/LayerFactory';
 import proj4 from 'proj4';
 import { WktParser } from '../wkt/WktParser';
 import { register } from 'ol/proj/proj4';
-import { ReadResult, ReadStatus } from '../ReadResult';
+import type { ReadResult } from '../ReadResult';
+import { ReadStatus } from '../ReadResult';
 import { normalizeFeatures } from './normalizeFeatures';
 import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('ShapefileReader.ts');
 
-const t = prefixedTranslation('DataReader:');
+const t = prefixedTranslation('DataReader');
 
 export class ShapefileReader implements ReaderImplementation {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
@@ -57,7 +59,7 @@ export class ShapefileReader implements ReaderImplementation {
     // We read feature collection from shapefile
     const shpBuffer = await BlobIO.asArrayBuffer(shp.content);
     const dbfBuffer = dbf ? await BlobIO.asArrayBuffer(dbf.content) : undefined;
-    const featureColl = await shapefile.read(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
+    const featureColl = await read(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
 
     // We try to use a prj file if any
     const prjFile = files.find((f) => f.path.toLocaleLowerCase().endsWith('.prj'));

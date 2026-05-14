@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import React from 'react';
 import { WithTooltip } from '../../../../../components/with-tooltip/WithTooltip';
 import Cls from './ActionButton.module.scss';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FaIcon } from '../../../../../components/icon/FaIcon';
 
 interface Props {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { SinonStub } from 'sinon';
 import { ModuleRegistry } from './ModuleRegistry';
-import { MainStore, storeFactory } from '../../../core/store/store';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import type { MainStore } from '../../../store/store';
+import { storeFactory } from '../../../store/store';
+import type { TestServices } from '../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../core/utils/test/TestServices';
 import { bundledModulesFactory } from '../../../modules';
-import { UiActions } from '../../store/ui/actions';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { disableSearchIndexLogging } from '../../utils/SearchIndex';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 disableSearchIndexLogging();
 
@@ -39,86 +40,15 @@ describe('ModuleRegistry', () => {
   });
 
   describe('initialize()', () => {
-    let fetchStub: SinonStub;
-    beforeEach(() => {
-      fetchStub = window.fetch as SinonStub;
-    });
-
-    afterEach(() => {
-      fetchStub.reset();
-    });
-
-    it('should initialize index even if no remote modules', async () => {
+    it('should initialize index', async () => {
       // Prepare
-      fetchStub.resolves({ text: () => Promise.resolve(sampleCode()) });
-
-      store.dispatch(UiActions.setRemoteModuleUrls([]));
-
       await registry.initialize();
 
       // Act
-      const result = registry.search(BundledModuleId.SharedMapSettings);
+      const result = registry.search(ModuleId.SharedMapSettings);
 
       // Assert
-      expect(result.find((mod) => mod.getId() === BundledModuleId.SharedMapSettings)).toBeDefined();
-    });
-
-    it('should initialize index and remote modules', async () => {
-      // Prepare
-      fetchStub.resolves({ text: () => Promise.resolve(sampleCode()) });
-
-      store.dispatch(UiActions.setRemoteModuleUrls(['http://module-1', 'http://module-2']));
-
-      await registry.initialize();
-
-      // Act
-      const result = registry.search('test-module-id');
-
-      // Assert
-      expect(fetchStub.args).toEqual([['http://module-1/module.js'], ['http://module-2/module.js']]);
-      expect(result.find((mod) => mod.getId() === 'test-module-id')).toBeDefined();
-    });
-  });
-
-  describe('loadRemoteModule()', () => {
-    let fetchStub: SinonStub;
-    beforeEach(() => {
-      fetchStub = window.fetch as SinonStub;
-    });
-
-    afterEach(() => {
-      fetchStub.reset();
-    });
-
-    it('should load remote module', async () => {
-      // Prepare
-      fetchStub.resolves({ text: () => Promise.resolve(sampleCode()) });
-
-      // Act
-      const module = await registry.loadRemoteModule('http://somewhere/abc-map/module');
-
-      // Assert
-      expect(fetchStub.args).toEqual([['http://somewhere/abc-map/module/module.js']]);
-      expect(module.getId()).toEqual('test-module-id');
+      expect(result.find((mod) => mod.getId() === ModuleId.SharedMapSettings)).toBeDefined();
     });
   });
 });
-
-function sampleCode() {
-  return `
-          /******/ (() => { // webpackBootstrap
-          var moduleFactory = function moduleFactory() {
-              return {
-                 getId: () => 'test-module-id',
-                 getReadableName: () => 'Test module',
-                 getShortDescription: () => 'Module used for tests',
-                 getFullDescription: () => undefined
-              };
-          };
-
-          exports.module = {default: moduleFactory};
-          /******/ })()
-          ;
-          //# sourceMappingURL=module.js.map
-      `;
-}

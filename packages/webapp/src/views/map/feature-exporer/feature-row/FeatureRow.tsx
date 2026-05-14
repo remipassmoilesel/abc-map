@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,15 @@
  */
 
 import Cls from './FeatureRow.module.scss';
-import React, { CSSProperties, useCallback, useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { Dropdown } from 'react-bootstrap';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
-import { DataPropertiesMap, FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
+import type { DataPropertiesMap, FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
 import { getFieldNames } from '../../../../core/data/getFieldNames';
 import { getRemSize } from '../../../../core/ui/getRemSize';
 import { createPortal } from 'react-dom';
@@ -177,7 +178,7 @@ export function FeatureRow(props: Props) {
                         {t('Delete')}
                       </Dropdown.Item>
                     </Dropdown.Menu>,
-                    document.body
+                    document.body,
                   )}
                 </Dropdown>
               </div>

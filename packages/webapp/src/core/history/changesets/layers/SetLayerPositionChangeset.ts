@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { MapWrapper } from '../../../geo/map/MapWrapper';
-import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
+import type { MapWrapper } from '../../../geo/map/MapWrapper';
+import type { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { getServices } from '../../../Services';
 
 export class SetLayerPositionChangeset extends Changeset {
@@ -33,7 +33,12 @@ export class SetLayerPositionChangeset extends Changeset {
     return new SetLayerPositionChangeset(map, layer, previousPosition, nextPosition);
   }
 
-  constructor(private map: MapWrapper, private layer: LayerWrapper, private previousPosition: number, private nextPosition: number) {
+  constructor(
+    private map: MapWrapper,
+    private layer: LayerWrapper,
+    private previousPosition: number,
+    private nextPosition: number,
+  ) {
     super();
   }
 

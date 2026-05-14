@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,9 @@
  */
 import { abcRender } from '../../../core/utils/test/abcRender';
 import NavigationBar from './NavigationBar';
-import sinon, { SinonStub } from 'sinon';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('NavigationBar', () => {
   let onClick: SinonStub;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import { promises as fs } from 'fs';
-import * as path from 'path';
+import path from 'path';
 
 export class TestData {
   public async getSampleArchive(): Promise<Buffer> {
@@ -25,7 +25,7 @@ export class TestData {
   }
 
   private async readFile(name: string): Promise<Buffer> {
-    const absPath = path.resolve(__dirname, '..', '..', 'test-data', name);
+    const absPath = path.resolve(import.meta.dirname, '..', '..', 'test-data', name);
     return fs.readFile(absPath);
   }
 }

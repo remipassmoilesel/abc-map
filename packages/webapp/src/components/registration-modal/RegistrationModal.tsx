@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { Modal } from 'react-bootstrap';
-import RegistrationForm, { FormValues } from './RegistrationForm';
+import type { FormValues } from './RegistrationForm';
+import RegistrationForm from './RegistrationForm';
 import RegistrationDone from './RegistrationDone';
 import { useTranslation } from 'react-i18next';
 import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
@@ -66,7 +67,7 @@ export function RegistrationModal() {
           }
         });
     },
-    [authentication, t]
+    [authentication, t],
   );
 
   const handleConfirm = useCallback(() => {

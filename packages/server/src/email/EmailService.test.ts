@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmailService } from './EmailService';
-import { SmtpClient } from './SmtpClient';
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { assert, expect } from 'chai';
+import { EmailService } from './EmailService.js';
+import { SmtpClient } from './SmtpClient.js';
+import sinon from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { assert, beforeEach, describe, expect, it } from 'vitest';
 import { Language } from '@abc-map/shared';
 
 describe('EmailService', () => {

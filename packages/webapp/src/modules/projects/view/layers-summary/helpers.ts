@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,9 +19,9 @@
 import { LayerType } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { IconDefs } from '../../../../components/icon/IconDefs';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-const t = prefixedTranslation('ProjectManagement:');
+const t = prefixedTranslation('ProjectManagement');
 
 export function layerTypeName(type: LayerType | undefined): string {
   switch (type) {

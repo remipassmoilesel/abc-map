@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -26,8 +26,9 @@ then pass it to deploy command:
  */
 module.exports = {
   releaseName: 'abc-map-production',
-  registry: 'my-registry.gitlab.com',
+  registry: 'docker-registry.my-domain.com',
   tag: 'my-tag',
   namespace: 'my-kubernetes-namespace',
-  valuesFile: 'my-values-file',
+  valuesFile: './my-values-file.yaml',
+  healthCheckUrl: 'https://abc-map.my-domain.fr/api/health/',
 };

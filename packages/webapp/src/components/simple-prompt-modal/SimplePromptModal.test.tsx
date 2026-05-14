@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { act, screen, waitFor } from '@testing-library/react';
+import type { ModalEvent } from '../../core/ui/typings';
+import { ModalEventType } from '../../core/ui/typings';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import userEvent from '@testing-library/user-event';
 import { SimplePromptModal } from './SimplePromptModal';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('SimplePromptModal', () => {
   let services: TestServices;
@@ -30,7 +34,9 @@ describe('SimplePromptModal', () => {
   });
 
   it('should become visible', async () => {
-    abcRender(<SimplePromptModal />, { services });
+    await act(async () => {
+      abcRender(<SimplePromptModal />, { services });
+    });
 
     await openModal();
 
@@ -40,18 +46,17 @@ describe('SimplePromptModal', () => {
 
   it('should emit after submit', async () => {
     // Prepare
-    abcRender(<SimplePromptModal />, { services });
+    await act(async () => {
+      abcRender(<SimplePromptModal />, { services });
+    });
+
     await openModal();
 
-    await act(async () => {
-      await userEvent.clear(screen.getByTestId('prompt-input'));
-      await userEvent.type(screen.getByTestId('prompt-input'), 'Project 4/5/6');
-    });
+    await userEvent.clear(screen.getByTestId('prompt-input'));
+    await userEvent.type(screen.getByTestId('prompt-input'), 'Project 4/5/6');
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('prompt-confirm'));
-    });
+    await userEvent.click(screen.getByTestId('prompt-confirm'));
 
     // Assert
     await waitFor(() => {
@@ -61,18 +66,17 @@ describe('SimplePromptModal', () => {
 
   it('should reset state on event', async () => {
     // Prepare
-    abcRender(<SimplePromptModal />, { services });
+    await act(async () => {
+      abcRender(<SimplePromptModal />, { services });
+    });
+
     await openModal();
 
-    await act(async () => {
-      await userEvent.clear(screen.getByTestId('prompt-input'));
-      await userEvent.type(screen.getByTestId('prompt-input'), 'Project 4/5/6');
-    });
+    await userEvent.clear(screen.getByTestId('prompt-input'));
+    await userEvent.type(screen.getByTestId('prompt-input'), 'Project 4/5/6');
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('prompt-cancel'));
-    });
+    await userEvent.click(screen.getByTestId('prompt-cancel'));
 
     await openModal();
 
@@ -82,13 +86,14 @@ describe('SimplePromptModal', () => {
 
   it('should warn if prompt is incorrect', async () => {
     // Prepare
-    abcRender(<SimplePromptModal />, { services });
+    await act(async () => {
+      abcRender(<SimplePromptModal />, { services });
+    });
+
     await openModal();
 
     // Act
-    await act(async () => {
-      await userEvent.clear(screen.getByTestId('prompt-input'));
-    });
+    await userEvent.clear(screen.getByTestId('prompt-input'));
 
     // Assert
     await waitFor(() => {

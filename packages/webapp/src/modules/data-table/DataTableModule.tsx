@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,16 +17,16 @@
  */
 
 import React from 'react';
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import { DataTableView } from './view/DataTableView';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('DataTableModule:');
+const t = prefixedTranslation('DataTableModule');
 
-export class DataTableModule extends ModuleAdapter {
-  public getId(): ModuleId {
-    return BundledModuleId.DataTable;
+export class DataTableModule implements AbcModule {
+  public getId() {
+    return ModuleId.DataTable;
   }
 
   public getReadableName(): string {
@@ -38,6 +38,6 @@ export class DataTableModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <DataTableView />;
+    return () => <DataTableView />;
   }
 }

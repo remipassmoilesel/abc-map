@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,15 +17,17 @@
  */
 import { abcRender } from '../../../../../core/utils/test/abcRender';
 import XYZLayerPanel from './XYZLayerPanel';
-import sinon, { SinonStub } from 'sinon';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TestServices } from '../../../../../core/utils/test/TestServices';
+import type { TestServices } from '../../../../../core/utils/test/TestServices';
 import { MapFactory } from '../../../../../core/geo/map/MapFactory';
-import { XYZ } from 'ol/source';
+import type { XYZ } from 'ol/source';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { mockServices, restoreServices } from '../../../../../core/utils/test/mock-services';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 describe('XYZLayerPanel', () => {
   let onChange: SinonStub;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,8 +20,7 @@ import Cls from './SharedViewsSummary.module.scss';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { useAppSelector } from '../../../../core/store/hooks';
-import { useMapLayers } from '../../../../core/geo/useMapLayers';
+import { useAppSelector } from '../../../../store/hooks';
 
 interface Props {
   className?: string;
@@ -31,7 +30,6 @@ export function SharedViewsSummary(props: Props) {
   const { className } = props;
   const { t } = useTranslation('ProjectManagement');
   const views = useAppSelector((st) => st.project.sharedViews.list);
-  const { layers } = useMapLayers();
 
   return (
     <>
@@ -42,16 +40,12 @@ export function SharedViewsSummary(props: Props) {
           <table className={Cls.table}>
             <tbody>
               {views.map((view) => {
-                const layerNames: string[] = view.layers
-                  .map((layA) => layers.find((layB) => layB.getId() === layA.layerId))
-                  .map((lay) => lay?.getName())
-                  .filter((name): name is string => typeof name === 'string');
                 return (
                   <tr key={view.id}>
                     <td>{view.title}</td>
                     <td>
                       <small>
-                        {view.layers.length} {t('Layers')} ({layerNames.join(', ')})
+                        {view.layers.length} {t('Layer_s')}
                       </small>
                     </td>
                   </tr>

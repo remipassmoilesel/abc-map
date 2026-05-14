@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from './Tool';
+import type { Tool } from './Tool';
 import { MoveMapTool } from './move/MoveMapTool';
 import { PointTool } from './point/PointTool';
-import { MapTool } from '@abc-map/shared';
-import { mainStore } from '../store/store';
+import type { MapTool } from '@abc-map/shared';
+import { mainStore } from '../../store/store';
 import { LineStringTool } from './line-string/LineStringTool';
 import { PolygonTool } from './polygon/PolygonTool';
 import { SelectionTool } from './selection/SelectionTool';

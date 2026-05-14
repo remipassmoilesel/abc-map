@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
  */
 
 import { Logger } from '@abc-map/shared';
-import { IndexedDbClient } from '../client/IndexedDbClient';
+import type { IndexedDbClient } from '../client/IndexedDbClient';
 import { ObjectStore } from '../client/ObjectStore';
-import { TileIDBEntry } from './TileIDBEntry';
+import type { TileIDBEntry } from './TileIDBEntry';
 import { getMainDbClient } from '../main-database';
 
 const logger = Logger.get('TileStorage.ts');

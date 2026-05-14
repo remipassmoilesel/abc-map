@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
  */
 
 import Cls from './MapDimensions.module.scss';
-import React, { ChangeEvent, useCallback, useMemo } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import clsx from 'clsx';
 import { Switch } from '../../../../../../components/switch/Switch';
 import { getViewportDimensions } from '../../../../../../core/ui/getViewportDimensions';
@@ -42,7 +43,7 @@ export function MapDimensions(props: Props) {
       const value = Math.min(parseInt(ev.target.value), maxDimensions?.width || 3000) || 0;
       onChange(value, height);
     },
-    [maxDimensions?.width, onChange, height]
+    [maxDimensions?.width, onChange, height],
   );
 
   const handleHeightChange = useCallback(
@@ -50,7 +51,7 @@ export function MapDimensions(props: Props) {
       const value = Math.min(parseInt(ev.target.value), maxDimensions?.height || 3000) || 0;
       onChange(width, value);
     },
-    [maxDimensions?.height, onChange, width]
+    [maxDimensions?.height, onChange, width],
   );
 
   return (

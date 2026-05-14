@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { MongodbDocument } from '../mongodb/MongodbDocument';
+import type { MongodbDocument } from '../mongodb/MongodbDocument.js';
 
 export interface RegistrationDocument extends MongodbDocument {
   email: string;

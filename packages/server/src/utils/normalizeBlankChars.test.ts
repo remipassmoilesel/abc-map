@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { normalizeBlankChars } from './normalizeBlankChars';
-import { assert } from 'chai';
+import { normalizeBlankChars } from './normalizeBlankChars.js';
+import { it, describe, assert } from 'vitest';
 
 describe('normalizeBlankChars()', () => {
   it('should remove duplicate blanks', () => {

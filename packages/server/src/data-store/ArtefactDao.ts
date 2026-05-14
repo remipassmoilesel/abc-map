@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ArtefactDocument } from './ArtefactDocument';
-import { MongodbCollection } from '../mongodb/MongodbCollection';
-import { CreateIndexesOptions, Filter, IndexSpecification } from 'mongodb';
-import { MongoLanguage } from '../mongodb/MongodbI18n';
+import type { Config } from '../config/Config.js';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { ArtefactDocument } from './ArtefactDocument.js';
+import { MongodbCollection } from '../mongodb/MongodbCollection.js';
+import type { CreateIndexesOptions, Filter, IndexSpecification } from 'mongodb';
+import type { MongoLanguage } from '../mongodb/MongodbI18n.js';
 import { ArtefactFilter, ArtefactType } from '@abc-map/shared';
 
 export class ArtefactDao {
-  constructor(private config: Config, private client: MongodbClient) {}
+  constructor(
+    private config: Config,
+    private client: MongodbClient,
+  ) {}
 
   public async init() {
     const coll = await this.collection();

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import Cls from './ProjectList.module.scss';
 import { ProjectItem } from './ProjectItem';
 import React from 'react';
-import { AbcProjectMetadata, AbcProjectQuotas } from '@abc-map/shared';
+import type { AbcProjectMetadata, AbcProjectQuotas } from '@abc-map/shared';
 import { useTranslation } from 'react-i18next';
 
 interface Props {

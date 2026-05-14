@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { assert } from 'chai';
-import { Validation } from '../utils/Validation';
-import { TestHelper } from '../utils/TestHelper';
+import { assert } from 'vitest';
+import { Validation } from '../utils/Validation.js';
+import { TestHelper } from '../utils/TestHelper.js';
+import { describe, it } from 'vitest';
 
 describe('ProjectMetadata.schema', () => {
   it('should validate', () => {

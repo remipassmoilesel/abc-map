@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,8 +21,8 @@ import { FileIO } from '../utils/FileIO';
 import { useServices } from '../useServices';
 import { Logger, ProjectConstants } from '@abc-map/shared';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '../store/hooks';
-import { ProjectActions } from '../store/project/actions';
+import { useAppDispatch } from '../../store/hooks';
+import { ProjectActions } from '../../store/project/actions';
 import { DateTime } from 'luxon';
 
 const logger = Logger.get('useExportProject.ts');
@@ -46,7 +46,7 @@ export function useExportProject(): () => Promise<void> {
       FileIO.downloadBlob(compressed.project, `project${ProjectConstants.FileExtension}`);
       toasts.dismiss(firstToast);
       toasts.info(t('Export_done'));
-      dispatch(ProjectActions.setLastExport(DateTime.now()));
+      dispatch(ProjectActions.setLastExport(DateTime.now().toMillis()));
       await modals.solicitation();
     } catch (err) {
       logger.error('Cannot export project: ', err);

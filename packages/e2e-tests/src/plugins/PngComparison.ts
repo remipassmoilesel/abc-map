@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as Cypress from 'cypress';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as pixelmatch from 'pixelmatch';
+import fs from 'fs';
+import path from 'path';
+import pixelmatch from 'pixelmatch';
 import { Logger, Zipper } from '@abc-map/shared';
 import { PNG } from 'pngjs';
 
@@ -45,7 +44,7 @@ export class PngComparison {
       // It may not work as expected on your workstation.
       async 'rendering-comparison'(params: PngComparisonParams): Promise<PngComparisonResult> {
         const { actualZipPath: relativeActualZipPath, expectedZipPath: relativeExpectedZipPath, testId } = params;
-        const packageRoot = path.resolve(__dirname, '../..');
+        const packageRoot = path.resolve(import.meta.dirname, '../..');
         const generatedFolder = path.resolve(packageRoot, 'generated');
         const actualZipPath = path.resolve(packageRoot, relativeActualZipPath);
         const expectedZipPath = path.resolve(packageRoot, relativeExpectedZipPath);

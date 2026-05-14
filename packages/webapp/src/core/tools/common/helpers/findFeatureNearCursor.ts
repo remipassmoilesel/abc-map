@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import MapBrowserEvent from 'ol/MapBrowserEvent';
-import { Geometry } from 'ol/geom';
-import Feature from 'ol/Feature';
-import VectorSource from 'ol/source/Vector';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
+import type { Geometry } from 'ol/geom';
+import type Feature from 'ol/Feature';
 import { toleranceFromStyle } from './toleranceFromStyle';
 import { isCloseTo } from './isCloseTo';
 import { DefaultTolerancePx } from '../constants';
+import type { DefaultVectorSource } from '../../../geo/layers/LayerWrapper';
 
 export declare type FeatureFilter = (f: Feature<Geometry>) => boolean;
 export const noopFilter: FeatureFilter = () => true;
@@ -36,10 +36,10 @@ export const noopFilter: FeatureFilter = () => true;
  *
  */
 export function findFeatureNearCursor(
-  event: MapBrowserEvent<MouseEvent>,
-  source: VectorSource<Geometry>,
+  event: MapBrowserEvent,
+  source: DefaultVectorSource,
   filter = noopFilter,
-  tolerancePx = DefaultTolerancePx
+  tolerancePx = DefaultTolerancePx,
 ): Feature<Geometry> | undefined {
   const coord = event.coordinate;
 

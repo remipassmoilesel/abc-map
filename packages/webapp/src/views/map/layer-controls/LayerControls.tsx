@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,17 +21,17 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import LayerListItem from './list-item/LayerListItem';
 import { AddLayerModal } from './add-layer-modal/AddLayerModal';
-import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { EditLayerModal } from './edit-layer-modal/EditLayerModal';
 import { useTranslation } from 'react-i18next';
 import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import isEqual from 'lodash/isEqual';
-import { usePrevious } from '../../../core/utils/usePrevious';
 import { useServices } from '../../../core/useServices';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { Extent, getArea } from 'ol/extent';
+import type { Extent } from 'ol/extent';
+import { getArea } from 'ol/extent';
 import { RemoveLayerChangeset } from '../../../core/history/changesets/layers/RemoveLayerChangeset';
 import { ToggleLayerVisibilityChangeset } from '../../../core/history/changesets/layers/ToggleLayerVisibilityChangeset';
 import { SetLayerPositionChangeset } from '../../../core/history/changesets/layers/SetLayerPositionChangeset';
@@ -54,16 +54,18 @@ export function LayerControls() {
 
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  const layerIds = layers.map((layer) => layer.getId());
-  const previousIds = usePrevious(layerIds);
+  const layerIds = layers.map((layer) => layer.getId() || '<invalid-id>');
+  const previousLayerIds = useRef<string[]>([]);
   useEffect(() => {
-    if (!isEqual(previousIds, layerIds)) {
+    if (!isEqual(previousLayerIds.current, layerIds)) {
       // We scroll to bottom of list if layer list change
       if (listRef.current) {
         listRef.current.scrollTop = listRef.current.scrollHeight;
       }
     }
-  }, [layerIds, previousIds]);
+
+    previousLayerIds.current = layerIds;
+  }, [layerIds]);
 
   const handleSelection = useCallback(
     (layerId: string) => {
@@ -85,7 +87,7 @@ export function LayerControls() {
         .then(() => history.register(HistoryKey.Map, setActiveLayer))
         .catch((err) => logger.error('Cannot set layer active', err));
     },
-    [activeLayer, history, layers, toasts]
+    [activeLayer, history, layers, toasts],
   );
 
   const handleZoom = useCallback(() => {
@@ -163,7 +165,7 @@ export function LayerControls() {
       };
       toggle().catch((err) => logger.error('Cannot toggle visibility of layer', err));
     },
-    [geo, history]
+    [geo, history],
   );
 
   const moveActiveLayer = useCallback(
@@ -187,7 +189,7 @@ export function LayerControls() {
         .then(() => history.register(HistoryKey.Map, setLayerPosition))
         .catch((err) => logger.error('Cannot set layer position', err));
     },
-    [activeLayer, history, layers, t, toasts]
+    [activeLayer, history, layers, t, toasts],
   );
 
   const handleLayerForward = useCallback(() => moveActiveLayer(+1), [moveActiveLayer]);
@@ -248,7 +250,7 @@ export function LayerControls() {
             </button>
           </WithTooltip>
           <WithTooltip title={t('Zoom_on_layer')}>
-            <button onClick={handleZoom} className={'btn btn-link'}>
+            <button onClick={handleZoom} className={'btn btn-link'} data-cy={'zoom-on-layer'}>
               <FaIcon icon={IconDefs.faSearchPlus} />
             </button>
           </WithTooltip>

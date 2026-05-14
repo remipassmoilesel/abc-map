@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,21 +17,21 @@
  */
 
 import 'cypress-file-upload';
-import { BundledModuleId, LayerType, ProjectConstants, ProjectHelper } from '@abc-map/shared';
-import { Toasts } from '../helpers/Toasts';
-import { TestHelper } from '../helpers/TestHelper';
-import { Download } from '../helpers/Download';
-import { TestData } from '../test-data/TestData';
-import { MainMap } from '../helpers/MainMap';
-import { LayerControls } from '../helpers/LayerControls';
-import { Registration } from '../helpers/Registration';
-import { Authentication } from '../helpers/Authentication';
-import * as uuid from 'uuid-random';
-import { Routes } from '../helpers/Routes';
-import { Modules } from '../helpers/Modules';
-import { TopBar } from '../helpers/TopBar';
-import { Project } from '../helpers/Project';
-import { FilePrompt } from '../helpers/FilePrompt';
+import { ModuleId, LayerType, ProjectConstants, ProjectHelper } from '@abc-map/shared';
+import { Toasts } from '../helpers/Toasts.js';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { Download } from '../helpers/Download.js';
+import { TestData } from '../test-data/TestData.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { LayerControls } from '../helpers/LayerControls.js';
+import { Registration } from '../helpers/Registration.js';
+import { Authentication } from '../helpers/Authentication.js';
+import uuidRandom from 'uuid-random';
+import { Routes } from '../helpers/Routes.js';
+import { Modules } from '../helpers/Modules.js';
+import { TopBar } from '../helpers/TopBar.js';
+import { Project } from '../helpers/Project.js';
+import { FilePrompt } from '../helpers/FilePrompt.js';
 
 const PROJECT_PASSWORD = 'azerty1234';
 
@@ -57,7 +57,7 @@ describe('Project', function () {
 
     it('can rename project', function () {
       cy.visit(Routes.map().format())
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         .get('[data-cy=edit-project-name]')
         .click()
         .get('[data-cy=prompt-input]')
@@ -74,7 +74,7 @@ describe('Project', function () {
     it('can export project', function () {
       cy.visit(Routes.map().format())
         .then(() => LayerControls.addWmsLayerWithCredentials())
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=export-project]')
         .click()
         .then(() => Toasts.assertText('Export done !'))
@@ -98,7 +98,7 @@ describe('Project', function () {
 
     it('can import project', function () {
       cy.visit(Routes.map().format())
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -123,7 +123,7 @@ describe('Project', function () {
 
     it('can import old projects with credentials', function () {
       cy.visit(Routes.map().format())
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -175,7 +175,7 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayerWithCredentials())
         // Save project online
 
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'));
@@ -187,7 +187,7 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .then(() => LayerControls.addVectorLayer())
         // Save project online
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         .get('[data-cy=project-management-module] [data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'))
@@ -214,9 +214,9 @@ describe('Project', function () {
     });
 
     it('can delete project', function () {
-      const projectName = `Project ${uuid()}`;
+      const projectName = `Project ${uuidRandom()}`;
       cy.visit(Routes.map().format())
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         // Rename project
         .get('[data-cy=edit-project-name]')
         .click()

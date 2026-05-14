@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DataStoreScanner, logger } from './DataStoreScanner';
-import { SinonStub, SinonStubbedInstance } from 'sinon';
-import { ManifestReader } from './ManifestReader';
-import * as sinon from 'sinon';
-import { assert } from 'chai';
-import { ArtefactManifestWithPath } from './ArtefactManifestSchema';
+import { DataStoreScanner, logger } from './DataStoreScanner.js';
+import sinon from 'sinon';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import { ManifestReader } from './ManifestReader.js';
+import { assert, beforeEach, describe, it } from 'vitest';
+import type { ArtefactManifestWithPath } from './ArtefactManifestSchema.js';
 
 logger.disable();
 
@@ -33,7 +33,7 @@ describe('DataStoreScanner', () => {
   beforeEach(() => {
     globFunction = sinon.stub();
     reader = sinon.createStubInstance(ManifestReader);
-    scanner = new DataStoreScanner(reader as unknown as ManifestReader, globFunction);
+    scanner = new DataStoreScanner(reader as unknown as ManifestReader, globFunction as any);
   });
 
   it('should return manifests', async () => {

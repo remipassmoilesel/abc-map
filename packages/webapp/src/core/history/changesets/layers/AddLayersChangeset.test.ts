@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../../geo/map/MapWrapper';
+import type { MapWrapper } from '../../../geo/map/MapWrapper';
 import { MapFactory } from '../../../geo/map/MapFactory';
 import { AddLayersChangeset } from './AddLayersChangeset';
 import { LayerFactory } from '../../../geo/layers/LayerFactory';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('AddLayersChangeset', () => {
   let map: MapWrapper;

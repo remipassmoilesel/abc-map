@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,11 +15,14 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { act } from 'react';
 import { abcRender } from '../../core/utils/test/abcRender';
-import ColorPickerButton from './ColorPickerButton';
-import sinon, { SinonStub } from 'sinon';
-import { act, screen, waitFor } from '@testing-library/react';
+import { ColorPickerButton } from './ColorPickerButton';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('ColorPickerButton', () => {
   let handleClose: SinonStub;
@@ -27,26 +30,30 @@ describe('ColorPickerButton', () => {
     handleClose = sinon.stub();
   });
 
-  it('should render button with initial value (hex)', () => {
-    abcRender(<ColorPickerButton value={'#AABBCCDD'} onClose={handleClose} />);
+  it('should render button with initial value (hex)', async () => {
+    await act(async () => {
+      abcRender(<ColorPickerButton value={'#AABBCCDD'} onClose={handleClose} />);
+    });
 
     expect(screen.getByRole('button').style.background).toEqual('rgba(170, 187, 204, 0.867)');
   });
 
-  it('should render button with initial value (rgba)', () => {
-    abcRender(<ColorPickerButton value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
+  it('should render button with initial value (rgba)', async () => {
+    await act(async () => {
+      abcRender(<ColorPickerButton value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
+    });
 
     expect(screen.getByRole('button').style.background).toEqual('rgba(170, 50, 204, 0.87)');
   });
 
   it('should open modal and set color value (hex)', async () => {
     // Prepare
-    abcRender(<ColorPickerButton value={'#AABBCCDD'} onClose={handleClose} />);
+    await act(async () => {
+      abcRender(<ColorPickerButton value={'#AABBCCDD'} onClose={handleClose} />);
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByRole('button'));
-    });
+    await userEvent.click(screen.getByRole('button'));
 
     // Assert
     await waitFor(() => {
@@ -56,12 +63,12 @@ describe('ColorPickerButton', () => {
 
   it('should open modal and set color value (rgba)', async () => {
     // Prepare
-    abcRender(<ColorPickerButton value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
+    await act(async () => {
+      abcRender(<ColorPickerButton value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByRole('button'));
-    });
+    await userEvent.click(screen.getByRole('button'));
 
     // Assert
     await waitFor(() => {
@@ -69,21 +76,21 @@ describe('ColorPickerButton', () => {
     });
   });
 
-  it('should trigger onClose()', async () => {
+  it('should call onClose()', async () => {
     // Prepare
-    abcRender(<ColorPickerButton value={'#AA32CCDD'} onClose={handleClose} />);
     await act(async () => {
-      await userEvent.click(screen.getByRole('button'));
+      abcRender(<ColorPickerButton value={'#AA32CCDD'} onClose={handleClose} />);
     });
+
+    await userEvent.click(screen.getByRole('button'));
 
     // Act
-    await act(async () => {
-      await setModalValue(175, 55, 209, 50);
-      await userEvent.click(screen.getByTestId('close-modal'));
-    });
+    await setModalValue(175, 55, 209, 50);
+
+    await userEvent.click(screen.getByTestId('close-modal'));
 
     // Assert
-    expect(handleClose.args).toEqual([['rgba(175,55,209,0.5)']]);
+    expect(handleClose.args).toEqual([['rgb(175 55 209 / 0.5)']]);
   });
 
   function getModalValue() {

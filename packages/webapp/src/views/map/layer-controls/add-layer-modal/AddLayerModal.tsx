@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { LabeledLayerType, LabeledLayerTypes } from './_common/LabeledLayerTypes';
+import type { LabeledLayerType } from './_common/LabeledLayerTypes';
+import { LabeledLayerTypes } from './_common/LabeledLayerTypes';
 import WmsLayerPanel from './wms/WmsLayerPanel';
 import { Logger, PredefinedLayerModel } from '@abc-map/shared';
 import { PredefinedLayerPanel } from './predefined/PredefinedLayerPanel';
@@ -27,10 +29,10 @@ import Cls from './AddLayerModal.module.scss';
 import GeometryLayerPanel from './geometry/GeometryLayerPanel';
 import { HelpPanel } from './help-panel/HelpPanel';
 import WmtsLayerPanel from './wmts/WmtsLayerPanel';
-import { WmsSettings, WmtsSettings } from '../../../../core/geo/layers/LayerFactory.types';
+import type { WmsSettings, WmtsSettings } from '../../../../core/geo/layers/LayerFactory.types';
 import { useTranslation } from 'react-i18next';
 import { EmptyWmsValues, EmptyWmtsValues } from './AddLayerModal.empty-values';
-import { useAppSelector } from '../../../../core/store/hooks';
+import { useAppSelector } from '../../../../store/hooks';
 import clsx from 'clsx';
 
 const logger = Logger.get('AddLayerModal.tsx');

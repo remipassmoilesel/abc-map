@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@ import { getAbcWindow, Logger } from '@abc-map/shared';
 import { StorageService } from './storage/StorageService';
 import { PwaService } from './pwa/PwaService';
 import { DocumentationService } from './documentation/DocumentationService';
+import { mainStore } from '../store/store.ts';
 
 const logger = Logger.get('Services.ts');
 
@@ -67,7 +68,7 @@ export function servicesFactory(): Services {
   const feedback = FeedbackService.create(toasts);
   const legalMentions = LegalMentionsService.create(toasts);
   const storage = new StorageService();
-  const pwa = new PwaService(storage);
+  const pwa = new PwaService(mainStore);
   const documentation = DocumentationService.create(toasts);
 
   return {

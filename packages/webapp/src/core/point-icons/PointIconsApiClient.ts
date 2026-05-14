@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
 import { ApiClient } from '../http/http-clients';
-import { GetPointIconsRequest, GetPointIconsResponse, Logger } from '@abc-map/shared';
+import type { GetPointIconsRequest, GetPointIconsResponse } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { PointIconsRoutes } from '../http/ApiRoutes';
-import { AllPointIcons, PointIcon } from '@abc-map/point-icons';
+import type { PointIcon } from '@abc-map/point-icons';
+import { AllPointIcons } from '@abc-map/point-icons';
 import axiosRetry from 'axios-retry';
 
 const logger = Logger.get('PointIconsApiClient.ts');

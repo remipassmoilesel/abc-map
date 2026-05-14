@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../geo/map/MapWrapper';
+import type { MapWrapper } from '../../geo/map/MapWrapper';
 import { LayoutHelper } from '../LayoutHelper';
 import View from 'ol/View';
-import { AbcFile, AbcLayout, BlobIO, LayoutFormat, Logger, Zipper } from '@abc-map/shared';
+import type { AbcFile, AbcLayout, LayoutFormat } from '@abc-map/shared';
+import { BlobIO, Logger, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
 import { StaticAttributions } from '../../../components/static-attributions/StaticAttributions';
@@ -27,18 +28,20 @@ import { MapUi } from '../../../components/map-ui/MapUi';
 import html2canvas from 'html2canvas';
 import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFrame';
 import { FloatingScale } from '../../../components/floating-scale/FloatingScale';
-import { DimensionsPx } from '../../utils/DimensionsPx';
+import type { DimensionsPx } from '../../utils/DimensionsPx';
 import { toPrecision } from '../../utils/numbers';
 import { FloatingNorthArrow } from '../../../components/floating-north-arrow/FloatingNorthArrow';
 import { createRoot } from 'react-dom/client';
+import { OnEffect } from './OnEffect.tsx';
 
-export const logger = Logger.get('LayoutRenderer');
+const logger = Logger.get('LayoutRenderer', 'warn');
 
 export class LayoutRenderer {
   private rootElement?: HTMLDivElement;
   private map?: MapWrapper;
 
   public init() {
+    logger.debug('Initializing LayoutRenderer');
     // Create support for map and others elements
     this.rootElement = document.createElement('div');
     this.rootElement.style.position = 'fixed';
@@ -52,15 +55,20 @@ export class LayoutRenderer {
   public dispose() {
     this.map?.dispose();
     this.rootElement?.remove();
+    logger.debug('LayoutRenderer disposed');
   }
 
   public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper, abcMapAttributions: boolean): Promise<Blob> {
+    logger.debug('Rendering layouts as PDF: ', { layouts });
+
     const pdf = new jsPDF();
 
     // jsPDF create a first page that may not correspond to first layout
     pdf.deletePage(1);
 
     for (const layout of layouts) {
+      logger.debug('Layout: ', { layout });
+
       const format = layout.format;
       pdf.addPage([format.width, format.height], format.orientation);
 
@@ -72,6 +80,8 @@ export class LayoutRenderer {
   }
 
   public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper, abcMapAttributions: boolean): Promise<Blob> {
+    logger.debug('Rendering layouts as PNG: ', { layouts });
+
     const files: AbcFile<Blob>[] = [];
     for (const layout of layouts) {
       const canvas = await this.renderLayout(layout, sourceMap, abcMapAttributions);
@@ -83,7 +93,8 @@ export class LayoutRenderer {
   }
 
   private async renderLayout(layout: AbcLayout, sourceMap: MapWrapper, abcMapAttributions: boolean): Promise<HTMLCanvasElement> {
-    logger.info('Rendering layout: ', layout);
+    logger.debug('Rendering layout: ', layout);
+
     const renderingMap = this.map;
     const rootElement = this.rootElement;
     if (!renderingMap || !rootElement) {
@@ -94,7 +105,8 @@ export class LayoutRenderer {
     const dimensions = LayoutHelper.formatToPixel(layout.format);
     const previewDimensions = this.getPreviewDimensionsFor(layout.format);
     const ratio = this.getStyleRatio(previewDimensions, dimensions);
-    logger.info(`Rendering style ratio: ${ratio}`);
+
+    logger.debug(`Rendering style ratio: ${ratio}`);
 
     // Copy layers from sourceMap to exportMap
     renderingMap.importLayersFrom(sourceMap, { withSelection: false, ratio });
@@ -108,7 +120,7 @@ export class LayoutRenderer {
         resolution: layout.view.resolution,
         projection: layout.view.projection.name,
         rotation: layout.view.rotation,
-      })
+      }),
     );
 
     return new Promise<HTMLCanvasElement>((resolve, reject) => {
@@ -179,10 +191,14 @@ export class LayoutRenderer {
           {/* Attributions */}
           <StaticAttributions map={map} ratio={ratio} abcMapAttributions={abcMapAttributions} />
 
-          {/*resolve() will be called when div will be created, see: https://github.com/reactwg/react-18/discussions/5*/}
           {/*  We leave a second more in order to avoid occasional CSS style loading errors */}
-          <div ref={() => setTimeout(resolve, 1000)} />
-        </>
+          <OnEffect
+            callback={() => {
+              logger.info('Map rendering done');
+              setTimeout(() => resolve(), 1000);
+            }}
+          />
+        </>,
       );
     });
   }

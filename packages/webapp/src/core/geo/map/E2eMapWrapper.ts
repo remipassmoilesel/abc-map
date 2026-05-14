@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from './MapWrapper';
-import { Logger, E2eMap, DEFAULT_PROJECTION } from '@abc-map/shared';
-import { LayerMetadata, BaseMetadata } from '@abc-map/shared';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
+import type { MapWrapper } from './MapWrapper';
+import type { E2eMap } from '@abc-map/shared';
+import { Logger, DEFAULT_PROJECTION } from '@abc-map/shared';
+import type { LayerMetadata, BaseMetadata } from '@abc-map/shared';
+import type Feature from 'ol/Feature';
+import type Geometry from 'ol/geom/Geometry';
 import View from 'ol/View';
 import { fromLonLat } from 'ol/proj';
 

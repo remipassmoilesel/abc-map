@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,20 +15,20 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-export * from './constants';
-export * from './feature';
-export * from './helpers';
-export * from './layer';
-export * from './layout';
-export * from './north';
-export * from './projection';
-export * from './scale';
-export * from './shared-views';
-export * from './style';
-export * from './text-frame';
-export * from './AbcProjectManifest';
-export * from './AbcView';
-export * from './CompressedProject';
-export * from './CompressedProjectStream';
-export * from './ProjectSaveResponse';
-export * from './AbcProjectQuotas';
+export * from './AbcProjectManifest.js';
+export * from './AbcProjectQuotas.js';
+export * from './AbcView.js';
+export * from './CompressedProject.js';
+export * from './CompressedProjectStream.js';
+export * from './ProjectSaveResponse.js';
+export * from './constants/index.js';
+export * from './feature/index.js';
+export * from './helpers/index.js';
+export * from './layer/index.js';
+export * from './layout/index.js';
+export * from './north/index.js';
+export * from './projection/index.js';
+export * from './scale/index.js';
+export * from './shared-views/index.js';
+export * from './style/index.js';
+export * from './text-frame/index.js';

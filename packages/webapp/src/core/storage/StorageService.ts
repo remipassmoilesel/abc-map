@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ const logger = Logger.get('StorageService.ts');
 
 export enum StorageKey {
   REDUX_STATE = 'ABC_MAP_REDUX_STATE',
-  DEV_SERVICE_WORKER = 'ABC_MAP_DEV_SERVICE_WORKER',
 }
 
 export class StorageService {

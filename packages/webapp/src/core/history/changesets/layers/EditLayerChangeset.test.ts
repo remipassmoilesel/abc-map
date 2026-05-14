@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EditableLayerProperties, EditLayerChangeset } from './EditLayerChangeset';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import type { EditableLayerProperties } from './EditLayerChangeset';
+import { EditLayerChangeset } from './EditLayerChangeset';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('EditLayerChangeset', () => {
   let map: SinonStubbedInstance<MapWrapper>;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ import React, { useCallback, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { IconDefs } from '../../icon/IconDefs';
 import { ExperimentalFeatures } from '../../../experimental-features';
-import ExperimentalFeaturesModal from './experimental-features/ExperimentalFeaturesModal';
+import { ExperimentalFeaturesModal } from './experimental-features/ExperimentalFeaturesModal';
 import { useServices } from '../../../core/useServices';
 import { useRunningAsPwa } from '../../../core/pwa/useRunningAsPwa';
 import { useTranslation } from 'react-i18next';
@@ -28,10 +28,11 @@ import { useFullscreen } from '../../../core/ui/useFullscreen';
 import { ActionButton } from '../action-button/ActionButton';
 import { FaIcon } from '../../icon/FaIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useServiceWorker } from '../../../core/pwa/useServiceWorker';
 import { Link } from 'react-router-dom';
 import { Routes } from '../../../routes';
 import { ModalStatus } from '../../../core/ui/typings';
+import { WithTooltip } from '../../with-tooltip/WithTooltip';
+import { useAppSelector } from '../../../store/hooks';
 
 const logger = Logger.get('AppSection.tsx');
 
@@ -57,8 +58,7 @@ export function AppSection() {
 
   const handleDismissInfo = useCallback(() => setFullscreenInfoDismissed(true), []);
 
-  const swState = useServiceWorker();
-  const worksOffline = swState.present || swState.installed;
+  const swState = useAppSelector((st) => st.ui.serviceWorker);
 
   const handleClearData = useCallback(
     () =>
@@ -76,7 +76,7 @@ export function AppSection() {
           logger.error('Clear storage error: ', err);
           toasts.genericError(err);
         }),
-    [authentication, modals, project, storage, toasts]
+    [authentication, modals, project, storage, toasts],
   );
 
   return (
@@ -112,14 +112,14 @@ export function AppSection() {
       <div className={'ps-2 mb-2'}>
         {!runningAsPwa && (
           <>
-            {worksOffline && (
+            {swState.installed && (
               <div className={'alert alert-light border rounded w-100 mb-2'}>
                 <FaIcon icon={IconDefs.faInfoCircle} className={'mr-2'} />
                 {t('You_can_use_abc-map_offline')}
               </div>
             )}
 
-            {!worksOffline && (
+            {!swState.installed && (
               <div className={'alert alert-light border rounded w-100 mb-2'}>
                 <FaIcon icon={IconDefs.faExclamationTriangle} className={'me-2'} />
                 {t('You_cannot_use_abc-map_offline')}
@@ -129,10 +129,12 @@ export function AppSection() {
         )}
 
         {swState.updateAvailable && (
-          <div className={'alert alert-light border rounded w-100 mb-2'}>
-            <FaIcon icon={IconDefs.faDownload} className={'me-2'} />
-            {t('New_version_available_Restart_Abc-Map')} 🤩
-          </div>
+          <WithTooltip title={t('Close_all_tabs_then_reopen_abc-map')}>
+            <div className={'alert alert-light border rounded w-100 mb-2'}>
+              <FaIcon icon={IconDefs.faDownload} className={'me-2'} />
+              {t('New_version_available')}
+            </div>
+          </WithTooltip>
         )}
 
         {/* Information about fullscreen */}

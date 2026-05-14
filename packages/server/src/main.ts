@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import 'source-map-support/register';
+import 'source-map-support/register.js';
 import { Logger } from '@abc-map/shared';
-import { HttpServer } from './server/HttpServer';
-import { Services, servicesFactory } from './services/services';
-import { ConfigLoader } from './config/ConfigLoader';
-import { DevInit } from './dev-init/DevInit';
-import { DbMigrationsLauncher } from './mongodb/migrations/DbMigrationsLauncher';
-import { VERSION } from './version';
-import { DocumentationTemplating } from './documentation/DocumentationTemplating';
+import { HttpServer } from './server/HttpServer.js';
+import type { Services } from './services/services.js';
+import { servicesFactory } from './services/services.js';
+import { ConfigLoader } from './config/ConfigLoader.js';
+import { DevInit } from './dev-init/DevInit.js';
+import { DbMigrationsLauncher } from './mongodb/migrations/DbMigrationsLauncher.js';
+import { VERSION } from './version.js';
+import { DocumentationTemplating } from './documentation/DocumentationTemplating.js';
 
 const logger = Logger.get('main.ts', 'info');
 

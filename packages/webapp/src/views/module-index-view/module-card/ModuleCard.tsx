@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,33 +17,27 @@
  */
 
 import Cls from './ModuleCard.module.scss';
-import { Module } from '@abc-map/module-api';
 import clsx from 'clsx';
-import { useCallback, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
+import { useCallback } from 'react';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
-import { UiActions } from '../../../core/store/ui/actions';
-import { useTranslation } from 'react-i18next';
-import { isRemoteModule } from '../../../core/modules/registry/RemoteModule';
-import { WindowNames } from '../../../core/ui/WindowNames';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { UiActions } from '../../../store/ui/actions';
+import type { AbcModule } from '../../../modules/AbcModule.ts';
 
 interface Props {
-  module: Module;
-  onOpen: (mod: Module) => void;
-  onRemove: (mod: Module) => void;
+  module: AbcModule;
+  onOpen: (mod: AbcModule) => void;
   className?: string;
 }
 
 export function ModuleCard(props: Props) {
-  const { module, onOpen, onRemove, className } = props;
-  const { t } = useTranslation('ModuleIndexView');
+  const { module, onOpen, className } = props;
 
   const dispatch = useAppDispatch();
   const name = module.getReadableName();
   const shortDescription = module.getShortDescription();
-  const isRemote = isRemoteModule(module);
-  const sourceUrl = isRemote ? module.getSourceUrl() : undefined;
 
   const favorites = useAppSelector((st) => st.ui.favoriteModules);
   const isFavorite = favorites.includes(module.getId());
@@ -55,23 +49,7 @@ export function ModuleCard(props: Props) {
       ev.stopPropagation();
       dispatch(UiActions.markFavorite(module.getId(), !isFavorite));
     },
-    [dispatch, module, isFavorite]
-  );
-
-  const handleOpenSource = useCallback(
-    (ev: MouseEvent) => {
-      ev.stopPropagation();
-      window.open(sourceUrl, WindowNames.Blank);
-    },
-    [sourceUrl]
-  );
-
-  const handleRemoveModule = useCallback(
-    (ev: MouseEvent) => {
-      ev.stopPropagation();
-      onRemove(module);
-    },
-    [module, onRemove]
+    [dispatch, module, isFavorite],
   );
 
   return (
@@ -83,18 +61,6 @@ export function ModuleCard(props: Props) {
 
       <div className={'flex-grow-1'} />
       <div className={'d-flex justify-content-end'}>
-        {isRemote && (
-          <>
-            <button onClick={handleRemoveModule} className={'btn btn-link mr-2'} title={t('Remove_module')}>
-              <FaIcon icon={IconDefs.faTimes} size={'1.5rem'} />
-            </button>
-
-            <button onClick={handleOpenSource} className={'btn btn-link mr-2'} title={t('See_module_source')}>
-              <FaIcon icon={IconDefs.faEarthEurope} size={'1.5rem'} />
-            </button>
-          </>
-        )}
-
         <button onClick={handleToggleFavorite} className={clsx('btn btn-outline-primary', 'mr-2')}>
           <FaIcon icon={isFavorite ? IconDefs.faStarSolid : IconDefs.faStarRegular} />
         </button>

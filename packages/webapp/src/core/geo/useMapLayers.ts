@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 
 import { useEffect, useState } from 'react';
 import { useServices } from '../useServices';
-import { LayerWrapper, VectorLayerWrapper } from './layers/LayerWrapper';
-import { MapWrapper } from './map/MapWrapper';
+import type { LayerWrapper, VectorLayerWrapper } from './layers/LayerWrapper';
+import type { MapWrapper } from './map/MapWrapper';
 
 interface Result {
   map: MapWrapper;

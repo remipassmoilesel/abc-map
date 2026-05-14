@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Services } from '../services/services';
+import type { Services } from '../services/services.js';
 import { AnonymousUser } from '@abc-map/shared';
-import { TestHelper } from './TestHelper';
-import { IncomingHttpHeaders } from 'http';
-import * as uuid from 'uuid-random';
+import { TestHelper } from './TestHelper.js';
+import type { IncomingHttpHeaders } from 'http';
+import uuid from 'uuid-random';
 
 export class TestAuthentication {
   constructor(private services: Services) {}

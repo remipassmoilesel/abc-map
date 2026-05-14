@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import { Editor, Element, Range, Transforms } from 'slate';
-import { ListElement, ListItemElement, ParagraphElement } from '@abc-map/shared';
+import type { ListElement, ListItemElement, ParagraphElement } from '@abc-map/shared';
 
 export const withLists = (editor: Editor) => {
   const { insertBreak } = editor;

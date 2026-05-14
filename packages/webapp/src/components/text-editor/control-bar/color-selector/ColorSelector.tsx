@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,21 +20,21 @@ import Cls from './ColorSelector.module.scss';
 import { useCallback, useState } from 'react';
 import { CustomEditor } from '../../CustomEditor';
 import { useEditor } from '../../useEditor';
-import { BaseSelection, Transforms } from 'slate';
+import type { BaseSelection } from 'slate';
+import { Transforms } from 'slate';
 import { FaIcon } from '../../../icon/FaIcon';
 import { IconDefs } from '../../../icon/IconDefs';
-import ColorPickerButton from '../../../color-picker/ColorPickerButton';
+import { ColorPickerButton } from '../../../color-picker/ColorPickerButton';
 import clsx from 'clsx';
 import { WithTooltip } from '../../../with-tooltip/WithTooltip';
-import { prefixedTranslation } from '../../../../i18n/i18n';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   className?: string;
 }
 
 export function ColorSelector(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { className } = props;
   const { editor } = useEditor();
 
@@ -55,7 +55,7 @@ export function ColorSelector(props: Props) {
       }
       CustomEditor.foregroundColor.set(editor, color);
     },
-    [editor, selection]
+    [editor, selection],
   );
 
   const handleBgColorPickerClosed = useCallback(
@@ -67,7 +67,7 @@ export function ColorSelector(props: Props) {
       }
       CustomEditor.backgroundColor.set(editor, color);
     },
-    [editor, selection]
+    [editor, selection],
   );
 
   return (

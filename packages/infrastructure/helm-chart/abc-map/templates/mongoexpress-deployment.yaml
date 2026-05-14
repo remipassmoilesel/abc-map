@@ -19,39 +19,42 @@ spec:
     spec:
       containers:
         - name: mongoexpress
-          image: "mongo-express:0.54"
+          image: "mongo-express:1.0.2-20-alpine3.19"
           imagePullPolicy: IfNotPresent
           ports:
             - name: mongoexpress
               containerPort: 8081
               protocol: TCP
           env:
-            - name: ME_CONFIG_MONGODB_SERVER
-              value: {{ include "abc-map.fullname" . }}-mongodb
-            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
-              value: {{ .Values.mongodb.auth.rootUsername }}
-            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
-              value: {{ .Values.mongodb.auth.rootPassword }}
-            - name: ME_CONFIG_MONGODB_PORT
-              value: '27017'
-          livenessProbe:
+            - name: ME_CONFIG_BASICAUTH_USERNAME
+              value: {{ .Values.mongoexpress.username }}
+            - name: ME_CONFIG_BASICAUTH_PASSWORD
+              value: {{ .Values.mongoexpress.password }}
+            - name: ME_CONFIG_MONGODB_ENABLE_ADMIN
+              value: "true"
+            - name: ME_CONFIG_MONGODB_URL
+              value: "mongodb://{{ .Values.mongodb.auth.rootUsername }}:{{ .Values.mongodb.auth.rootPassword }}@{{ include "abc-map.fullname" . }}-mongodb:27017/?ssl=false"
+          startupProbe:
             httpGet:
-              path: /
+              path: /status
               port: 8081
-            initialDelaySeconds: 10
-            periodSeconds: 10
+            periodSeconds: 30
             timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 6
+            failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /
+              path: /status
               port: 8081
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            periodSeconds: 30
             timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 6
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: 8081
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             {{- toYaml .Values.mongoexpress.resources | nindent 12 }}
 

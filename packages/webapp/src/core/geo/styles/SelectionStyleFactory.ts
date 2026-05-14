@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ import Style from 'ol/style/Style';
 import { Fill, Stroke } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import { AbcGeometryType, Logger } from '@abc-map/shared';
-import { FeatureWrapper } from '../features/FeatureWrapper';
+import type { FeatureWrapper } from '../features/FeatureWrapper';
 
 export const logger = Logger.get('SelectionStyleFactory.ts');
 

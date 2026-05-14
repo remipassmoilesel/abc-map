@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller } from '../server/Controller';
-import { Services } from '../services/services';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { ByCodeParams, ByCodeSchema } from './ProjectionController.schemas';
+import { Controller } from '../server/Controller.js';
+import type { Services } from '../services/services.js';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { ByCodeParams } from './ProjectionController.schemas.js';
+import { ByCodeSchema } from './ProjectionController.schemas.js';
 import '@fastify/sensible';
 
 export class ProjectionController extends Controller {

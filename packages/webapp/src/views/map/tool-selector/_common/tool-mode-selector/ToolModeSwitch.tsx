@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import { useTranslation, withTranslation } from 'react-i18next';
-import { ToolMode } from '../../../../../core/tools/ToolMode';
+import type { ToolMode } from '../../../../../core/tools/ToolMode';
 import { Switch } from '../../../../../components/switch/Switch';
 import KeyboardKey from './KeyboardKey';
 import { useCallback } from 'react';

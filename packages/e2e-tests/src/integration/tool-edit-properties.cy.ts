@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { BundledModuleId, MapTool } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { ModeName, ToolSelector } from '../helpers/ToolSelector';
-import { MainMap } from '../helpers/MainMap';
-import { DataStore } from '../helpers/DataStore';
-import { TopBar } from '../helpers/TopBar';
-import { Routes } from '../helpers/Routes';
-import { Draw } from '../helpers/Draw';
-import { Project } from '../helpers/Project';
-import { Modules } from '../helpers/Modules';
+import { ModuleId, MapTool } from '@abc-map/shared';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { DataStore } from '../helpers/DataStore.js';
+import { TopBar } from '../helpers/TopBar.js';
+import { Routes } from '../helpers/Routes.js';
+import { Draw } from '../helpers/Draw.js';
+import { Project } from '../helpers/Project.js';
+import { Modules } from '../helpers/Modules.js';
 
 describe('Edit properties', function () {
   beforeEach(() => {
@@ -51,7 +51,7 @@ describe('Edit properties', function () {
   it('user can edit properties, then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => Project.newProject())
-      .then(() => Modules.open(BundledModuleId.DataStore))
+      .then(() => Modules.open(ModuleId.DataStore))
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.map())
       .then(() => MainMap.fixedView1())

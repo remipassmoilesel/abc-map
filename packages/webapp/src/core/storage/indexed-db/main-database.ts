@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 
 import { ObjectStore } from './client/ObjectStore';
 import { IndexedDbClient } from './client/IndexedDbClient';
-import { FeatureIDBEntry } from './features/FeatureIDBEntry';
-import { TileIDBEntry } from './tiles/TileIDBEntry';
+import type { FeatureIDBEntry } from './features/FeatureIDBEntry';
+import type { TileIDBEntry } from './tiles/TileIDBEntry';
 import { StorageUpdater } from './migrations/StorageUpdater';
 import { Logger } from '@abc-map/shared';
 

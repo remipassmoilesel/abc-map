@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,21 +15,24 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 import { PredefinedLayerModel } from '@abc-map/shared';
 import { abcRender } from '../../../../core/utils/test/abcRender';
 import { EditLayerModal } from './EditLayerModal';
-import sinon, { SinonStub } from 'sinon';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import userEvent from '@testing-library/user-event';
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
-import { TestServices } from '../../../../core/utils/test/TestServices';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
+import type { TestServices } from '../../../../core/utils/test/TestServices';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { EditLayerChangeset } from '../../../../core/history/changesets/layers/EditLayerChangeset';
-import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../../core/geo/map/MapFactory';
 import { mockServices, restoreServices } from '../../../../core/utils/test/mock-services';
 import { AttributionFormat } from '../../../../core/geo/AttributionFormat';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 describe('EditLayerModal', () => {
   let onHide: SinonStub;
@@ -54,14 +57,14 @@ describe('EditLayerModal', () => {
 
   it('should change name', async () => {
     // Prepare
-    abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    await act(async () => {
+      abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.clear(screen.getByTestId('name-input'));
-      await userEvent.type(screen.getByTestId('name-input'), 'New layer name');
-      await userEvent.click(screen.getByTestId('submit-button'));
-    });
+    await userEvent.clear(screen.getByTestId('name-input'));
+    await userEvent.type(screen.getByTestId('name-input'), 'New layer name');
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -82,7 +85,7 @@ describe('EditLayerModal', () => {
               attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved'],
               name: 'New layer name',
               opacity: 0.5,
-            }
+            },
           ),
         ],
       ]);
@@ -91,13 +94,13 @@ describe('EditLayerModal', () => {
 
   it('should change opacity', async () => {
     // Prepare
-    abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    await act(async () => {
+      abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      fireEvent.change(screen.getByTestId('opacity-input'), { target: { value: 1 } });
-      await userEvent.click(screen.getByTestId('submit-button'));
-    });
+    fireEvent.change(screen.getByTestId('opacity-input'), { target: { value: 1 } });
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -118,7 +121,7 @@ describe('EditLayerModal', () => {
               attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved'],
               name: 'Layer 1',
               opacity: 1,
-            }
+            },
           ),
         ],
       ]);
@@ -127,13 +130,13 @@ describe('EditLayerModal', () => {
 
   it('should change attributions', async () => {
     // Prepare
-    abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    await act(async () => {
+      abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.type(screen.getByTestId('attributions-input'), '\nAll lefts too');
-      await userEvent.click(screen.getByTestId('submit-button'));
-    });
+    await userEvent.type(screen.getByTestId('attributions-input'), '\nAll lefts too');
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -154,7 +157,7 @@ describe('EditLayerModal', () => {
               attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved', 'All lefts too'],
               name: 'Layer 1',
               opacity: 0.5,
-            }
+            },
           ),
         ],
       ]);
@@ -163,12 +166,12 @@ describe('EditLayerModal', () => {
 
   it('should not register changesets', async () => {
     // Prepare
-    abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    await act(async () => {
+      abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('submit-button'));
-    });
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -179,12 +182,12 @@ describe('EditLayerModal', () => {
 
   it('should close on cancel', async () => {
     // Prepare
-    abcRender(<EditLayerModal layer={layer} onHide={onHide} />);
+    await act(async () => {
+      abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('cancel-button'));
-    });
+    await userEvent.click(screen.getByTestId('cancel-button'));
 
     // Assert
     expect(onHide.callCount).toEqual(1);

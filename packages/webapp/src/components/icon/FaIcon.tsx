@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,15 @@
  */
 
 import Cls from './Icon.module.scss';
+import type { CSSVariables } from '@fortawesome/react-fontawesome';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { CSSProperties, useMemo } from 'react';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { CSSProperties } from 'react';
+import { useMemo } from 'react';
 import clsx from 'clsx';
 
 interface Props {
   icon: IconDefinition;
-  style?: CSSProperties;
   className?: string;
   size?: string;
   color?: string;
@@ -32,8 +33,8 @@ interface Props {
 }
 
 export function FaIcon(props: Props) {
-  const { icon, size, color, title, style: _style, className } = props;
-  const style: CSSProperties = useMemo(() => ({ ..._style, color, width: size, height: size }), [_style, color, size]);
+  const { icon, size, color, title, className } = props;
+  const style: CSSProperties & CSSVariables = useMemo(() => ({ color, width: size, height: size }), [color, size]);
 
-  return <FontAwesomeIcon icon={icon} style={style} className={clsx(`abc-icon`, Cls.icon, className)} title={title} />;
+  return <FontAwesomeIcon icon={icon} style={style} className={clsx(`abc-icon`, Cls.icon, className)} aria-label={title} />;
 }

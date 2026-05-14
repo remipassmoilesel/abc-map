@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,9 +18,12 @@
 
 import { logger, ScriptsModule } from './ScriptsModule';
 import { ChromiumStack, FirefoxStack } from './ScriptsModule.test.data';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { GeoService } from '../../core/geo/GeoService';
-import { parseError, ScriptError } from './script-api/errors';
+import type { ScriptError } from './script-api/errors';
+import { parseError } from './script-api/errors';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 
@@ -32,19 +35,6 @@ describe('ScriptsModule', function () {
     beforeEach(() => {
       geoStub = sinon.createStubInstance(GeoService);
       scripts = new ScriptsModule();
-    });
-
-    it('module API should work', async () => {
-      geoStub.getMainMap.returns({} as any);
-      const script = `
-         const {mainMap} = moduleApi;
-         log('Hello')
-         log('World')
-         log(mainMap)
-      `;
-
-      const result = await scripts.process(script);
-      expect(result).toEqual(['Hello', 'World', '[object Object]']);
     });
 
     it('await should work', async () => {
@@ -67,10 +57,10 @@ describe('ScriptsModule', function () {
     it('should return correct error', async () => {
       geoStub.getMainMap.returns({} as any);
       const script = `\
-         const {mainMap} = moduleApi;
+         const {getMap} = scriptApi;
          log('Hello')
          log('World')
-         log(mainMap)
+         log(getMap())
          throw new Error('Test error')
       `;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FastifyRequest } from 'fastify';
-import { FallbackLang, isLangSupported, langFromString, Language } from '@abc-map/shared';
-import * as parser from 'accept-language-parser';
+import type { FastifyRequest } from 'fastify';
+import type { Language } from '@abc-map/shared';
+import { FallbackLang, isLangSupported, langFromString } from '@abc-map/shared';
+import parser from 'accept-language-parser';
 
 export function getLang(req: FastifyRequest): Language {
   const header = req.headers['accept-language'];

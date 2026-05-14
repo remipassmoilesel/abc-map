@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,23 +19,26 @@
 import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../core/utils/FileIO';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { LayerChangeHandler } from '../../core/geo/map/MapWrapper';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
+import type { LayerChangeHandler } from '../../core/geo/map/MapWrapper';
 import { LayerSelector } from '../layer-selector/LayerSelector';
-import { DataSource, DataSourceType } from '../../core/data/data-source/DataSource';
+import type { DataSource } from '../../core/data/data-source/DataSource';
+import { DataSourceType } from '../../core/data/data-source/DataSource';
 import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
 import { CsvDataSource } from '../../core/data/data-source/CsvDataSource';
-import { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
-import { CsvParsingError, isCsvParsingError, UnknownLineNumber } from '../../core/data/csv-parser/typings';
+import type { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { CsvParsingError } from '../../core/data/csv-parser/typings';
+import { isCsvParsingError, UnknownLineNumber } from '../../core/data/csv-parser/typings';
 import Cls from './DataSourceSelector.module.scss';
 import MessageLabel from '../message-label/MessageLabel';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../icon/IconDefs';
 
 export const logger = Logger.get('DataSourceSelector.tsx');
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   value: DataSource | undefined;
   onSelected: (source: DataSource | undefined) => void;
 }
@@ -56,8 +59,6 @@ enum Display {
 
 const UnknownRowsNumber = -1;
 
-const t = prefixedTranslation('DataSourceForm:');
-
 class DataSourceSelector extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -70,6 +71,7 @@ class DataSourceSelector extends Component<Props, State> {
   }
 
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'DataSourceForm');
     const { layer, display, rowsNumber, errorAtLine, error } = this.state;
 
     return (

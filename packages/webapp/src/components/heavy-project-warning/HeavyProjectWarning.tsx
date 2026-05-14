@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { useMapLayers } from '../../core/geo/useMapLayers';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { ReactNode } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import type { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useServices } from '../../core/useServices';
@@ -55,7 +56,7 @@ export function HeavyProjectWarning() {
             </div>
           ),
           dismissed: false,
-        })
+        }),
       );
     }
 
@@ -82,7 +83,7 @@ export function HeavyProjectWarning() {
             </div>
           ),
           dismissed: false,
-        })
+        }),
       );
     }
 
@@ -99,7 +100,7 @@ export function HeavyProjectWarning() {
             </div>
           ),
           dismissed: false,
-        })
+        }),
       );
     }
   }, [layers, layers.length, t, warnings]);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,18 @@
  */
 
 import Cls from './ModuleErrorBoundary.module.scss';
-import React, { ReactNode } from 'react';
-import { ServiceProps, withServices } from '../../core/withServices';
+import type { ReactNode } from 'react';
+import React from 'react';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
-import { withRouter, WithRouterProps } from '../../core/utils/withRouter';
+import type { WithRouterProps } from '../../core/utils/withRouter';
+import { withRouter } from '../../core/utils/withRouter';
 
 const logger = Logger.get('ModuleErrorBoundary.tsx');
 

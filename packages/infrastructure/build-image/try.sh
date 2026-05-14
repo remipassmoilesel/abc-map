@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright © 2023 Rémi Pace.
+# Copyright © 2026 Rémi Pace.
 # This file is part of Abc-Map.
 #
 # Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 
 set -e
 
-IMAGE_NAME="registry.gitlab.com/abc-map/abc-map/build-image:v0.25"
+IMAGE_NAME="registry.gitlab.com/abc-map/abc-map/build-image:v0.29"
 
 docker build . -t $IMAGE_NAME
 docker run --net=host -v `realpath ../../..`:/build/abc-map -ti $IMAGE_NAME bash

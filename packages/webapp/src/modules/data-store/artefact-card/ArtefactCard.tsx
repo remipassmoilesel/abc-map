@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import Cls from './ArtefactCard.module.scss';
 import React, { useCallback } from 'react';
-import { AbcArtefact, getTextByLang, Logger } from '@abc-map/shared';
+import type { AbcArtefact } from '@abc-map/shared';
+import { getTextByLang, Logger } from '@abc-map/shared';
 import { getLang } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import clsx from 'clsx';

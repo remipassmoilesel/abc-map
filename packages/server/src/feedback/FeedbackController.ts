@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller } from '../server/Controller';
-import { Services } from '../services/services';
-import { AbcTextFeedback, AbcVote } from '@abc-map/shared';
+import { Controller } from '../server/Controller.js';
+import type { Services } from '../services/services.js';
+import type { AbcTextFeedback, AbcVote } from '@abc-map/shared';
 import { DateTime } from 'luxon';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { StatParams, TextFeedbackSchema, VoteSchema } from './FeedbackController.schemas';
-import { Config } from '../config/Config';
-import { defaultRateLimitConfig } from '../server/helpers/defaultRateLimitConfig';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { StatParams } from './FeedbackController.schemas.js';
+import { TextFeedbackSchema, VoteSchema } from './FeedbackController.schemas.js';
+import type { Config } from '../config/Config.js';
+import { defaultRateLimitConfig } from '../server/helpers/defaultRateLimitConfig.js';
 
 export class FeedbackController extends Controller {
-  constructor(private config: Config, private services: Services) {
+  constructor(
+    private config: Config,
+    private services: Services,
+  ) {
     super();
   }
 

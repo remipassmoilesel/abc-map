@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer, LayerType, Logger, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
+import type { AbcLayer, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
+import { LayerType, Logger } from '@abc-map/shared';
 import { Encryption } from '../../../utils/Encryption';
-import { AbcProjectManifest110 } from './110-project-types';
+import type { AbcProjectManifest110 } from './110-project-types';
 
 const logger = Logger.get('DeprecatedEncryption.ts');
 

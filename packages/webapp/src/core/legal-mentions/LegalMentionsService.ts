@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { AxiosInstance } from 'axios';
-import { ToastService } from '../ui/ToastService';
+import type { AxiosInstance } from 'axios';
+import type { ToastService } from '../ui/ToastService';
 import { LegalMentionsRoutes as Api } from '../http/ApiRoutes';
 import { DownloadClient } from '../http/http-clients';
 import { BlobIO } from '@abc-map/shared';
@@ -26,7 +26,10 @@ export class LegalMentionsService {
     return new LegalMentionsService(DownloadClient(), toasts);
   }
 
-  constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
+  constructor(
+    private httpClient: AxiosInstance,
+    private toasts: ToastService,
+  ) {}
 
   public get(): Promise<string> {
     return this.httpClient

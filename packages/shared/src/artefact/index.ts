@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './AbcArtefact';
-export * from './ArtefactFilter';
-export * from './ArtefactManifest';
-export * from './ArtefactType';
-export * from './WmsDefinitionManifest';
-export * from './WmtsDefinitionManifest';
-export * from './XyzDefinitionManifest';
+export * from './AbcArtefact.js';
+export * from './ArtefactFilter.js';
+export * from './ArtefactManifest.js';
+export * from './ArtefactType.js';
+export * from './WmsDefinitionManifest.js';
+export * from './WmtsDefinitionManifest.js';
+export * from './XyzDefinitionManifest.js';

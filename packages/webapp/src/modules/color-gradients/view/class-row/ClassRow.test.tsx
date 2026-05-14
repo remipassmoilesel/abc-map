@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,20 +15,20 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { abcRender } from '../../../../core/utils/test/abcRender';
 import ClassRow from './ClassRow';
-import { GradientClass } from '../../typings/GradientClass';
+import type { GradientClass } from '../../typings/GradientClass';
 import { nanoid } from 'nanoid';
 import { deepFreeze } from '../../../../core/utils/deepFreeze';
 import { screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 let colorChangedHandler: (color: string) => void;
-jest.mock('../../../../components/color-picker/ColorPickerButton.tsx', () => {
+
+vi.mock('../../../../components/color-picker/ColorPickerButton.tsx', () => {
   return {
-    __esModule: true,
-    // eslint-disable-next-line react/display-name
-    default: function (props: { onClose: (color: string) => void }) {
+    ColorPickerButton: function (props: { onClose: (color: string) => void }) {
       colorChangedHandler = props.onClose;
       return <div />;
     },

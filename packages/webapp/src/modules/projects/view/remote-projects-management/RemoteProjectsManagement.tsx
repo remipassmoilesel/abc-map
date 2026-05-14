@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,8 +21,9 @@ import { ProjectOverview } from './project-overview/ProjectOverview';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useServices } from '../../../../core/useServices';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../../../core/store/hooks';
-import { AbcProjectMetadata, AbcProjectQuotas, Logger } from '@abc-map/shared';
+import { useAppSelector } from '../../../../store/hooks';
+import type { AbcProjectMetadata, AbcProjectQuotas } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { ModalStatus } from '../../../../core/ui/typings';
 import clsx from 'clsx';
 import { FileIO } from '../../../../core/utils/FileIO';
@@ -97,7 +98,7 @@ export function RemoteProjectsManagement(props: Props) {
           toasts.genericError(err);
         });
     },
-    [currectProject.name, listProjects, modals, projectService, t, toasts]
+    [currectProject.name, listProjects, modals, projectService, t, toasts],
   );
 
   const handleOpenProject = useCallback(
@@ -122,7 +123,7 @@ export function RemoteProjectsManagement(props: Props) {
           toasts.genericError(err);
         });
     },
-    [modals, projectService, t, toasts]
+    [modals, projectService, t, toasts],
   );
 
   const handleDownloadProject = useCallback(
@@ -143,7 +144,7 @@ export function RemoteProjectsManagement(props: Props) {
         })
         .finally(() => setLoading(false));
     },
-    [projectService, toasts]
+    [projectService, toasts],
   );
 
   return (

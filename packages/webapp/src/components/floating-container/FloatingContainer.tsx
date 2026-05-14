@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import type { RndDragCallback, RndResizeCallback } from 'react-rnd';
+import { Rnd } from 'react-rnd';
+import type { ReactNode } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -74,9 +76,9 @@ export function FloatingContainer(props: Props) {
     (ev, data) => {
       setX(data.x);
       setY(data.y);
-      onDrag && onDrag(data.x, data.y);
+      if (onDrag) onDrag(data.x, data.y);
     },
-    [onDrag]
+    [onDrag],
   );
 
   const handleResizeStop: RndResizeCallback = useCallback(
@@ -86,9 +88,9 @@ export function FloatingContainer(props: Props) {
       setWidth(ref.clientWidth);
       setHeight(ref.clientHeight);
 
-      onResize && onResize(position.x, position.y, ref.clientWidth, ref.clientHeight);
+      if (onResize) onResize(position.x, position.y, ref.clientWidth, ref.clientHeight);
     },
-    [onResize]
+    [onResize],
   );
 
   const size = typeof width !== 'undefined' && typeof height !== 'undefined' ? { width, height } : undefined;

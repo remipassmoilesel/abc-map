@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
  */
 
 import React, { useContext } from 'react';
-import { createEditor, Editor } from 'slate';
+import type { Editor } from 'slate';
+import { createEditor } from 'slate';
 
 export interface EditorContext {
   editor: Editor;

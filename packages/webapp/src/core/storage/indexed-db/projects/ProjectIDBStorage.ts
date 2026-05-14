@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IndexedDbClient } from '../client/IndexedDbClient';
+import type { IndexedDbClient } from '../client/IndexedDbClient';
 import { ObjectStore } from '../client/ObjectStore';
 import { getMainDbClient } from '../main-database';
-import { AbcLayout, AbcProjectManifest, AbcSharedView, LayerType, Logger } from '@abc-map/shared';
+import type { AbcLayout, AbcProjectManifest, AbcSharedView } from '@abc-map/shared';
+import { LayerType, Logger } from '@abc-map/shared';
 import { LayerIDBStorage } from '../layers/LayerIDBStorage';
-import { ProjectIDBEntry } from './ProjectIDBEntry';
+import type { ProjectIDBEntry } from './ProjectIDBEntry';
 import { FeatureIDBStorage } from '../features/FeatureIDBStorage';
-import { GenericReduxIDBStorage } from '../redux/GenericReduxIDBStorage';
+import type { GenericReduxIDBStorage } from '../redux/GenericReduxIDBStorage';
 import { LayoutIDBStorage } from '../layouts/LayoutIDBStorage';
 import { SharedViewIDBStorage } from '../shared-views/SharedViewIDBStorage';
 
@@ -42,7 +43,7 @@ export class ProjectIDBStorage {
     private layers: LayerIDBStorage,
     private layouts: GenericReduxIDBStorage<AbcLayout>,
     private sharedViews: GenericReduxIDBStorage<AbcSharedView>,
-    private features: FeatureIDBStorage
+    private features: FeatureIDBStorage,
   ) {}
 
   public async exists(projectId: string): Promise<boolean> {

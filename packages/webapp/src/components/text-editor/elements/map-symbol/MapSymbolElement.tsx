@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,12 @@
  */
 
 import Cls from './MapSymbolElement.module.scss';
-import { RenderElementProps } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
 import { MapSymbolRenderer } from '../../../../core/project/rendering/MapSymbolRenderer';
 import { useEditor } from '../../useEditor';
 import { useEffect, useRef } from 'react';
-import { MapSymbolElement as MapSymbolElementDef, Logger } from '@abc-map/shared';
+import type { MapSymbolElement as MapSymbolElementDef } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { StyleFactory } from '../../../../core/geo/styles/StyleFactory';
 import { IconProcessor } from '../../../../core/point-icons/IconProcessor';
 

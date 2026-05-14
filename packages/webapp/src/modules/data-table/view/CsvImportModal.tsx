@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@ import { IconDefs } from '../../../components/icon/IconDefs';
 import { errorMessage } from '@abc-map/shared';
 import { isCsvParsingError, UnknownLineNumber } from '../../../core/data/csv-parser/typings';
 import { CsvLineIdFieldName, useCsv } from './useCsv';
-import { DataRow } from '../../../core/data/data-source/DataSource';
-import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { DataRow } from '../../../core/data/data-source/DataSource';
+import type { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DateTime } from 'luxon';
 import Cls from './CsvImportModal.module.scss';
@@ -52,7 +52,7 @@ export function CsvImportModal(props: Props) {
           {t('File')}: {result.file.name} ({t('Modified_at')} {DateTime.fromMillis(result.file?.lastModified).toFormat('HH:MM dd/LL')})
         </div>
       ),
-    [result?.file, t]
+    [result, t],
   );
 
   return (

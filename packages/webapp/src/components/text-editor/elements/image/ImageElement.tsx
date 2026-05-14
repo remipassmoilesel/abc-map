@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,32 +17,34 @@
  */
 
 import Cls from './ImageElement.module.scss';
-import { ReactEditor, RenderElementProps } from 'slate-react';
-import { ImageElement as ImageElementDef } from '@abc-map/shared';
+import type { RenderElementProps } from 'slate-react';
+import { ReactEditor } from 'slate-react';
+import type { ImageElement as ImageElementDef } from '@abc-map/shared';
 import clsx from 'clsx';
 import { IconDefs } from '../../../icon/IconDefs';
-import { MouseEvent, useCallback, useState, PointerEvent } from 'react';
+import type { MouseEvent, PointerEvent } from 'react';
+import { useMemo } from 'react';
+import { useCallback, useState } from 'react';
 import { CustomEditor } from '../../CustomEditor';
 import { useEditor } from '../../useEditor';
 import { ButtonMenu } from '../../../button-menu/ButtonMenu';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { Action } from '../../../button-menu/Action';
 import { Separator } from '../../../button-menu/Separator';
 import { createPortal } from 'react-dom';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 type Props = RenderElementProps & { element: ImageElementDef };
 
 const classes = [Cls.size1, Cls.size2, Cls.size3];
 
-const labels = [t('Small_image'), t('Medium_image'), t('Large_image')];
-
 export function ImageElement(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { children, attributes, element } = props;
   const { url, size } = element;
   const { editor, readOnly } = useEditor();
   const [fullscreenPreview, setFullscreenPreview] = useState(false);
+
+  const labels = useMemo(() => [t('Small_image'), t('Medium_image'), t('Large_image')], [t]);
 
   const handleDelete = useCallback(() => {
     const path = ReactEditor.findPath(editor, element);
@@ -57,7 +59,7 @@ export function ImageElement(props: Props) {
       const path = ReactEditor.findPath(editor, element);
       CustomEditor.image.setSize(editor, size, path);
     },
-    [editor, element]
+    [editor, element],
   );
 
   const toggleFullScreenPreview = useCallback(
@@ -70,7 +72,7 @@ export function ImageElement(props: Props) {
 
       setFullscreenPreview(!fullscreenPreview);
     },
-    [fullscreenPreview, readOnly]
+    [fullscreenPreview, readOnly],
   );
 
   const handlePointerDown = useCallback((ev: PointerEvent) => {
@@ -112,7 +114,7 @@ export function ImageElement(props: Props) {
           <div className={Cls.fullscreenModal} onClick={toggleFullScreenPreview}>
             <img src={url} alt={url} className={Cls.largePreview} />
           </div>,
-          document.body
+          document.body,
         )}
 
       {children}

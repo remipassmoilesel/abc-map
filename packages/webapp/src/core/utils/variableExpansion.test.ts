@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable no-template-curly-in-string */
-
 import { variableExpansion } from './variableExpansion';
+import { describe, expect, it } from 'vitest';
 
 describe('variableExpansion()', () => {
   it('should expand', () => {

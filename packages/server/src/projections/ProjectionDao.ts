@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { Config } from '../config/Config';
-import { MongodbCollection } from '../mongodb/MongodbCollection';
-import { ProjectionDocument } from './ProjectionDocument';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { Config } from '../config/Config.js';
+import { MongodbCollection } from '../mongodb/MongodbCollection.js';
+import type { ProjectionDocument } from './ProjectionDocument.js';
 
 export class ProjectionDao {
-  constructor(private config: Config, private client: MongodbClient) {}
+  constructor(
+    private config: Config,
+    private client: MongodbClient,
+  ) {}
 
   public async init(): Promise<void> {
     const coll = await this.collection();
@@ -52,7 +55,7 @@ export class ProjectionDao {
           replacement: doc,
           upsert: true,
         },
-      }))
+      })),
     );
   }
 

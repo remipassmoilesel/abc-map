@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,25 +16,25 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import MapBrowserEvent from 'ol/MapBrowserEvent';
-import { FeatureLike } from 'ol/Feature';
-import { SupportedGeometry } from '../interactions/SupportedGeometry';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
+import type { FeatureLike } from 'ol/Feature';
+import type { SupportedGeometry } from '../interactions/SupportedGeometry';
 
-export function withShiftKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+export function withShiftKey(ev: MapBrowserEvent): boolean {
   const original = ev.originalEvent;
   return 'shiftKey' in original && original.shiftKey;
 }
 
-export function withControlKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+export function withControlKey(ev: MapBrowserEvent): boolean {
   const original = ev.originalEvent;
   return 'ctrlKey' in original && original.ctrlKey;
 }
 
-export function withControlKeyOnly(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+export function withControlKeyOnly(ev: MapBrowserEvent): boolean {
   return withControlKey(ev) && !withShiftKey(ev) && !withAltKey(ev);
 }
 
-export function withAltKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+export function withAltKey(ev: MapBrowserEvent): boolean {
   const original = ev.originalEvent;
   return 'altKey' in original && original.altKey;
 }

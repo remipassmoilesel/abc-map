@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MigrationProject } from './typings';
+import type { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV090ToV100 } from './FromV090ToV100';
-import { AbcProjectManifest090 } from './dependencies/090-project-types';
+import type { AbcProjectManifest090 } from './dependencies/090-project-types';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV090ToV100', () => {
   let sampleProject: MigrationProject<AbcProjectManifest090>;

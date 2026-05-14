@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { VoteDao } from './VoteDao';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcTextFeedback, AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
-import { AbstractService } from '../services/AbstractService';
-import { VoteDocument } from './VoteDocument';
-import * as uuid from 'uuid-random';
-import { DateTime } from 'luxon';
-import { TextFeedbackDocument } from './TextFeedbackDocument';
-import { TextFeedbackDao } from './TextFeedbackDao';
+import { VoteDao } from './VoteDao.js';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { AbcTextFeedback, AbcVote, AbcVoteAggregation } from '@abc-map/shared';
+import { VoteValue } from '@abc-map/shared';
+import { AbstractService } from '../services/AbstractService.js';
+import type { VoteDocument } from './VoteDocument.js';
+import uuid from 'uuid-random';
+import type { DateTime } from 'luxon';
+import type { TextFeedbackDocument } from './TextFeedbackDocument.js';
+import { TextFeedbackDao } from './TextFeedbackDao.js';
 
 const authorizedValues = [VoteValue.NOT_SATISFIED, VoteValue.BLAH, VoteValue.SATISFIED];
 
@@ -33,7 +34,10 @@ export class FeedbackService extends AbstractService {
     return new FeedbackService(new VoteDao(client), new TextFeedbackDao(client));
   }
 
-  constructor(private voteDao: VoteDao, private feedbackDao: TextFeedbackDao) {
+  constructor(
+    private voteDao: VoteDao,
+    private feedbackDao: TextFeedbackDao,
+  ) {
     super();
   }
 

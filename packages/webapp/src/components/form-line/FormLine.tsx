@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import Cls from './FormLine.module.scss';
 
 interface Props {
   children: ReactNode | ReactNode[];
 }
 
-class FormLine extends Component<Props, {}> {
+class FormLine extends Component<Props, unknown> {
   public render() {
     return <div className={Cls.formLine}>{this.props.children}</div>;
   }

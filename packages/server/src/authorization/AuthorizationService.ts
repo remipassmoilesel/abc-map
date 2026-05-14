@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractService } from '../services/AbstractService';
+import { AbstractService } from '../services/AbstractService.js';
 import { Logger } from '@abc-map/shared';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ProjectDao } from '../projects/ProjectDao';
-import { Authentication } from '../authentication/Authentication';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import { ProjectDao } from '../projects/ProjectDao.js';
+import { Authentication } from '../authentication/Authentication.js';
 import { isUserAnonymous } from '@abc-map/shared';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 
 const logger = Logger.get('AuthorizationService.ts');
 

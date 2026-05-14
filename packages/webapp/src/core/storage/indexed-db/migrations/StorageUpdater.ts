@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Logger } from '@abc-map/shared';
-import { getMigrations, MigrationsFactory } from './migrations';
-import { IndexedDbClient } from '../client/IndexedDbClient';
-import { StorageMigrationContext } from './IndexedDbMigration';
+import type { MigrationsFactory } from './migrations';
+import { getMigrations } from './migrations';
+import type { IndexedDbClient } from '../client/IndexedDbClient';
+import type { StorageMigrationContext } from './IndexedDbMigration';
 import { MigrationIDBStorage } from './MigrationIDBStorage';
 
 export const logger = Logger.get('StorageUpdater.ts', 'debug');

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractService } from '../services/AbstractService';
-import { Config } from '../config/Config';
+import { AbstractService } from '../services/AbstractService.js';
+import type { Config } from '../config/Config.js';
 import { promises as fs } from 'fs';
-import * as path from 'path';
+import path from 'path';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('PointIconsService.ts');
@@ -54,7 +54,7 @@ export class PointIconsService extends AbstractService {
               this.cache.set(name, content);
               result.push({ name, content });
             })
-            .catch((err) => logger.error(`Invalid icon: ${name}`, err))
+            .catch((err) => logger.error(`Invalid icon: ${name}`, err)),
         );
       }
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,12 @@
  */
 
 import Cls from './ButtonMenu.module.scss';
-import { ReactNode, useCallback, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback, useState } from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
 import clsx from 'clsx';
 
@@ -42,7 +43,7 @@ export function ButtonMenu(props: Props) {
 
   const handleToggle = useCallback(() => {
     setOpen(!open);
-    onToggle && onToggle(!open);
+    if (onToggle) onToggle(!open);
   }, [onToggle, open]);
 
   const popover = (

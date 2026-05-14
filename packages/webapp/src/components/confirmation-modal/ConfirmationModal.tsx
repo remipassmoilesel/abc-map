@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventType, ModalStatus, ShowConfirmationModalEvent } from '../../core/ui/typings';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { ShowConfirmationModalEvent } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 
 interface State {
@@ -29,10 +32,10 @@ interface State {
   message: string;
 }
 
-const t = prefixedTranslation('ConfirmationModal:');
+type Props = ServiceProps & WithTranslation;
 
-class ConfirmationModal extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
+class ConfirmationModal extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       visible: false,
@@ -42,6 +45,8 @@ class ConfirmationModal extends Component<ServiceProps, State> {
   }
 
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ConfirmationModal');
+
     const visible = this.state.visible;
     const title = this.state.title;
     const message = this.state.message;

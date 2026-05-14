@@ -1,26 +1,26 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`M20230806 Features should do nothing 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Features > should do nothing 1`] = `
+[
+  {
     "key": "sample-feature-id",
-    "value": Object {
-      "feature": Object {
-        "bbox": Array [
+    "value": {
+      "feature": {
+        "bbox": [
           1,
           2,
           3,
           4,
         ],
-        "geometry": Object {
-          "coordinates": Array [
+        "geometry": {
+          "coordinates": [
             1,
             5,
           ],
           "type": "Point",
         },
         "id": "sample-feature-id",
-        "properties": Object {
+        "properties": {
           "val": "var",
         },
         "type": "Feature",
@@ -32,27 +32,27 @@ Array [
 ]
 `;
 
-exports[`M20230806 Features should migrate 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Features > should migrate 1`] = `
+[
+  {
     "key": "sample-feature-id",
-    "value": Object {
-      "feature": Object {
-        "bbox": Array [
+    "value": {
+      "feature": {
+        "bbox": [
           1,
           2,
           3,
           4,
         ],
-        "geometry": Object {
-          "coordinates": Array [
+        "geometry": {
+          "coordinates": [
             1,
             5,
           ],
           "type": "Point",
         },
         "id": "sample-feature-id",
-        "properties": Object {
+        "properties": {
           "val": "var",
         },
         "type": "Feature",
@@ -64,13 +64,13 @@ Array [
 ]
 `;
 
-exports[`M20230806 Layers should do nothing 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Layers > should do nothing 1`] = `
+[
+  {
     "key": "test-layer-1",
-    "value": Object {
-      "layer": Object {
-        "metadata": Object {
+    "value": {
+      "layer": {
+        "metadata": {
           "active": false,
           "id": "test-layer-1",
           "model": "OSM",
@@ -87,13 +87,13 @@ Array [
 ]
 `;
 
-exports[`M20230806 Layers should migrate 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Layers > should migrate 1`] = `
+[
+  {
     "key": "test-layer-1",
-    "value": Object {
-      "layer": Object {
-        "metadata": Object {
+    "value": {
+      "layer": {
+        "metadata": {
           "active": false,
           "id": "test-layer-1",
           "model": "OSM",
@@ -110,13 +110,13 @@ Array [
 ]
 `;
 
-exports[`M20230806 Layouts should do nothing 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Layouts > should do nothing 1`] = `
+[
+  {
     "key": "test-layout-1",
-    "value": Object {
-      "entry": Object {
-        "format": Object {
+    "value": {
+      "entry": {
+        "format": {
           "height": 297,
           "id": "A4_PORTRAIT",
           "orientation": "portrait",
@@ -124,12 +124,12 @@ Array [
         },
         "id": "test-layout-1",
         "name": "Sample layout",
-        "textFrames": Array [
-          Object {
-            "content": Array [
-              Object {
-                "children": Array [
-                  Object {
+        "textFrames": [
+          {
+            "content": [
+              {
+                "children": [
+                  {
                     "text": "Hey man, how are you ?",
                   },
                 ],
@@ -137,27 +137,27 @@ Array [
               },
             ],
             "id": "test-text-frame-1",
-            "position": Object {
+            "position": {
               "x": 10,
               "y": 10,
             },
-            "size": Object {
+            "size": {
               "height": 100,
               "width": 100,
             },
-            "style": Object {
+            "style": {
               "background": "#FFFFFF",
               "withBorders": true,
               "withShadows": true,
             },
           },
         ],
-        "view": Object {
-          "center": Array [
+        "view": {
+          "center": [
             1.5,
             45.4,
           ],
-          "projection": Object {
+          "projection": {
             "name": "EPSG:3857",
           },
           "resolution": 1000,
@@ -171,13 +171,13 @@ Array [
 ]
 `;
 
-exports[`M20230806 Layouts should migrate 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Layouts > should migrate 1`] = `
+[
+  {
     "key": "test-layout-1",
-    "value": Object {
-      "entry": Object {
-        "format": Object {
+    "value": {
+      "entry": {
+        "format": {
           "height": 297,
           "id": "A4_PORTRAIT",
           "orientation": "portrait",
@@ -185,12 +185,12 @@ Array [
         },
         "id": "test-layout-1",
         "name": "Sample layout",
-        "textFrames": Array [
-          Object {
-            "content": Array [
-              Object {
-                "children": Array [
-                  Object {
+        "textFrames": [
+          {
+            "content": [
+              {
+                "children": [
+                  {
                     "text": "Hey man, how are you ?",
                   },
                 ],
@@ -198,27 +198,27 @@ Array [
               },
             ],
             "id": "test-text-frame-1",
-            "position": Object {
+            "position": {
               "x": 10,
               "y": 10,
             },
-            "size": Object {
+            "size": {
               "height": 100,
               "width": 100,
             },
-            "style": Object {
+            "style": {
               "background": "#FFFFFF",
               "withBorders": true,
               "withShadows": true,
             },
           },
         ],
-        "view": Object {
-          "center": Array [
+        "view": {
+          "center": [
             1.5,
             45.4,
           ],
-          "projection": Object {
+          "projection": {
             "name": "EPSG:3857",
           },
           "resolution": 1000,
@@ -232,49 +232,49 @@ Array [
 ]
 `;
 
-exports[`M20230806 Projects should do nothing 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Projects > should do nothing 1`] = `
+[
+  {
     "key": "test-project-1",
-    "value": Object {
-      "layerIds": Array [
+    "value": {
+      "layerIds": [
         "layer-id-1",
         "layer-id-2",
         "layer-id-3",
       ],
-      "layouts": Object {
+      "layouts": {
         "abcMapAttributionsEnabled": true,
-        "layoutIds": Array [
+        "layoutIds": [
           "layout-id-1",
           "layout-id-2",
           "layout-id-3",
         ],
       },
-      "metadata": Object {
+      "metadata": {
         "id": "test-project-1",
         "name": "Test project 1",
         "public": false,
         "version": "1.3.0",
       },
-      "sharedViews": Object {
+      "sharedViews": {
         "fullscreen": false,
-        "mapDimensions": Object {
+        "mapDimensions": {
           "height": 600,
           "width": 800,
         },
-        "viewIds": Array [
+        "viewIds": [
           "shared-view-id-1",
           "shared-view-id-2",
           "shared-view-id-3",
         ],
       },
       "version": 99,
-      "view": Object {
-        "center": Array [
+      "view": {
+        "center": [
           1,
           2,
         ],
-        "projection": Object {
+        "projection": {
           "name": "EPSG:3857",
         },
         "resolution": 1000,
@@ -285,49 +285,49 @@ Array [
 ]
 `;
 
-exports[`M20230806 Projects should migrate 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Projects > should migrate 1`] = `
+[
+  {
     "key": "test-project-1",
-    "value": Object {
-      "layerIds": Array [
+    "value": {
+      "layerIds": [
         "layer-id-1",
         "layer-id-2",
         "layer-id-3",
       ],
-      "layouts": Object {
+      "layouts": {
         "abcMapAttributionsEnabled": true,
-        "layoutIds": Array [
+        "layoutIds": [
           "layout-id-1",
           "layout-id-2",
           "layout-id-3",
         ],
       },
-      "metadata": Object {
+      "metadata": {
         "id": "test-project-1",
         "name": "Test project 1",
         "public": false,
         "version": "1.3.0",
       },
-      "sharedViews": Object {
+      "sharedViews": {
         "fullscreen": false,
-        "mapDimensions": Object {
+        "mapDimensions": {
           "height": 600,
           "width": 800,
         },
-        "viewIds": Array [
+        "viewIds": [
           "shared-view-id-1",
           "shared-view-id-2",
           "shared-view-id-3",
         ],
       },
       "version": 2,
-      "view": Object {
-        "center": Array [
+      "view": {
+        "center": [
           1,
           2,
         ],
-        "projection": Object {
+        "projection": {
           "name": "EPSG:3857",
         },
         "resolution": 1000,
@@ -338,24 +338,24 @@ Array [
 ]
 `;
 
-exports[`M20230806 SharedViews should do nothing 1`] = `
-Array [
-  Object {
+exports[`M20230806 > SharedViews > should do nothing 1`] = `
+[
+  {
     "key": "test-shared-view-1",
-    "value": Object {
-      "entry": Object {
+    "value": {
+      "entry": {
         "id": "test-shared-view-1",
-        "layers": Array [],
-        "scale": Object {
+        "layers": [],
+        "scale": {
           "x": 30,
           "y": 100,
         },
-        "textFrames": Array [
-          Object {
-            "content": Array [
-              Object {
-                "children": Array [
-                  Object {
+        "textFrames": [
+          {
+            "content": [
+              {
+                "children": [
+                  {
                     "text": "Hey man, how are you ?",
                   },
                 ],
@@ -363,15 +363,15 @@ Array [
               },
             ],
             "id": "test-text-frame-1",
-            "position": Object {
+            "position": {
               "x": 10,
               "y": 10,
             },
-            "size": Object {
+            "size": {
               "height": 100,
               "width": 100,
             },
-            "style": Object {
+            "style": {
               "background": "#FFFFFF",
               "withBorders": true,
               "withShadows": true,
@@ -379,12 +379,12 @@ Array [
           },
         ],
         "title": "Sample layout",
-        "view": Object {
-          "center": Array [
+        "view": {
+          "center": [
             1.5,
             45.4,
           ],
-          "projection": Object {
+          "projection": {
             "name": "EPSG:3857",
           },
           "resolution": 1000,
@@ -398,24 +398,24 @@ Array [
 ]
 `;
 
-exports[`M20230806 SharedViews should migrate 1`] = `
-Array [
-  Object {
+exports[`M20230806 > SharedViews > should migrate 1`] = `
+[
+  {
     "key": "test-shared-view-1",
-    "value": Object {
-      "entry": Object {
+    "value": {
+      "entry": {
         "id": "test-shared-view-1",
-        "layers": Array [],
-        "scale": Object {
+        "layers": [],
+        "scale": {
           "x": 30,
           "y": 100,
         },
-        "textFrames": Array [
-          Object {
-            "content": Array [
-              Object {
-                "children": Array [
-                  Object {
+        "textFrames": [
+          {
+            "content": [
+              {
+                "children": [
+                  {
                     "text": "Hey man, how are you ?",
                   },
                 ],
@@ -423,15 +423,15 @@ Array [
               },
             ],
             "id": "test-text-frame-1",
-            "position": Object {
+            "position": {
               "x": 10,
               "y": 10,
             },
-            "size": Object {
+            "size": {
               "height": 100,
               "width": 100,
             },
-            "style": Object {
+            "style": {
               "background": "#FFFFFF",
               "withBorders": true,
               "withShadows": true,
@@ -439,12 +439,12 @@ Array [
           },
         ],
         "title": "Sample layout",
-        "view": Object {
-          "center": Array [
+        "view": {
+          "center": [
             1.5,
             45.4,
           ],
-          "projection": Object {
+          "projection": {
             "name": "EPSG:3857",
           },
           "resolution": 1000,
@@ -458,11 +458,11 @@ Array [
 ]
 `;
 
-exports[`M20230806 Tiles should do nothing 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Tiles > should do nothing 1`] = `
+[
+  {
     "key": "http://1",
-    "value": Object {
+    "value": {
       "image": "blob data 1",
       "url": "http://1",
       "version": 99,
@@ -471,11 +471,11 @@ Array [
 ]
 `;
 
-exports[`M20230806 Tiles should migrate 1`] = `
-Array [
-  Object {
+exports[`M20230806 > Tiles > should migrate 1`] = `
+[
+  {
     "key": "http://1",
-    "value": Object {
+    "value": {
       "image": "blob data 1",
       "url": "http://1",
       "version": 2,

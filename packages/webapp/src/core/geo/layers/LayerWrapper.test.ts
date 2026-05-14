@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,32 +16,31 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
+import type {
   AbcPredefinedLayer,
   AbcVectorLayer,
   AbcWmsLayer,
   AbcWmtsLayer,
   AbcXyzLayer,
-  LayerProperties,
-  LayerType,
-  PredefinedLayerModel,
   PredefinedMetadata,
   VectorMetadata,
   WmsMetadata,
   WmtsMetadata,
   XyzMetadata,
 } from '@abc-map/shared';
+import { LayerProperties, LayerType, PredefinedLayerModel } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import { LayerWrapper, logger as wrapperLogger } from './LayerWrapper';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { LayerFactory } from './LayerFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { WmsSettings } from './LayerFactory.types';
+import type { WmsSettings } from './LayerFactory.types';
 import TileSource from 'ol/source/Tile';
 import { WMTS, XYZ } from 'ol/source';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
 import { AttributionFormat } from '../AttributionFormat';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 wrapperLogger.disable();
 

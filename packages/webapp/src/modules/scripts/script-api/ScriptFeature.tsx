@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DataPropertiesMap, FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import { AbcProjection, FeatureStyle } from '@abc-map/shared';
+import type { DataPropertiesMap } from '../../../core/geo/features/FeatureWrapper';
+import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
+import type Feature from 'ol/Feature';
+import type Geometry from 'ol/geom/Geometry';
+import type { AbcProjection, FeatureStyle } from '@abc-map/shared';
 import { asNumberOrString } from '../../../core/utils/numbers';
-import { GeoJSONGeometry } from 'ol/format/GeoJSON';
+import type { GeoJSONGeometry } from 'ol/format/GeoJSON';
 import { GeoJSON } from 'ol/format';
 
 const geojson = new GeoJSON();
@@ -29,7 +30,10 @@ const geojson = new GeoJSON();
 export class ScriptFeature {
   private innerFeature: FeatureWrapper;
 
-  constructor(feature: Feature<Geometry>, private projection?: AbcProjection) {
+  constructor(
+    feature: Feature<Geometry>,
+    private projection?: AbcProjection,
+  ) {
     this.innerFeature = FeatureWrapper.from(feature);
   }
 

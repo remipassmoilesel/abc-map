@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import CursorPosition from './CursorPosition';
 import { abcRender } from '../../../core/utils/test/abcRender';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
-import * as sinon from 'sinon';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import type { TestServices } from '../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../core/utils/test/TestServices';
+import sinon from 'sinon';
+import type { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import { act } from 'react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('CursorPosition', () => {
   let services: TestServices;

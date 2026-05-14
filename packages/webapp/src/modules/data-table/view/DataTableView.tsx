@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { DataRow } from '../../../core/data/data-source/DataSource';
-import { LayerWrapper, VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { DataRow } from '../../../core/data/data-source/DataSource';
+import type { LayerWrapper, VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import Cls from './DataTableView.module.scss';
 import { useTranslation } from 'react-i18next';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
@@ -35,7 +35,8 @@ import { Routes } from '../../../routes';
 import { useShowDataTableModule } from '../useShowDataTableModule';
 import { Table } from './table/Table';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
-import { TableSettings, usePersistentStore } from './state';
+import type { TableSettings } from './state';
+import { usePersistentStore } from './state';
 import { CsvImportModal } from './CsvImportModal';
 import { useCsv } from './useCsv';
 import { HistoryKeyboardListener } from '../../../core/ui/HistoryKeyboardListener';
@@ -69,7 +70,7 @@ export function DataTableView() {
     (layer: LayerWrapper | undefined) => {
       showDataTable(layer?.getId());
     },
-    [showDataTable]
+    [showDataTable],
   );
 
   // User download data
@@ -123,7 +124,7 @@ export function DataTableView() {
         })
         .catch((err) => logger.error('Error while editing feature properties:', err));
     },
-    [history, layer, modals]
+    [history, layer, modals],
   );
 
   // User delete a row
@@ -145,7 +146,7 @@ export function DataTableView() {
         .then(() => history.register(HistoryKey.Map, cs))
         .catch((err) => logger.error('Cannot delete feature:', err));
     },
-    [history, layer]
+    [history, layer],
   );
 
   // User shows a feature on map
@@ -164,12 +165,12 @@ export function DataTableView() {
 
       const extent = feature.getGeometry()?.getExtent();
       if (extent) {
-        navigate(Routes.map().format());
+        navigate(Routes.map().format())?.catch((err) => toasts.genericError(err));
         geo.getMainMap().unwrap().getView().fit(extent);
         feature.setHighlighted(true, 3_000);
       }
     },
-    [geo, layer, navigate]
+    [geo, layer, navigate, toasts],
   );
 
   // User selects a feature
@@ -193,7 +194,7 @@ export function DataTableView() {
         selection.add([feature.unwrap()]);
       }
     },
-    [geo, layer]
+    [geo, layer],
   );
 
   // TODO: use zustand store in all modules and in module template
@@ -215,7 +216,7 @@ export function DataTableView() {
         });
       }
     },
-    [layerId, state]
+    [layerId, state],
   );
 
   // We listen for undo / redo key strokes

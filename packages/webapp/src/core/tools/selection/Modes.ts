@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ToolMode } from '../ToolMode';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import type { ToolMode } from '../ToolMode';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
 import { ToolModeHelper } from '../common/ToolModeHelper';
 import { noModifierKeys, primaryAction } from 'ol/events/condition';
 
@@ -36,6 +36,6 @@ export const MoveMap: ToolMode = {
 export const Modes = { Select, MoveMap };
 
 export const Conditions = {
-  Move: (ev: MapBrowserEvent<UIEvent>) => ToolModeHelper.is(ev.map, Modes.MoveMap),
-  Select: (ev: MapBrowserEvent<UIEvent>) => primaryAction(ev) && noModifierKeys(ev) && ToolModeHelper.is(ev.map, Modes.Select),
+  Move: (ev: MapBrowserEvent) => ToolModeHelper.is(ev.map, Modes.MoveMap),
+  Select: (ev: MapBrowserEvent) => primaryAction(ev) && noModifierKeys(ev) && ToolModeHelper.is(ev.map, Modes.Select),
 };

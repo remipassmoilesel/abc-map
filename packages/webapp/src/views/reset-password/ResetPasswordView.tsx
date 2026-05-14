@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,17 +17,21 @@
  */
 
 import Cls from './ResetPasswordView.module.scss';
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger, PasswordLostParams, ResetPasswordTokenParam } from '@abc-map/shared';
-import { ServiceProps, withServices } from '../../core/withServices';
+import type { ChangeEvent, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { PasswordLostParams } from '@abc-map/shared';
+import { Logger, ResetPasswordTokenParam } from '@abc-map/shared';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { pageSetup } from '../../core/utils/page-setup';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
-import { withRouter, WithRouterProps } from '../../core/utils/withRouter';
-import { prefixI18nTFunc } from '../../i18n/i18n';
+import type { WithRouterProps } from '../../core/utils/withRouter';
+import { withRouter } from '../../core/utils/withRouter';
 
 const logger = Logger.get('ResetPasswordView.tsx', 'info');
 
@@ -46,7 +50,7 @@ class ResetPasswordView extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const t = prefixI18nTFunc('ResetPasswordView:', this.props.t);
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ResetPasswordView');
     const { password, confirmation, formState } = this.state;
 
     const submitDisabled = this.state.formState !== FormState.Ok;
@@ -88,12 +92,12 @@ class ResetPasswordView extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    const t = prefixI18nTFunc('ResetPasswordView:', this.props.t);
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ResetPasswordView');
     pageSetup(t('Reset_your_password'));
   }
 
   public handleSubmit = () => {
-    const t = prefixI18nTFunc('ResetPasswordView:', this.props.t);
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ResetPasswordView');
     const { authentication, toasts, modals } = this.props.services;
     const { searchParams, navigate } = this.props.router;
 

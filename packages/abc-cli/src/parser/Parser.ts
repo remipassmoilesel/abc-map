@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Command, CommandName } from './Command';
+import type { Command } from './Command.js';
+import { CommandName } from './Command.js';
 
 export class Parser {
   public parse(args: string[]): Command {
@@ -108,7 +109,7 @@ function getDockerTag(args: string[]): string {
 
 function getConfigPath(args: string[]): string {
   if (args.length < 3 || !args[3]) {
-    throw new Error("Config path is mandatory, e.g: '/path/to/config.js'. See help for more details.");
+    throw new Error("Config path is mandatory, e.g: '/path/to/config.mjs'. See help for more details.");
   }
   return args[3];
 }

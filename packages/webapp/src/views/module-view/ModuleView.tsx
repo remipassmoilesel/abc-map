@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import Cls from './ModuleView.module.scss';
-import React, { LazyExoticComponent, Suspense, ReactElement, useCallback, useEffect, useMemo } from 'react';
-import { Logger, ModuleParams } from '@abc-map/shared';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import type { ModuleParams } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { useNavigate, useParams } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { useTranslation, withTranslation } from 'react-i18next';
-import { useAppDispatch } from '../../core/store/hooks';
-import { UiActions } from '../../core/store/ui/actions';
+import { useAppDispatch } from '../../store/hooks';
+import { UiActions } from '../../store/ui/actions';
 import ModuleErrorBoundary from './ModuleErrorBoundary';
 import { ModuleRegistry } from '../../core/modules/registry/ModuleRegistry';
 import { Routes } from '../../routes';
@@ -34,7 +35,7 @@ function ModuleView() {
   const activeModuleId = useParams<ModuleParams>().moduleId;
   const activeModule = useMemo(() => registry.getModules().find((mod) => mod.getId() === activeModuleId), [activeModuleId, registry]);
   const dispatch = useAppDispatch();
-  const { i18n, t } = useTranslation('ModuleView');
+  const { t } = useTranslation('ModuleView');
   const navigate = useNavigate();
 
   // Page setup
@@ -42,13 +43,12 @@ function ModuleView() {
 
   // Register usage for frequently used modules
   useEffect(() => {
-    activeModuleId && dispatch(UiActions.registerModuleUsage(activeModuleId));
+    if (activeModuleId) {
+      dispatch(UiActions.registerModuleUsage(activeModuleId));
+    }
   }, [activeModuleId, dispatch]);
 
-  const moduleUi = activeModule?.getView();
-  const SyncUi = isReactElement(moduleUi) ? moduleUi : null;
-  const LazyUi = isLazyComponent(moduleUi) ? moduleUi : null;
-
+  const ModuleUi = useMemo(() => activeModule?.getView(), [activeModule]);
   const handleShowIndex = useCallback(() => navigate(Routes.moduleIndex().format()), [navigate]);
 
   return (
@@ -58,18 +58,11 @@ function ModuleView() {
         <div className={Cls.moduleViewPort} key={activeModuleId} data-cy={'module-viewport'}>
           <ModuleErrorBoundary>
             {/* Display module ui if any */}
-            {SyncUi && React.cloneElement(SyncUi, { lang: i18n.language })}
-
-            {LazyUi && (
-              // FIXME: With this implementation, UI may "flicker".
-              // FIXME: We can implement a fix like https://github.com/HanMoeHtet/route-level-code-split
-              <Suspense>
-                <LazyUi />
-              </Suspense>
-            )}
+            {/* eslint-disable-next-line react-hooks/static-components */}
+            {ModuleUi && <ModuleUi />}
 
             {/* No module UI, display error */}
-            {!moduleUi && (
+            {!ModuleUi && (
               <div className={'h-100 d-flex flex-column justify-content-center align-items-center'}>
                 <h2>{t('Something_went_wrong')} 😅</h2>
                 <div>{t('This_module_does_not_work_correctly')}</div>
@@ -90,14 +83,6 @@ function ModuleView() {
       )}
     </div>
   );
-}
-
-function isLazyComponent(comp: unknown): comp is LazyExoticComponent<any> {
-  return comp !== null && typeof comp === 'object' && '$$typeof' in comp && comp?.$$typeof?.toString() === 'Symbol(react.lazy)';
-}
-
-function isReactElement(comp: unknown): comp is ReactElement {
-  return comp !== null && typeof comp === 'object' && '$$typeof' in comp && comp?.$$typeof?.toString() === 'Symbol(react.element)';
 }
 
 export default withTranslation()(ModuleView);

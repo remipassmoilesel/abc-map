@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { CSSProperties, ReactNode, useEffect, useMemo, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Routes } from '../../routes';
 import Grid from './grid.svg';
 import { useActiveModule, useFavoriteModules } from '../../core/modules/hooks';
 import { useTranslation } from 'react-i18next';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import uniqBy from 'lodash/uniqBy';
 
 interface LinkDef {
@@ -79,7 +80,7 @@ export function useLinks(): Result {
       activeMatch: /^\/[a-z]{2}\/modules$/gi,
       dataCy: 'module-index',
     }),
-    [imageSize, t]
+    [imageSize, t],
   );
 
   const map: LinkDef = useMemo(() => {
@@ -97,13 +98,13 @@ export function useLinks(): Result {
         label: mod.getReadableName(),
         dataCy: `top-bar-link_${mod.getId()}`,
       })),
-    [favoriteModules]
+    [favoriteModules],
   );
 
   // Menu links
   // These links are used in side menu. Some links are static (Map, documentation, ...).
   const menuLinks: LinkDef[] = useMemo(() => {
-    const docRoute = Routes.module().withParams({ moduleId: BundledModuleId.Documentation });
+    const docRoute = Routes.module().withParams({ moduleId: ModuleId.Documentation });
     return uniqBy(
       [
         map,
@@ -117,7 +118,7 @@ export function useLinks(): Result {
         moduleIndex,
         funding,
       ].filter((link): link is LinkDef => !!link),
-      (value) => value.to
+      (value) => value.to,
     );
   }, [favorites, funding, lastNonFavoriteActiveLink, map, moduleIndex, t]);
 
@@ -126,7 +127,7 @@ export function useLinks(): Result {
   const topBarLinks: LinkDef[] = useMemo(() => {
     return uniqBy(
       [map, ...favorites.slice(0, 5), lastNonFavoriteActiveLink, moduleIndex, funding].filter((link): link is LinkDef => !!link),
-      (value) => value.to
+      (value) => value.to,
     );
   }, [favorites, funding, lastNonFavoriteActiveLink, map, moduleIndex]);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 import { Stats } from './Stats';
 import shuffle from 'lodash/shuffle';
 import { ClassificationAlgorithm } from './Algorithm';
+import { describe, expect, it } from 'vitest';
 
 describe('Stats', () => {
   it('proportionality()', () => {

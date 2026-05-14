@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 import { CsvParser } from './CsvParser';
 import { File1, File2, File3, File4 } from './CsvParser.test.data';
 import { CsvParsingError } from './typings';
+import { describe, expect, it } from 'vitest';
 
 describe('CsvParser', () => {
   describe('parse()', () => {
@@ -42,7 +43,7 @@ describe('CsvParser', () => {
 
       expect(error).toBeInstanceOf(CsvParsingError);
       expect(error.message).toMatch('Invalid data');
-      expect(error.line).toEqual(1);
+      expect(error.line).toEqual(2);
     });
 
     it('should fail and return line of error', async () => {

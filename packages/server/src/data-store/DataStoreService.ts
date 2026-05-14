@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,18 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { ArtefactDao } from './ArtefactDao';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ArtefactMapper } from './ArtefactMapper';
-import { AbstractService } from '../services/AbstractService';
-import { AbcArtefact, ArtefactFilter, Language } from '@abc-map/shared';
-import * as path from 'path';
+import type { Config } from '../config/Config.js';
+import { ArtefactDao } from './ArtefactDao.js';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import { ArtefactMapper } from './ArtefactMapper.js';
+import { AbstractService } from '../services/AbstractService.js';
+import type { AbcArtefact, Language } from '@abc-map/shared';
+import { ArtefactFilter } from '@abc-map/shared';
+import path from 'path';
 import { Logger } from '@abc-map/shared';
-import * as crypto from 'crypto';
-import { ArtefactDocument } from './ArtefactDocument';
-import { MongoI18nMapper } from '../mongodb/MongodbI18n';
-import { DataStoreScanner } from './DataStoreScanner';
+import crypto from 'crypto';
+import type { ArtefactDocument } from './ArtefactDocument.js';
+import { MongoI18nMapper } from '../mongodb/MongodbI18n.js';
+import { DataStoreScanner } from './DataStoreScanner.js';
 
 export const logger = Logger.get('DatastoreService.ts', 'info');
 
@@ -38,7 +39,11 @@ export class DataStoreService extends AbstractService {
     return new DataStoreService(config, dao, scanner);
   }
 
-  constructor(private config: Config, private dao: ArtefactDao, private scanner: DataStoreScanner) {
+  constructor(
+    private config: Config,
+    private dao: ArtefactDao,
+    private scanner: DataStoreScanner,
+  ) {
     super();
   }
 

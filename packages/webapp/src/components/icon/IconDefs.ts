@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -81,7 +81,6 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faBorderNone } from '@fortawesome/free-solid-svg-icons/faBorderNone';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons/faDrawPolygon';
-import { faVectorSquare } from '@fortawesome/free-solid-svg-icons/faVectorSquare';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faSearchPlus } from '@fortawesome/free-solid-svg-icons/faSearchPlus';
@@ -225,7 +224,6 @@ export const IconDefs = {
   faPlus,
   faBorderNone,
   faDrawPolygon,
-  faVectorSquare,
   faImage,
   faMinus,
   faEdit,

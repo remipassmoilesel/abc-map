@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,10 @@
  */
 
 import Cls from './TextEditor.module.scss';
-import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
-import { createEditor, Descendant } from 'slate';
+import type { CSSProperties } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import type { Descendant } from 'slate';
+import { createEditor } from 'slate';
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { renderElement, renderLeaf } from './render';
 import ControlBar from './control-bar/ControlBar';
@@ -28,10 +30,11 @@ import { withTables } from './elements/table/withTables';
 import { withVideos } from './elements/video/withVideos';
 import clsx from 'clsx';
 import { withImages } from './elements/image/withImages';
-import { EditorContext, EditorProvider } from './useEditor';
+import type { EditorContext } from './useEditor';
+import { EditorProvider } from './useEditor';
 import { withLists } from './elements/list/withLists';
 import { withLinks } from './elements/link/withLinks';
-import { TextFrameChild } from '@abc-map/shared';
+import type { TextFrameChild } from '@abc-map/shared';
 import { withTranslation } from 'react-i18next';
 import { withMapSymbol } from './elements/map-symbol/withMapSymbol';
 
@@ -82,6 +85,8 @@ function TextEditor(props: Props) {
   // We must use a setState() and set children property of editor to update it correctly in all cases
   const [derivedValue, setDerivedValue] = useState<Descendant[]>(() => value ?? [{ type: 'paragraph', children: [{ text: '' }] }]);
   useEffect(() => {
+    // This was recommended in documentation.
+    // eslint-disable-next-line react-hooks/immutability
     editor.children = value;
     setDerivedValue(value);
   }, [editor, value]);

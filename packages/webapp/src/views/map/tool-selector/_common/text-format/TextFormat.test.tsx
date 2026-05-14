@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
+import type { TestServices } from '../../../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../../../core/utils/test/TestServices';
 import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
 import { abcRender } from '../../../../../core/utils/test/abcRender';
-import TextFormat from './TextFormat';
+import { TextFormat } from './TextFormat';
 import { Point } from 'ol/geom';
 import userEvent from '@testing-library/user-event';
-import { act, screen } from '@testing-library/react';
-import { MainStore, storeFactory } from '../../../../../core/store/store';
+import { screen } from '@testing-library/react';
+import { act } from 'react';
+import type { MainStore } from '../../../../../store/store';
+import { storeFactory } from '../../../../../store/store';
 import { TestHelper } from '../../../../../core/utils/test/TestHelper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('TextFormat', () => {
   let services: TestServices;

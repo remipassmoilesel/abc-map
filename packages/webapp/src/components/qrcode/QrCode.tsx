@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ export function QrCode(props: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const qrCodeRef = useRef<Blob>();
+  const qrCodeRef = useRef<Blob | undefined>(undefined);
   const [downloadDisabled, setDownloadDisabled] = useState(false);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,29 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller } from '../server/Controller';
-import { Services } from '../services/services';
-import {
+import { Controller } from '../server/Controller.js';
+import type { Services } from '../services/services.js';
+import type {
   RegistrationConfirmationRequest,
   RegistrationConfirmationResponse,
   AuthenticationRequest,
   AuthenticationResponse,
-  AuthenticationStatus,
   RegistrationRequest,
   RegistrationResponse,
-  RegistrationStatus,
   RenewResponse,
-  isEmailAnonymous,
   PasswordLostRequest,
   ResetPasswordRequest,
-  ConfirmationStatus,
   UpdatePasswordRequest,
   DeleteAccountRequest,
 } from '@abc-map/shared';
+import { AuthenticationStatus, RegistrationStatus, isEmailAnonymous, ConfirmationStatus } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
-import { Authentication } from './Authentication';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { Config } from '../config/Config';
+import { Authentication } from './Authentication.js';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { Config } from '../config/Config.js';
 import {
   DeleteAccountSchema,
   LoginRequestSchema,
@@ -47,15 +44,18 @@ import {
   RegistrationRequestSchema,
   ResetPasswordSchema,
   UpdatePasswordRequestSchema,
-} from './AuthenticationController.schemas';
-import { jwtPlugin } from '../server/helpers/jwtPlugin';
+} from './AuthenticationController.schemas.js';
+import { jwtPlugin } from '../server/helpers/jwtPlugin.js';
 import '@fastify/rate-limit';
-import { defaultRateLimitConfig } from '../server/helpers/defaultRateLimitConfig';
+import { defaultRateLimitConfig } from '../server/helpers/defaultRateLimitConfig.js';
 
 export const logger = Logger.get('AuthenticationController.ts');
 
 export class AuthenticationController extends Controller {
-  constructor(private config: Config, private services: Services) {
+  constructor(
+    private config: Config,
+    private services: Services,
+  ) {
     super();
   }
 
@@ -167,7 +167,7 @@ export class AuthenticationController extends Controller {
   private renew = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
     try {
       await req.jwtVerify();
-    } catch (err) {
+    } catch {
       void reply.forbidden();
     }
 
@@ -186,7 +186,7 @@ export class AuthenticationController extends Controller {
 
     try {
       await req.jwtVerify();
-    } catch (err) {
+    } catch {
       void reply.forbidden();
     }
 
@@ -237,7 +237,7 @@ export class AuthenticationController extends Controller {
 
     try {
       await req.jwtVerify();
-    } catch (err) {
+    } catch {
       void reply.forbidden();
     }
 

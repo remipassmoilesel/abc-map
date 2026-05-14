@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectActions } from '../store/project/actions';
-import {
+import { ProjectActions } from '../../store/project/actions';
+import type {
   AbcFile,
   AbcLayer,
   AbcLayout,
@@ -27,20 +27,18 @@ import {
   AbcSharedView,
   AbcTextFrame,
   AbcView,
-  BlobIO,
   CompressedProject,
-  Logger,
-  ProjectConstants,
-  Zipper,
 } from '@abc-map/shared';
-import { AxiosInstance } from 'axios';
+import { BlobIO, Logger, ProjectConstants, Zipper } from '@abc-map/shared';
+import type { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
-import { GeoService } from '../geo/GeoService';
+import type { GeoService } from '../geo/GeoService';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
-import { mainStore, MainStore } from '../store/store';
+import type { MainStore } from '../../store/store';
+import { mainStore } from '../../store/store';
 import { HttpError } from '../http/HttpError';
-import { ToastService } from '../ui/ToastService';
-import { ModalService } from '../ui/ModalService';
+import type { ToastService } from '../ui/ToastService';
+import type { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
 import { ProjectSchemaMigration } from './migrations/ProjectSchemaMigration';
 import { ProjectStatus } from './ProjectStatus';
@@ -80,7 +78,7 @@ export class ProjectService {
     private toasts: ToastService,
     private geoService: GeoService,
     private migration: ProjectSchemaMigration,
-    private storage: ProjectIDBStorage
+    private storage: ProjectIDBStorage,
   ) {}
 
   public enableProjectAutoSave() {
@@ -128,7 +126,7 @@ export class ProjectService {
   }
 
   public disableProjectAutoSave() {
-    this.autoSaveSubscription && this.autoSaveSubscription();
+    if (this.autoSaveSubscription) this.autoSaveSubscription();
 
     LayoutIDBStorage.unwatch();
     SharedViewIDBStorage.unwatch();
@@ -282,7 +280,7 @@ export class ProjectService {
 
     // Load project manifest and layers
     this.store.dispatch(ProjectActions.loadProject(manifest));
-    const layerDefs = manifest.layers.map((layer) => ({ ...layer, metadata: { ...layer.metadata, active: false } } as AbcLayer));
+    const layerDefs = manifest.layers.map((layer) => ({ ...layer, metadata: { ...layer.metadata, active: false } }) as AbcLayer);
     await this.geoService.importLayers(layerDefs);
 
     // Set active layer if any

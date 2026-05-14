@@ -5,3 +5,4 @@
 .turbo
 node_modules/
 notes/
+.npm-cache

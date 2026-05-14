@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
+import type { ChangeEvent, MouseEvent } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { FormState } from '../../../form-validation-label/FormState';
 import FormValidationLabel from '../../../form-validation-label/FormValidationLabel';
 import { ValidationHelper } from '../../../../core/utils/ValidationHelper';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onEmbedVideo: (url: string) => void;
@@ -37,6 +36,7 @@ enum MediaType {
 }
 
 export function EmbedMediaModal(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { onEmbedImage, onEmbedVideo, onClose } = props;
   const [type, setType] = useState(MediaType.Image);
   const [formState, setFormState] = useState(FormState.InvalidFile);
@@ -66,7 +66,7 @@ export function EmbedMediaModal(props: Props) {
       setImageUrl(URL.createObjectURL(file));
       setFormState(FormState.Ok);
     },
-    [imageUrl]
+    [imageUrl],
   );
 
   // Video form has only one text field
@@ -86,7 +86,12 @@ export function EmbedMediaModal(props: Props) {
 
   // User confirms
   const handleConfirm = useCallback(() => {
-    type === MediaType.Image ? onEmbedImage(imageUrl) : onEmbedVideo(videoUrl);
+    if (type === MediaType.Image) {
+      onEmbedImage(imageUrl);
+    } else {
+      onEmbedVideo(videoUrl);
+    }
+
     onClose();
   }, [type, onEmbedImage, imageUrl, onEmbedVideo, videoUrl, onClose]);
 

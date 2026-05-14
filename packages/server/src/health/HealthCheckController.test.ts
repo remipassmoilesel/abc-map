@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,18 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { Services, servicesFactory } from '../services/services';
-import { HttpServer } from '../server/HttpServer';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { assert } from 'chai';
+import type { Config } from '../config/Config.js';
+import type { Services } from '../services/services.js';
+import { servicesFactory } from '../services/services.js';
+import { HttpServer } from '../server/HttpServer.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { afterAll, assert, beforeAll, describe, it } from 'vitest';
 
 describe('HealthCheckController', () => {
   let config: Config;
   let services: Services;
   let server: HttpServer;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
@@ -38,7 +39,7 @@ describe('HealthCheckController', () => {
     await server.initialize();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await services.shutdown();
     await server.shutdown();
   });

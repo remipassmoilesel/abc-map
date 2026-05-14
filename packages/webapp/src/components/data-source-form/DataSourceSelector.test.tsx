@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
-import sinon, { SinonStub } from 'sinon';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { abcRender } from '../../core/utils/test/abcRender';
 import DataSourceSelector, { logger } from './DataSourceSelector';
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import userEvent from '@testing-library/user-event';
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
 import { CsvParsingError } from '../../core/data/csv-parser/typings';
 import range from 'lodash/range';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 

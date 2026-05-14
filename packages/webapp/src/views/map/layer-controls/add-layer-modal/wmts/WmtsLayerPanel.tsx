@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,27 +17,30 @@
  */
 
 import Cls from './WmtsLayerPanel.module.scss';
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { BasicAuthentication, Logger, normalizedProjectionName } from '@abc-map/shared';
+import type { ChangeEvent, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { BasicAuthentication } from '@abc-map/shared';
+import { Logger, normalizedProjectionName } from '@abc-map/shared';
 import WmtsLayerItem from './WmtsLayerItem';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
+import type { ServiceProps } from '../../../../../core/withServices';
+import { withServices } from '../../../../../core/withServices';
 import FormValidationLabel from '../../../../../components/form-validation-label/FormValidationLabel';
 import { ValidationHelper } from '../../../../../core/utils/ValidationHelper';
 import { FormState } from '../../../../../components/form-validation-label/FormState';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import ControlButtons from '../_common/ControlButtons';
-import { WmtsCapabilities, WmtsLayer } from '../../../../../core/geo/WmtsCapabilities';
-import { WmtsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
+import type { WmtsCapabilities, WmtsLayer } from '../../../../../core/geo/WmtsCapabilities';
+import type { WmtsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { resolveInAtLeast } from '../../../../../core/utils/resolveInAtLeast';
-import { isOpenlayersProjection } from '../../../../../core/utils/crossContextInstanceof';
+import { isOpenlayersProjection } from '../../../../../core/utils/instanceof.ts';
 
 const logger = Logger.get('WmtsLayerPanel.tsx');
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   value: WmtsSettings;
   onChange: (values: WmtsSettings) => void;
   onCancel: () => void;
@@ -50,8 +53,6 @@ interface State {
   loading: boolean;
 }
 
-const t = prefixedTranslation('MapView:');
-
 class WmtsLayerPanel extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -59,6 +60,7 @@ class WmtsLayerPanel extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const value = this.props.value;
     const capabilities = this.state.capabilities;
     const formState = this.state.formState;
@@ -169,6 +171,7 @@ class WmtsLayerPanel extends Component<Props, State> {
 
   private handleLayerSelected = (layer: WmtsLayer) => {
     const { toasts } = this.props.services;
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
 
     this.getValues(layer)
       .then((values) => {
@@ -249,6 +252,7 @@ class WmtsLayerPanel extends Component<Props, State> {
   };
 
   private fetchCapabilities = () => {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const { geo, toasts } = this.props.services;
     const value = this.props.value;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  */
 
 import { FeatureProperties, MapTool, StyleProperties } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { ToolSelector } from '../helpers/ToolSelector';
-import { Draw } from '../helpers/Draw';
-import { MainMap } from '../helpers/MainMap';
-import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
-import { Routes } from '../helpers/Routes';
-import { Project } from '../helpers/Project';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { ToolSelector } from '../helpers/ToolSelector.js';
+import { Draw } from '../helpers/Draw.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle.js';
+import { Routes } from '../helpers/Routes.js';
+import { Project } from '../helpers/Project.js';
 
 describe('Tool Selection', function () {
   beforeEach(() => {
@@ -54,7 +54,7 @@ describe('Tool Selection', function () {
         expect(features[0].get(FeatureProperties.Selected)).equal(false);
         expect(extents[0]).deep.equals(
           [-3564850.149620659, 4072571.746860552, -3564850.149620659, 4072571.746860552],
-          `Actual: "${JSON.stringify(extents[0])}"`
+          `Actual: "${JSON.stringify(extents[0])}"`,
         );
         expect(features[1].get(FeatureProperties.Selected)).equal(true);
         expect(features[2].get(FeatureProperties.Selected)).equal(true);
@@ -91,7 +91,7 @@ describe('Tool Selection', function () {
             [-2782134.9799804543, 3289856.5772203472, -2782134.9799804543, 3289856.5772203472],
             [-2292937.9989553266, 2800659.5961952196, -2292937.9989553266, 2800659.5961952196],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       })
       .get('[data-cy=undo]')
@@ -133,7 +133,7 @@ describe('Tool Selection', function () {
             [1327119.660630621, -819398.0633907281, 1327119.660630621, -819398.0633907281],
             [1816316.6416557487, -1308595.0444158558, 1816316.6416557487, -1308595.0444158558],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       })
       // Undo
@@ -149,7 +149,7 @@ describe('Tool Selection', function () {
             [-1608062.225520147, 2115783.82276004, -1608062.225520147, 2115783.82276004],
             [-1118865.2444950193, 1626586.8417349122, -1118865.2444950193, 1626586.8417349122],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       })
       // Redo
@@ -165,7 +165,7 @@ describe('Tool Selection', function () {
             [1327119.660630621, -819398.0633907281, 1327119.660630621, -819398.0633907281],
             [1816316.6416557487, -1308595.0444158558, 1816316.6416557487, -1308595.0444158558],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       });
   });
@@ -198,7 +198,7 @@ describe('Tool Selection', function () {
             [837922.6796054933, -330201.0823656004, 837922.6796054933, -330201.0823656004],
             [1327119.660630621, -819398.0633907281, 1327119.660630621, -819398.0633907281],
           ],
-          `Actual: "${JSON.stringify(extents)}"`
+          `Actual: "${JSON.stringify(extents)}"`,
         );
       });
   });
@@ -229,7 +229,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('rgba(208,2,27,1)');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('rgb(208 2 27 / 1)');
       })
       // Undo
       .get('[data-cy=undo]')
@@ -245,7 +245,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('rgba(208,2,27,1)');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('rgb(208 2 27 / 1)');
       });
   });
 
@@ -274,7 +274,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('rgba(208,2,27,1)');
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('rgb(208 2 27 / 1)');
       })
       // Undo
       .get('[data-cy=undo]')
@@ -291,7 +291,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('rgba(208,2,27,1)');
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('rgb(208 2 27 / 1)');
       });
   });
 });

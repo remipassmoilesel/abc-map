@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,37 +16,41 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Map from 'ol/Map';
-import { AbcProjection, AbcView, EPSG_4326, LayerProperties, Logger, PredefinedLayerModel } from '@abc-map/shared';
+import type Map from 'ol/Map';
+import type { AbcProjection, AbcView } from '@abc-map/shared';
+import { EPSG_4326, LayerProperties, Logger, PredefinedLayerModel } from '@abc-map/shared';
 import debounce from 'lodash/debounce';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
-import BaseEvent from 'ol/events/Event';
-import { Tool } from '../../tools/Tool';
-import TileLayer from 'ol/layer/Tile';
+import type BaseEvent from 'ol/events/Event';
+import type { Tool } from '../../tools/Tool';
+import type TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { LayerFactory } from '../layers/LayerFactory';
-import { LayerWrapper, OlLayers, VectorLayerWrapper } from '../layers/LayerWrapper';
-import { EventType, MapSizeChangedEvent, SizeListener, TileErrorListener, TileLoadErrorEvent } from './MapWrapper.events';
+import type { OlLayers, VectorLayerWrapper } from '../layers/LayerWrapper';
+import { LayerWrapper } from '../layers/LayerWrapper';
+import type { SizeListener, TileErrorListener } from './MapWrapper.events';
+import { EventType, MapSizeChangedEvent, TileLoadErrorEvent } from './MapWrapper.events';
 import { Views } from '../Views';
 import { fromLonLat, transformExtent } from 'ol/proj';
-import { Coordinate } from 'ol/coordinate';
-import TileSource from 'ol/source/Tile';
-import { Extent } from 'ol/extent';
-import { ToolMode } from '../../tools/ToolMode';
+import type { Coordinate } from 'ol/coordinate';
+import type TileSource from 'ol/source/Tile';
+import type { Extent } from 'ol/extent';
+import type { ToolMode } from '../../tools/ToolMode';
 import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { MoveMapTool } from '../../tools/move/MoveMapTool';
-import { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
+import type { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
 import { toDegrees, toPrecision } from '../../utils/numbers';
-import { isOpenlayersMap, isTileLayer, isTileSource } from '../../utils/crossContextInstanceof';
-import { AttributionFormat } from '../AttributionFormat';
+import { isOpenlayersMap, isTileLayer, isTileSource } from '../../utils/instanceof.ts';
+import type { AttributionFormat } from '../AttributionFormat';
 import uniqBy from 'lodash/uniqBy';
 import { stripHtml } from '../../utils/strings';
 import { Geolocation } from '../geolocation/Geolocation';
 import uuid from 'uuid-random';
-import { FeatureSelection } from '../feature-selection/FeatureSelection';
+import type { FeatureSelection } from '../feature-selection/FeatureSelection';
 import { getSelectionFromMap } from '../feature-selection/getSelectionFromMap';
 import { ToolChangedEvent, ToolProperty } from './properties';
-import { IconProcessor, IconProcessorEvent } from '../../point-icons/IconProcessor';
+import type { IconProcessorEvent } from '../../point-icons/IconProcessor';
+import { IconProcessor } from '../../point-icons/IconProcessor';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -308,7 +312,9 @@ export class MapWrapper {
     ToolModeHelper.set(this.internalMap, toolMode);
 
     const tool = this.getTool();
-    toolMode && tool?.modeChanged && tool.modeChanged(toolMode);
+    if (toolMode && tool?.modeChanged) {
+      tool.modeChanged(toolMode);
+    }
 
     this.internalMap.dispatchEvent(ToolChangedEvent);
   }
@@ -520,7 +526,7 @@ export class MapWrapper {
 
     // We trigger a rerender in order to redraw icons. map.render() does not work here.
     this.getLayers().forEach((layer) => {
-      layer.isVector() && layer.getSource().changed();
+      if (layer.isVector()) layer.getSource().changed();
     });
   };
 

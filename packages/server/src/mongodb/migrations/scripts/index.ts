@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../../MongodbClient';
-import { DatabaseMigrationScript } from '../DatabaseMigrationScript';
-import { S2022_01_04_AddPublicField } from './S2022_01_04_AddPublicField/S2022_01_04_AddPublicField';
-import { S2023_08_06_RemoveCredentialsField } from './S2023_08_06_RemoveCredentialsField/S2023_08_06_RemoveCredentialsField';
+import type { MongodbClient } from '../../MongodbClient.js';
+import type { DatabaseMigrationScript } from '../DatabaseMigrationScript.js';
+import { S2022_01_04_AddPublicField } from './S2022_01_04_AddPublicField/S2022_01_04_AddPublicField.js';
+import { S2023_08_06_RemoveCredentialsField } from './S2023_08_06_RemoveCredentialsField/S2023_08_06_RemoveCredentialsField.js';
 
 // Scripts are executed in provided order
 export function getScripts(client: MongodbClient): DatabaseMigrationScript[] {

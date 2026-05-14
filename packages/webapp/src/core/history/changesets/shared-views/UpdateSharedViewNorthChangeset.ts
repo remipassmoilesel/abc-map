@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { ProjectService } from '../../../project/ProjectService';
-import { AbcNorth, AbcSharedView } from '@abc-map/shared';
+import type { ProjectService } from '../../../project/ProjectService';
+import type { AbcNorth, AbcSharedView } from '@abc-map/shared';
 import { getServices } from '../../../Services';
 
 export class UpdateSharedViewNorthChangeset extends Changeset {
@@ -27,7 +27,12 @@ export class UpdateSharedViewNorthChangeset extends Changeset {
     return new UpdateSharedViewNorthChangeset(project, layout, before, after);
   }
 
-  constructor(private project: ProjectService, private view: AbcSharedView, private before: AbcNorth, private after: AbcNorth) {
+  constructor(
+    private project: ProjectService,
+    private view: AbcSharedView,
+    private before: AbcNorth,
+    private after: AbcNorth,
+  ) {
     super();
   }
 

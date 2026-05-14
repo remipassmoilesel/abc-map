@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PaginationState, SortingState } from '@tanstack/react-table';
+import type { PaginationState, SortingState } from '@tanstack/react-table';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -52,6 +52,6 @@ export const usePersistentStore = create<State & Action>()(
           paginationByLayerId: { ...state.paginationByLayerId, [layerId]: settings.pagination },
         })),
     }),
-    { name: 'ABC_MAP_DATA_TABLE_MODULE', version: StateVersion }
-  )
+    { name: 'ABC_MAP_DATA_TABLE_MODULE', version: StateVersion },
+  ),
 );

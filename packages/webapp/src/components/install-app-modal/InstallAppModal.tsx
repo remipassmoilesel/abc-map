@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@ import { useTranslation, withTranslation } from 'react-i18next';
 import { usePwaInstallReadiness } from '../../core/pwa/PwaInstallReadinessContext';
 import { useServices } from '../../core/useServices';
 import { Logger } from '@abc-map/shared';
-import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
-import { UiActions } from '../../core/store/ui/actions';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { UiActions } from '../../store/ui/actions';
 import { BlueLoader } from '../blue-loader/BlueLoader';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
@@ -32,7 +32,7 @@ import clsx from 'clsx';
 import { ModalEventType } from '../../core/ui/typings';
 import { confetti } from '../../core/ui/confetti';
 import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
-import * as Bowser from 'bowser';
+import Bowser from 'bowser';
 
 const logger = Logger.get('InstallAppModal.tsx');
 

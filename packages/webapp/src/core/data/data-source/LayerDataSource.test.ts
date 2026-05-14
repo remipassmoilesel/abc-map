@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ import { LayerDataSource } from './LayerDataSource';
 import { DataSourceType } from './DataSource';
 import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
+import { describe, expect, it } from 'vitest';
 
 describe('LayerDataSource', () => {
   it('getId()', () => {

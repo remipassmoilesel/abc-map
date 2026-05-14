@@ -6,12 +6,12 @@
     "build": "node scripts/toc.js && prettier --write .",
     "clean": "rm -rf build",
     "clean-build": "pnpm run clean && pnpm run build",
-    "lint": "prettier --loglevel warn --check . && sort-package-json --check",
-    "lint:fix": "prettier --loglevel warn --write . && sort-package-json"
+    "lint": "prettier --log-level warn --check . && sort-package-json --check",
+    "lint:fix": "prettier --log-level warn --write . && sort-package-json"
   },
   "dependencies": {
     "markdown-toc": "^1.2.0",
-    "prettier": "2.8.8",
-    "sort-package-json": "^2.4.1"
+    "prettier": "3.8.1",
+    "sort-package-json": "^3.6.1"
   }
 }

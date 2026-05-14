@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,22 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectIDBEntryV0 } from '../typings/ProjectIDBEntryV0';
+import type { ProjectIDBEntryV0 } from '../typings/ProjectIDBEntryV0';
 import { ObjectStore } from '../../client/ObjectStore';
-import { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
+import type { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
 import { IndexedDbClient } from '../../client/IndexedDbClient';
 import { nanoid } from 'nanoid';
 import { TestHelper } from '../../../../utils/test/TestHelper';
 import { M20230806 } from './M20230806';
-import { GenericReduxIDBEntry } from '../../redux/GenericReduxIDBEntry';
-import { AbcLayout, AbcSharedView } from '@abc-map/shared';
-import { FeatureIDBEntry } from '../../features/FeatureIDBEntry';
-import { FeatureIDBEntryV0 } from '../typings/FeatureIDBEntryV0';
-import { TileIDBEntry } from '../../tiles/TileIDBEntry';
-import { TileIDBEntryV0 } from '../typings/TileIDBEntryV0';
-import { LayerIDBEntry } from '../../layers/LayerIDBEntry';
-import { LayerIDBEntryV0 } from '../typings/LayerIDBEntryV0';
+import type { GenericReduxIDBEntry } from '../../redux/GenericReduxIDBEntry';
+import type { AbcLayout, AbcSharedView } from '@abc-map/shared';
+import type { FeatureIDBEntry } from '../../features/FeatureIDBEntry';
+import type { FeatureIDBEntryV0 } from '../typings/FeatureIDBEntryV0';
+import type { TileIDBEntry } from '../../tiles/TileIDBEntry';
+import type { TileIDBEntryV0 } from '../typings/TileIDBEntryV0';
+import type { LayerIDBEntry } from '../../layers/LayerIDBEntry';
+import type { LayerIDBEntryV0 } from '../typings/LayerIDBEntryV0';
 import { disableStorageMigrationLogs } from '../StorageUpdater';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 disableStorageMigrationLogs();
 
@@ -89,7 +90,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Projects,
-        docs.map((entry) => ({ key: entry.metadata.id, value: entry }))
+        docs.map((entry) => ({ key: entry.metadata.id, value: entry })),
       );
 
       // Act
@@ -124,7 +125,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Projects,
-        docs.map((entry) => ({ key: entry.metadata.id, value: entry }))
+        docs.map((entry) => ({ key: entry.metadata.id, value: entry })),
       );
 
       // Act
@@ -153,7 +154,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Layouts,
-        docs.map((entry) => ({ key: entry.id, value: entry.entry }))
+        docs.map((entry) => ({ key: entry.id, value: entry.entry })),
       );
 
       // Act
@@ -176,7 +177,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Layouts,
-        docs.map((entry) => ({ key: entry.id, value: entry }))
+        docs.map((entry) => ({ key: entry.id, value: entry })),
       );
 
       // Act
@@ -206,7 +207,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Layers,
-        docs.map((entry) => ({ key: entry.layer.metadata.id, value: entry }))
+        docs.map((entry) => ({ key: entry.layer.metadata.id, value: entry })),
       );
 
       // Act
@@ -233,7 +234,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Layers,
-        docs.map((entry) => ({ key: entry.layer.metadata.id, value: entry }))
+        docs.map((entry) => ({ key: entry.layer.metadata.id, value: entry })),
       );
 
       // Act
@@ -262,7 +263,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.SharedViews,
-        docs.map((entry) => ({ key: entry.id, value: entry.entry }))
+        docs.map((entry) => ({ key: entry.id, value: entry.entry })),
       );
 
       // Act
@@ -285,7 +286,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.SharedViews,
-        docs.map((entry) => ({ key: entry.id, value: entry }))
+        docs.map((entry) => ({ key: entry.id, value: entry })),
       );
 
       // Act
@@ -313,7 +314,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Features,
-        docs.map((entry) => ({ key: entry.feature.id as string, value: entry }))
+        docs.map((entry) => ({ key: entry.feature.id as string, value: entry })),
       );
 
       // Act
@@ -338,7 +339,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Features,
-        docs.map((entry) => ({ key: entry.feature.id as string, value: entry }))
+        docs.map((entry) => ({ key: entry.feature.id as string, value: entry })),
       );
 
       // Act
@@ -363,7 +364,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Tiles,
-        docs.map((entry) => ({ key: entry.url, value: entry }))
+        docs.map((entry) => ({ key: entry.url, value: entry })),
       );
 
       // Act
@@ -385,7 +386,7 @@ describe('M20230806', () => {
 
       await client.putAll(
         ObjectStore.Tiles,
-        docs.map((entry) => ({ key: entry.url, value: entry.image }))
+        docs.map((entry) => ({ key: entry.url, value: entry.image })),
       );
 
       // Act

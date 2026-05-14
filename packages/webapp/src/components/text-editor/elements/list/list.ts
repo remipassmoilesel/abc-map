@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,12 +18,12 @@
 
 import { Logger } from '@abc-map/shared';
 import { Editor, Element, Transforms } from 'slate';
-import { ListElement } from '@abc-map/shared';
+import type { ListElement } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('list.ts');
 
-const t = prefixedTranslation('TextEditor:');
+const t = prefixedTranslation('TextEditor');
 
 export const list = {
   create(editor: Editor, ordered: boolean) {

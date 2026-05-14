@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjection } from '../project';
-import { LayerAuthentication } from '../project/layer/LayerAuthentication';
-import { I18nText } from '../lang';
+import type { AbcProjection } from '../project/index.js';
+import type { LayerAuthentication } from '../project/layer/LayerAuthentication.js';
+import type { I18nText } from '../lang/index.js';
 
 export interface WmsDefinitionManifest {
   version: string;

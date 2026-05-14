@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FromV120ToV130 should migrate 1`] = `
-Object {
-  "layers": Array [
-    Object {
-      "metadata": Object {
+exports[`FromV120ToV130 > should migrate 1`] = `
+{
+  "layers": [
+    {
+      "metadata": {
         "active": false,
-        "attributions": Array [
-          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        "attributions": [
+          "&#169; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.",
         ],
         "id": "c323b4db-7c1e-4007-ac3c-909d9cfc42bc",
         "model": "OSM",
@@ -18,12 +18,12 @@ Object {
       },
       "type": "Predefined",
     },
-    Object {
-      "features": Object {
-        "features": Array [],
+    {
+      "features": {
+        "features": [],
         "type": "FeatureCollection",
       },
-      "metadata": Object {
+      "metadata": {
         "active": false,
         "id": "c6d662e6-2958-4b3d-91bb-f2cd24c5f65a",
         "name": "Géométries",
@@ -33,10 +33,10 @@ Object {
       },
       "type": "Vector",
     },
-    Object {
-      "metadata": Object {
+    {
+      "metadata": {
         "active": false,
-        "attributions": Array [
+        "attributions": [
           "Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL.",
         ],
         "id": "b11acf7f-0d1a-473e-b9d3-42bd7f31135e",
@@ -48,19 +48,19 @@ Object {
       },
       "type": "Xyz",
     },
-    Object {
-      "features": Object {
-        "features": Array [
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+    {
+      "features": {
+        "features": [
+          {
+            "geometry": {
+              "coordinates": [
                 563668.6058644486,
                 8543859.921068361,
               ],
               "type": "Point",
             },
             "id": "8sCeHRwfOt",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(65,8,8,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -68,16 +68,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 595388.6058644486,
                 8455409.921068361,
               ],
               "type": "Point",
             },
             "id": "NGEZiopFDG",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(65,8,8,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -85,16 +85,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 580138.6058644486,
                 8362079.921068361,
               ],
               "type": "Point",
             },
             "id": "ZsCMAjpCjm",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": true,
               "abc:style:point:color": "rgba(65,8,8,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -105,7 +105,7 @@ Object {
         ],
         "type": "FeatureCollection",
       },
-      "metadata": Object {
+      "metadata": {
         "active": true,
         "id": "1f8c1da4-807e-4e39-816e-cf2b34d42ef7",
         "name": "Géométries",
@@ -116,30 +116,30 @@ Object {
       "type": "Vector",
     },
   ],
-  "layouts": Object {
+  "layouts": {
     "abcMapAttributionsEnabled": true,
-    "list": Array [],
+    "list": [],
   },
-  "metadata": Object {
+  "metadata": {
     "id": "663f65ee-6d9c-4ca5-9235-19cee829ced7",
     "name": "Projet du 06/05/2023",
     "public": false,
     "version": "1.3.0",
   },
-  "sharedViews": Object {
+  "sharedViews": {
     "fullscreen": false,
-    "list": Array [],
-    "mapDimensions": Object {
+    "list": [],
+    "mapDimensions": {
       "height": 568,
       "width": 1152,
     },
   },
-  "view": Object {
-    "center": Array [
+  "view": {
+    "center": [
       654558.605864449,
       8399737.889818361,
     ],
-    "projection": Object {
+    "projection": {
       "name": "EPSG:3857",
     },
     "resolution": 610,

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,13 +15,17 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { act, screen, waitFor } from '@testing-library/react';
+import type { ModalEvent } from '../../core/ui/typings';
+import { ModalEventType } from '../../core/ui/typings';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import userEvent from '@testing-library/user-event';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import { RegistrationModal } from './RegistrationModal';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('RegistrationModal', () => {
   let services: TestServices;
@@ -31,7 +35,9 @@ describe('RegistrationModal', () => {
   });
 
   it('should become visible', async () => {
-    abcRender(<RegistrationModal />, { services });
+    await act(async () => {
+      abcRender(<RegistrationModal />, { services });
+    });
 
     await openModal();
 
@@ -40,15 +46,16 @@ describe('RegistrationModal', () => {
 
   it('should have disabled button if form is invalid', async () => {
     // Prepare
-    abcRender(<RegistrationModal />, { services });
+    await act(async () => {
+      abcRender(<RegistrationModal />, { services });
+    });
+
     await openModal();
 
     // Act
-    await act(async () => {
-      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
-    });
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
 
     // Assert
     expect(screen.getByTestId('submit-registration')).toBeDisabled();
@@ -56,19 +63,20 @@ describe('RegistrationModal', () => {
 
   it('should register on submit then show confirm button', async () => {
     // Prepare
-    abcRender(<RegistrationModal />, { services });
+    await act(async () => {
+      abcRender(<RegistrationModal />, { services });
+    });
+
     await openModal();
 
-    await act(async () => {
-      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
-    });
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     services.authentication.registration.resolves();
 
     // Act
-    screen.getByTestId('submit-registration').click();
+    await userEvent.click(screen.getByTestId('submit-registration'));
 
     // Assert
     expect(services.authentication.registration.args).toEqual([['heyhey@hey.com', 'azerty1234']]);
@@ -79,21 +87,21 @@ describe('RegistrationModal', () => {
 
   it('should not keep state after cancel', async () => {
     // Prepare
-    abcRender(<RegistrationModal />, { services });
+    await act(async () => {
+      abcRender(<RegistrationModal />, { services });
+    });
+
     await openModal();
 
-    await act(async () => {
-      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
-    });
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     services.authentication.registration.resolves();
 
     // Act
-    await act(() => {
-      screen.getByTestId('cancel-registration').click();
-    });
+    await userEvent.click(screen.getByTestId('cancel-registration'));
+
     await openModal();
 
     // Assert
@@ -104,22 +112,21 @@ describe('RegistrationModal', () => {
 
   it('should not keep state after confirm', async () => {
     // Prepare
-    abcRender(<RegistrationModal />, { services });
+    await act(async () => {
+      abcRender(<RegistrationModal />, { services });
+    });
+
     await openModal();
 
-    await act(async () => {
-      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
-    });
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     services.authentication.registration.resolves();
 
     // Act
-    await act(async () => {
-      screen.getByTestId('submit-registration').click();
-      await TestHelper.wait(10); // Wait internal promise
-    });
+    await userEvent.click(screen.getByTestId('submit-registration'));
+    await TestHelper.wait(10); // Wait internal promise
 
     await openModal();
 
@@ -130,7 +137,7 @@ describe('RegistrationModal', () => {
   });
 
   async function openModal() {
-    await act(() => {
+    await act(async () => {
       const ev: ModalEvent = { type: ModalEventType.ShowRegistration };
       services.modals.addListener.args[0][1](ev);
     });

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,12 +18,13 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventType, ModalStatus, ShowEditPropertiesModal } from '../../core/ui/typings';
-import { DataPropertiesMap } from '../../core/geo/features/FeatureWrapper';
+import type { ShowEditPropertiesModal } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
+import type { DataPropertiesMap } from '../../core/geo/features/FeatureWrapper';
 import { PropertiesForm } from './PropertiesForm';
 import { useTranslation } from 'react-i18next';
 import { useServices } from '../../core/useServices';
-import { Property } from './Property';
+import type { Property } from './Property';
 import { nanoid } from 'nanoid';
 import { Logger } from '@abc-map/shared';
 import { isValidDataField } from '../../core/geo/features/isValidDataField';
@@ -34,7 +35,7 @@ import { IconDefs } from '../icon/IconDefs';
 export const logger = Logger.get('EditPropertiesModal.tsx');
 
 export function EditPropertiesModal() {
-  const { modals } = useServices();
+  const { modals, toasts } = useServices();
   const { t } = useTranslation('EditPropertiesModal');
   const [visible, setVisible] = useState(false);
   const [properties, setProperties] = useState<Property[]>([]);
@@ -80,12 +81,17 @@ export function EditPropertiesModal() {
   const handleConfirm = useCallback(() => {
     const result: DataPropertiesMap = {};
     for (const property of properties) {
-      const name = property.name.trim();
-      if (!name) {
+      const propertyName = property.name.trim();
+      if (!propertyName) {
         continue;
       }
 
-      result[property.name.trim()] = normalizeValue(property.value);
+      if (propertyName === 'geometry') {
+        toasts.error('You can not use "geometry", it is a reserved name');
+        return;
+      }
+
+      result[propertyName] = normalizeValue(property.value);
     }
 
     modals.dispatch({
@@ -95,7 +101,7 @@ export function EditPropertiesModal() {
     });
 
     setVisible(false);
-  }, [modals, properties]);
+  }, [modals, properties, toasts]);
 
   useEffect(() => {
     modals.addListener(ModalEventType.ShowEditProperties, handleOpen);
@@ -109,7 +115,7 @@ export function EditPropertiesModal() {
   return (
     <Modal show={visible} onHide={handleCancel} size={'lg'} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{t('Properties')}</Modal.Title>
+        <Modal.Title>{t('Editable_properties')}</Modal.Title>
       </Modal.Header>
       <Modal.Body className={'d-flex flex-column'}>
         {/* Properties edition */}

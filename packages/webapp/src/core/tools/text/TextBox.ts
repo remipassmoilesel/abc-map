@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -42,7 +42,7 @@ export class TextBox {
     this.backdrop.style.bottom = '0';
     this.backdrop.addEventListener('click', () => {
       this.hide();
-      this.onCancel && this.onCancel();
+      if (this.onCancel) this.onCancel();
     });
 
     this.inputBox.style.display = 'flex';
@@ -67,7 +67,7 @@ export class TextBox {
     button.dataset['testid'] = 'validate';
     button.addEventListener('click', () => {
       this.hide();
-      this.onValidation && this.onValidation(textarea.value);
+      if (this.onValidation) this.onValidation(textarea.value);
     });
 
     this.inputBox.append(textarea);
@@ -81,14 +81,14 @@ export class TextBox {
   }
 
   private hide(): void {
-    this.backdrop && document.body.removeChild(this.backdrop);
-    this.inputBox && document.body.removeChild(this.inputBox);
+    if (this.backdrop) document.body.removeChild(this.backdrop);
+    if (this.inputBox) document.body.removeChild(this.inputBox);
   }
 
   public dispose(): void {
     try {
       this.hide();
-      this.onCancel && this.onCancel();
+      if (this.onCancel) this.onCancel();
     } catch (err) {
       logger.error('Text box dispose error: ', err);
     }

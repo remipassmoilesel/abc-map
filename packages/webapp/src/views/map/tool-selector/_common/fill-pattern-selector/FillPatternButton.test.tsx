@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,14 @@
  */
 
 import { abcRender } from '../../../../../core/utils/test/abcRender';
-import FillPatternButton, { Props } from './FillPatternButton';
-import sinon, { SinonStub, SinonStubbedInstance } from 'sinon';
+import type { Props } from './FillPatternButton';
+import FillPatternButton from './FillPatternButton';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { FillPatterns } from '@abc-map/shared';
 import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
 import { render } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FillPatternButton', () => {
   let factory: SinonStubbedInstance<FillPatternFactory>;

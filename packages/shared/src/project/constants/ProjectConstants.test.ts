@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectConstants } from './ProjectConstants';
+import { ProjectConstants } from './ProjectConstants.js';
 import semver from 'semver';
+import { describe, expect, it } from 'vitest';
 
 describe('ProjectConstants', () => {
   it('version should be valid', () => {

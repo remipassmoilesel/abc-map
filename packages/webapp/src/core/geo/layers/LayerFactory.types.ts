@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjection, BasicAuthentication } from '@abc-map/shared';
-import { Options as WmtsSourceOptions } from 'ol/source/WMTS';
+import type { AbcProjection, BasicAuthentication } from '@abc-map/shared';
+import type { Options as WmtsSourceOptions } from 'ol/source/WMTS';
 
 export interface WmsSettings {
   capabilitiesUrl?: string;

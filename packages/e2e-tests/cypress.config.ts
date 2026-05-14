@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,8 +19,7 @@
 import { defineConfig } from 'cypress';
 import { BrowserConfig } from './src/plugins/BrowserConfig';
 import { PngComparison } from './src/plugins/PngComparison';
-import { DebugOutput } from './src/plugins/DebugOutput';
-import * as path from 'path';
+import path from 'path';
 
 const baseUrl = process.env.ABC_CYPRESS_BASE_URL || 'http://localhost:3005';
 
@@ -29,23 +28,24 @@ export default defineConfig({
   watchForFileChanges: false,
   // We do not keep tests in memory in order to reduce the use of resources and make the tests more reliable
   numTestsKeptInMemory: 0,
-  screenshotsFolder: path.resolve(__dirname, 'screenshots'),
-  downloadsFolder: path.resolve(__dirname, 'downloads'),
-  videosFolder: path.resolve(__dirname, 'videos'),
+  screenshotsFolder: path.resolve(import.meta.dirname, 'screenshots'),
+  downloadsFolder: path.resolve(import.meta.dirname, 'downloads'),
+  videosFolder: path.resolve(import.meta.dirname, 'videos'),
   e2e: {
     setupNodeEvents(on, config) {
       BrowserConfig.setupNodeEvents(on);
       PngComparison.setupNodeEvents(on);
-      DebugOutput.setupNodeEvents(on);
     },
     baseUrl,
     specPattern: 'src/integration/**/*.cy.{js,jsx,ts,tsx}',
-    supportFile: 'src/support/index.js',
+    supportFile: 'src/support/index.ts',
   },
   retries: {
     openMode: 0,
-    runMode: 3,
+    runMode: 2,
   },
   pageLoadTimeout: 15_000,
   defaultCommandTimeout: 6_000,
+  allowCypressEnv: false,
+  experimentalRunAllSpecs: true,
 });

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -24,11 +24,13 @@
  * This script copy build result to server directory.
  */
 
-const { execSync } = require('child_process');
-const path = require('path');
+import { execSync } from 'child_process';
+import path from 'path';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const sourceDir = path.resolve(`${__dirname}/../build`);
-const targetDir = path.resolve(`${__dirname}/../../server/public/user-documentation`);
+const sourceDir = path.resolve(`${import.meta.dirname}/../build`);
+const targetDir = path.resolve(`${import.meta.dirname}/../../server/public/user-documentation`);
 
 console.info(`Copying documentation to ${targetDir}`);
 

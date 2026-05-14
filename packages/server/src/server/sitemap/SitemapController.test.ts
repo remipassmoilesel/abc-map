@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,19 +20,21 @@
  */
 
 import { XMLParser } from 'fast-xml-parser';
-import * as _ from 'lodash';
-import { assert, expect } from 'chai';
-import { Config } from '../../config/Config';
-import { Services, servicesFactory } from '../../services/services';
-import { HttpServer } from '../HttpServer';
-import { ConfigLoader } from '../../config/ConfigLoader';
+import _ from 'lodash';
+import { assert, expect } from 'vitest';
+import type { Config } from '../../config/Config.js';
+import type { Services } from '../../services/services.js';
+import { servicesFactory } from '../../services/services.js';
+import { HttpServer } from '../HttpServer.js';
+import { ConfigLoader } from '../../config/ConfigLoader.js';
+import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 
 describe('SitemapController', () => {
   let config: Config;
   let services: Services;
   let server: HttpServer;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
@@ -51,7 +53,7 @@ describe('SitemapController', () => {
     await server.initialize();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await services.shutdown();
     await server.shutdown();
   });

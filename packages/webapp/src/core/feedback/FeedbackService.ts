@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
 import { FeedbackRoutes as Api } from '../http/ApiRoutes';
-import { AbcTextFeedback, AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
-import { DateTime } from 'luxon';
-import { ToastService } from '../ui/ToastService';
+import type { AbcTextFeedback, AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
+import type { DateTime } from 'luxon';
+import type { ToastService } from '../ui/ToastService';
 import { getLang } from '../../i18n/i18n';
 import { ApiClient } from '../http/http-clients';
 
@@ -29,7 +29,10 @@ export class FeedbackService {
     return new FeedbackService(ApiClient(), toasts);
   }
 
-  constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
+  constructor(
+    private httpClient: AxiosInstance,
+    private toasts: ToastService,
+  ) {}
 
   public textFeedback(text: string): Promise<void> {
     const data: AbcTextFeedback = { text, lang: getLang() };

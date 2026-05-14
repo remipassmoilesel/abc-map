@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  */
 
 import Cls from './Search.module.scss';
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { NominatimResult } from '../../../core/geo/NominatimResult';
+import type { NominatimResult } from '../../../core/geo/NominatimResult';
 import ResultItem from './result/ResultItem';
-import { Extent } from 'ol/extent';
-import { prefixedTranslation } from '../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import type { Extent } from 'ol/extent';
+import { useTranslation, withTranslation } from 'react-i18next';
 import debounce from 'lodash/debounce';
 import { useServices } from '../../../core/useServices';
 import { resolveInAtLeast } from '../../../core/utils/resolveInAtLeast';
@@ -37,9 +37,8 @@ export interface State {
   loading: boolean;
 }
 
-const t = prefixedTranslation('MapView:');
-
 function Search() {
+  const { t } = useTranslation('MapView');
   const { geo } = useServices();
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -60,7 +59,7 @@ function Search() {
           .catch((err) => logger.error('Error while geocoding: ', err))
           .finally(() => setLoading(false));
       }, 500),
-    [geo]
+    [geo],
   );
 
   const handleQueryChanged = useCallback(
@@ -74,7 +73,7 @@ function Search() {
         search(query);
       }
     },
-    [search]
+    [search],
   );
 
   const handleResultSelected = useCallback(
@@ -83,7 +82,7 @@ function Search() {
       const extent: Extent = [bbox[2], bbox[0], bbox[3], bbox[1]];
       geo.getMainMap().moveViewToExtent(extent);
     },
-    [geo]
+    [geo],
   );
 
   return (

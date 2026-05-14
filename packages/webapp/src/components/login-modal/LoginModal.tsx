@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import type { InputEvent, KeyboardEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Logger, UserStatus } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
@@ -122,21 +123,21 @@ function LoginModal() {
   }, [authentication, email, modals, password, t, toasts, validateForm]);
 
   const handleEmailChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const email = ev.target.value;
+    (ev: InputEvent<HTMLInputElement>) => {
+      const email = (ev.target as HTMLInputElement).value;
       setEmail(email);
       setFormState(validateForm(email, password));
     },
-    [password, validateForm]
+    [password, validateForm],
   );
 
   const handlePasswordChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const password = ev.target.value;
+    (ev: InputEvent<HTMLInputElement>) => {
+      const password = (ev.target as HTMLInputElement).value;
       setPassword(password);
       setFormState(validateForm(email, password));
     },
-    [email, validateForm]
+    [email, validateForm],
   );
 
   const handleKeyUp = useCallback(
@@ -145,7 +146,7 @@ function LoginModal() {
         handleSubmit();
       }
     },
-    [handleSubmit]
+    [handleSubmit],
   );
 
   if (!visible) {

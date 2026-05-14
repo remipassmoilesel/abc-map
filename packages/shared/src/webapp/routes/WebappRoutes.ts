@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,18 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Params, Route } from './Route';
-import { Language } from '../../lang';
+import type { Params } from './Route.js';
+import { Route } from './Route.js';
+import type { Language } from '../../lang/index.js';
 
 export class WebappRoutes {
   constructor(private lang: Language | (() => Language)) {}
 
   public landing() {
-    return new Route<EmptyParams>('/:lang', this.lang);
+    return new Route('/:lang', this.lang);
   }
 
   public map() {
-    return new Route<EmptyParams>('/:lang/map', this.lang);
+    return new Route('/:lang/map', this.lang);
   }
 
   public sharedMap() {
@@ -36,32 +37,32 @@ export class WebappRoutes {
 
   public confirmAccount() {
     // See ConfirmAccountTokenParam
-    return new Route<EmptyParams>('/:lang/confirm-account', this.lang);
+    return new Route('/:lang/confirm-account', this.lang);
   }
 
   public resetPassword() {
     // See ResetPasswordTokenParam
-    return new Route<EmptyParams>('/:lang/reset-password', this.lang);
+    return new Route('/:lang/reset-password', this.lang);
   }
 
   public userAccount() {
-    return new Route<EmptyParams>('/:lang/user-profile', this.lang);
+    return new Route('/:lang/user-profile', this.lang);
   }
 
   public legalMentions() {
-    return new Route<EmptyParams>('/:lang/legal-mentions', this.lang);
+    return new Route('/:lang/legal-mentions', this.lang);
   }
 
   public funding() {
-    return new Route<EmptyParams>('/:lang/funding', this.lang);
+    return new Route('/:lang/funding', this.lang);
   }
 
   public changelog() {
-    return new Route<EmptyParams>('/:lang/changelog', this.lang);
+    return new Route('/:lang/changelog', this.lang);
   }
 
   public moduleIndex() {
-    return new Route<EmptyParams>('/:lang/modules', this.lang);
+    return new Route('/:lang/modules', this.lang);
   }
 
   public module() {
@@ -69,7 +70,7 @@ export class WebappRoutes {
   }
 
   public staticDocumentation() {
-    return new Route<EmptyParams>('/documentation', this.lang);
+    return new Route('/documentation', this.lang);
   }
 
   public getMainRoutes(): Route<any>[] {
@@ -87,8 +88,6 @@ export class WebappRoutes {
     ];
   }
 }
-
-declare type EmptyParams = {};
 
 export interface PasswordLostParams extends Params {
   token?: string;

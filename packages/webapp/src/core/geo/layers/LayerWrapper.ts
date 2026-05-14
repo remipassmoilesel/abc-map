@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,49 +17,54 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import {
+import type {
   AbcLayer,
   AbcProjection,
   BaseMetadata,
   LayerMetadata,
+  PredefinedLayerModel,
+  PredefinedMetadata,
+  VectorMetadata,
+  WmsMetadata,
+  WmtsMetadata,
+  XyzMetadata,
+} from '@abc-map/shared';
+import {
   LayerProperties,
   LayerType,
   Logger,
   normalizedProjectionName,
-  PredefinedLayerModel,
   PredefinedLayerProperties,
-  PredefinedMetadata,
-  VectorMetadata,
   WmsLayerProperties,
-  WmsMetadata,
   WmtsLayerProperties,
-  WmtsMetadata,
   XyzLayerProperties,
-  XyzMetadata,
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { GeoJSON } from 'ol/format';
-import BaseLayer from 'ol/layer/Base';
-import TileSource from 'ol/source/Tile';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
+import type BaseLayer from 'ol/layer/Base';
+import type TileSource from 'ol/source/Tile';
+import type VectorSource from 'ol/source/Vector';
+import type Geometry from 'ol/geom/Geometry';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { Source, TileWMS, WMTS, XYZ } from 'ol/source';
-import { Layer } from 'ol/layer';
-import LayerRenderer from 'ol/renderer/Layer';
+import type { Source, TileWMS, WMTS, XYZ } from 'ol/source';
+import type { Layer } from 'ol/layer';
+import type LayerRenderer from 'ol/renderer/Layer';
 import { styleFunction } from '../styles/style-function';
 import { stripHtml } from '../../utils/strings';
-import { DefaultStyleOptions, StyleFactoryOptions } from '../styles/StyleFactoryOptions';
-import { isTileLayer, isVectorImageLayer } from '../../utils/crossContextInstanceof';
+import type { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
+import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
+import { isTileLayer, isVectorImageLayer } from '../../utils/instanceof.ts';
 import { AttributionFormat } from '../AttributionFormat';
 import uniqBy from 'lodash/uniqBy';
+import type Feature from 'ol/Feature';
 
 export const logger = Logger.get('LayerWrapper');
 
-export type OlLayers = Layer<Source, LayerRenderer<any>> | VectorImageLayer<VectorSource<Geometry>> | TileLayer<TileSource>;
-export type OlSources = Source | VectorSource<Geometry> | TileSource | TileWMS | WMTS;
+export type DefaultVectorSource = VectorSource<Feature<Geometry>>;
+export type OlLayers = Layer<Source, LayerRenderer<any>> | VectorImageLayer<DefaultVectorSource> | TileLayer<TileSource>;
+export type OlSources = Source | DefaultVectorSource | TileSource | TileWMS | WMTS;
 
-export type VectorLayerWrapper = LayerWrapper<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>;
+export type VectorLayerWrapper = LayerWrapper<VectorImageLayer<DefaultVectorSource>, DefaultVectorSource, VectorMetadata>;
 export type PredefinedLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileSource, PredefinedMetadata>;
 export type WmsLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileWMS, WmsMetadata>;
 export type WmtsLayerWrapper = LayerWrapper<TileLayer<TileSource>, WMTS, WmtsMetadata>;
@@ -183,7 +188,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   public shallowClone(_options?: Partial<StyleFactoryOptions>): LayerWrapper<Layer, Source, Meta> {
     const options: StyleFactoryOptions = { ...DefaultStyleOptions, ..._options };
 
-    let layer: TileLayer<TileSource> | VectorImageLayer<VectorSource<Geometry>>;
+    let layer: TileLayer<TileSource> | VectorImageLayer<DefaultVectorSource>;
     if (this.isPredefined()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
     } else if (this.isWms()) {
@@ -193,7 +198,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     } else if (this.isXyz()) {
       layer = new TileLayer({ source: this.layer.getSource() as XYZ });
     } else if (this.isVector()) {
-      layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry>, style: (f) => styleFunction(options, f) });
+      layer = new VectorImageLayer({ source: this.layer.getSource() as DefaultVectorSource, style: (f) => styleFunction(options, f) });
       layer.set(LayerProperties.StyleOptions, options);
     } else {
       throw new Error(`Cannot clone layer, type is not supported: ${this.getType()}`);
@@ -453,7 +458,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
         return Promise.reject(new Error('Invalid vector layer'));
       }
       const geoJson = new GeoJSON();
-      const source = this.getSource() as VectorSource<Geometry>;
+      const source = this.getSource() as DefaultVectorSource;
       const features = geoJson.writeFeaturesObject(source.getFeatures());
       return {
         type: LayerType.Vector,

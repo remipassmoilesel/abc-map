@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { ProjectService } from '../../../project/ProjectService';
-import { AbcSharedView } from '@abc-map/shared';
+import type { ProjectService } from '../../../project/ProjectService';
+import type { AbcSharedView } from '@abc-map/shared';
 import { getServices } from '../../../Services';
 
 interface RemoveViewOperation {
@@ -36,7 +36,10 @@ export class RemoveSharedViewsChangeset extends Changeset {
 
   private operations: RemoveViewOperation[];
 
-  constructor(private project: ProjectService, operations: RemoveViewOperation[]) {
+  constructor(
+    private project: ProjectService,
+    operations: RemoveViewOperation[],
+  ) {
     super();
     if (!operations.length) {
       throw new Error('Operation list cannot be empty');

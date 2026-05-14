@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ import flow from 'lodash/flow';
 import flatMap from 'lodash/flatMap';
 import uniqBy from 'lodash/uniqBy';
 import sortBy from 'lodash/sortBy';
-import { DataRow } from './data-source/DataSource';
+import type { DataRow } from './data-source/DataSource';
 
 export function getFieldNames(row: DataRow): string[] {
   return Object.keys(row.data);
@@ -31,7 +31,7 @@ export function getAllFieldNames(rows: DataRow[]): string[] {
     (rows: DataRow[]) => rows.map(getFieldNames),
     (names) => flatMap(names),
     (names) => uniqBy(names, (n) => n),
-    (rows) => sortBy(rows)
+    (rows) => sortBy(rows),
   )(rows);
 }
 

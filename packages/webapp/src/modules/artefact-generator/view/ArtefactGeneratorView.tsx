@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,12 +18,14 @@
 
 import Cls from './ArtefactGeneratorView.module.scss';
 import { withTranslation } from 'react-i18next';
-import { ExportProgress, Parameters, ProgressHandler } from '../typings';
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import type { ExportProgress, Parameters, ProgressHandler } from '../typings';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useState } from 'react';
 import clsx from 'clsx';
 import { I18nInput } from './I18nInput';
 import { useServices } from '../../../core/useServices';
-import { I18nText, Logger, LayerType, AbcView, errorMessage } from '@abc-map/shared';
+import type { I18nText, AbcView } from '@abc-map/shared';
+import { Logger, LayerType, errorMessage } from '@abc-map/shared';
 import { ModuleContainer } from '../../../components/module-container/ModuleContainer';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 
@@ -50,7 +52,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleXyzChange = useCallback(
@@ -59,7 +61,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleWmsChange = useCallback(
@@ -68,7 +70,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleWmtsChange = useCallback(
@@ -77,7 +79,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleUsernameChanged = useCallback(
@@ -93,7 +95,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handlePasswordChanged = useCallback(
@@ -109,7 +111,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleProviderChange = useCallback(
@@ -118,7 +120,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleLicenseChange = useCallback(
@@ -127,7 +129,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleAttributionsChange = useCallback(
@@ -136,7 +138,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleNameChange = useCallback(
@@ -145,7 +147,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleDescriptionChange = useCallback(
@@ -154,7 +156,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleKeywordChange = useCallback(
@@ -163,7 +165,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleLinkChange = useCallback(
@@ -172,7 +174,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handlePreviewsChange = useCallback(
@@ -181,7 +183,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleViewsChange = useCallback(
@@ -204,7 +206,7 @@ function ArtefactGeneratorView(props: Props) {
         setParseError(errorMessage(err));
       }
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleOffsetChange = useCallback(
@@ -213,7 +215,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleLimitChange = useCallback(
@@ -222,7 +224,7 @@ function ArtefactGeneratorView(props: Props) {
       setParameters(updatedParams);
       onChange(updatedParams);
     },
-    [onChange, parameters]
+    [onChange, parameters],
   );
 
   const handleProcess = useCallback(() => {

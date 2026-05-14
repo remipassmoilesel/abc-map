@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Dailymotion should return integration for long url 1`] = `
+exports[`Dailymotion > should return integration for long url 1`] = `
 <div>
   <div>
     <iframe
@@ -13,7 +13,7 @@ exports[`Dailymotion should return integration for long url 1`] = `
 </div>
 `;
 
-exports[`Dailymotion should return integration for small url 1`] = `
+exports[`Dailymotion > should return integration for small url 1`] = `
 <div>
   <div>
     <iframe

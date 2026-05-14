@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback } from 'react';
 import { Logger } from '@abc-map/shared';
-import { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { useTranslation } from 'react-i18next';
 import { useMapLayers } from '../../core/geo/useMapLayers';
 import clsx from 'clsx';
@@ -78,7 +79,7 @@ export function LayerSelector(props: Props) {
 
       onSelected(layer, layer.isVector() ? layer : undefined);
     },
-    [layers, onSelected]
+    [layers, onSelected],
   );
 
   const toDisplay = onlyVector ? layers.filter((layer) => layer.isVector()) : layers;

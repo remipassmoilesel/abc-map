@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as sinon from 'sinon';
-import { SinonStub, SinonStubbedInstance } from 'sinon';
-import axios, { AxiosInstance } from 'axios';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
+import type { AxiosInstance } from 'axios';
+import axios from 'axios';
 import ImageTile from 'ol/ImageTile';
-import { LoadFunction } from 'ol/Tile';
+import type { LoadFunction } from 'ol/Tile';
 import VectorTile from 'ol/VectorTile';
 import TileState from 'ol/TileState';
 import { waitFor } from '@testing-library/react';
@@ -28,11 +29,12 @@ import { logger, tileLoadingAuthenticated } from './tileLoadingAuthenticated';
 import { TileStorage } from '../../storage/indexed-db/tiles/TileIDBStorage';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { disableTileImageLogging } from './setTileImage';
-import MockedFn = jest.MockedFn;
 import { CURRENT_VERSION } from '../../storage/indexed-db/tiles/TileIDBEntry';
+import type { Mock } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-jest.mock('axios');
-jest.mock('../../storage/indexed-db/tiles/TileIDBStorage');
+vi.mock('axios');
+vi.mock('../../storage/indexed-db/tiles/TileIDBStorage');
 
 logger.disable();
 disableTileImageLogging();
@@ -47,10 +49,10 @@ describe('tileLoadingAuthenticated', () => {
   beforeEach(() => {
     httpGetStub = sinon.stub();
     const fakeClient = { get: httpGetStub } as unknown as AxiosInstance;
-    (axios.create as MockedFn<any>).mockImplementation(() => fakeClient);
+    (axios.create as Mock<any>).mockImplementation(() => fakeClient);
 
     storage = sinon.createStubInstance(TileStorage);
-    (TileStorage.get as MockedFn<any>).mockImplementation(() => storage);
+    (TileStorage.get as Mock<any>).mockImplementation(() => storage);
 
     tileStub = sinon.createStubInstance(ImageTile);
     const tileImage = document.createElement('img');

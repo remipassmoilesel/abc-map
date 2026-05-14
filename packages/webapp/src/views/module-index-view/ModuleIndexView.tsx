@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,86 +17,56 @@
  */
 
 import Cls from './ModuleIndexView.module.scss';
-import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import type { InputEvent, KeyboardEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ModuleCard } from './module-card/ModuleCard';
 import clsx from 'clsx';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEssentialModules, useFavoriteModules, useLastModulesUsed, useModuleRegistry } from '../../core/modules/hooks';
 import { Routes } from '../../routes';
-import { Module } from '@abc-map/module-api';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
-import { UiActions } from '../../core/store/ui/actions';
-import { useAppDispatch } from '../../core/store/hooks';
-import { AddModuleModal } from './add-module-modal/AddModuleModal';
+import { UiActions } from '../../store/ui/actions';
+import { useAppDispatch } from '../../store/hooks';
 import { useTranslation } from 'react-i18next';
-import { useSearchParamsModuleUrls } from './hooks';
+import { useServices } from '../../core/useServices.ts';
+import type { AbcModule } from '../../modules/AbcModule.ts';
 
 export default function ModuleIndexView() {
-  const { search } = useLocation();
   const registry = useModuleRegistry();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation('ModuleIndexView');
+  const { toasts } = useServices();
 
   useEffect(() => registry.updateSearchIndex(), [registry, i18n.language]);
 
   const [query, setQuery] = useState('');
 
-  const [addModuleModal, setAddModuleModal] = useState(false);
-  const showAddModuleModal = useCallback(() => setAddModuleModal(true), []);
-  const hideAddModuleModal = useCallback(() => {
-    setAddModuleModal(false);
-    // When we hide modal, we reset eventual module urls in search parameters
-    navigate({ pathname: Routes.moduleIndex().format(), search: '' });
-  }, [navigate]);
-
-  const searchParamsUrls = useSearchParamsModuleUrls();
-
-  // Grab remote URLs from query string at init. Used for "Open in Abc-Map" button on module template.
-  useEffect(() => {
-    if (searchParamsUrls.length && !addModuleModal) {
-      showAddModuleModal();
-    }
-  }, [addModuleModal, searchParamsUrls, showAddModuleModal]);
-
   // Handle user searches
-  const handleQueryChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const newQuery = ev.target.value;
-      setQuery(newQuery);
-      navigate({ pathname: Routes.moduleIndex().format(), search: '?q=' + newQuery });
-    },
-    [navigate]
-  );
-
-  // Update search query when query parameters changes
-  useEffect(() => {
-    const params = new URLSearchParams(search);
-    const newQuery = params.get('q');
-    newQuery && newQuery !== query && setQuery(newQuery);
-  }, [query, search]);
+  const handleQueryChange = useCallback((ev: InputEvent<HTMLInputElement>) => {
+    const newQuery = (ev.target as HTMLInputElement).value;
+    setQuery(newQuery);
+  }, []);
 
   const searchResults = useMemo(() => registry.search(query), [query, registry]);
 
   const handleKeyUp = useCallback(
     (ev: KeyboardEvent<HTMLInputElement>) => {
       if (ev.key === 'Enter' && searchResults.length === 1) {
-        navigate(Routes.module().withParams({ moduleId: searchResults[0].getId() }));
+        navigate(Routes.module().withParams({ moduleId: searchResults[0].getId() }))?.catch((err) => toasts.genericError(err));
       }
     },
-    [navigate, searchResults]
+    [navigate, searchResults, toasts],
   );
 
   const handleShowModule = useCallback(
-    (mod: Module) => {
-      navigate({ pathname: Routes.module().withParams({ moduleId: mod.getId() }) });
+    (mod: AbcModule) => {
+      navigate({ pathname: Routes.module().withParams({ moduleId: mod.getId() }) })?.catch((err) => toasts.genericError(err));
       setQuery('');
     },
-    [navigate]
+    [navigate, toasts],
   );
-
-  const handleRemoveModule = useCallback((mod: Module) => registry.unload(mod), [registry]);
 
   const essentialModules = useEssentialModules();
   const essentialModulesList = (
@@ -104,7 +74,7 @@ export default function ModuleIndexView() {
       <h2>{t('Essential_modules')}</h2>
       <div className={'d-flex flex-wrap mb-4'}>
         {essentialModules.map((module) => (
-          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} onRemove={handleRemoveModule} className={'mr-4 mb-4'} />
+          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} className={'mr-4 mb-4'} />
         ))}
       </div>
     </>
@@ -116,7 +86,7 @@ export default function ModuleIndexView() {
       <h2>{t('All_modules')}</h2>
       <div className={'d-flex flex-wrap mb-4'}>
         {allModules.map((module) => (
-          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} onRemove={handleRemoveModule} className={'mr-4 mb-4'} />
+          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} className={'mr-4 mb-4'} />
         ))}
       </div>
     </>
@@ -128,27 +98,7 @@ export default function ModuleIndexView() {
       <h2>{t('Last_modules_used')}</h2>
       <div className={'d-flex flex-wrap mb-4'}>
         {lastModulesUsed.map((module) => (
-          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} onRemove={handleRemoveModule} className={'mr-4 mb-4'} />
-        ))}
-      </div>
-    </>
-  );
-
-  const handleRemoveRemoteModules = useCallback(() => registry.resetModules(), [registry]);
-
-  const remoteModules = registry.getRemoteModules();
-  const remoteModulesList = (
-    <>
-      <div className={'d-flex justify-content-start align-items-center'}>
-        <h2 className={'mr-5'}>{t('Recently_loaded')}</h2>
-
-        <button onClick={handleRemoveRemoteModules} className={'btn btn-outline-primary'}>
-          <FaIcon icon={IconDefs.faBan} className={'mr-2'} /> {t('Remove_all')}
-        </button>
-      </div>
-      <div className={'d-flex flex-wrap mb-4'}>
-        {remoteModules.map((module) => (
-          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} onRemove={handleRemoveModule} className={'mr-4 mb-4'} />
+          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} className={'mr-4 mb-4'} />
         ))}
       </div>
     </>
@@ -175,7 +125,7 @@ export default function ModuleIndexView() {
       </div>
       <div className={'d-flex flex-wrap mb-4'}>
         {favoriteModules.map((module) => (
-          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} onRemove={handleRemoveModule} className={'mr-4 mb-4'} />
+          <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} className={'mr-4 mb-4'} />
         ))}
 
         {!favoriteModules.length && <div>{t('Click_on_stars')}</div>}
@@ -199,10 +149,6 @@ export default function ModuleIndexView() {
       />
 
       <div className={'d-flex flex-wrap align-items-center flex-wrap mb-3'}>
-        <button onClick={showAddModuleModal} className={'btn btn-outline-primary me-2'} data-cy={'add-module-modal'}>
-          <FaIcon icon={IconDefs.faPlus} /> {t('Add_a_module')}
-        </button>
-
         <div className={'me-4'}>{restoreFavoritesButton}</div>
 
         <small>
@@ -217,7 +163,7 @@ export default function ModuleIndexView() {
           {!!searchResults.length && (
             <div className={'d-flex flex-wrap'}>
               {searchResults.map((module) => (
-                <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} onRemove={handleRemoveModule} className={'mr-4 mb-4'} />
+                <ModuleCard key={module.getId()} module={module} onOpen={handleShowModule} className={'mr-4 mb-4'} />
               ))}
             </div>
           )}
@@ -240,11 +186,8 @@ export default function ModuleIndexView() {
           {allModulesList}
           {!!lastModulesUsed.length && lastModulesUsedList}
           {favoriteModulesList}
-          {!!remoteModules.length && remoteModulesList}
         </div>
       )}
-
-      {addModuleModal && <AddModuleModal onHide={hideAddModuleModal} />}
     </div>
   );
 }

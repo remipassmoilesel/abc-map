@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 import { TestData } from './test-data/TestData';
 import { FromV120ToV130 } from './FromV120ToV130';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV120ToV130', () => {
   let migration: FromV120ToV130;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import { GeoService, logger as geoLogger } from './GeoService';
 import { logger as mapLogger } from './map/MapWrapper';
-import { AbcVectorLayer, FeatureStyle, LayerProperties, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared';
+import type { AbcVectorLayer, FeatureStyle, PredefinedMetadata } from '@abc-map/shared';
+import { LayerProperties, LayerType, PredefinedLayerModel } from '@abc-map/shared';
 import { TestHelper } from '../utils/test/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
@@ -26,19 +27,20 @@ import { httpApiClient, httpExternalClient } from '../http/http-clients';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './layers/LayerWrapper';
-import * as sinon from 'sinon';
-import { SinonStub, SinonStubbedInstance } from 'sinon';
+import type { VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './layers/LayerWrapper';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { ToastService } from '../ui/ToastService';
-import { storeFactory } from '../store/store';
+import { storeFactory } from '../../store/store';
 import { HttpClientStub } from '../utils/test/HttpClientStub';
-import { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
 import { get as getProjection } from 'ol/proj';
 import { FeatureWrapper } from './features/FeatureWrapper';
 import { Point } from 'ol/geom';
 import { UpdateStyleChangeset } from '../history/changesets/features/UpdateStyleChangeset';
 import { HistoryKey } from '../history/HistoryKey';
 import { GeoServiceErrors } from './GeoServiceErrors';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 geoLogger.disable();
 mapLogger.disable();
@@ -67,7 +69,7 @@ describe('GeoService', () => {
         history as unknown as HistoryService,
         storeFactory(),
         wmsParser,
-        wmtsParser
+        wmtsParser,
       );
 
       service.getMainMap().unwrap().getLayers().clear();

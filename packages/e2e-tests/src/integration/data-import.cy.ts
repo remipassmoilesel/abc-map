@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestData } from '../test-data/TestData';
-import { MainMap } from '../helpers/MainMap';
-import { TestHelper } from '../helpers/TestHelper';
-import { Routes } from '../helpers/Routes';
-import { FilePrompt } from '../helpers/FilePrompt';
+import { TestData } from '../test-data/TestData.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { Routes } from '../helpers/Routes.js';
+import { FilePrompt } from '../helpers/FilePrompt.js';
+import { LayerControls } from '../helpers/LayerControls.js';
+import { Toasts } from '../helpers/Toasts.js';
 
 describe('Data import', () => {
   beforeEach(() => {
@@ -36,6 +38,8 @@ describe('Data import', () => {
       .then(() => TestData.sampleGpx())
       .then((file) => FilePrompt.select('sample.gpx', file))
       .wait(1_000)
+      .then(() => Toasts.assertText('Import done !'))
+      .then(() => LayerControls.zoomOnActiveLayer())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);
@@ -77,6 +81,8 @@ describe('Data import', () => {
         return MainMap.getComponent().trigger('dragover').get('[data-cy=drag-overlay]').trigger('drop', { dataTransfer });
       })
       .wait(1_000)
+      .then(() => Toasts.assertText('Import done !'))
+      .then(() => LayerControls.zoomOnActiveLayer())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);

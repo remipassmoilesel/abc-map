@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,11 +19,10 @@
  *
  */
 
-import * as util from 'util';
-import * as path from 'path';
+import path from 'path';
 import { glob } from 'glob';
-import { ConfigLoader, LoadConfigFunc } from '../config/ConfigLoader';
-const globPromise = util.promisify(glob);
+import type { LoadConfigFunc } from '../config/ConfigLoader.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
 
 let instance: DocumentationIndex | undefined;
 
@@ -52,7 +51,7 @@ export class DocumentationIndex {
   private async listEntries(): Promise<string[]> {
     const { userDocumentationPath } = await this.config();
 
-    const absolutePaths = await globPromise(userDocumentationPath + '/**/*.html', { nocase: true });
+    const absolutePaths = await glob(userDocumentationPath + '/**/*.html', { nocase: true });
     return absolutePaths.map((absolutePath) => {
       return path.relative(userDocumentationPath, absolutePath);
     });

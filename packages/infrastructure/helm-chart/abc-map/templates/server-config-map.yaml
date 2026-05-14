@@ -5,5 +5,5 @@ metadata:
   labels:
     {{- include "abc-map.labels" . | nindent 4 }}
 data:
-  config.js: |
+  config.mjs: |
 {{ .Values.abcMap.config | indent 4 }}

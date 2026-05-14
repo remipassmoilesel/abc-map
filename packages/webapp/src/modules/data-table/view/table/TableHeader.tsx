@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Column, flexRender, Header, Table } from '@tanstack/react-table';
-import React, { ChangeEvent, MouseEvent, ReactNode, Ref, useCallback } from 'react';
-import { DataRow } from '../../../../core/data/data-source/DataSource';
+import type { Column, Header, Table } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
+import type { ChangeEvent, MouseEvent, ReactNode, Ref } from 'react';
+import React, { useCallback } from 'react';
+import type { DataRow } from '../../../../core/data/data-source/DataSource';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -63,7 +65,7 @@ export function TableHeader(props: Props) {
         column.clearSorting();
       }
     },
-    [column]
+    [column],
   );
 
   const handleSortDesc = useCallback(
@@ -76,7 +78,7 @@ export function TableHeader(props: Props) {
         column.clearSorting();
       }
     },
-    [column]
+    [column],
   );
 
   const handleReset = useCallback(
@@ -86,7 +88,7 @@ export function TableHeader(props: Props) {
       column.clearSorting();
       column.setFilterValue(undefined);
     },
-    [column]
+    [column],
   );
 
   const sortOrder: 'asc' | 'desc' | false = column.getIsSorted();
@@ -162,7 +164,7 @@ function StringFilter(props: FilterProps) {
       column.setFilterValue(ev.target.value);
       onChange();
     },
-    [column, onChange]
+    [column, onChange],
   );
 
   return (
@@ -184,7 +186,7 @@ function NumberFilter(props: FilterProps) {
       column.setFilterValue((old: NumberFilterValue | undefined) => [ev.target.value, old?.[1]]);
       onChange();
     },
-    [column, onChange]
+    [column, onChange],
   );
 
   const handleMaxChange = useCallback(
@@ -192,7 +194,7 @@ function NumberFilter(props: FilterProps) {
       column.setFilterValue((old: NumberFilterValue | undefined) => [old?.[0], ev.target.value]);
       onChange();
     },
-    [column, onChange]
+    [column, onChange],
   );
 
   return (

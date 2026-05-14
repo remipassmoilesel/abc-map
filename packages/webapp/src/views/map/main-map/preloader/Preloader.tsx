@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,11 @@
  */
 
 import Cls from './Preloader.module.scss';
-import { prefixedTranslation } from '../../../../i18n/i18n';
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
-import { MapPreloader, PreloadEvent } from '../../../../core/geo/MapPreloader';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import type { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+import type { PreloadEvent } from '../../../../core/geo/MapPreloader';
+import { MapPreloader } from '../../../../core/geo/MapPreloader';
 import { Logger } from '@abc-map/shared';
 import { useServices } from '../../../../core/useServices';
 import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
@@ -29,10 +30,9 @@ import { IconDefs } from '../../../../components/icon/IconDefs';
 import { Modal } from 'react-bootstrap';
 import { InlineLoader } from '../../../../components/inline-loader/InlineLoader';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('Preloader.tsx');
-
-const t = prefixedTranslation('MapView:');
 
 interface Props {
   map: MapWrapper;
@@ -50,6 +50,7 @@ const Params: { [k: string]: number } = {
 };
 
 export function Preloader(props: Props) {
+  const { t } = useTranslation('MapView');
   const { map, className } = props;
   const { toasts } = useServices();
   const preloaderRef = useRef<MapPreloader | null>(null);
@@ -93,7 +94,9 @@ export function Preloader(props: Props) {
     }
 
     // Cancel previous loading if any
-    cancelLoading.current && cancelLoading.current();
+    if (cancelLoading.current) {
+      cancelLoading.current();
+    }
 
     // Start loading
     const { cancel, promise } = preloader.load(map, Params[quantity]);

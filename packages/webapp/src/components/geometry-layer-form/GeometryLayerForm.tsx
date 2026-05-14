@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,19 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { DataRow } from '../../core/data/data-source/DataSource';
+import type { DataRow } from '../../core/data/data-source/DataSource';
 import { SmallDataTable } from '../small-data-table/SmallDataTable';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
+import type { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { LayerSelector } from '../layer-selector/LayerSelector';
 import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
 import DialogBoxAdvice from '../dialog-box-advice/DialogBoxAdvice';
 import { DataProcessingTips } from '../../core/tips';
 import FormLine from '../form-line/FormLine';
 import MessageLabel from '../message-label/MessageLabel';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../icon/IconDefs';
 import { getAllFieldNames } from '../../core/data/getFieldNames';
@@ -40,7 +42,7 @@ export interface GeometryLayerFormValues {
   joinBy?: string;
 }
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   values: GeometryLayerFormValues;
   onChange: (params: GeometryLayerFormValues) => void;
 }
@@ -53,8 +55,6 @@ interface State {
 
 const UnknownGeometries = -1;
 
-const t = prefixedTranslation('GeometryLayerForm:');
-
 class GeometryLayerForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -66,6 +66,7 @@ class GeometryLayerForm extends Component<Props, State> {
   }
 
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'GeometryLayerForm');
     const layer = this.props.values.layer;
     const joinBy = this.props.values.joinBy;
     const geometries = this.state.geometries;
@@ -80,6 +81,7 @@ class GeometryLayerForm extends Component<Props, State> {
             value={layer}
             onSelected={this.handleGeometryLayerSelected}
             onlyVector={true}
+            className={'w-75'}
             data-cy={'geometry-layer'}
             data-testid={'layer-selector'}
           />
@@ -106,7 +108,7 @@ class GeometryLayerForm extends Component<Props, State> {
                   <option key={f} value={f}>
                     {f}
                   </option>
-                ))
+                )),
               )}
           </select>
         </FormLine>

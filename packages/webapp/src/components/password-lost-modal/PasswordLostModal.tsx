@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import type { InputEvent, KeyboardEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { withServices } from '../../core/withServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { FormState } from '../form-validation-label/FormState';
 import { useServices } from '../../core/useServices';
 import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
@@ -32,13 +32,12 @@ import { FormOfflineIndicator } from '../offline-indicator/FormOfflineIndicator'
 
 const logger = Logger.get('PasswordLostModal.tsx');
 
-const t = prefixedTranslation('PasswordLostModal:');
-
 function PasswordLostModal() {
   const { modals, toasts, authentication } = useServices();
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [formState, setFormState] = useState(FormState.InvalidEmail);
+  const { t } = useTranslation('PasswordLostModal');
 
   const offline = useOfflineStatus();
 
@@ -82,15 +81,15 @@ function PasswordLostModal() {
         logger.error('Cannot send request for password reset: ', err);
         toasts.genericError(err);
       });
-  }, [authentication, email, toasts, validateForm]);
+  }, [authentication, email, t, toasts, validateForm]);
 
   const handleEmailChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const email = ev.target.value;
+    (ev: InputEvent<HTMLInputElement>) => {
+      const email = (ev.target as HTMLInputElement).value;
       setEmail(email);
       setFormState(validateForm(email));
     },
-    [validateForm]
+    [validateForm],
   );
 
   const handleKeyUp = useCallback(
@@ -99,7 +98,7 @@ function PasswordLostModal() {
         handleSubmit();
       }
     },
-    [handleSubmit]
+    [handleSubmit],
   );
 
   if (!visible) {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,15 @@
  */
 
 import React from 'react';
-import { logger } from './MainMap';
-import MainMap from './MainMap';
+import MainMap, { disableMainMapLogs } from './MainMap';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import type { TestServices } from '../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../core/utils/test/TestServices';
 import { abcRender } from '../../../core/utils/test/abcRender';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-logger.disable();
+disableMainMapLogs();
 
 describe('MainMap', () => {
   let services: TestServices;

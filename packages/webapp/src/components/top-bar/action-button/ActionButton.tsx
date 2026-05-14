@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
+import React from 'react';
 import { FaIcon } from '../../icon/FaIcon';
 import clsx from 'clsx';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import Cls from './ActionButton.module.scss';
 
 interface Props {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import { GenericReduxIDBStorage } from '../redux/GenericReduxIDBStorage';
-import { AbcLayout } from '@abc-map/shared';
+import type { AbcLayout } from '@abc-map/shared';
 import { ObjectStore } from '../client/ObjectStore';
 
 export const CURRENT_VERSION = 2;

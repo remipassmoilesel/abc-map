@@ -4,12 +4,12 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "lint": "prettier --loglevel warn --check . && sort-package-json --check",
+    "lint": "prettier --log-level warn --check . && sort-package-json --check && pnpm run lint:chart",
     "lint:chart": "helm lint helm-chart/abc-map --strict",
-    "lint:fix": "prettier --loglevel warn --write . && sort-package-json"
+    "lint:fix": "prettier --log-level warn --write . && sort-package-json"
   },
   "devDependencies": {
-    "prettier": "^2.8.8",
-    "sort-package-json": "^2.4.1"
+    "prettier": "3.8.1",
+    "sort-package-json": "^3.6.1"
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,17 +17,17 @@
  */
 
 import Cls from './FrameControls.module.scss';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { IconDefs } from '../icon/IconDefs';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
 import { FaIcon } from '../icon/FaIcon';
 import clsx from 'clsx';
 import { Modal } from 'react-bootstrap';
-import { ColorResult, SketchPicker } from 'react-color';
-import { AbcTextFrame, AbcTextFrameStyle } from '@abc-map/shared';
-
-const t = prefixedTranslation('FloatingTextFrame:');
+import type { ColorResult } from 'react-color';
+import { SketchPicker } from 'react-color';
+import type { AbcTextFrame, AbcTextFrameStyle } from '@abc-map/shared';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   frame: AbcTextFrame;
@@ -39,6 +39,7 @@ interface Props {
 
 export function FrameControls(props: Props) {
   const { frame, className, onDelete, onEditFullscreen, onStyleChange } = props;
+  const { t } = useTranslation('FloatingTextFrame');
   const { style } = frame;
 
   const [styleModal, showStyleModal] = useState(false);
@@ -79,7 +80,11 @@ export function FrameControls(props: Props) {
 
   // User wants to enable / disable background
   const handleToggleBackground = useCallback(() => {
-    withBackground ? setBackground('#ffffff00') : setBackground('#ffffffff');
+    if (withBackground) {
+      setBackground('#ffffff00');
+    } else {
+      setBackground('#ffffffff');
+    }
   }, [withBackground]);
 
   // User wants to enable / disable borders
