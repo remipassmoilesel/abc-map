@@ -2,6 +2,7 @@
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "stream",
   "globalEnv": ["CI", "ABC_CONFIGURATION", "CYPRESS_CACHE_FOLDER", "NODE_OPTIONS"],
+  "globalDependencies": ["CHANGELOG.md"],
   "tasks": {
     "lint": {},
     "lint:fix": {},
@@ -20,10 +21,12 @@
       "cache": false
     },
     "test": {
-      "dependsOn": ["^test"]
+      "dependsOn": ["^test"],
+      "cache": false
     },
     "test:with-servers": {
-      "dependsOn": ["^test:with-servers"]
+      "dependsOn": ["^test:with-servers"],
+      "cache": false
     },
     "start": {
       "cache": false,
