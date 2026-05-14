@@ -17,6 +17,15 @@ For the moment we use git hashes as version, since no one care about it 👍
   - Before updates, you must `mongodump` then `mongorestore`, otherwise deployment will fail !
 - Updated various things (k6, Helm, a lot of dependencies, and God only knows what else)
 
+**About MongoDB 7**
+
+Mongodb will not start after update, you may need to do the following:
+
+- Create a backup with `mongodump`
+- Remove mongodb data directory
+- Start a MongoDB 7 instance
+- Restore the backup with `mongorestore`
+
 ## 12/11/2023 - Better icons (git: 4099b730)
 
 - New icons and a new user interface for a smoother display.
