@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import DifferentSymbolsView from './view/DifferentSymbolsView';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('DifferentSymbolsModule:');
+const t = prefixedTranslation('DifferentSymbolsModule');
 
-export class DifferentSymbolsModule extends ModuleAdapter {
-  public getId(): ModuleId {
-    return BundledModuleId.DifferentSymbols;
+export class DifferentSymbolsModule implements AbcModule {
+  public getId() {
+    return ModuleId.DifferentSymbols;
   }
 
   public getReadableName(): string {
@@ -37,6 +37,6 @@ export class DifferentSymbolsModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <DifferentSymbolsView />;
+    return () => <DifferentSymbolsView />;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,27 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../Tool';
+import type { Tool } from '../Tool';
 import { AbcGeometryType, Logger, MapTool } from '@abc-map/shared';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/text.inline.svg';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { HistoryKey } from '../../history/HistoryKey';
 import { UpdateStyleChangeset } from '../../history/changesets/features/UpdateStyleChangeset';
-import { Interaction, Select } from 'ol/interaction';
-import { MainStore } from '../../store/store';
-import { HistoryService } from '../../history/HistoryService';
-import { MapActions } from '../../store/map/actions';
+import type { Interaction } from 'ol/interaction';
+import { Select } from 'ol/interaction';
+import type { MainStore } from '../../../store/store';
+import type { HistoryService } from '../../history/HistoryService';
+import { MapActions } from '../../../store/map/actions';
 import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
+import type { DefaultVectorSource } from '../../geo/layers/LayerWrapper';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { DefaultTolerancePx } from '../common/constants';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 import { SupportedGeometries } from '../common/interactions/SupportedGeometry';
 import { getRemSize } from '../../ui/getRemSize';
-import { ToolMode } from '../ToolMode';
+import type { ToolMode } from '../ToolMode';
 import { Conditions, Modes } from './Modes';
 import { TextBox } from './TextBox';
 import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
@@ -46,14 +46,17 @@ const logger = Logger.get('TextTool.ts');
 // TODO: refactor
 export class TextTool implements Tool {
   private map?: Map;
-  private source?: VectorSource<Geometry>;
+  private source?: DefaultVectorSource;
   private move?: MoveMapInteractionsBundle;
   private selection?: SelectionInteractionsBundle;
   private textSelect?: Select;
   private interactions: Interaction[] = [];
   private textBox?: TextBox;
 
-  constructor(private store: MainStore, private history: HistoryService) {}
+  constructor(
+    private store: MainStore,
+    private history: HistoryService,
+  ) {}
 
   public getId(): MapTool {
     return MapTool.Text;
@@ -71,7 +74,7 @@ export class TextTool implements Tool {
     return 'Text';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
+  public setup(map: Map, source: DefaultVectorSource): void {
     this.map = map;
     this.source = source;
 
@@ -81,7 +84,7 @@ export class TextTool implements Tool {
 
     // Selection for style modifications
     this.selection = new SelectionInteractionsBundle({ condition: Conditions.Select });
-    this.selection.setup(map, source, SupportedGeometries);
+    this.selection.setup(map, SupportedGeometries);
     this.selection.onStyleSelected = (style) => this.store.dispatch(MapActions.setDrawingStyle({ text: style.text }));
 
     const selection = getSelectionFromMap(map);
@@ -134,7 +137,7 @@ export class TextTool implements Tool {
       });
 
       // We grab feature position in pixel then display text box
-      const originalEv = ev.mapBrowserEvent as MapBrowserEvent<UIEvent> | undefined;
+      const originalEv = ev.mapBrowserEvent as MapBrowserEvent | undefined;
       const map = originalEv?.map as Map | undefined;
       const mapTarget = map?.getTarget() as HTMLDivElement | undefined;
       if (!originalEv || !mapTarget || !(mapTarget instanceof HTMLDivElement)) {

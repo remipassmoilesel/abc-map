@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LoadFunction } from 'ol/Tile';
+import type { LoadFunction } from 'ol/Tile';
 import { Logger } from '@abc-map/shared';
-import axios, { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
 import { TileStorage } from '../../storage/indexed-db/tiles/TileIDBStorage';
 import { setTileImage } from './setTileImage';
 import { setTileError } from './setTileError';
@@ -30,12 +31,12 @@ export function tileLoadingPublic(): LoadFunction {
   const httpClient = axios.create({ timeout: 10_000, responseType: 'blob' });
 
   return async function (tile, src) {
-    const storage = await TileStorage.get();
+    const storage = TileStorage.get();
 
     storage
       .get(src)
       // If storage fails, we try a network request
-      .catch((err) => logger.warn('Cannot get tile: ', err))
+      .catch((err) => logger.warn('Cannot load tile from storage: ', err))
       .then<Blob>((tile) => {
         if (!tile) {
           return httpClient.get(src).then((res) => res.data);

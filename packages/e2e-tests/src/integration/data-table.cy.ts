@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { DataStore } from '../helpers/DataStore';
-import { Download } from '../helpers/Download';
-import { Modules } from '../helpers/Modules';
-import { FilePrompt } from '../helpers/FilePrompt';
-import { BundledModuleId } from '@abc-map/shared';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { DataStore } from '../helpers/DataStore.js';
+import { Download } from '../helpers/Download.js';
+import { Modules } from '../helpers/Modules.js';
+import { FilePrompt } from '../helpers/FilePrompt.js';
+import { ModuleId } from '@abc-map/shared';
 
 describe('Data table', function () {
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Data table', function () {
 
   it('User can display layer data', () => {
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open(BundledModuleId.DataTable))
+      .then(() => Modules.open(ModuleId.DataTable))
       .get('[data-cy=layer-selector] > option')
       .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
@@ -74,7 +74,7 @@ describe('Data table', function () {
 
   it('User can export as CSV', () => {
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open(BundledModuleId.DataTable))
+      .then(() => Modules.open(ModuleId.DataTable))
       .get('[data-cy=layer-selector] > option')
       .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
@@ -93,7 +93,7 @@ describe('Data table', function () {
 
     // We import from data store
     DataStore.importByName('Countries of the world')
-      .then(() => Modules.open(BundledModuleId.DataTable))
+      .then(() => Modules.open(ModuleId.DataTable))
       .get('[data-cy=layer-selector] > option')
       .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))

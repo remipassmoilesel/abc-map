@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import clsx from 'clsx';
 import Cls from './PointIconButton.module.scss';
 import React, { useCallback } from 'react';
-import { IconPreview } from './IconPreview';
+import type { IconPreview } from './IconPreview';
 
 interface Props {
   value: IconPreview;

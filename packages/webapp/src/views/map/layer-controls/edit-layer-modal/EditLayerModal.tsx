@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,11 @@
  */
 
 import Cls from './EditLayerModal.module.scss';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import isEqual from 'lodash/isEqual';
-import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { Logger } from '@abc-map/shared';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { EditLayerChangeset } from '../../../../core/history/changesets/layers/EditLayerChangeset';

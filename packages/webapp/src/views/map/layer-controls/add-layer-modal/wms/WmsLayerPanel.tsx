@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { AbcProjection, BasicAuthentication, isProjectionEqual, Logger, normalizedProjectionName } from '@abc-map/shared';
-import { WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
+import type { ChangeEvent, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { AbcProjection, BasicAuthentication } from '@abc-map/shared';
+import { isProjectionEqual, Logger, normalizedProjectionName } from '@abc-map/shared';
+import type { WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import WmsLayerItem from './WmsLayerItem';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
+import type { ServiceProps } from '../../../../../core/withServices';
+import { withServices } from '../../../../../core/withServices';
 import FormValidationLabel from '../../../../../components/form-validation-label/FormValidationLabel';
 import { ValidationHelper } from '../../../../../core/utils/ValidationHelper';
 import { FormState } from '../../../../../components/form-validation-label/FormState';
@@ -28,15 +31,15 @@ import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import ControlButtons from '../_common/ControlButtons';
-import { WmsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import type { WmsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import Cls from './WmsLayerPanel.module.scss';
 import { resolveInAtLeast } from '../../../../../core/utils/resolveInAtLeast';
 
 const logger = Logger.get('WmsLayerPanel.tsx');
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   projection: AbcProjection;
   value: WmsSettings;
   onChange: (values: WmsSettings) => void;
@@ -50,8 +53,6 @@ interface State {
   loading: boolean;
 }
 
-const t = prefixedTranslation('MapView:');
-
 class WmsLayerPanel extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -59,6 +60,7 @@ class WmsLayerPanel extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const value = this.props.value;
     const capabilities = this.state.capabilities;
     const formState = this.state.formState;
@@ -163,6 +165,7 @@ class WmsLayerPanel extends Component<Props, State> {
   };
 
   private handleLayerSelected = (layer: WmsLayer) => {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const { toasts } = this.props.services;
 
     this.getValues(layer)
@@ -243,6 +246,7 @@ class WmsLayerPanel extends Component<Props, State> {
   };
 
   private fetchCapabilities = () => {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const { geo, toasts } = this.props.services;
     const value = this.props.value;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ import Cls from './SharedMapSettingsView.module.scss';
 import React, { useEffect, useRef } from 'react';
 import { pageSetup } from '../../../core/utils/page-setup';
 import { Logger, UserStatus } from '@abc-map/shared';
-import { useAppSelector } from '../../../core/store/hooks';
+import { useAppSelector } from '../../../store/hooks';
 import { EnableSharePanel } from './enable-share-panel/EnableSharePanel';
 import SharedMapLayout from './shared-map-layout/SharedMapLayout';
 import { useTranslation, withTranslation } from 'react-i18next';
@@ -46,7 +46,7 @@ function SharedMapSettingsView() {
   useEffect(() => pageSetup(t('Share'), t('Share_your_maps_online')), [t]);
 
   // Keyboard setup
-  const keyboardListener = useRef<HistoryKeyboardListener>();
+  const keyboardListener = useRef<HistoryKeyboardListener | undefined>(undefined);
   useEffect(() => {
     keyboardListener.current = HistoryKeyboardListener.create(HistoryKey.SharedViews);
     keyboardListener.current?.initialize();

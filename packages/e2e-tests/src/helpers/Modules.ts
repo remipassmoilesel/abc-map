@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TopBar } from './TopBar';
-import { BundledModuleId } from '@abc-map/shared';
+import { TopBar } from './TopBar.js';
+import type { ModuleId } from '@abc-map/shared';
 
 export class Modules {
-  public static open(moduleId: BundledModuleId) {
+  public static open(moduleId: ModuleId) {
     return (
       TopBar.moduleIndex()
         // Search for module id
         .get('[data-cy=module-search]')
+        .wait(500)
         .type(moduleId)
+        .wait(500)
         // Open module
         .get('[data-cy=search-results] [data-cy=open-module]')
         .eq(0)

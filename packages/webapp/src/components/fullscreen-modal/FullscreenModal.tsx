@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,22 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import Classes from './FullscreenModal.module.scss';
 import clsx from 'clsx';
-import { AppearAnimation } from '../appear-animation/AppearAnimation';
 
 interface Props {
   children: ReactNode;
-  className?: ReactNode;
+  className?: string;
 }
 
 export function FullscreenModal(props: Props) {
   const { children, className } = props;
 
-  return (
-    <AppearAnimation>
-      <div className={clsx(Classes.modal, className)}>{children}</div>
-    </AppearAnimation>
-  );
+  return <div className={clsx(Classes.modal, className)}>{children}</div>;
 }

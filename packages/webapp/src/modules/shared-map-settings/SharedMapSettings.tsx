@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleAdapter } from '@abc-map/module-api';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import SharedMapSettingsView from './view/SharedMapSettingsView';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('SharedMapSettingsModule:');
+const t = prefixedTranslation('SharedMapSettingsModule');
 
-export class SharedMapSettings extends ModuleAdapter {
+export class SharedMapSettings implements AbcModule {
   public getId() {
-    return BundledModuleId.SharedMapSettings;
+    return ModuleId.SharedMapSettings;
   }
 
   public getReadableName(): string {
@@ -37,6 +37,6 @@ export class SharedMapSettings extends ModuleAdapter {
   }
 
   public getView() {
-    return <SharedMapSettingsView />;
+    return () => <SharedMapSettingsView />;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerWrapper, VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
-import { DataRow, DataSource, DataSourceType } from './DataSource';
+import type { LayerWrapper, VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
+import type { DataRow, DataSource } from './DataSource';
+import { DataSourceType } from './DataSource';
 import { Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('LayerDataSource.ts');
 
-const t = prefixedTranslation('LayerDataSource:');
+const t = prefixedTranslation('LayerDataSource');
 
 // FIXME: check if layer with numeric properties are always returned as numbers
 export class LayerDataSource implements DataSource {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,24 +17,22 @@
  */
 
 import { createScript } from './createScript';
-import { ScriptContext } from './ScriptContext';
+import type { ScriptContext } from './ScriptContext';
 import sinon from 'sinon';
-import { ModuleApi } from '@abc-map/module-api';
-import { ScriptApi } from './ScriptApi';
+import type { ScriptApi } from './ScriptApi';
+import { describe, expect, it } from 'vitest';
 
 describe('createScript', () => {
   it('should work', async () => {
     // Prepare
     const logStub = sinon.stub();
     const context: ScriptContext = {
-      moduleApi: { type: 'module-api' } as unknown as ModuleApi,
       scriptApi: { type: 'script-api' } as unknown as ScriptApi,
       log: logStub,
     };
 
     const content = `\
 log(log.toString());
-log(JSON.stringify(moduleApi));
 log(JSON.stringify(scriptApi));
 
 function wait(n) {

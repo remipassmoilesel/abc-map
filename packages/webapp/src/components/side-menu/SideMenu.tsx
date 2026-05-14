@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { CSSProperties, useCallback } from 'react';
+import type { CSSProperties } from 'react';
+import React, { useCallback } from 'react';
 import { FaIcon } from '../icon/FaIcon';
 import Cls from './SideMenu.module.scss';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { IconDefs } from '../icon/IconDefs';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
 import { FloatingButton } from '../floating-button/FloatingButton';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
-import { UiActions } from '../../core/store/ui/actions';
+import { useTranslation, withTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { UiActions } from '../../store/ui/actions';
 import { createPortal } from 'react-dom';
 
 interface Props {
@@ -44,8 +44,6 @@ interface Props {
   children: React.ReactNode;
   initiallyOpened?: boolean;
 }
-
-const t = prefixedTranslation('SideMenu:');
 
 /**
  * This is a large menu, attached to a side of the app, that we can open with a floating button.
@@ -70,6 +68,7 @@ function SideMenu(props: Props) {
   } = props;
   const open = useAppSelector((st) => st.ui.sideMenu)[menuId] ?? initiallyOpened ?? false;
   const dispatch = useAppDispatch();
+  const { t } = useTranslation('SideMenu');
 
   const handleToggleClick = useCallback(() => dispatch(UiActions.setSideMenuState(menuId, !open)), [dispatch, menuId, open]);
   const handleContentClick = useCallback(() => {
@@ -94,7 +93,7 @@ function SideMenu(props: Props) {
               {children}
             </div>
           </div>,
-          document.body
+          document.body,
         )}
 
       {!open && (

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,21 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ReaderImplementation } from './ReaderImplementation';
-import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared';
+import type { ReaderImplementation } from './ReaderImplementation';
+import type { AbcProjection, VectorMetadata } from '@abc-map/shared';
+import { LayerType } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { KML } from 'ol/format';
 import { BlobIO } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
-import { AbcFile } from '@abc-map/shared';
+import type { AbcFile } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
-import { LayerWrapper } from '../../geo/layers/LayerWrapper';
-import { ReadResult, ReadStatus } from '../ReadResult';
+import type { LayerWrapper } from '../../geo/layers/LayerWrapper';
+import type { ReadResult } from '../ReadResult';
+import { ReadStatus } from '../ReadResult';
 import { normalizeFeatures } from './normalizeFeatures';
 import { prefixedTranslation } from '../../../i18n/i18n';
 
-const t = prefixedTranslation('DataReader:');
+const t = prefixedTranslation('DataReader');
 
 export class KmlReader implements ReaderImplementation {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {

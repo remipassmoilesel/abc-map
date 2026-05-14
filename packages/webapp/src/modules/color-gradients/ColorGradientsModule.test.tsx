@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,20 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { ClassificationAlgorithm, ScaleAlgorithm } from '../../core/modules/Algorithm';
-import VectorSource from 'ol/source/Vector';
-import { newParameters, Parameters } from './typings/Parameters';
+import type { Parameters } from './typings/Parameters';
+import { newParameters } from './typings/Parameters';
 import { ColorGradientsModule, logger } from './ColorGradientsModule';
 import { featuresToComparableValues, testGradientClasses } from './ColorGradientsModule.test.data';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import { Status } from './typings/ProcessingResult';
-import { DataSource, DataValue } from '../../core/data/data-source/DataSource';
-import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { DataSource, DataValue } from '../../core/data/data-source/DataSource';
+import type { DefaultVectorSource, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
-import Geometry from 'ol/geom/Geometry';
 import { mockServices, restoreServices } from '../../core/utils/test/mock-services';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 
@@ -111,7 +111,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');
@@ -160,7 +160,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');
@@ -209,7 +209,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');
@@ -258,7 +258,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
+      const features = (map.getLayers()[0].getSource() as DefaultVectorSource).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');

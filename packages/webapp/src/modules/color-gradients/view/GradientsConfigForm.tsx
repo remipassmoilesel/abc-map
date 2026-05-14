@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,27 +16,25 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import {
-  Algorithm,
-  ClassificationAlgorithm,
-  GradientAlgorithm,
-  isClassificationAlgorithm,
-  isGradientAlgorithm,
-  isScaleAlgorithm,
-  ScaleAlgorithm,
-} from '../../../core/modules/Algorithm';
+import type { Algorithm, GradientAlgorithm } from '../../../core/modules/Algorithm';
+import { ClassificationAlgorithm, isClassificationAlgorithm, isGradientAlgorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../../core/modules/Algorithm';
 import AlgorithmSelector from '../../../components/algorithm-selector/AlgorithmSelector';
 import FormLine from '../../../components/form-line/FormLine';
-import ScaleColors from './ScaleColors';
-import ClassificationColors, { ClassesConfig } from './ClassificationColors';
-import { DataSource } from '../../../core/data/data-source/DataSource';
-import { GradientClass } from '../typings/GradientClass';
+import { ScaleColors } from './ScaleColors';
+import type { ClassesConfig } from './ClassificationColors';
+import { ClassificationColors } from './ClassificationColors';
+import type { DataSource } from '../../../core/data/data-source/DataSource';
+import type { GradientClass } from '../typings/GradientClass';
 import { ColorGradientTips } from '../../../core/tips';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
+import type { ServiceProps } from '../../../core/withServices.tsx';
+import { withServices } from '../../../core/withServices.tsx';
 
-const logger = Logger.get('SymbolConfigForm.tsx');
+const logger = Logger.get('GradientsConfigForm.tsx');
 
 export interface ColorsConfigFormValues {
   layerName: string;
@@ -46,7 +44,7 @@ export interface ColorsConfigFormValues {
   classes: GradientClass[];
 }
 
-interface Props {
+interface Props extends ServiceProps, WithTranslation {
   values: ColorsConfigFormValues;
   valueField: string;
   dataSource: DataSource;
@@ -55,87 +53,88 @@ interface Props {
 
 const algorithms: Algorithm[] = [ScaleAlgorithm.Interpolated, ...Object.values(ClassificationAlgorithm)];
 
-const t = prefixedTranslation('ColorGradientsModule:');
+export const GradientsConfigForm = withTranslation()(
+  withServices(
+    class GradientsConfigForm extends Component<Props, unknown> {
+      public render() {
+        const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorGradientsModule');
+        const values = this.props.values;
+        const dataSource = this.props.dataSource;
+        const valueField = this.props.valueField;
+        const currentAlgo = this.props.values.algorithm;
 
-class GradientsConfigForm extends Component<Props, {}> {
-  public render() {
-    const values = this.props.values;
-    const dataSource = this.props.dataSource;
-    const valueField = this.props.valueField;
-    const currentAlgo = this.props.values.algorithm;
+        return (
+          <>
+            <FormLine>
+              <label htmlFor="layer-name" className={'flex-grow-1'}>
+                {t('Name_of_new_layer')}:
+              </label>
+              <input type={'text'} className={'form-control'} id={'layer-name'} value={values?.layerName} onChange={this.handleLayerNameChange} />
+            </FormLine>
 
-    return (
-      <>
-        <FormLine>
-          <label htmlFor="layer-name" className={'flex-grow-1'}>
-            {t('Name_of_new_layer')}:
-          </label>
-          <input type={'text'} className={'form-control'} id={'layer-name'} value={values?.layerName} onChange={this.handleLayerNameChange} />
-        </FormLine>
+            <FormLine>
+              <AlgorithmSelector
+                label={`${t('Scale_or_classification')}:`}
+                tip={ColorGradientTips.Algorithm}
+                only={algorithms}
+                value={values.algorithm}
+                onChange={this.handleAlgorithmChange}
+              />
+            </FormLine>
 
-        <FormLine>
-          <AlgorithmSelector
-            label={`${t('Scale_or_classification')}:`}
-            tip={ColorGradientTips.Algorithm}
-            only={algorithms}
-            value={values.algorithm}
-            onChange={this.handleAlgorithmChange}
-          />
-        </FormLine>
+            {isScaleAlgorithm(currentAlgo) && <ScaleColors start={values.start} end={values.end} onChange={this.handleScaleColorsChanged} />}
+            {isClassificationAlgorithm(currentAlgo) && (
+              <ClassificationColors
+                value={{ classes: values.classes, startColor: values.start, endColor: values.end }}
+                dataSource={dataSource}
+                valueField={valueField}
+                algorithm={currentAlgo}
+                onChange={this.handleColorConfigChanged}
+              />
+            )}
+          </>
+        );
+      }
 
-        {isScaleAlgorithm(currentAlgo) && <ScaleColors start={values.start} end={values.end} onChange={this.handleScaleColorsChanged} />}
-        {isClassificationAlgorithm(currentAlgo) && (
-          <ClassificationColors
-            value={{ classes: values.classes, startColor: values.start, endColor: values.end }}
-            dataSource={dataSource}
-            valueField={valueField}
-            algorithm={currentAlgo}
-            onChange={this.handleColorConfigChanged}
-          />
-        )}
-      </>
-    );
-  }
+      private handleLayerNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        const config: ColorsConfigFormValues = {
+          ...this.props.values,
+          layerName: ev.target.value,
+        };
+        this.props.onChange(config);
+      };
 
-  private handleLayerNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const config: ColorsConfigFormValues = {
-      ...this.props.values,
-      layerName: ev.target.value,
-    };
-    this.props.onChange(config);
-  };
+      private handleScaleColorsChanged = (start: string, end: string) => {
+        const config: ColorsConfigFormValues = {
+          ...this.props.values,
+          start,
+          end,
+        };
+        this.props.onChange(config);
+      };
 
-  private handleScaleColorsChanged = (start: string, end: string) => {
-    const config: ColorsConfigFormValues = {
-      ...this.props.values,
-      start,
-      end,
-    };
-    this.props.onChange(config);
-  };
+      private handleAlgorithmChange = (value: Algorithm) => {
+        if (!isGradientAlgorithm(value)) {
+          logger.error('Invalid algorithm');
+          return;
+        }
 
-  private handleAlgorithmChange = (value: Algorithm) => {
-    if (!isGradientAlgorithm(value)) {
-      logger.error('Invalid algorithm');
-      return;
-    }
+        const config: ColorsConfigFormValues = {
+          ...this.props.values,
+          algorithm: value,
+        };
+        this.props.onChange(config);
+      };
 
-    const config: ColorsConfigFormValues = {
-      ...this.props.values,
-      algorithm: value,
-    };
-    this.props.onChange(config);
-  };
-
-  private handleColorConfigChanged = (classes: ClassesConfig) => {
-    const config: ColorsConfigFormValues = {
-      ...this.props.values,
-      classes: classes.classes,
-      start: classes.startColor,
-      end: classes.endColor,
-    };
-    this.props.onChange(config);
-  };
-}
-
-export default GradientsConfigForm;
+      private handleColorConfigChanged = (classes: ClassesConfig) => {
+        const config: ColorsConfigFormValues = {
+          ...this.props.values,
+          classes: classes.classes,
+          start: classes.startColor,
+          end: classes.endColor,
+        };
+        this.props.onChange(config);
+      };
+    },
+  ),
+);

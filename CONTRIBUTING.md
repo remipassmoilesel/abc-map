@@ -12,8 +12,6 @@ See: [https://crowdin.com/project/abc-map](https://crowdin.com/project/abc-map)
 
 Ensure that your idea is a need that will be shared by other people.
 
-Ensure that your idea cannot fit in a [custom data processing module](documentation/6_modules.md)
-
 [Open an issue](https://gitlab.com/abc-map/abc-map/-/issues/new) to discuss it and to avoid unnecessary or duplicate work.
 
 If not already done, please check the [bottomless well](documentation/5_backlog.md) too !

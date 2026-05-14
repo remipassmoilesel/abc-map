@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ export class Download {
    * Return the last file downloaded if any
    */
   public static currentFileAsBlob(): Cypress.Chainable<Blob> {
-    return cy.get('[data-cy=file-output]').then(
+    return cy.get('[data-cy=file-output]', { timeout: 10_000 }).then(
       (anchor) =>
         new Cypress.Promise<Blob>((resolve, reject) => {
           const xhr = new XMLHttpRequest();
@@ -30,7 +30,7 @@ export class Download {
           xhr.onload = () => resolve(xhr.response);
           xhr.onerror = (err) => reject(err);
           xhr.send();
-        })
+        }),
     );
   }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,14 +15,18 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
 import PasswordInputModal from './PasswordInputModal';
-import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { act, screen, waitFor } from '@testing-library/react';
+import type { ModalEvent } from '../../core/ui/typings';
+import { ModalEventType } from '../../core/ui/typings';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import userEvent from '@testing-library/user-event';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import { Encryption } from '../../core/utils/Encryption';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('PasswordInputModal', () => {
   let services: TestServices;
@@ -32,7 +36,9 @@ describe('PasswordInputModal', () => {
   });
 
   it('should become visible', async () => {
-    abcRender(<PasswordInputModal />, { services });
+    await act(async () => {
+      abcRender(<PasswordInputModal />, { services });
+    });
 
     await openModal();
 
@@ -42,14 +48,16 @@ describe('PasswordInputModal', () => {
 
   it('should emit after submit', async () => {
     // Prepare
-    abcRender(<PasswordInputModal />, { services });
-    await openModal();
     await act(async () => {
-      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+      abcRender(<PasswordInputModal />, { services });
     });
 
+    await openModal();
+
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+
     // Act
-    screen.getByTestId('password-confirm').click();
+    await userEvent.click(screen.getByTestId('password-confirm'));
 
     // Assert
     await waitFor(() => {
@@ -59,16 +67,16 @@ describe('PasswordInputModal', () => {
 
   it('should not keep state after cancel', async () => {
     // Prepare
-    abcRender(<PasswordInputModal />, { services });
-    await openModal();
     await act(async () => {
-      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+      abcRender(<PasswordInputModal />, { services });
     });
 
+    await openModal();
+
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+
     // Act
-    await act(() => {
-      screen.getByTestId('password-cancel').click();
-    });
+    await userEvent.click(screen.getByTestId('password-cancel'));
 
     await openModal();
 
@@ -78,16 +86,16 @@ describe('PasswordInputModal', () => {
 
   it('should not keep state after confirm', async () => {
     // Prepare
-    abcRender(<PasswordInputModal />, { services });
-    await openModal();
     await act(async () => {
-      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+      abcRender(<PasswordInputModal />, { services });
     });
 
+    await openModal();
+
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+
     // Act
-    await act(async () => {
-      screen.getByTestId('password-confirm').click();
-    });
+    await userEvent.click(screen.getByTestId('password-confirm'));
 
     await TestHelper.wait(10); // Wait internal promise
     await openModal();
@@ -100,14 +108,15 @@ describe('PasswordInputModal', () => {
 
   it('should warn if password is incorrect', async () => {
     // Prepare
-    abcRender(<PasswordInputModal />, { services });
+    await act(async () => {
+      abcRender(<PasswordInputModal />, { services });
+    });
+
     await openModal();
 
     // Act
-    await act(async () => {
-      await userEvent.type(screen.getByTestId('password-input'), 'azerty5678');
-    });
-    screen.getByTestId('password-confirm').click();
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty5678');
+    await userEvent.click(screen.getByTestId('password-confirm'));
 
     // Assert
     await waitFor(() => {

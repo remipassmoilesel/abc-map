@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,24 +17,24 @@
  */
 
 import Cls from './StyleControls.module.scss';
-import { MouseEvent, useCallback } from 'react';
+import type { MouseEvent } from 'react';
+import { useCallback } from 'react';
 import { CustomEditor } from '../../CustomEditor';
 import { FaIcon } from '../../../icon/FaIcon';
 import { IconDefs } from '../../../icon/IconDefs';
 import { WithTooltip } from '../../../with-tooltip/WithTooltip';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useEditor } from '../../useEditor';
 import clsx from 'clsx';
 import { ButtonMenu } from '../../../button-menu/ButtonMenu';
 import { Action } from '../../../button-menu/Action';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   className?: string;
 }
 
 export function StyleControls(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { className } = props;
   const { editor } = useEditor();
 
@@ -43,7 +43,7 @@ export function StyleControls(props: Props) {
       event.preventDefault();
       CustomEditor.clearStyle(editor);
     },
-    [editor]
+    [editor],
   );
 
   const handleToggleBold = useCallback(
@@ -51,7 +51,7 @@ export function StyleControls(props: Props) {
       event.preventDefault();
       CustomEditor.bold.toggle(editor);
     },
-    [editor]
+    [editor],
   );
 
   const handleToggleItalic = useCallback(
@@ -59,7 +59,7 @@ export function StyleControls(props: Props) {
       event.preventDefault();
       CustomEditor.italic.toggle(editor);
     },
-    [editor]
+    [editor],
   );
 
   const handleToggleUnderline = useCallback(
@@ -67,7 +67,7 @@ export function StyleControls(props: Props) {
       event.preventDefault();
       CustomEditor.underline.toggle(editor);
     },
-    [editor]
+    [editor],
   );
 
   const handleSetSize = useCallback(
@@ -75,7 +75,7 @@ export function StyleControls(props: Props) {
       event.preventDefault();
       CustomEditor.size.set(editor, size);
     },
-    [editor]
+    [editor],
   );
 
   return (

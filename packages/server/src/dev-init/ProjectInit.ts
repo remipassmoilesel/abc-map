@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,22 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Services } from '../services/services';
-import { AbcProjectManifest, Logger, ProjectHelper } from '@abc-map/shared';
-import { ResourcePath } from '../utils/ResourcePath';
+import type { Services } from '../services/services.js';
+import type { AbcProjectManifest } from '@abc-map/shared';
+import { Logger, ProjectHelper } from '@abc-map/shared';
+import { ResourceHelper } from '../utils/ResourceHelper.js';
 import { promises as fs } from 'fs';
-import * as uuid from 'uuid-random';
-import { Config } from '../config/Config';
+import uuid from 'uuid-random';
+import type { Config } from '../config/Config.js';
 
 const logger = Logger.get('ProjectInit.ts', 'info');
 
 export class ProjectInit {
   public static create(config: Config, services: Services) {
-    const resources = new ResourcePath();
+    const resources = new ResourceHelper();
     return new ProjectInit(config, services, resources);
   }
 
-  constructor(private config: Config, private services: Services, private resources: ResourcePath) {}
+  constructor(
+    private config: Config,
+    private services: Services,
+    private resources: ResourceHelper,
+  ) {}
 
   public async init(): Promise<void> {
     if (!this.config.development?.generateData) {

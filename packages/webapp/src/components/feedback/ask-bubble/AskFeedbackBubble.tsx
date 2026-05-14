@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,7 @@
  */
 
 import Cls from './AskFeedbackBubble.module.scss';
-import { prefixedTranslation } from '../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-
-const t = prefixedTranslation('AskFeedbackBubble:');
+import { useTranslation, withTranslation } from 'react-i18next';
 
 interface Props {
   onConfirm: () => void;
@@ -29,6 +26,7 @@ interface Props {
 
 function AskFeedbackBubble(props: Props) {
   const { onConfirm, onCancel } = props;
+  const { t } = useTranslation('AskFeedbackBubble');
 
   return (
     <div className={Cls.container}>

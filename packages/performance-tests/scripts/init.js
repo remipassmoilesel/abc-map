@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@
  *
  */
 
-const fs = require('fs');
-const path = require('path');
-const JSZip = require('jszip');
+import fs from 'fs';
+import path from 'path';
+import JSZip from 'jszip';
 
 /*
  *
@@ -36,7 +36,7 @@ main().catch((err) => {
 });
 
 async function main() {
-  const testDataDir = path.resolve(__dirname, '..', 'test-data');
+  const testDataDir = path.resolve(import.meta.dirname, '..', 'test-data');
   const projectPath = path.resolve(testDataDir, 'project.abm2');
 
   // Create test data dir if needed

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import Cls from './MessageLabel.module.scss';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FaIcon } from '../icon/FaIcon';
 import clsx from 'clsx';
 
@@ -29,7 +30,7 @@ export interface Props {
   children: ReactNode | ReactNode[];
 }
 
-class MessageLabel extends Component<Props, {}> {
+class MessageLabel extends Component<Props, unknown> {
   public render(): ReactNode {
     const icon = this.props.icon;
     const children = this.props.children;

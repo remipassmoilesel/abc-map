@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,14 +19,16 @@
 import { StyleFactory } from './StyleFactory';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { LineString, Point } from 'ol/geom';
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
-import { StyleCache, StyleCacheEntry } from './StyleCache';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
+import type { StyleCacheEntry } from './StyleCache';
+import { StyleCache } from './StyleCache';
 import Style from 'ol/style/Style';
 import { IconName } from '@abc-map/point-icons';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { DefaultStyleOptions } from './StyleFactoryOptions';
 import { AbcGeometryType } from '@abc-map/shared';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 // TODO: test other geometries
 
@@ -48,7 +50,7 @@ describe('StyleFactory', () => {
           new LineString([
             [1, 1],
             [2, 2],
-          ])
+          ]),
         );
       });
 

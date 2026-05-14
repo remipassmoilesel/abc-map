@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,27 +19,33 @@
 import Cls from './ProportionalSymbolsView.module.scss';
 import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { newParameters, Parameters } from '../Parameters';
+import type { Parameters } from '../Parameters';
+import { newParameters } from '../Parameters';
 import FoldingCard from '../../../components/folding-card/FoldingCard';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import SymbolConfigForm, { SymbolConfigFormValues } from './components/SymbolConfigForm';
-import DataSourceForm, { DataSourceFormValues } from '../../../components/data-source-form/DataSourceForm';
-import GeometryLayerForm, { GeometryLayerFormValues } from '../../../components/geometry-layer-form/GeometryLayerForm';
+import type { ServiceProps } from '../../../core/withServices';
+import { withServices } from '../../../core/withServices';
+import type { SymbolConfigFormValues } from './components/SymbolConfigForm';
+import SymbolConfigForm from './components/SymbolConfigForm';
+import type { DataSourceFormValues } from '../../../components/data-source-form/DataSourceForm';
+import DataSourceForm from '../../../components/data-source-form/DataSourceForm';
+import type { GeometryLayerFormValues } from '../../../components/geometry-layer-form/GeometryLayerForm';
+import GeometryLayerForm from '../../../components/geometry-layer-form/GeometryLayerForm';
 import { ScaleAlgorithm } from '../../../core/modules/Algorithm';
 import Sample from './sample.png';
 import { ProportionalSymbolsTips } from '../../../core/tips';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 import { FormState } from '../../../components/form-validation-label/FormState';
-import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
+import type { ProcessingResult } from '../ProcessingResult';
+import { isProcessingResult } from '../ProcessingResult';
 import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 import { ModuleContainer } from '../../../components/module-container/ModuleContainer';
 
 const logger = Logger.get('ProportionalSymbolsView.tsx');
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   initialValue: Parameters;
   onChange: (params: Parameters) => void;
   onProcess: () => Promise<ProcessingResult>;
@@ -51,8 +57,6 @@ interface State {
   result?: ProcessingResult;
 }
 
-const t = prefixedTranslation('ProportionalSymbolsModule:');
-
 class ProportionalSymbolsView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -60,6 +64,7 @@ class ProportionalSymbolsView extends Component<Props, State> {
   }
 
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ProportionalSymbolsModule');
     const params = this.state.params;
     const formState = this.state.formState;
     const result = this.state.result;
@@ -195,6 +200,7 @@ class ProportionalSymbolsView extends Component<Props, State> {
   };
 
   private handleSubmit = () => {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ProportionalSymbolsModule');
     const { toasts } = this.props.services;
 
     const formState = this.validateParameters();

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ import React, { useEffect } from 'react';
 import MainMap from './main-map/MainMap';
 import { LayerControls } from './layer-controls/LayerControls';
 import { Logger } from '@abc-map/shared';
-import ToolSelector from './tool-selector/ToolSelector';
+import { ToolSelector } from './tool-selector/ToolSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import Search from './search/Search';

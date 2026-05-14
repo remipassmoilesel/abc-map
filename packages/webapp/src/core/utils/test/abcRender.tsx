@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,15 @@
  */
 
 import React from 'react';
-import { render as rtlRender, RenderOptions, RenderResult } from '@testing-library/react';
-import { newTestServices, TestServices } from './TestServices';
-import { Services } from '../../Services';
+import type { RenderOptions, RenderResult } from '@testing-library/react';
+import { render as rtlRender } from '@testing-library/react';
+import type { TestServices } from './TestServices';
+import { newTestServices } from './TestServices';
+import type { Services } from '../../Services';
 import { Provider } from 'react-redux';
-import { MainStore, storeFactory } from '../../store/store';
-import { MainState } from '../../store/reducer';
+import type { MainStore } from '../../../store/store';
+import { storeFactory } from '../../../store/store';
+import type { MainState } from '../../../store/reducer';
 import { MemoryRouter } from 'react-router-dom';
 import { ServiceProvider } from '../../context';
 

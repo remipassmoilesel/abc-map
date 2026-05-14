@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,30 +16,34 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Env, EnvKey } from './Env';
-import { Config, ConfigInput } from './Config';
+import { EnvironmentHelper, EnvironmentVariable } from './EnvironmentHelper.js';
+import type { Config, ConfigInput } from './Config.js';
 import { errorMessage, Logger } from '@abc-map/shared';
-import * as path from 'path';
-import * as _ from 'lodash';
-import { Validation } from '../utils/Validation';
-import { isDirectory } from '../utils/isDirectory';
-import { sampleConfig } from './sampleConfig';
+import path from 'path';
+import { Validation } from '../utils/Validation.js';
+import { isDirectory } from '../utils/isDirectory.js';
+import { sampleConfig } from './sampleConfig.js';
+import { isDeprecatedConfig } from './isDeprecatedConfig.js';
+import { ResourceHelper } from '../utils/ResourceHelper.js';
+import _ from 'lodash';
+import ms from 'ms';
 
-export const logger = Logger.get('ConfigLoader.ts', 'info');
+const logger = Logger.get('ConfigLoader.ts', 'info');
+
+export function disableConfigLoaderLogger() {
+  logger.disable();
+}
 
 export type LoadConfigFunc = () => Promise<Config>;
 
+const Resources = new ResourceHelper();
+const Environment = new EnvironmentHelper();
+
 export class ConfigLoader {
-  public static readonly DEFAULT_CONFIG = 'resources/configuration/development.js';
+  public static readonly DEFAULT_CONFIG_PATH = Resources.getResourcePath('configuration/development.mjs');
 
   public static getPathFromEnv(): string {
-    const env = new Env();
-    return env.get(EnvKey.CONFIG) || ConfigLoader.DEFAULT_CONFIG;
-  }
-
-  public static async load(): Promise<Config> {
-    const configPath = ConfigLoader.getPathFromEnv();
-    return new ConfigLoader().load(configPath);
+    return Environment.get(EnvironmentVariable.CONFIG_PATH) || ConfigLoader.DEFAULT_CONFIG_PATH;
   }
 
   public static safeConfig(config: Config): Config {
@@ -58,8 +62,8 @@ export class ConfigLoader {
     return safe;
   }
 
-  public async load(configPath: string): Promise<Config> {
-    const _configPath = path.resolve(configPath);
+  public static async load(pathArg: string | undefined = undefined): Promise<Config> {
+    const _configPath = path.resolve(pathArg ?? ConfigLoader.getPathFromEnv());
 
     const explainedError = (message: string) => {
       logger.error(
@@ -72,36 +76,39 @@ export class ConfigLoader {
           '',
           'This is a valid configuration example:',
           '',
-          '------ config.js ------',
+          '------ config.mjs ------',
           sampleConfig()
             .split('\n')
             .map((line) => '   ' + line)
             .join('\n'),
-          '------ config.js ------',
+          '------ config.mjs ------',
           '',
           'You can see other examples here: https://gitlab.com/abc-map/abc-map/-/tree/master/packages/server/resources/configuration',
           '',
           '',
-        ].join('\n')
+        ].join('\n'),
       );
     };
 
     let input: ConfigInput;
     try {
-      /* eslint-disable @typescript-eslint/no-var-requires */
-      input = _.cloneDeep(require(_configPath));
+      if (await isDeprecatedConfig(_configPath)) {
+        throw new Error('This config format has been deprecated. Replace "module.exports" by "export default". See full example below.');
+      }
+
+      input = await import(_configPath).then((mod) => mod.default);
     } catch (err) {
       explainedError(errorMessage(err));
-      return Promise.reject(new Error(`Cannot load configuration ${configPath}: ${errorMessage(err)}`));
+      return Promise.reject(new Error(`Cannot load configuration ${_configPath}: ${errorMessage(err)}`));
     }
 
     // We validate config input
     if (!Validation.ConfigInput(input)) {
       explainedError(Validation.formatErrors(Validation.ConfigInput));
-      return Promise.reject(new Error(`Configuration ${configPath} is not valid: ${Validation.formatErrors(Validation.ConfigInput)}`));
+      return Promise.reject(new Error(`Configuration ${_configPath} is not valid: ${Validation.formatErrors(Validation.ConfigInput)}`));
     }
 
-    const publicDir = path.resolve(__dirname, '../../public/');
+    const publicDir = path.resolve(import.meta.dirname, '../../public/');
     const config: Config = {
       ...input,
       webappPath: path.resolve(publicDir, 'webapp'),
@@ -123,6 +130,17 @@ export class ConfigLoader {
     // We check if webapp path is a directory
     if (!(await isDirectory(config.webappPath))) {
       throw new Error(`Webapp root '${config.webappPath}' must be a directory. Try "abc build" on a developer workstation.`);
+    }
+
+    const msValues = [
+      { name: 'config.authentication.tokenExpiresIn', value: config.authentication.tokenExpiresIn },
+      { name: 'config.registration.confirmationExpiresIn', value: config.registration.confirmationExpiresIn },
+      { name: 'config.authentication.passwordLostExpiresIn', value: config.authentication.passwordLostExpiresIn },
+    ];
+
+    const msErrors = msValues.filter((v) => ms(v.value) === undefined);
+    if (msErrors.length > 0) {
+      throw new Error("Some time values are incorrect, you should use a string in minutes or second, e.g. '15m' or '30s': " + JSON.stringify(msErrors));
     }
 
     return config;

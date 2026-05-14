@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component } from 'react';
-import { Algorithm, allAlgorithms, LabeledAlgorithms } from '../../core/modules/Algorithm';
+import type { ChangeEvent } from 'react';
+import React, { Component } from 'react';
+import type { Algorithm } from '../../core/modules/Algorithm';
+import { allAlgorithms, LabeledAlgorithms } from '../../core/modules/Algorithm';
 import DialogBoxAdvice from '../dialog-box-advice/DialogBoxAdvice';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 interface Props extends WithTranslation {
   label: string;
@@ -29,9 +32,10 @@ interface Props extends WithTranslation {
   onChange: (value: Algorithm) => void;
 }
 
-class AlgorithmSelector extends Component<Props, {}> {
+class AlgorithmSelector extends Component<Props, unknown> {
   public render() {
-    const { value, label, tip, only, t } = this.props;
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'AlgorithmSelector');
+    const { value, label, tip, only } = this.props;
 
     return (
       <>
@@ -64,4 +68,4 @@ class AlgorithmSelector extends Component<Props, {}> {
   };
 }
 
-export default withTranslation('AlgorithmSelector')(AlgorithmSelector);
+export default withTranslation()(AlgorithmSelector);

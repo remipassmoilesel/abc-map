@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 
 import Cls from './FloatingNorthArrow.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { AbcNorth } from '@abc-map/shared';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { AbcNorth } from '@abc-map/shared';
 import clsx from 'clsx';
 import { NorthArrow } from '../north-arrow/NorthArrow';
 import { FloatingContainer } from '../floating-container/FloatingContainer';
@@ -39,9 +39,9 @@ export function FloatingNorthArrow(props: Props) {
 
   const handleDrag = useCallback(
     (x: number, y: number) => {
-      onChange && onChange({ ...north, x, y });
+      if (onChange) onChange({ ...north, x, y });
     },
-    [onChange, north]
+    [onChange, north],
   );
 
   useEffect(() => {

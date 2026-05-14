@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../../../core/tools/Tool';
-import React, { useCallback } from 'react';
-import { MapTool } from '@abc-map/shared';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import type { Tool } from '../../../core/tools/Tool';
+import React, { useCallback, useMemo } from 'react';
+import type { MapTool } from '@abc-map/shared';
 import Cls from './ToolButton.module.scss';
 import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   tool: Tool;
@@ -29,15 +29,16 @@ interface Props {
   onSelect: (tool: MapTool) => void;
 }
 
-const t = prefixedTranslation('tools:');
-
 export function ToolButton(props: Props) {
   const { tool, active, onSelect } = props;
-  const classes = active ? `${Cls.toolButton} ${Cls.active}` : Cls.toolButton;
+  const { t } = useTranslation('tools');
+  const classes = useMemo(() => (active ? `${Cls.toolButton} ${Cls.active}` : Cls.toolButton), [active]);
 
   const handleSelect = useCallback(() => {
     onSelect(tool.getId());
   }, [onSelect, tool]);
+
+  const iconHtml = useMemo(() => decodeURI(tool.getIcon().replace('data:image/svg+xml,', '')), [tool]);
 
   return (
     <WithTooltip title={t(tool.getI18nLabel())} placement={'left'}>
@@ -46,8 +47,8 @@ export function ToolButton(props: Props) {
         className={classes}
         data-cy={`tool-${tool.getId().toLocaleLowerCase()}`}
         data-active={active}
-        dangerouslySetInnerHTML={{ __html: tool.getIcon() }}
-      />
+        dangerouslySetInnerHTML={{ __html: iconHtml }}
+      ></button>
     </WithTooltip>
   );
 }

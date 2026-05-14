@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -30,13 +30,6 @@ $sidemenu-move-mobile: -96vw;
   position: fixed;
   top: 0;
 
-  width: $sidemenu-width-desktop;
-  right: $sidemenu-move-desktop;
-  @include media-breakpoint-down(md) {
-    width: $sidemenu-width-mobile;
-    right: $sidemenu-move-mobile;
-  }
-
   height: 100vh;
   opacity: 0.5;
   border-radius: $border-radius 0 0 $border-radius;
@@ -48,7 +41,17 @@ $sidemenu-move-mobile: -96vw;
   padding: 1rem;
   background: white;
 
-  transition: right ease-in-out 250ms, opacity ease-in-out 150ms;
+  transition:
+    right ease-in-out 250ms,
+    opacity ease-in-out 150ms;
+
+  width: $sidemenu-width-desktop;
+  right: $sidemenu-move-desktop;
+
+  @include media-breakpoint-down(md) {
+    width: $sidemenu-width-mobile;
+    right: $sidemenu-move-mobile;
+  }
 
   &.open {
     right: 0;

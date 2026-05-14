@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import JSZip from 'jszip';
-import { AbcFile } from './AbcFile';
+import type { AbcFile } from './AbcFile.js';
 
 // TODO: try https://www.npmjs.com/package/unzipit ?
 

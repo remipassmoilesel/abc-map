@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,9 @@
  */
 
 import { FillPatternFactory } from './FillPatternFactory';
-import { FillPatterns, FillProperties } from '@abc-map/shared';
+import type { FillProperties } from '@abc-map/shared';
+import { FillPatterns } from '@abc-map/shared';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FillPatternFactory', () => {
   let factory: FillPatternFactory;

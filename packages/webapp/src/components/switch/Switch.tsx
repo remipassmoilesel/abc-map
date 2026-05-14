@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
  */
 
 import Cls from './Switch.module.scss';
-import React, { useCallback, SyntheticEvent } from 'react';
+import type { SyntheticEvent } from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
 
 interface Props {
@@ -36,7 +37,7 @@ export function Switch(props: Props) {
         onChange(ev);
       }
     },
-    [disabled, onChange]
+    [disabled, onChange],
   );
 
   return (

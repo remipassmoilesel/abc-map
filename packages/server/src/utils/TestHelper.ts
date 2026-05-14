@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,24 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-  AbcArtefact,
-  AbcProjectManifest,
-  AbcUser,
-  ArtefactManifest,
-  ArtefactType,
-  CompressedProject,
-  DEFAULT_PROJECTION,
-  Language,
-  LayerType,
-  PredefinedLayerModel,
-  ProjectConstants,
-  Zipper,
-} from '@abc-map/shared';
-import * as uuid from 'uuid-random';
-import { ProjectDocument } from '../projects/ProjectDocument';
+import type { AbcArtefact, AbcProjectManifest, AbcUser, ArtefactManifest, CompressedProject } from '@abc-map/shared';
+import { ArtefactType, DEFAULT_PROJECTION, Language, LayerType, PredefinedLayerModel, ProjectConstants, Zipper } from '@abc-map/shared';
+import uuid from 'uuid-random';
+import type { ProjectDocument } from '../projects/ProjectDocument.js';
 import { DateTime } from 'luxon';
-import { ArtefactManifestWithPath } from '../data-store/ArtefactManifestSchema';
+import type { ArtefactManifestWithPath } from '../data-store/ArtefactManifestSchema.js';
 
 export class TestHelper {
   public static sampleUser(): AbcUser {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IndexedDbMigration } from './IndexedDbMigration';
+import type { IndexedDbMigration } from './IndexedDbMigration';
 import { M20230806 } from './M20230806/M20230806';
 import { M20230816 } from './M20230816/M20230816';
 

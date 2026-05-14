@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import React, { useCallback } from 'react';
-import { BaseMetadata } from '@abc-map/shared';
+import type { BaseMetadata } from '@abc-map/shared';
 import Cls from './LayerListItem.module.scss';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import { FaIcon } from '../../../../components/icon/FaIcon';

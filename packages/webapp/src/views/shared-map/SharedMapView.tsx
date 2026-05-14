@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,13 +20,14 @@ import Cls from './SharedMapView.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { pageSetup } from '../../core/utils/page-setup';
 import { Link, useParams } from 'react-router-dom';
-import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger, ProjectConstants, SharedMapParams } from '@abc-map/shared';
+import type { AbcNorth, AbcScale, AbcTextFrame, AbcView, SharedMapParams } from '@abc-map/shared';
+import { getAbcWindow, Logger, ProjectConstants } from '@abc-map/shared';
 import { useServices } from '../../core/useServices';
 import NavigationMenu from './navigation-menu/NavigationMenu';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import MainIcon from '../../assets/main-icon.svg';
 import { Routes } from '../../routes';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { useActiveSharedView } from '../../core/project/useActiveSharedView';
 import { MapUi } from '../../components/map-ui/MapUi';
 import { E2eMapWrapper } from '../../core/geo/map/E2eMapWrapper';
@@ -35,8 +36,8 @@ import { useTranslation, withTranslation } from 'react-i18next';
 import { FloatingTextFrame } from '../../components/text-frame/FloatingTextFrame';
 import { FloatingScale } from '../../components/floating-scale/FloatingScale';
 import { toPrecision } from '../../core/utils/numbers';
-import { useAppSelector } from '../../core/store/hooks';
-import { DimensionsStyle } from '../../core/utils/DimensionsStyle';
+import { useAppSelector } from '../../store/hooks';
+import type { DimensionsStyle } from '../../core/utils/DimensionsStyle';
 import { adaptMapDimensions } from '../../core/project/adaptMapDimensions';
 import SharedViewNavigation from '../../components/shared-view-navigation/SharedViewNavigation';
 import { adaptView } from './adaptView';
@@ -171,7 +172,7 @@ function SharedMapView() {
 
     const view = adaptView(activeView.view, fullscreen, mapDimensions);
     setPreviewView(view);
-  }, [activeView?.view, fullscreen, mapDimensions]);
+  }, [activeView, fullscreen, mapDimensions]);
 
   // Adapt relative values of frames
   useEffect(() => {

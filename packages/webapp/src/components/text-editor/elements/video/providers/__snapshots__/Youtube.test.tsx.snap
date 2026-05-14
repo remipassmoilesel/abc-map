@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Youtube should return integration for long url 1`] = `
+exports[`Youtube > should return integration for long url 1`] = `
 <div>
   <div>
     <iframe
@@ -14,7 +14,7 @@ exports[`Youtube should return integration for long url 1`] = `
 </div>
 `;
 
-exports[`Youtube should return integration for short url 1`] = `
+exports[`Youtube > should return integration for short url 1`] = `
 <div>
   <div>
     <iframe
@@ -28,7 +28,7 @@ exports[`Youtube should return integration for short url 1`] = `
 </div>
 `;
 
-exports[`Youtube should work with https://youtu.be/tEpMEl-_syY 1`] = `
+exports[`Youtube > should work with https://youtu.be/tEpMEl-_syY 1`] = `
 <div>
   <div>
     <iframe

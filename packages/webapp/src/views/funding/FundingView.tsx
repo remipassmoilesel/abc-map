@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,7 +21,6 @@ import { withServices } from '../../core/withServices';
 import { pageSetup } from '../../core/utils/page-setup';
 import { FundingLinks } from '../../components/funding-links/FundingLinks';
 import { useTranslation, withTranslation } from 'react-i18next';
-import { BudgetTable } from './BudgetTable';
 import Cls from './FundingView.module.scss';
 
 function FundingView() {
@@ -43,11 +42,6 @@ function FundingView() {
           <p>{t('Fund_a_free_internet_territory')}</p>
         </div>
 
-        <div className={'w-100'}>
-          <h3 className={'my-4'}>{t('What_budget')}</h3>
-          <BudgetTable />
-        </div>
-
         <div>
           <h3 className={'my-4'}>{t('How_to_donate')}</h3>
           <FundingLinks />
@@ -65,9 +59,6 @@ function FundingView() {
 
         <h3 className="mt-3 mb-3">{t('Links')}</h3>
         <div className="d-flex flex-column">
-          <a href="https://twitter.com/abcmapfr" target="_blank" rel="noreferrer">
-            🐦 Twitter
-          </a>
           <a href="mailto:fr.abcmap@gmail.com" target="_blank" rel="noreferrer">
             📧 Email
           </a>

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcWindow, E2eMap } from '@abc-map/shared';
+import type { AbcWindow, E2eMap } from '@abc-map/shared';
 import Chainable = Cypress.Chainable;
 
 export class SharingLayoutMap {

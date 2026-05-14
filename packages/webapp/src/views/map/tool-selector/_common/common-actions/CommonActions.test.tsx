@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,21 +15,24 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
+import type { TestServices } from '../../../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../../../core/utils/test/TestServices';
 import { abcRender } from '../../../../../core/utils/test/abcRender';
 import CommonActions from './CommonActions';
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { act } from 'react';
 import userEvent from '@testing-library/user-event';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { MapFactory } from '../../../../../core/geo/map/MapFactory';
 import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
 import { LineString, Point, Polygon } from 'ol/geom';
-import { MapWrapper } from '../../../../../core/geo/map/MapWrapper';
-import { VectorLayerWrapper } from '../../../../../core/geo/layers/LayerWrapper';
+import type { MapWrapper } from '../../../../../core/geo/map/MapWrapper';
+import type { VectorLayerWrapper } from '../../../../../core/geo/layers/LayerWrapper';
 import { FillPatterns } from '@abc-map/shared';
-import { MainState } from '../../../../../core/store/reducer';
+import type { MainState } from '../../../../../store/reducer';
 import { IconName } from '@abc-map/point-icons';
 import { TestHelper } from '../../../../../core/utils/test/TestHelper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('CommonActions', () => {
   let fPoint: FeatureWrapper;
@@ -55,7 +58,7 @@ describe('CommonActions', () => {
           [3, 3],
           [2, 2],
         ],
-      ])
+      ]),
     );
 
     map.getSelection().add([fPoint.unwrap()]);
@@ -98,13 +101,13 @@ describe('CommonActions', () => {
   describe('Apply style', () => {
     it('on point with text', async () => {
       // Prepare
-      abcRender(<CommonActions />, { services, state });
+      await act(async () => {
+        abcRender(<CommonActions />, { services, state });
+      });
       fPoint.setText('Hey !');
 
       // Act
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('apply-style'));
-      });
+      await userEvent.click(screen.getByTestId('apply-style'));
 
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
@@ -133,12 +136,13 @@ describe('CommonActions', () => {
 
     it('on point without text', async () => {
       // Prepare
-      abcRender(<CommonActions />, { services, state });
+      await act(async () => {
+        abcRender(<CommonActions />, { services, state });
+      });
 
       // Act
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('apply-style'));
-      });
+      await userEvent.click(screen.getByTestId('apply-style'));
+
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
@@ -154,12 +158,13 @@ describe('CommonActions', () => {
 
     it('on line', async () => {
       // Prepare
-      abcRender(<CommonActions />, { services, state });
+      await act(async () => {
+        abcRender(<CommonActions />, { services, state });
+      });
 
       // Act
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('apply-style'));
-      });
+      await userEvent.click(screen.getByTestId('apply-style'));
+
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fLine);
 
@@ -174,12 +179,13 @@ describe('CommonActions', () => {
 
     it('on polygon', async () => {
       // Prepare
-      abcRender(<CommonActions />, { services, state });
+      await act(async () => {
+        abcRender(<CommonActions />, { services, state });
+      });
 
       // Act
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('apply-style'));
-      });
+      await userEvent.click(screen.getByTestId('apply-style'));
+
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPolygon);
 
@@ -199,15 +205,15 @@ describe('CommonActions', () => {
 
   it('Duplicate selection', async () => {
     // Prepare
-    abcRender(<CommonActions />, { services, state });
+    await act(async () => {
+      abcRender(<CommonActions />, { services, state });
+    });
 
     const style = { ...fPoint.getStyleProperties(), zIndex: 5555 };
     fPoint.setStyleProperties(style);
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('duplicate-selection'));
-    });
+    await userEvent.click(screen.getByTestId('duplicate-selection'));
     await TestHelper.wait(0); // We wait for overlay
 
     // Assert
@@ -226,12 +232,12 @@ describe('CommonActions', () => {
 
   it('Delete features', async () => {
     // Prepare
-    abcRender(<CommonActions />, { services, state });
+    await act(async () => {
+      abcRender(<CommonActions />, { services, state });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('delete-features'));
-    });
+    await userEvent.click(screen.getByTestId('delete-features'));
     await TestHelper.wait(0); // We wait for overlay
 
     // Assert
@@ -247,14 +253,14 @@ describe('CommonActions', () => {
 
   it('Move features behind', async () => {
     // Prepare
-    abcRender(<CommonActions />, { services, state });
+    await act(async () => {
+      abcRender(<CommonActions />, { services, state });
+    });
 
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('move-features-behind'));
-    });
+    await userEvent.click(screen.getByTestId('move-features-behind'));
     await TestHelper.wait(0); // We wait for overlay
     const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
@@ -264,14 +270,14 @@ describe('CommonActions', () => {
 
   it('Move features forward', async () => {
     // Prepare
-    abcRender(<CommonActions />, { services });
+    await act(async () => {
+      abcRender(<CommonActions />, { services, state });
+    });
 
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 
     // Act
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('move-features-forward'));
-    });
+    await userEvent.click(screen.getByTestId('move-features-forward'));
     await TestHelper.wait(0); // We wait for overlay
     const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 

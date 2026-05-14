@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ScriptContext, ScriptFunction } from './ScriptContext';
+import type { ScriptContext, ScriptFunction } from './ScriptContext';
 
 export function createScript(content: string): ScriptFunction {
   // Be careful with line ends here, it may break error stacks
-  const contextKeys: (keyof ScriptContext)[] = ['log', 'moduleApi', 'scriptApi'];
+  const contextKeys: (keyof ScriptContext)[] = ['log', 'scriptApi'];
   const header = `"use strict";return (async function(){ const {${contextKeys.join(', ')}} = context;\n`;
   const footer = `})();`;
 
-  // eslint-disable-next-line no-new-func
   return new Function('context', header + content + footer) as ScriptFunction;
 }

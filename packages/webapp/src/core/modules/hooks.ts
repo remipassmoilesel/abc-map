@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleRegistry } from './registry/ModuleRegistry';
+import type { ModuleRegistry } from './registry/ModuleRegistry';
 import { useContext } from 'react';
 import { ModuleRegistryContext } from './registry/context';
-import { Logger, Module, ModuleId } from '@abc-map/module-api';
-import { useAppSelector } from '../../core/store/hooks';
-import { BundledModuleId } from '@abc-map/shared';
+import { useAppSelector } from '../../store/hooks';
+import { ModuleId, Logger } from '@abc-map/shared';
 import { matchRoutes, useLocation } from 'react-router-dom';
 import { Routes } from '../../routes';
+import type { AbcModule } from '../../modules/AbcModule.ts';
 
 const logger = Logger.get('hooks.ts');
 
@@ -38,7 +38,7 @@ export function useModuleRegistry(): ModuleRegistry {
   return registry;
 }
 
-export function useActiveModule(): { module: Module | undefined } {
+export function useActiveModule(): { module: AbcModule | undefined } {
   // We cannot use useMatch() here, this hook can be called from outside a Route element
   // See: https://github.com/remix-run/react-router/issues/7026
   const registry = useModuleRegistry();
@@ -50,8 +50,8 @@ export function useActiveModule(): { module: Module | undefined } {
   return { module };
 }
 
-export function useEssentialModules(): Module[] {
-  const moduleIds: ModuleId[] = [BundledModuleId.DataStore, BundledModuleId.MapExport, BundledModuleId.SharedMapSettings];
+export function useEssentialModules(): AbcModule[] {
+  const moduleIds: ModuleId[] = [ModuleId.DataStore, ModuleId.MapExport, ModuleId.SharedMapSettings];
 
   const registry = useModuleRegistry();
   const modules = registry.getModules();
@@ -59,13 +59,13 @@ export function useEssentialModules(): Module[] {
   return moduleIds
     .map((moduleId) => {
       const module = modules.find((mod) => mod.getId() === moduleId);
-      !module && logger.warn(`Module not found: ${moduleId}`);
+      if (!module) logger.warn(`Module not found: ${moduleId}`);
       return module;
     })
-    .filter((mod): mod is Module => !!mod);
+    .filter((mod): mod is AbcModule => !!mod);
 }
 
-export function useLastModulesUsed(): Module[] {
+export function useLastModulesUsed(): AbcModule[] {
   const lastModulesUsed = useAppSelector((st) => st.ui.lastModulesUsed);
   const registry = useModuleRegistry();
   const modules = registry.getModules();
@@ -73,14 +73,14 @@ export function useLastModulesUsed(): Module[] {
   return lastModulesUsed
     .map((moduleId) => {
       const module = modules.find((mod) => mod.getId() === moduleId);
-      !module && logger.warn(`Module not found: ${moduleId}`);
+      if (!module) logger.warn(`Module not found: ${moduleId}`);
       return module;
     })
-    .filter((mod): mod is Module => !!mod)
+    .filter((mod): mod is AbcModule => !!mod)
     .slice(0, 5);
 }
 
-export function useFavoriteModules(): Module[] {
+export function useFavoriteModules(): AbcModule[] {
   const moduleIds = useAppSelector((st) => st.ui.favoriteModules);
   const registry = useModuleRegistry();
   const modules = registry.getModules();
@@ -88,8 +88,8 @@ export function useFavoriteModules(): Module[] {
   return moduleIds
     .map((moduleId) => {
       const module = modules.find((mod) => mod.getId() === moduleId);
-      !module && logger.warn(`Module not found: ${moduleId}`);
+      if (!module) logger.warn(`Module not found: ${moduleId}`);
       return module;
     })
-    .filter((mod): mod is Module => !!mod);
+    .filter((mod): mod is AbcModule => !!mod);
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Prj, PrjWkt } from './Prj';
 import { BlobIO, Logger } from '@abc-map/shared';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const wktParser = require('wkt-parser').default ? require('wkt-parser').default : require('wkt-parser');
+import wktParser from 'wkt-parser';
+import type { PrjWkt, Prj } from 'wkt-parser';
 
 const logger = Logger.get('WktParser.ts');
 
 export class WktParser {
   /**
-   * Par a PRJ file if possible. If something fail, return undefined.
+   * Parse a PRJ file if possible. If something fail, return undefined.
    *
    * We choose to not fail here in order to try shapefile import anyway in case of failure.
    * @param blob

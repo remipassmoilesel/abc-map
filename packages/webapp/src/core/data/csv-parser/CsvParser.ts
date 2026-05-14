@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as Papa from 'papaparse';
+import Papa from 'papaparse';
 import { BlobIO, Logger } from '@abc-map/shared';
-import { CsvParsingError, CsvRow } from './typings';
+import type { CsvRow } from './typings';
+import { UnknownLineNumber } from './typings';
+import { CsvParsingError } from './typings';
 
 export const logger = Logger.get('CsvParser.ts');
 
@@ -35,9 +37,8 @@ export class CsvParser {
     });
 
     if (results.errors.length) {
-      // We count lines from one, silly humans
-      // If error has a valid row, we add 1 for headers row
-      const row = results.errors[0].row === 0 ? 1 : results.errors[0].row + 2;
+      // If error has a valid row, we add 1 for headers row, and 1 because we count lines from 1 for users.
+      const row = typeof results.errors[0].row === 'number' ? results.errors[0].row + 2 : UnknownLineNumber;
       return Promise.reject(new CsvParsingError(`Invalid data: ${results.errors[0].message}`, row));
     }
 

@@ -44,22 +44,18 @@ spec:
               command:
                 - postfix
                 - status
-            initialDelaySeconds: 10
             periodSeconds: 30
             timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 2
+            failureThreshold: 3
           readinessProbe:
             # We do not perform a TCP check in order to keep logs clean
             exec:
               command:
                 - postfix
                 - status
-            initialDelaySeconds: 10
             periodSeconds: 30
             timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 2
+            failureThreshold: 3
 
           resources:
           {{- toYaml .Values.smtp.resources | nindent 12 }}

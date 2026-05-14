@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import Cls from './UserAccountView.module.scss';
 import { Routes } from '../../routes';
 import { AccountInformations } from './AccountInformations';
 import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
-import { useAppSelector } from '../../core/store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { useServices } from '../../core/useServices';
 import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
 import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
@@ -65,7 +65,7 @@ function UserAccountView() {
           }
         });
     },
-    [authentication, passwordFormVersion, t, toasts]
+    [authentication, passwordFormVersion, t, toasts],
   );
 
   const handleDeleteAccount = useCallback(
@@ -74,8 +74,7 @@ function UserAccountView() {
         .deleteAccount(password)
         .then(() => {
           toasts.info(t('Your_account_has_been_deleted'));
-          navigate(Routes.landing().format());
-          return authentication.logout();
+          return authentication.logout().then(() => navigate(Routes.landing().format()));
         })
         .catch((err) => {
           logger.error('Cannot delete account: ', err);
@@ -87,7 +86,7 @@ function UserAccountView() {
           }
         });
     },
-    [authentication, navigate, t, toasts]
+    [authentication, navigate, t, toasts],
   );
 
   if (offline) {
@@ -131,4 +130,4 @@ function UserAccountView() {
   );
 }
 
-export default withTranslation('UserAccountView')(UserAccountView);
+export default withTranslation()(UserAccountView);

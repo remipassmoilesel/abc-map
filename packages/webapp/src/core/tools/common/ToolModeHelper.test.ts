@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import Map from 'ol/Map';
 import { ToolModeHelper } from './ToolModeHelper';
-import { ToolMode } from '../ToolMode';
+import type { ToolMode } from '../ToolMode';
+import { describe, expect, it } from 'vitest';
 
 const testMode: ToolMode = {
   name: 'testMode',

@@ -1,8 +1,9 @@
-node_modules
-build
 .nyc_output
+build
 coverage
-videos
+downloads
 emails
-screenshots
 generated
+node_modules
+screenshots
+videos

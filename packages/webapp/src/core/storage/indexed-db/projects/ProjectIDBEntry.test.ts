@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
  */
 
 import { TestHelper } from '../../../utils/test/TestHelper';
-import { ProjectIDBEntry } from './ProjectIDBEntry';
+import type { ProjectIDBEntry } from './ProjectIDBEntry';
+import { describe, expect, it } from 'vitest';
 
 describe('ProjectIDBEntry', () => {
   it('should not change without migration', () => {

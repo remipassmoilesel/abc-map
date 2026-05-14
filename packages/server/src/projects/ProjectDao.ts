@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ProjectDocument } from './ProjectDocument';
-import { MongodbCollection } from '../mongodb/MongodbCollection';
-import { MongodbBucket } from '../mongodb/MongodbBucket';
-import { Collection, GridFSBucket } from 'mongodb';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { ProjectDocument } from './ProjectDocument.js';
+import { MongodbCollection } from '../mongodb/MongodbCollection.js';
+import { MongodbBucket } from '../mongodb/MongodbBucket.js';
+import type { Collection, GridFSBucket } from 'mongodb';
 import ReadableStream = NodeJS.ReadableStream;
-import WritableStream = NodeJS.WritableStream;
 import { Readable } from 'stream';
 
 export class ProjectDao {
@@ -54,7 +53,7 @@ export class ProjectDao {
       bulk
         .find({ _id: { $eq: doc._id } })
         .upsert()
-        .replaceOne(doc)
+        .replaceOne(doc),
     );
     await bulk.execute();
   }
@@ -71,9 +70,11 @@ export class ProjectDao {
     // Stream typings are borked
     if (file instanceof Buffer) {
       const fileStream = Readable.from(file);
-      fileStream.pipe(upload as unknown as WritableStream);
+      fileStream.pipe(upload);
+    } else if ('pipe' in file) {
+      file.pipe(upload);
     } else {
-      file.pipe(upload as unknown as WritableStream);
+      throw new Error('Unsupported file stream: ' + [typeof file, file.constructor.name].join(', '));
     }
 
     return res;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller } from '../server/Controller';
-import { Services } from '../services/services';
-import { HealthStatus } from './HealthCheckService';
+import { Controller } from '../server/Controller.js';
+import type { Services } from '../services/services.js';
+import { HealthStatus } from './HealthCheckService.js';
 import { Logger } from '@abc-map/shared';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 const logger = Logger.get('HealthCheckController.ts');
 

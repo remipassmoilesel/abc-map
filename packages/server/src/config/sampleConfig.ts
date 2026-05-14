@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,10 +19,10 @@
  *
  */
 
-import { ConfigInput } from './Config';
+import type { ConfigInput } from './Config.js';
 
 /**
- * This function return a valid javascript configuration example.
+ * This function return a valid JavaScript configuration example.
  */
 export function sampleConfig(): string {
   const config: ConfigInput = {
@@ -95,6 +95,6 @@ export function sampleConfig(): string {
   };
 
   return `
-module.exports = ${JSON.stringify(config, null, 2)}
+export default ${JSON.stringify(config, null, 2)}
 `;
 }

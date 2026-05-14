@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectIDBEntryV0 } from '../typings/ProjectIDBEntryV0';
+import type { ProjectIDBEntryV0 } from '../typings/ProjectIDBEntryV0';
 import { ObjectStore } from '../../client/ObjectStore';
-import { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
+import type { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
 import { IndexedDbClient } from '../../client/IndexedDbClient';
 import { nanoid } from 'nanoid';
 import { TestHelper } from '../../../../utils/test/TestHelper';
 import { M20230816 } from './M20230816';
 import { disableStorageMigrationLogs } from '../StorageUpdater';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 disableStorageMigrationLogs();
 
@@ -76,7 +77,7 @@ describe('M20230816', () => {
 
       await client.putAll(
         ObjectStore.Projects,
-        docs.map((entry) => ({ key: entry.metadata.id, value: entry }))
+        docs.map((entry) => ({ key: entry.metadata.id, value: entry })),
       );
 
       // Act
@@ -112,7 +113,7 @@ describe('M20230816', () => {
 
       await client.putAll(
         ObjectStore.Projects,
-        docs.map((entry) => ({ key: entry.metadata.id, value: entry }))
+        docs.map((entry) => ({ key: entry.metadata.id, value: entry })),
       );
 
       // Act

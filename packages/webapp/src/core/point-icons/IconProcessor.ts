@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IconName, PointIcon } from '@abc-map/point-icons';
+import type { IconName, PointIcon } from '@abc-map/point-icons';
 import { Logger } from '@abc-map/shared';
 import EventEmitter from 'eventemitter3';
 import debounce from 'lodash/debounce';
@@ -146,7 +146,7 @@ export class IconProcessor {
     const serialized = btoa(
       serializer.serializeToString(svg).replace(/[\u00A0-\u2666]/g, function (c) {
         return '&#' + c.charCodeAt(0) + ';';
-      })
+      }),
     );
 
     return `data:image/svg+xml;base64,${serialized}`;

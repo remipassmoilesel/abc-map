@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayout, AbcSharedView } from '@abc-map/shared';
+import type { AbcFile, AbcLayout, AbcSharedView } from '@abc-map/shared';
 import { TextFrameHelpers } from './TextFrameHelpers';
-import { SinonStub } from 'sinon';
-import { mockNanoid, restoreNanoid } from '../utils/test/mock-nanoid';
+import type { SinonStub } from 'sinon';
 import { sampleFramesWithBlobUrls, sampleFramesWithPaths } from './TextFrameHelpers.test.data';
 import { deepFreeze } from '../utils/deepFreeze';
 import { TestHelper } from '../utils/test/TestHelper';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('nanoid', () => ({
+  nanoid: () => `###-FAKE-NANOID-###`,
+}));
 
 describe('TextFrameHelpers', () => {
   describe('Extract images', () => {
@@ -57,15 +61,9 @@ describe('TextFrameHelpers', () => {
         },
       ]);
 
-      mockNanoid();
-
       fetchStub.callsFake((url) => {
         return Promise.resolve({ blob: () => ({ type: 'blob', url }) });
       });
-    });
-
-    afterEach(() => {
-      restoreNanoid();
     });
 
     it('extractImagesFromLayouts()', async () => {
@@ -74,10 +72,10 @@ describe('TextFrameHelpers', () => {
 
       // Assert
       expect(images).toEqual([
-        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-1-###' },
-        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-2-###' },
-        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-3-###' },
-        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-4-###' },
+        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-###' },
+        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-###' },
+        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-###' },
+        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-###' },
       ]);
 
       expect(output).toMatchSnapshot();
@@ -89,10 +87,10 @@ describe('TextFrameHelpers', () => {
 
       // Assert
       expect(images).toEqual([
-        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-1-###' },
-        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-2-###' },
-        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-3-###' },
-        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-4-###' },
+        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-###' },
+        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-###' },
+        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-###' },
+        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-###' },
       ]);
 
       expect(output).toMatchSnapshot();

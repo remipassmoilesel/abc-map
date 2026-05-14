@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 import { useMemo } from 'react';
 import debounce from 'lodash/debounce';
-import { StyleTransformFunc } from './GeoService';
+import type { StyleTransformFunc } from './GeoService';
 import { useServices } from '../useServices';
 
 /**
@@ -35,6 +35,6 @@ export function useDebouncedStyleTransform() {
       debounce((transform: StyleTransformFunc) => {
         geo.updateSelectedFeatures(transform);
       }, 200),
-    [geo]
+    [geo],
   );
 }

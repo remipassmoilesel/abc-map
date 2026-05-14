@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -49,7 +49,7 @@ export function LanguageSection(props: Props) {
                   window.location.search,
                   window.location.hash,
                 ].join('');
-                navigate(route);
+                return navigate(route);
               })
               .catch((err) => logger.error('Cannot set lang: ', err));
           };

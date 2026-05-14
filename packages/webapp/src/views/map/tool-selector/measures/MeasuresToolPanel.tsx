@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,21 +19,19 @@
 import Cls from './MeasuresToolPanel.module.scss';
 import React, { useCallback } from 'react';
 import { AbcGeometryType, Logger } from '@abc-map/shared';
-import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { useServices } from '../../../../core/useServices';
 import { formatArea, formatLength } from './helpers';
-import TextFormat from '../_common/text-format/TextFormat';
+import { TextFormat } from '../_common/text-format/TextFormat';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import clsx from 'clsx';
 
 const logger = Logger.get('MeasuresToolPanel.tsx');
 
-const t = prefixedTranslation('MapView:');
-
-function MeasuresToolPanel() {
+export function MeasuresToolPanel() {
   const { geo } = useServices();
+  const { t } = useTranslation('MapView');
 
   const handleMeasureLengths = useCallback(() => {
     const layer = geo.getMainMap().getActiveLayer();
@@ -96,5 +94,3 @@ function MeasuresToolPanel() {
     </div>
   );
 }
-
-export default withTranslation()(MeasuresToolPanel);

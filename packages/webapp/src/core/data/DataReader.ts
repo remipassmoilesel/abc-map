@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,15 +17,17 @@
  */
 
 import { DateTime } from 'luxon';
-import { getServices, Services } from '../Services';
+import type { Services } from '../Services';
+import { getServices } from '../Services';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { GpxReader } from './readers/GpxReader';
 import { KmlReader } from './readers/KmlReader';
 import { ShapefileReader } from './readers/ShapefileReader';
 import { GeoJsonReader } from './readers/GeoJsonReader';
 import { WmsDefinitionReader } from './readers/WmsDefinitionReader';
-import { ReaderImplementation as DataReaderImplem } from './readers/ReaderImplementation';
-import { AbcArtefact, AbcFile, AbcProjection, Zipper } from '@abc-map/shared';
+import type { ReaderImplementation as DataReaderImplem } from './readers/ReaderImplementation';
+import type { AbcArtefact, AbcFile, AbcProjection } from '@abc-map/shared';
+import { Zipper } from '@abc-map/shared';
 import { FileFormat, FileFormats } from './FileFormats';
 import { ModalStatus } from '../ui/typings';
 import { AddLayersChangeset } from '../history/changesets/layers/AddLayersChangeset';
@@ -33,13 +35,14 @@ import { HistoryKey } from '../history/HistoryKey';
 import { getArea } from 'ol/extent';
 import { XyzDefinitionReader } from './readers/XyzDefinitionReader';
 import { WmtsDefinitionReader } from './readers/WmtsDefinitionReader';
-import { ReadResult, ReadStatus } from './ReadResult';
+import type { ReadResult } from './ReadResult';
+import { ReadStatus } from './ReadResult';
 import { attributionsVariableExpansion } from '../utils/variableExpansion';
 import { WktReader } from './readers/WktReader';
 import { TopoJsonReader } from './readers/TopoJsonReader';
 import { UiConstants } from '../ui/UiConstants';
 
-const t = prefixedTranslation('DataReader:');
+const t = prefixedTranslation('DataReader');
 
 export const readersFactory = (services: Services) => [
   new GpxReader(),
@@ -58,7 +61,10 @@ export class DataReader {
     return new DataReader(getServices(), readersFactory(getServices()));
   }
 
-  constructor(private services: Services, private readers: DataReaderImplem[]) {}
+  constructor(
+    private services: Services,
+    private readers: DataReaderImplem[],
+  ) {}
 
   public async read(files: AbcFile<Blob>[], targetProjection: AbcProjection): Promise<ReadResult> {
     if (!files.length) {

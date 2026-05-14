@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectManifest, AbcProjectMetadata, ProjectConstants } from '@abc-map/shared';
+import type { AbcProjectManifest, AbcProjectMetadata } from '@abc-map/shared';
+import { ProjectConstants } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { DateTime } from 'luxon';
 import { Views } from '../geo/Views';
 import { prefixedTranslation } from '../../i18n/i18n';
 
-const t = prefixedTranslation('ProjectFactory:');
+const t = prefixedTranslation('ProjectFactory');
 
 export class ProjectFactory {
   public static newProjectMetadata(): AbcProjectMetadata {

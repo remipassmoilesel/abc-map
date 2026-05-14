@@ -11,11 +11,11 @@
 - [How to fix my broken repository ?](#how-to-fix-my-broken-repository-)
 - [Server crashed: Error: Frontend root 'abc-map/packages/server/public' must be a directory](#server-crashed-error-frontend-root-abc-mappackagesserverpublic-must-be-a-directory)
 - [How to create videos for help page ?](#how-to-create-videos-for-help-page-)
-- [About style ratios](#about-style-ratios)
-- [About 'instanceof' in frontend](#about-instanceof-in-frontend)
-- [How do I publish public packages ?](#how-do-i-publish-public-packages-)
 - [How to debug turborepo ?](#how-to-debug-turborepo-)
 - [Which package manager is used ?](#which-package-manager-is-used-)
+- [(node:3841) TimeoutNaNWarning: NaN is not a number.](#node3841-timeoutnanwarning-nan-is-not-a-number)
+- [Why `void` in `void reply.forbidden();` ?](#why-void-in-void-replyforbidden-)
+- [How to update turbo (turborepo) ?](#how-to-update-turbo-turborepo-)
 
 <!-- tocstop -->
 
@@ -73,31 +73,6 @@ You must run `abc build`.
 
 You can use [peek](https://github.com/phw/peek).
 
-## About style ratios
-
-Styles can be artificially scaled, for example between two screen sizes or for exports.
-
-To this end, the functions and methods that handle styles take a "style ratio" as a parameter. For example,
-a map with dots 10 pixels in diameter displayed with a ratio of 2 will have dots 20 pixels in diameter.
-
-## About 'instanceof' in frontend
-
-`instanceof` usage can have weird behavior in frontend because it cannot work with external modules.  
-See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof#instanceof_and_multiple_context_e.g._frames_or_windows
-
-You can use instead `crossContextInstanceof()`.
-
-## How do I publish public packages ?
-
-To publish packages to the NPM registry:
-
-```
-  $ npm adduser
-  $ lerna run public-publish
-```
-
-Not all public packages are published on NPM registry.
-
 ## How to debug turborepo ?
 
 ```
@@ -107,3 +82,19 @@ $ turbo run clean-build --summarize
 ## Which package manager is used ?
 
 PNPM is preferred, NPM otherwise.
+
+## (node:3841) TimeoutNaNWarning: NaN is not a number.
+
+This warning come from react or react-boostrap (04/2026)
+
+## Why `void` in `void reply.forbidden();` ?
+
+Some Fastify methods are conflicting with @typescript-eslint/no-floating-promises rules (`.then()`)
+
+See: https://github.com/fastify/fastify/discussions/3849
+
+## How to update turbo (turborepo) ?
+
+Update `turbo` dependency in both `abc-map/package.json` and `abc-map/packages/abc-cli/package.json)`.
+
+Why `turbo` in `abc-cli` ? In order to work even if turbo was not globally installed (like in CI).

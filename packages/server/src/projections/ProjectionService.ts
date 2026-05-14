@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractService } from '../services/AbstractService';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { Config } from '../config/Config';
-import { ProjectionDao } from './ProjectionDao';
-import { ProjectionSource } from './ProjectionSource';
-import { ProjectionDocument } from './ProjectionDocument';
-import { Logger, normalizedProjectionName, ProjectionDto } from '@abc-map/shared';
-import { ProjectionMapper } from './ProjectionMapper';
+import { AbstractService } from '../services/AbstractService.js';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { Config } from '../config/Config.js';
+import { ProjectionDao } from './ProjectionDao.js';
+import { ProjectionSource } from './ProjectionSource.js';
+import type { ProjectionDocument } from './ProjectionDocument.js';
+import type { ProjectionDto } from '@abc-map/shared';
+import { Logger, normalizedProjectionName } from '@abc-map/shared';
+import { ProjectionMapper } from './ProjectionMapper.js';
 
 export const logger = Logger.get('ProjectionService.ts', 'info');
 
@@ -34,7 +35,10 @@ export class ProjectionService extends AbstractService {
     return new ProjectionService(dao, projectionSource);
   }
 
-  constructor(private dao: ProjectionDao, private projectionSource: ProjectionSource) {
+  constructor(
+    private dao: ProjectionDao,
+    private projectionSource: ProjectionSource,
+  ) {
     super();
   }
 

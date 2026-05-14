@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { IconName } from './IconName';
-import { IconCategory } from './IconCategory';
+import type { IconName } from './IconName.js';
+import type { IconCategory } from './IconCategory.js';
 
 export interface PointIcon {
   name: IconName;

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,13 +18,17 @@
  *
  */
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'node:url';
+
 /*
  * This scripts reads test-results.json then exit(0) if no requests failed, 1 otherwise.
  *
  * TODO: we should fail if performance drops here.
  */
 
-const results = require('../test-results.json');
+const results = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../test-results.json')).toString('utf-8'));
 
 // If many tests are failed, report shape can change
 const fails = results?.metrics?.checks?.fails ?? 'Invalid report';

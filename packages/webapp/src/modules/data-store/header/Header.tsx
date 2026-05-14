@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,8 @@ import { useTranslation } from 'react-i18next';
 import Cls from './Header.module.scss';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ArtefactFilter } from '@abc-map/shared';
 import clsx from 'clsx';
 import NavigationBar from './NavigationBar';
@@ -52,7 +53,7 @@ export function Header(props: Props) {
       setQuery(ev.target.value);
       onQueryChange(ev.target.value);
     },
-    [onQueryChange]
+    [onQueryChange],
   );
 
   // User types on 'Enter' key to search
@@ -62,7 +63,7 @@ export function Header(props: Props) {
         onSearch(query);
       }
     },
-    [onSearch, query]
+    [onSearch, query],
   );
 
   // User clicks on clear button
@@ -79,7 +80,7 @@ export function Header(props: Props) {
       setFilter(filter);
       onFilterChange(filter);
     },
-    [onFilterChange]
+    [onFilterChange],
   );
 
   return (

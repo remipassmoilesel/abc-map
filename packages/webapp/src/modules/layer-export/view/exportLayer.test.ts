@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,13 @@
  */
 
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
-import Feature from 'ol/Feature';
+import type Feature from 'ol/Feature';
 import { exportLayer } from './exportLayer';
 import { Format } from './Format';
-import { AbcProjection, BlobIO } from '@abc-map/shared';
+import type { AbcProjection } from '@abc-map/shared';
+import { BlobIO } from '@abc-map/shared';
 import { GeoJSON } from 'ol/format';
+import { describe, expect, it } from 'vitest';
 
 describe('exportLayer()', () => {
   const sourceProjection: AbcProjection = { name: 'EPSG:3857' };
@@ -198,7 +200,7 @@ describe('exportLayer()', () => {
           },
         ],
       },
-      { dataProjection: sourceProjection.name, featureProjection: sourceProjection.name }
+      { dataProjection: sourceProjection.name, featureProjection: sourceProjection.name },
     );
   }
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import Cls from './LinkElement.module.scss';
-import { RenderElementProps } from 'slate-react';
-import { LinkElement as LinkElementDef } from '@abc-map/shared';
+import type { RenderElementProps } from 'slate-react';
+import type { LinkElement as LinkElementDef } from '@abc-map/shared';
 
 type Props = RenderElementProps & { element: LinkElementDef };
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tile } from 'ol';
+import type { Tile } from 'ol';
 import TileState from 'ol/TileState';
 import { errorMessage, Logger } from '@abc-map/shared';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 const logger = Logger.get('setTileError.ts');
 

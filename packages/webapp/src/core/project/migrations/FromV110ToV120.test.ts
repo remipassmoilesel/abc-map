@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,9 +18,11 @@
 
 import { TestData } from './test-data/TestData';
 import { FromV110ToV120 } from './FromV110ToV120';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { ModalService } from '../../ui/ModalService';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV110ToV120', () => {
   let modals: SinonStubbedInstance<ModalService>;

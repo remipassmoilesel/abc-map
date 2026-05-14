@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -33,6 +33,6 @@ export const usePersistentStore = create<State & Action>()(
       zoom: 1,
       setZoom: (zoom) => set(() => ({ zoom })),
     }),
-    { name: 'ABC_MAP_DOCUMENTATION_MODULE' }
-  )
+    { name: 'ABC_MAP_DOCUMENTATION_MODULE' },
+  ),
 );

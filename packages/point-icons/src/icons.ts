@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable max-len */
-import { IconName } from './IconName';
-import { IconCategory } from './IconCategory';
-import { PointIcon } from './PointIcon';
+import { IconName } from './IconName.js';
+import { IconCategory } from './IconCategory.js';
+import type { PointIcon } from './PointIcon.js';
 
 export const AllPointIcons: PointIcon[] = [
   { name: IconName.Icon0CircleFill, category: IconCategory.Geometries },

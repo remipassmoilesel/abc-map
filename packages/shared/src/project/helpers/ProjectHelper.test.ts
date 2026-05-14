@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectHelper } from './ProjectHelper';
-import { AbcFile, Zipper } from '../../zip';
-import { ProjectConstants } from '../constants/ProjectConstants';
-import { AbcProjectManifest } from '../AbcProjectManifest';
+import { ProjectHelper } from './ProjectHelper.js';
+import type { AbcFile } from '../../zip/index.js';
+import { Zipper } from '../../zip/index.js';
+import { ProjectConstants } from '../constants/ProjectConstants.js';
+import type { AbcProjectManifest } from '../AbcProjectManifest.js';
+import { describe, expect, it } from 'vitest';
 
 describe('ProjectHelper', () => {
   describe('extractManifest()', () => {

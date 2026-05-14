@@ -1,8 +1,8 @@
-import { FastifySchema } from 'fastify/types/schema';
+import type { FastifySchema } from 'fastify';
 import { VoteValue } from '@abc-map/shared';
 
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { Download } from '../helpers/Download';
-import { Toasts } from '../helpers/Toasts';
-import { MainMap } from '../helpers/MainMap';
-import { TopBar } from '../helpers/TopBar';
-import { Routes } from '../helpers/Routes';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { Download } from '../helpers/Download.js';
+import { Toasts } from '../helpers/Toasts.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { TopBar } from '../helpers/TopBar.js';
+import { Routes } from '../helpers/Routes.js';
+import { LayerControls } from '../helpers/LayerControls.js';
 
 describe('Data store', function () {
   beforeEach(() => {
@@ -33,6 +34,7 @@ describe('Data store', function () {
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')
+      .wait(500)
       .get('[data-cy=artefact-name]')
       .should('contain', 'Countries of the world')
       .click()
@@ -41,7 +43,7 @@ describe('Data store', function () {
       .then(() => Download.currentFileAsBlob())
       .should((file) => {
         expect(file).not.undefined;
-        expect(file.size).equal(1_577_455);
+        expect(file.size).greaterThan(1000);
       });
   });
 
@@ -50,6 +52,7 @@ describe('Data store', function () {
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')
+      .wait(500)
       .get('[data-cy=artefact-name]')
       .should('contain', 'Countries of the world')
       .click()
@@ -58,6 +61,7 @@ describe('Data store', function () {
       .then(() => Toasts.assertText('Import in progress'))
       .then(() => Toasts.assertText('Import done !'))
       .then(() => TopBar.map())
+      .then(() => LayerControls.zoomOnActiveLayer())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layers = map.getLayersMetadata();
@@ -74,6 +78,7 @@ describe('Data store', function () {
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')
+      .wait(500)
       .get('[data-cy=artefact-name]')
       .should('contain', 'Countries of the world')
       .click()

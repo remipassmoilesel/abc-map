@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FromV070ToV080 migrate should work 1`] = `
-Object {
-  "layers": Array [
-    Object {
-      "metadata": Object {
+exports[`FromV070ToV080 > migrate should work 1`] = `
+{
+  "layers": [
+    {
+      "metadata": {
         "active": false,
-        "attributions": Array [
+        "attributions": [
           "© OpenStreetMap contributors.",
         ],
         "id": "3baf449f-83d7-4ee4-bf9b-66ab377c9d3a",
@@ -18,19 +18,19 @@ Object {
       },
       "type": "Predefined",
     },
-    Object {
-      "features": Object {
-        "features": Array [
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+    {
+      "features": {
+        "features": [
+          {
+            "geometry": {
+              "coordinates": [
                 483537.70856973104,
                 5384734.194694325,
               ],
               "type": "Point",
             },
             "id": "PKNy6gKXSc",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(147,18,49,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -38,16 +38,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 462762.70856973104,
                 5390434.194694325,
               ],
               "type": "Point",
             },
             "id": "G0_XyWz64a",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(147,18,49,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -55,16 +55,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 474012.70856973104,
                 5385034.194694325,
               ],
               "type": "Point",
             },
             "id": "yOHGhoTseI",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(18,19,147,0.9)",
               "abc:style:point:icon": "twbs/0_square-fill.inline.svg",
@@ -72,31 +72,31 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
-                Array [
-                  Array [
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  [
                     494187.70856973104,
                     5392909.194694325,
                   ],
-                  Array [
+                  [
                     485262.70856973104,
                     5390959.194694325,
                   ],
-                  Array [
+                  [
                     482637.70856973104,
                     5401984.194694325,
                   ],
-                  Array [
+                  [
                     496362.70856973104,
                     5405884.194694325,
                   ],
-                  Array [
+                  [
                     499512.70856973104,
                     5391934.194694325,
                   ],
-                  Array [
+                  [
                     494187.70856973104,
                     5392909.194694325,
                   ],
@@ -105,7 +105,7 @@ Object {
               "type": "Polygon",
             },
             "id": "JNI5QMnOHS",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": true,
               "abc:style:fill:color1": "#cc8d70",
               "abc:style:fill:color2": "rgba(255,255,255,0.60)",
@@ -115,16 +115,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 472362.70856973104,
                 5396659.194694325,
               ],
               "type": "Point",
             },
             "id": "NXvMFHnhSk",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(147,18,49,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -132,26 +132,26 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
-                Array [
+          {
+            "geometry": {
+              "coordinates": [
+                [
                   518412.70856973104,
                   5390209.194694325,
                 ],
-                Array [
+                [
                   507687.70856973104,
                   5377984.194694325,
                 ],
-                Array [
+                [
                   513387.70856973104,
                   5370109.194694325,
                 ],
-                Array [
+                [
                   526812.708569731,
                   5377684.194694325,
                 ],
-                Array [
+                [
                   504762.70856973104,
                   5393809.194694325,
                 ],
@@ -159,23 +159,23 @@ Object {
               "type": "LineString",
             },
             "id": "f9ToQfhmws",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:stroke:color": "rgba(18,90,147,0.60)",
               "abc:style:stroke:width": 3,
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 478137.70856973104,
                 5378659.194694325,
               ],
               "type": "Point",
             },
             "id": "gmbpVxddjV",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(147,18,49,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -183,16 +183,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 488862.70856973104,
                 5383534.194694325,
               ],
               "type": "Point",
             },
             "id": "Ydq46oceSH",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(18,19,147,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -201,16 +201,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 498912.70856973104,
                 5377459.194694325,
               ],
               "type": "Point",
             },
             "id": "LneUQyncso",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(147,18,49,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -219,16 +219,16 @@ Object {
             },
             "type": "Feature",
           },
-          Object {
-            "geometry": Object {
-              "coordinates": Array [
+          {
+            "geometry": {
+              "coordinates": [
                 501837.70856973104,
                 5381734.194694325,
               ],
               "type": "Point",
             },
             "id": "C2NdE0ZmyU",
-            "properties": Object {
+            "properties": {
               "abc:feature:selected": false,
               "abc:style:point:color": "rgba(18,19,147,0.9)",
               "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
@@ -239,7 +239,7 @@ Object {
         ],
         "type": "FeatureCollection",
       },
-      "metadata": Object {
+      "metadata": {
         "active": true,
         "id": "81775cd7-1e77-4c07-ac37-e6989a9b229f",
         "name": "Géométries",
@@ -250,9 +250,9 @@ Object {
       "type": "Vector",
     },
   ],
-  "layouts": Array [
-    Object {
-      "format": Object {
+  "layouts": [
+    {
+      "format": {
         "height": 210,
         "id": "A4_LANDSCAPE",
         "orientation": "landscape",
@@ -260,39 +260,39 @@ Object {
       },
       "id": "f3418195-aa3c-4add-870c-a3e09dc33e0a",
       "name": "Page 1",
-      "textFrames": Array [
-        Object {
-          "content": Array [
-            Object {
-              "children": Array [
-                Object {
+      "textFrames": [
+        {
+          "content": [
+            {
+              "children": [
+                {
                   "text": "",
                 },
               ],
               "type": "paragraph",
             },
-            Object {
+            {
               "border": 0,
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "LineString",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {},
-                                "stroke": Object {},
-                                "text": Object {},
+                              "style": {
+                                "fill": {},
+                                "point": {},
+                                "stroke": {},
+                                "text": {},
                               },
                               "type": "map-symbol",
                             },
@@ -302,11 +302,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 1",
                             },
                           ],
@@ -318,29 +318,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(18,19,147,0.9)",
                                   "icon": "twbs/0_star-fill.inline.svg",
                                   "size": 12,
                                 },
-                                "stroke": Object {},
-                                "text": Object {
+                                "stroke": {},
+                                "text": {
                                   "value": "",
                                 },
                               },
@@ -352,11 +352,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 2",
                             },
                           ],
@@ -368,29 +368,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(147,18,49,0.9)",
                                   "icon": "twbs/0_star-fill.inline.svg",
                                   "size": 20,
                                 },
-                                "stroke": Object {},
-                                "text": Object {
+                                "stroke": {},
+                                "text": {
                                   "value": "",
                                 },
                               },
@@ -402,11 +402,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 3",
                             },
                           ],
@@ -418,29 +418,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(18,19,147,0.9)",
                                   "icon": "twbs/0_star-fill.inline.svg",
                                   "size": 20,
                                 },
-                                "stroke": Object {},
-                                "text": Object {
+                                "stroke": {},
+                                "text": {
                                   "value": "",
                                 },
                               },
@@ -452,11 +452,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 4",
                             },
                           ],
@@ -468,29 +468,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(18,19,147,0.9)",
                                   "icon": "twbs/0_square-fill.inline.svg",
                                   "size": 40,
                                 },
-                                "stroke": Object {},
-                                "text": Object {},
+                                "stroke": {},
+                                "text": {},
                               },
                               "type": "map-symbol",
                             },
@@ -500,11 +500,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 5",
                             },
                           ],
@@ -519,91 +519,91 @@ Object {
               ],
               "type": "table",
             },
-            Object {
-              "children": Array [
-                Object {
+            {
+              "children": [
+                {
                   "text": "",
                 },
               ],
               "type": "paragraph",
             },
           ],
-          "id": "###-FAKE-NANOID-1-###",
-          "position": Object {
+          "id": "###-FAKE-NANOID-###",
+          "position": {
             "x": 0,
             "y": 0,
           },
-          "size": Object {
+          "size": {
             "height": 517.5,
             "width": 392,
           },
         },
       ],
-      "view": Object {
-        "center": Array [
+      "view": {
+        "center": [
           479684.677727075,
           5377825.024768071,
         ],
-        "projection": Object {
+        "projection": {
           "name": "EPSG:3857",
         },
         "resolution": 46.966404979,
       },
     },
   ],
-  "metadata": Object {
+  "metadata": {
     "containsCredentials": false,
     "id": "224855c1-7085-4410-abcc-5b3d845c7ad0",
     "name": "Projet du 15/03/2022",
     "public": true,
     "version": "0.8.0",
   },
-  "sharedViews": Array [
-    Object {
+  "sharedViews": [
+    {
       "id": "VxtjLCKzWPXB1g2CSjLir",
-      "layers": Array [
-        Object {
+      "layers": [
+        {
           "layerId": "3baf449f-83d7-4ee4-bf9b-66ab377c9d3a",
           "visible": true,
         },
-        Object {
+        {
           "layerId": "81775cd7-1e77-4c07-ac37-e6989a9b229f",
           "visible": true,
         },
       ],
-      "textFrames": Array [
-        Object {
-          "content": Array [
-            Object {
-              "children": Array [
-                Object {
+      "textFrames": [
+        {
+          "content": [
+            {
+              "children": [
+                {
                   "text": "",
                 },
               ],
               "type": "paragraph",
             },
-            Object {
+            {
               "border": 0,
-              "children": Array [
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "LineString",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {},
-                                "stroke": Object {},
-                                "text": Object {},
+                              "style": {
+                                "fill": {},
+                                "point": {},
+                                "stroke": {},
+                                "text": {},
                               },
                               "type": "map-symbol",
                             },
@@ -613,11 +613,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 1",
                             },
                           ],
@@ -629,29 +629,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(18,19,147,0.9)",
                                   "icon": "twbs/0_star-fill.inline.svg",
                                   "size": 12,
                                 },
-                                "stroke": Object {},
-                                "text": Object {
+                                "stroke": {},
+                                "text": {
                                   "value": "",
                                 },
                               },
@@ -663,11 +663,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 2",
                             },
                           ],
@@ -679,29 +679,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(147,18,49,0.9)",
                                   "icon": "twbs/0_star-fill.inline.svg",
                                   "size": 20,
                                 },
-                                "stroke": Object {},
-                                "text": Object {
+                                "stroke": {},
+                                "text": {
                                   "value": "",
                                 },
                               },
@@ -713,11 +713,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 3",
                             },
                           ],
@@ -729,29 +729,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(18,19,147,0.9)",
                                   "icon": "twbs/0_star-fill.inline.svg",
                                   "size": 20,
                                 },
-                                "stroke": Object {},
-                                "text": Object {
+                                "stroke": {},
+                                "text": {
                                   "value": "",
                                 },
                               },
@@ -763,11 +763,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 4",
                             },
                           ],
@@ -779,29 +779,29 @@ Object {
                   ],
                   "type": "table-row",
                 },
-                Object {
-                  "children": Array [
-                    Object {
-                      "children": Array [
-                        Object {
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
                           "align": "center",
-                          "children": Array [
-                            Object {
-                              "children": Array [
-                                Object {
+                          "children": [
+                            {
+                              "children": [
+                                {
                                   "text": "",
                                 },
                               ],
                               "geometryType": "Point",
-                              "style": Object {
-                                "fill": Object {},
-                                "point": Object {
+                              "style": {
+                                "fill": {},
+                                "point": {
                                   "color": "rgba(18,19,147,0.9)",
                                   "icon": "twbs/0_square-fill.inline.svg",
                                   "size": 40,
                                 },
-                                "stroke": Object {},
-                                "text": Object {},
+                                "stroke": {},
+                                "text": {},
                               },
                               "type": "map-symbol",
                             },
@@ -811,11 +811,11 @@ Object {
                       ],
                       "type": "table-cell",
                     },
-                    Object {
-                      "children": Array [
-                        Object {
-                          "children": Array [
-                            Object {
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
                               "text": "Entry 5",
                             },
                           ],
@@ -830,45 +830,45 @@ Object {
               ],
               "type": "table",
             },
-            Object {
-              "children": Array [
-                Object {
+            {
+              "children": [
+                {
                   "text": "",
                 },
               ],
               "type": "paragraph",
             },
           ],
-          "id": "###-FAKE-NANOID-2-###",
-          "position": Object {
+          "id": "###-FAKE-NANOID-###",
+          "position": {
             "x": 0,
             "y": 0,
           },
-          "size": Object {
+          "size": {
             "height": 517.5,
             "width": 392,
           },
         },
       ],
       "title": "Vue principale",
-      "view": Object {
-        "center": Array [
+      "view": {
+        "center": [
           500937.708569731,
           5388389.272819325,
         ],
-        "projection": Object {
+        "projection": {
           "name": "EPSG:3857",
         },
         "resolution": 75,
       },
     },
   ],
-  "view": Object {
-    "center": Array [
+  "view": {
+    "center": [
       500937.708569731,
       5388389.272819325,
     ],
-    "projection": Object {
+    "projection": {
       "name": "EPSG:3857",
     },
     "resolution": 75,

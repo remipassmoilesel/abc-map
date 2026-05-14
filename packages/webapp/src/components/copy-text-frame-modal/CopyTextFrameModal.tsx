@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcTextFrame } from '@abc-map/shared';
-import { withTranslation } from 'react-i18next';
+import type { AbcTextFrame } from '@abc-map/shared';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
 import React, { useCallback } from 'react';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { TextFrameHelpers } from '../../core/project/TextFrameHelpers';
-import { useAppSelector } from '../../core/store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import Cls from './CopyTextFrameModal.module.scss';
-
-const t = prefixedTranslation('CopyTextFrameModal:');
 
 // TODO: add frames from shared views
 
@@ -41,10 +38,11 @@ interface Props {
  */
 function CopyTextFrameModal(props: Props) {
   const { onCancel, onConfirm } = props;
+  const { t } = useTranslation('CopyTextFrameModal');
 
   const fromLayouts = useAppSelector((st) => st.project.layouts.list).flatMap((lay, i) => lay.textFrames.map<[AbcTextFrame, number]>((frame) => [frame, i]));
   const fromSharedViews = useAppSelector((st) => st.project.sharedViews.list).flatMap((view, i) =>
-    view.textFrames.map<[AbcTextFrame, number]>((frame) => [frame, i])
+    view.textFrames.map<[AbcTextFrame, number]>((frame) => [frame, i]),
   );
   const noTextFrames = !fromLayouts.length && !fromSharedViews.length;
 
@@ -53,7 +51,7 @@ function CopyTextFrameModal(props: Props) {
       const clone = TextFrameHelpers.clone(frame);
       onConfirm({ ...clone, position: { x: 10, y: 10 } });
     },
-    [onConfirm]
+    [onConfirm],
   );
 
   return (

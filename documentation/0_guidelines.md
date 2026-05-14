@@ -1,5 +1,13 @@
 # Guidelines
 
+<!-- toc -->
+
+- [Free software](#free-software)
+- [User first](#user-first)
+- [Then developer's turn](#then-developers-turn)
+
+<!-- tocstop -->
+
 ## Free software
 
 All developments of this project are under free license AGPL 3. This license guarantees that this software will

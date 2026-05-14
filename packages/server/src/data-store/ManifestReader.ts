@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ArtefactManifestWithPath } from './ArtefactManifestSchema';
-import * as yaml from 'js-yaml';
-import * as path from 'path';
+import type { ArtefactManifestWithPath } from './ArtefactManifestSchema.js';
+import yaml from 'js-yaml';
+import path from 'path';
 import { promises as fs } from 'fs';
 import { isLangSupported } from '@abc-map/shared';
-import { Validation } from '../utils/Validation';
+import { Validation } from '../utils/Validation.js';
 
 export declare type FileModule = typeof fs;
 
@@ -69,7 +69,7 @@ export class ManifestReader {
             .stat(filePath)
             .then((stat) => (!stat.isFile() ? reject() : undefined))
             .catch(() => reject());
-        })
+        }),
     );
 
     return manifest;

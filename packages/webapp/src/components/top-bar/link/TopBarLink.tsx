@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ReactNode, useCallback } from 'react';
+import type { ReactNode } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
 import clsx from 'clsx';
+import { useServices } from '../../../core/useServices.ts';
 
 export interface Props {
   to: string;
@@ -35,14 +37,17 @@ export function TopBarLink(props: Props) {
   const { to, children, activeMatch, display, 'data-cy': dataCy, className, onClick } = props;
   const location = useLocation();
   const navigate = useNavigate();
+  const { toasts } = useServices();
 
   const match = activeMatch || new RegExp(`^${to}`, 'i');
   const isActive = !!location.pathname.match(match);
 
   const handleClick = useCallback(() => {
-    navigate(to);
-    onClick && onClick();
-  }, [navigate, onClick, to]);
+    navigate(to)?.catch((err) => toasts.genericError(err));
+    if (onClick) {
+      onClick();
+    }
+  }, [navigate, onClick, to, toasts]);
   const displayClass = display === 'horizontal' ? Cls.horizontal : Cls.vertical;
   return (
     <button onClick={handleClick} className={clsx(Cls.topBarLink, displayClass, isActive && Cls.active, className)} data-cy={dataCy}>

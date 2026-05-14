@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,32 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState, useEffect, useContext, ReactNode } from 'react';
+import React, { useContext } from 'react';
 
 export const OnlineStatusContext = React.createContext(true);
-
-interface Props {
-  children: ReactNode | ReactNode[];
-}
-
-export function OnlineStatusProvider(props: Props) {
-  const { children } = props;
-  const [onlineStatus, setOnlineStatus] = useState<boolean>(navigator.onLine ?? true);
-
-  useEffect(() => {
-    const handleOffline = () => setOnlineStatus(false);
-    const handleOnline = () => setOnlineStatus(true);
-
-    window.addEventListener('offline', handleOffline);
-    window.addEventListener('online', handleOnline);
-    return () => {
-      window.removeEventListener('offline', handleOffline);
-      window.removeEventListener('online', handleOnline);
-    };
-  }, []);
-
-  return <OnlineStatusContext.Provider value={onlineStatus}>{children}</OnlineStatusContext.Provider>;
-}
 
 /**
  * Return true if app is currently online

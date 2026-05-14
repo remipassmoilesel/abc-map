@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import { Logger } from '@abc-map/shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
-import TextFormat from '../_common/text-format/TextFormat';
+import { TextFormat } from '../_common/text-format/TextFormat';
 import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
 import { useTranslation } from 'react-i18next';

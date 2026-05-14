@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import * as nodemailer from 'nodemailer';
-import { Transporter } from 'nodemailer';
+import type { Config } from '../config/Config.js';
+import type { Transporter } from 'nodemailer';
+import nodemailer from 'nodemailer';
 import { Logger } from '@abc-map/shared';
-import { promises as fs } from 'fs';
-import { constants } from 'fs';
-import * as path from 'path';
+import { constants, promises as fs } from 'fs';
+import path from 'path';
 
 const logger = Logger.get('SmtpClient.ts', 'info');
 
@@ -81,7 +80,7 @@ export class SmtpClient {
   }
 
   private async fakeSending(email: string, body: string): Promise<void> {
-    const mailDir = path.resolve(__dirname, '..', '..', '..', 'e2e-tests', 'emails');
+    const mailDir = path.resolve(import.meta.dirname, '..', '..', '..', 'e2e-tests', 'emails');
     const mailPath = path.resolve(mailDir, `${email}.html`);
     logger.warn(`Mail will not be sent, you can see it at: ${mailPath}`);
 

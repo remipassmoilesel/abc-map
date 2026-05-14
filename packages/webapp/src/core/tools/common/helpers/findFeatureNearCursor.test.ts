@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureFilter, findFeatureNearCursor, noopFilter } from './findFeatureNearCursor';
+import type { FeatureFilter } from './findFeatureNearCursor';
+import { findFeatureNearCursor, noopFilter } from './findFeatureNearCursor';
 import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
 import { Polygon } from 'ol/geom';
-import Geometry from 'ol/geom/Geometry';
+import type Geometry from 'ol/geom/Geometry';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import Point from 'ol/geom/Point';
 import { TestHelper } from '../../../utils/test/TestHelper';
+import type { DefaultVectorSource } from '../../../geo/layers/LayerWrapper';
+import { describe, expect, it } from 'vitest';
 
 describe('findFeatureNearCursor', function () {
   it('should find nothing if source is empty', () => {
@@ -92,7 +95,7 @@ describe('findFeatureNearCursor', function () {
   });
 });
 
-function testVectorSource1(): { source: VectorSource<Geometry>; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
+function testVectorSource1(): { source: DefaultVectorSource; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
   const source = new VectorSource();
   const feature1 = new Feature(
     new Polygon([
@@ -103,7 +106,7 @@ function testVectorSource1(): { source: VectorSource<Geometry>; feature1: Featur
         [1, 3],
         [1, 1],
       ],
-    ])
+    ]),
   );
   source.addFeature(feature1);
 
@@ -116,14 +119,14 @@ function testVectorSource1(): { source: VectorSource<Geometry>; feature1: Featur
         [111, 113],
         [111, 111],
       ],
-    ])
+    ]),
   );
   source.addFeature(feature2);
 
   return { source, feature1, feature2 };
 }
 
-function testVectorSource2(): { source: VectorSource<Geometry>; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
+function testVectorSource2(): { source: DefaultVectorSource; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
   const source = new VectorSource();
   const feature1 = FeatureWrapper.create(
     new Polygon([
@@ -134,7 +137,7 @@ function testVectorSource2(): { source: VectorSource<Geometry>; feature1: Featur
         [1, 3],
         [1, 1],
       ],
-    ])
+    ]),
   );
   source.addFeature(feature1.unwrap());
 

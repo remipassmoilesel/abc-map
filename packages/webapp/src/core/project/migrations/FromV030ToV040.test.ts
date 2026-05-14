@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { WmsMetadata } from '@abc-map/shared';
+import type { WmsMetadata } from '@abc-map/shared';
 import { TestData } from './test-data/TestData';
-import { MigrationProject } from './typings';
+import type { MigrationProject } from './typings';
 import { FromV030ToV040 } from './FromV030ToV040';
-import { AbcProjectManifest030, WmsMetadata030 } from './dependencies/030-project-types';
-import { AbcProjectMetadata040 } from './dependencies/040-project-types';
+import type { AbcProjectManifest030, WmsMetadata030 } from './dependencies/030-project-types';
+import type { AbcProjectMetadata040 } from './dependencies/040-project-types';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV030ToV040', () => {
   let sampleProject: MigrationProject<AbcProjectManifest030>;

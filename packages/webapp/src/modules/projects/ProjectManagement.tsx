@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import ProjectsModuleView from './view/ProjectManagementView';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('ProjectManagement:');
+const t = prefixedTranslation('ProjectManagement');
 
-export class ProjectManagement extends ModuleAdapter {
-  public getId(): ModuleId {
-    return BundledModuleId.ProjectManagement;
+export class ProjectManagement implements AbcModule {
+  public getId() {
+    return ModuleId.ProjectManagement;
   }
 
   public getReadableName(): string {
@@ -37,6 +37,6 @@ export class ProjectManagement extends ModuleAdapter {
   }
 
   public getView() {
-    return <ProjectsModuleView />;
+    return () => <ProjectsModuleView />;
   }
 }

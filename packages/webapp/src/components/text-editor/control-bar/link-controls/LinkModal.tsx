@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,11 +19,10 @@
 import { Modal } from 'react-bootstrap';
 import FormValidationLabel from '../../../form-validation-label/FormValidationLabel';
 import { FormState } from '../../../form-validation-label/FormState';
-import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react';
-import { prefixedTranslation } from '../../../../i18n/i18n';
+import type { ChangeEvent, MouseEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ValidationHelper } from '../../../../core/utils/ValidationHelper';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   initialText: string;
@@ -33,6 +32,7 @@ interface Props {
 }
 
 export function LinkModal(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { initialText, initialUrl, onCancel, onConfirm } = props;
   const [text, setText] = useState(initialText);
   const [url, setUrl] = useState(initialUrl || '');
@@ -61,7 +61,7 @@ export function LinkModal(props: Props) {
       validateLink(value, url);
       setFormState(value ? FormState.Ok : FormState.FieldMissing);
     },
-    [url, validateLink]
+    [url, validateLink],
   );
 
   const handleUrlChange = useCallback(
@@ -70,7 +70,7 @@ export function LinkModal(props: Props) {
       setUrl(value);
       validateLink(text, value);
     },
-    [text, validateLink]
+    [text, validateLink],
   );
 
   // Validate on mount

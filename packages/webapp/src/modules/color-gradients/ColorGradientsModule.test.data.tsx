@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,15 +17,15 @@
  */
 
 import { StyleProperties } from '@abc-map/shared';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import { GradientClass } from './typings/GradientClass';
+import type Feature from 'ol/Feature';
+import type Geometry from 'ol/geom/Geometry';
+import type { GradientClass } from './typings/GradientClass';
 import { Stats } from '../../core/modules/Stats';
-import { ClassificationAlgorithm } from '../../core/modules/Algorithm';
+import type { ClassificationAlgorithm } from '../../core/modules/Algorithm';
 import { nanoid } from 'nanoid';
 import chroma from 'chroma-js';
 import { asValidNumber } from '../../core/utils/numbers';
-import { DataValue } from '../../core/data/data-source/DataSource';
+import type { DataValue } from '../../core/data/data-source/DataSource';
 
 export const testGradientClasses = (values: DataValue[], algo: ClassificationAlgorithm, numberOfClasses: number): GradientClass[] => {
   const _values = values.map((x) => asValidNumber(x)).filter((x): x is number => x !== null);

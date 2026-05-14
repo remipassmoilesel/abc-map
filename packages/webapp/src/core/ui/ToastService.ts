@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { toast, ToastOptions } from 'react-toastify';
-import { AxiosError } from 'axios';
+import type { ToastOptions } from 'react-toastify';
+import { toast } from 'react-toastify';
+import type { AxiosError } from 'axios';
 import { HttpError } from '../http/HttpError';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -37,7 +38,7 @@ const defaultOptions: ToastOptions = {
   icon: false,
 };
 
-const t = prefixedTranslation('ToastService:');
+const t = prefixedTranslation('ToastService');
 
 export class ToastService {
   /**

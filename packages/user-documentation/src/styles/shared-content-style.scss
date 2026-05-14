@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -91,28 +91,27 @@ You can't use normal class selectors here, because of webapp CSS isolation. Use 
 
     margin-bottom: 1rem;
 
+    border: solid 0.1rem $gray-400;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
     @include media-breakpoint-down(xl) {
       width: 100%;
       height: auto;
     }
-
-    border: solid 0.1rem $gray-400;
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
   }
 
   img,
   picture {
     max-width: 40vw;
-    @include media-breakpoint-down(md) {
-      max-width: 90vw;
-    }
-
     margin-bottom: 1rem;
-
     border: solid 0.1rem $gray-400;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
+
+    @include media-breakpoint-down(md) {
+      max-width: 90vw;
+    }
   }
 
   p {

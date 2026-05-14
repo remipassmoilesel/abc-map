@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@
  *
  */
 
-import http, { RefinedResponse, ResponseType } from 'k6/http';
-import { AbcProjectMetadata, AuthenticationResponse } from '@abc-map/shared';
-import { bytes } from 'k6';
+import type { RefinedResponse, ResponseType } from 'k6/http';
+import http from 'k6/http';
+import type { AbcProjectMetadata, AuthenticationResponse } from '@abc-map/shared';
 import uuid from 'uuid-random';
 
 export declare type HeaderMap = { [name: string]: string };
@@ -51,13 +51,7 @@ export function get(route: string, headers?: HeaderMap): RefinedResponse<Respons
   });
 }
 
-export function authentication(token: string): { [k: string]: string } {
-  return {
-    Authorization: `Beader ${token}`,
-  };
-}
-
-export function extractAuthentication(body: string | bytes | null): HeaderMap {
+export function extractAuthentication(body: string | ArrayBuffer | null): HeaderMap {
   if (typeof body !== 'string') {
     throw new Error('Invalid authentication response');
   }
@@ -82,5 +76,26 @@ export function sampleProjectMetadata(): AbcProjectMetadata {
     version: '0.0.1',
     name: `Test project ${projectId}`,
     public: false,
+  };
+}
+
+export function assertStatusCode(code: number) {
+  return (res: { status: number | undefined }) => {
+    if (res.status !== code) {
+      console.error('Invalid status code: ', { expected: code, actual: res.status });
+    }
+
+    return res.status === code;
+  };
+}
+
+export function assertMinBodyLength(length: number) {
+  return (res: { body: string | unknown }) => {
+    if (!res.body || typeof res.body !== 'string') {
+      console.error(`Unexpected response body received: ${typeof res.body}`);
+      return false;
+    }
+
+    return res.body.length > length;
   };
 }

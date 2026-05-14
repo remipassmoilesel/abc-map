@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,16 +17,14 @@
  */
 
 import Cls from './SharedViewNavigation.module.scss';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import React, { useCallback } from 'react';
 import clsx from 'clsx';
-import { useAppSelector } from '../../core/store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { useServices } from '../../core/useServices';
-
-const t = prefixedTranslation('SharedViewNavigation:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onNext?: () => void;
@@ -38,6 +36,7 @@ interface Props {
 function SharedViewNavigation(props: Props) {
   const { onNext, onPrevious, onMore, className } = props;
   const { project } = useServices();
+  const { t } = useTranslation('SharedViewNavigation');
 
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
   const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
@@ -50,14 +49,14 @@ function SharedViewNavigation(props: Props) {
     const newActiveIndex = sharedViews.findIndex((v) => v.id === activeViewId) - 1;
     const newActiveId = sharedViews[newActiveIndex]?.id || sharedViews[sharedViews.length - 1]?.id;
     project.setActiveSharedView(newActiveId);
-    onPrevious && onPrevious();
+    if (onPrevious) onPrevious();
   }, [activeViewId, onPrevious, project, sharedViews]);
 
   const handleNextView = useCallback(() => {
     const newActiveIndex = sharedViews.findIndex((v) => v.id === activeViewId) + 1;
     const newActiveId = sharedViews[newActiveIndex]?.id || sharedViews[0]?.id;
     project.setActiveSharedView(newActiveId);
-    onNext && onNext();
+    if (onNext) onNext();
   }, [onNext, activeViewId, project, sharedViews]);
 
   return (

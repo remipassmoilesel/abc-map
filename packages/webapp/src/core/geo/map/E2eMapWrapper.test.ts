@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ import { E2eMapWrapper } from './E2eMapWrapper';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { LayerFactory } from '../layers/LayerFactory';
 import { PredefinedLayerModel } from '@abc-map/shared';
+import { describe, expect, it } from 'vitest';
 
 describe('E2eMapWrapper', function () {
   it('getLayersMetadata()', function () {

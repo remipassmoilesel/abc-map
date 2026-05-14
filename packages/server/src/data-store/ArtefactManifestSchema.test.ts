@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Validation } from '../utils/Validation';
-import { assert } from 'chai';
-import { TestHelper } from '../utils/TestHelper';
-import { normalizeBlankChars } from '../utils/normalizeBlankChars';
-import { ArtefactManifest } from '@abc-map/shared';
+import { Validation } from '../utils/Validation.js';
+import { assert, describe, it } from 'vitest';
+import { TestHelper } from '../utils/TestHelper.js';
+import { normalizeBlankChars } from '../utils/normalizeBlankChars.js';
+import type { ArtefactManifest } from '@abc-map/shared';
 
 describe('ArtefactManifestSchema', () => {
   it('simple manifest', () => {
@@ -65,7 +65,7 @@ describe('ArtefactManifestSchema', () => {
               },
               "message": "must NOT have additional properties"
             }
-`)
+`),
     );
   });
 });

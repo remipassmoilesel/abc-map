@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,15 +17,17 @@
  */
 
 import { DataReader, readersFactory } from './DataReader';
+import type { AbcFile } from '@abc-map/shared';
 import { DEFAULT_PROJECTION, Zipper } from '@abc-map/shared';
-import { AbcFile } from '@abc-map/shared';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { Services } from '../Services';
+import type { Services } from '../Services';
 import { TestData } from '../../assets/test-data/TestData';
-import { newTestServices, TestServices } from '../utils/test/TestServices';
-import { LayerWrapper, VectorLayerWrapper } from '../geo/layers/LayerWrapper';
+import type { TestServices } from '../utils/test/TestServices';
+import { newTestServices } from '../utils/test/TestServices';
+import type { LayerWrapper, VectorLayerWrapper } from '../geo/layers/LayerWrapper';
 import { ReadStatus } from './ReadResult';
 import { logger } from './readers/normalizeFeatures';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 logger.disable();
 

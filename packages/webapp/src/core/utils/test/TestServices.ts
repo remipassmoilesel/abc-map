@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { ProjectService } from '../../project/ProjectService';
 import { GeoService } from '../../geo/GeoService';
 import { ToastService } from '../../ui/ToastService';
@@ -25,8 +25,8 @@ import { AuthenticationService } from '../../authentication/AuthenticationServic
 import { HistoryService } from '../../history/HistoryService';
 import { DataStoreService } from '../../data/DataStoreService';
 import { FeedbackService } from '../../feedback/FeedbackService';
-import { SinonStubbedInstance } from 'sinon';
-import { Services } from '../../Services';
+import type { SinonStubbedInstance } from 'sinon';
+import type { Services } from '../../Services';
 import { LegalMentionsService } from '../../legal-mentions/LegalMentionsService';
 import { StorageService } from '../../storage/StorageService';
 import { PwaService } from '../../pwa/PwaService';

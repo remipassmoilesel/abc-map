@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import { LayerFactory } from './geo/layers/LayerFactory';
 
 /*
 
-We keep a reference to these tools for hacking in consoles
+We keep a reference to these tools for hacking in consoles and scripts
 
  */
 

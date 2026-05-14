@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { FastifySchema } from 'fastify/types/schema';
-import { PaginatedQuery } from '../server/helpers/PaginationHelper';
-import { ArtefactFilter } from '@abc-map/shared';
+import type { FastifySchema } from 'fastify';
+import type { PaginatedQuery } from '../server/helpers/PaginationHelper.js';
+import type { ArtefactFilter } from '@abc-map/shared';
 
 export interface ListQuery extends PaginatedQuery {
   query: string;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Routes } from '../../routes';
-import { BundledModuleId, LegacyRouteRedirections } from '@abc-map/shared';
+import { ModuleId, LegacyRouteRedirections } from '@abc-map/shared';
+import { useServices } from '../useServices.ts';
 
 // See LegacyRoutesRedirectionController.ts too
 
@@ -29,15 +30,16 @@ const toLanding = LegacyRouteRedirections.ToLanding.map((regexp) => new RegExp(r
 export function useRedirectLegacyRoutes() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { toasts } = useServices();
 
   // We redirect old routes
   useEffect(() => {
     if (toDocumentation.find((regexp) => location.pathname.match(regexp))) {
-      navigate(Routes.module().withParams({ moduleId: BundledModuleId.Documentation }));
+      navigate(Routes.module().withParams({ moduleId: ModuleId.Documentation }))?.catch((err) => toasts.genericError(err));
     }
 
     if (toLanding.find((regexp) => location.pathname.match(regexp))) {
-      navigate(Routes.landing().format());
+      navigate(Routes.landing().format())?.catch((err) => toasts.genericError(err));
     }
-  }, [location, navigate]);
+  }, [location, navigate, toasts]);
 }

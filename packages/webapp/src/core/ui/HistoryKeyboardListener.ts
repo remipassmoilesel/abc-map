@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,19 +19,23 @@
 import Mousetrap from 'mousetrap';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { Logger } from '@abc-map/shared';
-import { HistoryKey } from '../history/HistoryKey';
-import { getServices, Services } from '../Services';
+import type { HistoryKey } from '../history/HistoryKey';
+import type { Services } from '../Services';
+import { getServices } from '../Services';
 
 const logger = Logger.get('HistoryKeyboardListener.ts');
 
-const t = prefixedTranslation('HistoryKeyboardListener:');
+const t = prefixedTranslation('HistoryKeyboardListener');
 
 export class HistoryKeyboardListener {
   public static create(key: HistoryKey) {
     return new HistoryKeyboardListener(getServices(), key);
   }
 
-  constructor(private services: Services, private key: HistoryKey) {}
+  constructor(
+    private services: Services,
+    private key: HistoryKey,
+  ) {}
 
   public initialize(): void {
     Mousetrap.bind('ctrl+z', this.undo);

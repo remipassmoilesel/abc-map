@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as logLevel from 'loglevel';
-import { Logger as LogLevelLogger } from 'loglevel';
+import logLevel from 'loglevel';
+import type { Logger as LogLevelLogger } from 'loglevel';
 
 export declare type LogSeverity = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'silent';
 
@@ -42,19 +42,19 @@ export class Logger {
     this.logger.setLevel('silent');
   }
 
-  public debug(message: string | Error, data?: any): void {
+  public debug(message: string | Error, data?: unknown): void {
     this.logger.debug(message, data || '');
   }
 
-  public info(message: string | Error, data?: any): void {
+  public info(message: string | Error, data?: unknown): void {
     this.logger.info(message, data || '');
   }
 
-  public warn(message: string | Error, data?: any): void {
+  public warn(message: string | Error, data?: unknown): void {
     this.logger.warn(message, data || '');
   }
 
-  public error(message: string | Error, data?: any): void {
+  public error(message: string | Error, data?: unknown): void {
     this.logger.error(message, data || '');
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { ProjectService } from '../../../project/ProjectService';
-import { AbcLayout } from '@abc-map/shared';
+import type { ProjectService } from '../../../project/ProjectService';
+import type { AbcLayout } from '@abc-map/shared';
 import { getServices } from '../../../Services';
 import { Logger } from '@abc-map/shared';
 
@@ -39,7 +39,10 @@ export class RemoveLayoutsChangeset extends Changeset {
 
   private operations: RemoveLayoutOperation[];
 
-  constructor(private project: ProjectService, operations: RemoveLayoutOperation[]) {
+  constructor(
+    private project: ProjectService,
+    operations: RemoveLayoutOperation[],
+  ) {
     super();
     if (!operations.length) {
       throw new Error('List of operations cannot be empty');

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout } from '@abc-map/shared';
-import { useAppSelector } from '../store/hooks';
+import type { AbcLayout } from '@abc-map/shared';
+import { useAppSelector } from '../../store/hooks';
 
 export function useActiveLayout(): AbcLayout | undefined {
   const { activeId, list } = useAppSelector((st) => st.project.layouts);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,17 +19,18 @@
 import Cls from './DifferentSymbolsUi.module.scss';
 import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 
 const logger = Logger.get('DifferentSymbolsView.tsx');
 
-const t = prefixedTranslation('DifferentSymbolsModule:');
+type Props = WithTranslation;
 
-class DifferentSymbolsView extends Component<{}, {}> {
+class DifferentSymbolsView extends Component<Props, unknown> {
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'DifferentSymbolsModule');
     return (
       <div className={Cls.panel}>
         <FaIcon icon={IconDefs.faFileCode} size={'4rem'} />

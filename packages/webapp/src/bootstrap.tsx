@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,18 +15,16 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Services } from './core/Services';
+import type { Services } from './core/Services';
 import { errorMessage, getAbcWindow, Logger, UserStatus } from '@abc-map/shared';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
-import { VERSION } from './version';
 import { render } from './render';
-import { MainStore } from './core/store/store';
+import type { MainStore } from './store/store';
 import { ProjectEventType } from './core/project/ProjectEvent';
 import { StyleFactory } from './core/geo/styles/StyleFactory';
 import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
-import { UiActions } from './core/store/ui/actions';
-import React from 'react';
+import { UiActions } from './store/ui/actions';
 import { initMainDatabase } from './core/storage/indexed-db/main-database';
 import { Routes } from './routes';
 import { matchRoutes } from 'react-router-dom';
@@ -34,10 +32,7 @@ import { matchRoutes } from 'react-router-dom';
 export const logger = Logger.get('bootstrap.tsx');
 
 export function bootstrap(svc: Services, store: MainStore) {
-  logger.info('Version: ', VERSION);
-
-  return setGlobals()
-    .then(() => authentication(svc))
+  return authentication(svc)
     .then(() => initializeModules())
     .then(() => render(svc, store))
     .then(() => dispatchVisit(store))
@@ -46,20 +41,12 @@ export function bootstrap(svc: Services, store: MainStore) {
     .catch((err) => bootstrapError(svc, err));
 }
 
-async function setGlobals() {
-  // We keep a global reference of our instance of React in order to use it in remote modules
-  // See https://github.com/facebook/react/issues/13991 and related issues
-  // Reference must be lower case
-  type HasReact = Window & { react?: typeof React };
-  (window as HasReact).react = React;
-}
-
 /**
  * All users are authenticated, as connected users or as anonymous users
  * @param svc
  */
 async function authentication(svc: Services): Promise<void> {
-  const { authentication, pwa, project } = svc;
+  const { authentication, project, pwa } = svc;
 
   // On logout we clear all data
   authentication.addDisconnectListener(() => {
@@ -70,6 +57,7 @@ async function authentication(svc: Services): Promise<void> {
       .catch((err) => logger.error('Clear storage error: ', err));
   });
 
+  // If we ar offline, we do not try to log in
   if (!pwa.isOnline()) {
     return;
   }
@@ -77,7 +65,7 @@ async function authentication(svc: Services): Promise<void> {
   const connected = !!authentication.getUserStatus();
   if (connected) {
     return authentication.renewToken().catch((err) => {
-      logger.error('Cannot renew token: ', err);
+      logger.warn('Cannot renew token, session may have expired: ', err);
       return authentication.anonymousLogin();
     });
   }

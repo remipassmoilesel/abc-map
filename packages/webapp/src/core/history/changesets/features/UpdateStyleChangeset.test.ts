@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,8 @@
 import { UpdateStyleChangeset } from './UpdateStyleChangeset';
 import { TestHelper } from '../../../utils/test/TestHelper';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import { FeatureStyle } from '@abc-map/shared';
+import type { FeatureStyle } from '@abc-map/shared';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('UpdateStyleChangeset', function () {
   let feature: FeatureWrapper;

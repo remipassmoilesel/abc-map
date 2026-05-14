@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,12 @@
  */
 
 import Cls from './FeatureToggle.module.scss';
-import { withTranslation } from 'react-i18next';
-import React, { SyntheticEvent, useCallback } from 'react';
-import { getLang, prefixedTranslation } from '../../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
+import type { SyntheticEvent } from 'react';
+import React, { useCallback } from 'react';
+import { getLang } from '../../../../i18n/i18n';
 import { Switch } from '../../../switch/Switch';
-import { ExperimentalFeature } from '../../../../experimental-features';
+import type { ExperimentalFeature } from '../../../../experimental-features';
 import { getTextByLang } from '@abc-map/shared';
 import { linkify } from '../../../../core/utils/strings';
 
@@ -29,32 +30,32 @@ interface Props {
   feature: ExperimentalFeature;
   state: boolean;
   onChange: (feature: ExperimentalFeature, state: boolean) => void;
+  disabled?: boolean;
   'data-cy'?: string;
 }
 
-const t = prefixedTranslation('ExperimentalFeaturesModal:');
-
-function FeatureToggle(props: Props) {
-  const { feature, onChange, state, 'data-cy': dataCy } = props;
+export function FeatureToggle(props: Props) {
+  const { feature, onChange, state, disabled, 'data-cy': dataCy } = props;
   const description = getTextByLang(feature.description, getLang());
+  const { t } = useTranslation('ExperimentalFeaturesModal');
 
   const handleChange = useCallback(
     (ev: SyntheticEvent) => {
-      ev.stopPropagation();
-      onChange(feature, !state);
+      if (!disabled) {
+        ev.stopPropagation();
+        onChange(feature, !state);
+      }
     },
-    [onChange, feature, state]
+    [disabled, onChange, feature, state],
   );
 
   return (
     <div onClick={handleChange} className={Cls.featureToggle} data-cy={dataCy}>
       <div className={'d-flex flex-row align-items-center justify-content-between mb-2'}>
         {t(feature.id)}
-        <Switch onChange={handleChange} value={state} className={'ml-3'} />
+        <Switch onChange={handleChange} value={state} className={'ml-3'} disabled={disabled} />
       </div>
       {description && <small dangerouslySetInnerHTML={{ __html: linkify(description) }}></small>}
     </div>
   );
 }
-
-export default withTranslation()(FeatureToggle);

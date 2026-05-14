@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayer, AbcProjectManifest, LayerType, Logger, PredefinedLayerModel } from '@abc-map/shared';
-import { MigrationProject, ProjectMigration, ProjectMigrationSettings } from './typings';
+import type { AbcFile, AbcLayer, AbcProjectManifest } from '@abc-map/shared';
+import { LayerType, Logger, PredefinedLayerModel } from '@abc-map/shared';
+import type { MigrationProject, ProjectMigration, ProjectMigrationSettings } from './typings';
 import semver from 'semver';
-import { ModalService } from '../../ui/ModalService';
-import { AbcProjectManifest130 } from './dependencies/130-project-types';
+import type { ModalService } from '../../ui/ModalService';
+import type { AbcProjectManifest130 } from './dependencies/130-project-types';
 import { prefixedTranslation } from '../../../i18n/i18n';
 
 const NEXT = '1.4.0';
@@ -29,7 +30,7 @@ const logger = Logger.get('FromV130ToV140.ts');
 
 const deprecatedModels = ['StamenToner', 'StamenTonerLite', 'StamenTerrain', 'StamenWatercolor'];
 
-const t = prefixedTranslation('FromV130ToV140:');
+const t = prefixedTranslation('FromV130ToV140');
 
 /**
  * This migration replaces Stamen predefined layers by OSM layers.
@@ -45,7 +46,7 @@ export class FromV130ToV140 implements ProjectMigration<AbcProjectManifest130, A
   public async migrate(
     manifest: AbcProjectManifest130,
     files: AbcFile<Blob>[],
-    settings?: ProjectMigrationSettings
+    settings?: ProjectMigrationSettings,
   ): Promise<MigrationProject<AbcProjectManifest>> {
     // We will warn user once
     let warned = false;
@@ -57,7 +58,7 @@ export class FromV130ToV140 implements ProjectMigration<AbcProjectManifest130, A
             .warning(
               t('Changes_have_been_made_to_your_project'),
               `<div class="mb-4">${t('Stamen_layers_are_no_longer_available_as_before')}</div>
-               <div class="fw-bold">${t('The_Stamen_layers_in_your_project_have_been_replaced')}</div>`
+               <div class="fw-bold">${t('The_Stamen_layers_in_your_project_have_been_replaced')}</div>`,
             )
             .catch((err) => logger.error('Modal error: ', err));
           warned = true;

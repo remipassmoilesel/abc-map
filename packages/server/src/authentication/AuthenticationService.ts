@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,34 +16,33 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as jwt from 'jsonwebtoken';
-import { PasswordHasher } from './PasswordHasher';
+import jwt from 'jsonwebtoken';
+import { PasswordHasher } from './PasswordHasher.js';
+import type { AbcUser, AuthenticationToken, Language, RegistrationRequest, RegistrationToken, ResetPasswordToken } from '@abc-map/shared';
 import {
-  AbcUser,
   AnonymousUser,
   AuthenticationStatus,
+  ConfirmationStatus,
   isEmailAnonymous,
   isUserAnonymous,
-  RegistrationRequest,
+  Logger,
   RegistrationStatus,
-  AuthenticationToken,
-  RegistrationToken,
   UserStatus,
-  ResetPasswordToken,
-  ConfirmationStatus,
-  Language,
 } from '@abc-map/shared';
-import { Config } from '../config/Config';
-import { UserService } from '../users/UserService';
-import * as uuid from 'uuid-random';
-import { AbstractService } from '../services/AbstractService';
-import { Logger } from '@abc-map/shared';
-import { RegistrationDao } from './RegistrationDao';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { RegistrationDocument } from './RegistrationDocument';
-import { EmailService } from '../email/EmailService';
+import type { Config } from '../config/Config.js';
+import type { UserService } from '../users/UserService.js';
+import uuid from 'uuid-random';
+import { AbstractService } from '../services/AbstractService.js';
+import { RegistrationDao } from './RegistrationDao.js';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { RegistrationDocument } from './RegistrationDocument.js';
+import type { EmailService } from '../email/EmailService.js';
 
-export const logger = Logger.get('AuthenticationService');
+const logger = Logger.get('AuthenticationService');
+
+export function disableAuthenticationServiceLogs() {
+  logger.disable();
+}
 
 export interface Authentication {
   status: AuthenticationStatus;
@@ -62,7 +61,7 @@ export class AuthenticationService extends AbstractService {
     private registrations: RegistrationDao,
     private users: UserService,
     private hasher: PasswordHasher,
-    private emails: EmailService
+    private emails: EmailService,
   ) {
     super();
   }

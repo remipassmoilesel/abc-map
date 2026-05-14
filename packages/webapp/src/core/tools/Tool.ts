@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
-import Map from 'ol/Map';
-import { MapTool } from '@abc-map/shared';
-import { ToolMode } from './ToolMode';
+import type Map from 'ol/Map';
+import type { MapTool } from '@abc-map/shared';
+import type { ToolMode } from './ToolMode';
+import type { DefaultVectorSource } from '../geo/layers/LayerWrapper';
 
 export interface Tool {
   // Unique ID of tool
@@ -36,7 +35,7 @@ export interface Tool {
   getIcon(): string;
 
   // Called when tool is enabled
-  setup(map: Map, source: VectorSource<Geometry>): void;
+  setup(map: Map, source: DefaultVectorSource): void;
 
   modeChanged?(mode: ToolMode): void;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Services } from '../services/services';
-import { AbcUser } from '@abc-map/shared';
-import { Config } from '../config/Config';
-import * as uuid from 'uuid-random';
-import { PasswordHasher } from '../authentication/PasswordHasher';
+import type { Services } from '../services/services.js';
+import type { AbcUser } from '@abc-map/shared';
+import type { Config } from '../config/Config.js';
+import uuid from 'uuid-random';
+import { PasswordHasher } from '../authentication/PasswordHasher.js';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('UserInit.ts', 'info');
@@ -37,7 +37,11 @@ export class UserInit {
     return new UserInit(config, hasher, services);
   }
 
-  constructor(private config: Config, private hasher: PasswordHasher, private services: Services) {}
+  constructor(
+    private config: Config,
+    private hasher: PasswordHasher,
+    private services: Services,
+  ) {}
 
   public async init(): Promise<void> {
     const numberOfUsers = this.config.development?.generateData?.users || 0;

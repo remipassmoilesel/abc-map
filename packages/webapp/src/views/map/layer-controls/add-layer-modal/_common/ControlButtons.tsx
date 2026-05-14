@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,22 +17,23 @@
  */
 
 import React from 'react';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends WithTranslation {
   submitDisabled?: boolean;
   onCancel: () => void;
   onConfirm: () => void;
 }
 
-const t = prefixedTranslation('MapView:');
-
-class ControlButtons extends React.Component<Props, {}> {
+class ControlButtons extends React.Component<Props, unknown> {
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
+
     const onCancel = this.props.onCancel;
     const onConfirm = this.props.onConfirm;
     const submitDisabled = this.props.submitDisabled;
+
     return (
       <div className={'d-flex justify-content-end mt-3'}>
         <button className={'btn btn-secondary mr-3'} onClick={onCancel} data-testid={'cancel'}>

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './blob/BlobIO';
-export * from './routes/WebappRoutes';
-export * from './routes/Route';
-export * from './AbcWindow';
-export * from './BundledModuleId';
-export * from './LegacyRouteRedirections';
-export * from './MapTool';
+export * from './blob/BlobIO.js';
+export * from './routes/WebappRoutes.js';
+export * from './routes/Route.js';
+export * from './AbcWindow.js';
+export * from './ModuleId.js';
+export * from './LegacyRouteRedirections.js';
+export * from './MapTool.js';

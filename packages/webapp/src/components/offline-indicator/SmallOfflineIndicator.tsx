@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,12 +18,10 @@
 
 import Cls from './SmallOfflineIndicator.module.scss';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
-import { prefixedTranslation } from '../../i18n/i18n';
 import clsx from 'clsx';
 import OfflineIcon from './offline.svg';
 import { useOnlineStatus } from '../../core/pwa/OnlineStatusContext';
-
-const t = prefixedTranslation('SmallOfflineIndicator:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   className?: string;
@@ -32,6 +30,7 @@ interface Props {
 export function SmallOfflineIndicator(props: Props) {
   const { className } = props;
   const online = useOnlineStatus();
+  const { t } = useTranslation('SmallOfflineIndicator');
 
   if (online) {
     return <></>;

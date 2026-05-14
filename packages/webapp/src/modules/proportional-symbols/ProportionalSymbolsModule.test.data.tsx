@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,12 +21,12 @@ import { FeatureWrapper } from '../../core/geo/features/FeatureWrapper';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
 import shuffle from 'lodash/shuffle';
 import range from 'lodash/range';
-import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import type { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Point from 'ol/geom/Point';
-import { DataRow } from '../../core/data/data-source/DataSource';
+import type { DataRow } from '../../core/data/data-source/DataSource';
 import { StyleProperties } from '@abc-map/shared';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
+import type Feature from 'ol/Feature';
+import type Geometry from 'ol/geom/Geometry';
 
 export const testDataSource1 = (): TestDataSource =>
   TestDataSource.from([

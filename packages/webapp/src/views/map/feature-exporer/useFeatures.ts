@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,16 +18,15 @@
 
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { useEffect, useState } from 'react';
-import { VectorSourceEvent } from 'ol/source/Vector';
-import { Geometry } from 'ol/geom';
-import { Feature } from 'ol';
+import type { VectorSourceEvent } from 'ol/source/Vector';
+import type { Feature } from 'ol';
 import throttle from 'lodash/throttle';
 import { getAllFieldNames, getFieldNames, trySelectMainFieldName } from '../../../core/data/getFieldNames';
 import { Logger } from '@abc-map/shared';
-import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import { DataRow } from '../../../core/data/data-source/DataSource';
+import type { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { DataRow } from '../../../core/data/data-source/DataSource';
 import uniq from 'lodash/uniq';
-import BaseEvent from 'ol/events/Event';
+import type BaseEvent from 'ol/events/Event';
 
 const logger = Logger.get('useFeatures.ts');
 
@@ -57,7 +56,7 @@ export function useFeatures(vectorLayer: VectorLayerWrapper | undefined): Result
 
     const lastDeletedIndex: { [k: string | number]: number | undefined } = {};
 
-    const handleAddFeature = (ev: VectorSourceEvent<Geometry>) => {
+    const handleAddFeature = (ev: VectorSourceEvent<Feature>) => {
       const start = Date.now();
       const added = FeatureWrapper.fromUnknown(ev.feature);
       const featureId = added?.getId();
@@ -83,7 +82,7 @@ export function useFeatures(vectorLayer: VectorLayerWrapper | undefined): Result
       logger.debug(`Update took ${Date.now() - start}ms`);
     };
 
-    const handleUpdateFeature = (ev: VectorSourceEvent<Geometry>) => {
+    const handleUpdateFeature = (ev: VectorSourceEvent<Feature>) => {
       const updated = FeatureWrapper.fromUnknown(ev.feature);
       const featureId = updated?.getId();
       if (!updated || !featureId) {
@@ -96,7 +95,7 @@ export function useFeatures(vectorLayer: VectorLayerWrapper | undefined): Result
       });
     };
 
-    const handleRemoveFeatures = (ev: VectorSourceEvent<Geometry>) => {
+    const handleRemoveFeatures = (ev: VectorSourceEvent<Feature>) => {
       const start = Date.now();
       const toDelete = [ev.feature, ...(ev.features ?? [])].filter((f): f is Feature => !!f);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,17 +17,17 @@
  */
 
 import Cls from './PointSizeSelector.module.scss';
-import React, { ChangeEvent, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { MapActions } from '../../../../../core/store/map/actions';
+import type { ChangeEvent } from 'react';
+import React, { useCallback } from 'react';
+import { MapActions } from '../../../../../store/map/actions';
 import OptionRow from '../../_common/option-row/OptionRow';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../../../../core/store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 
 export default function PointSizeSelector() {
   const size = useAppSelector((st) => st.map.currentStyle.point.size);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation('MapView');
 
   const styleTransform = useDebouncedStyleTransform();
@@ -42,7 +42,7 @@ export default function PointSizeSelector() {
         point: { ...style.point, size },
       }));
     },
-    [dispatch, styleTransform]
+    [dispatch, styleTransform],
   );
 
   return (

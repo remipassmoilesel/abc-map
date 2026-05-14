@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Style from 'ol/style/Style';
-import { AbcGeometryType, FeatureStyle } from '@abc-map/shared';
+import type Style from 'ol/style/Style';
+import type { AbcGeometryType, FeatureStyle } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
-import { StyleFactoryOptions } from './StyleFactoryOptions';
+import type { StyleFactoryOptions } from './StyleFactoryOptions';
 
 export interface StyleCacheEntry {
   id: string;

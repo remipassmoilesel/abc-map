@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -23,23 +23,23 @@ import { SelectionToolPanel } from './selection/SelectionToolPanel';
 import LineStringPanel from './line-string/LineStringToolPanel';
 import PointPanel from './point/PointToolPanel';
 import PolygonPanel from './polygon/PolygonToolPanel';
-import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../core/history/changesets/layers/AddLayersChangeset';
-import { prefixedTranslation } from '../../../i18n/i18n';
 import { useServices } from '../../../core/useServices';
 import CommonActions from './_common/common-actions/CommonActions';
 import DialogBoxAdvice from '../../../components/dialog-box-advice/DialogBoxAdvice';
 import { ToolTips } from '../../../core/tips';
 import { ToolButton } from './ToolButton';
-import TextToolPanel from './text/TextToolPanel';
+import { TextToolPanel } from './text/TextToolPanel';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import ToolModeSelector from './_common/tool-mode-selector/ToolModeSelector';
-import { Tool } from '../../../core/tools/Tool';
+import type { Tool } from '../../../core/tools/Tool';
 import Cls from './ToolSelector.module.scss';
-import MeasuresToolPanel from './measures/MeasuresToolPanel';
+import { MeasuresToolPanel } from './measures/MeasuresToolPanel';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('ToolSelector');
 
@@ -47,10 +47,10 @@ interface Props {
   activeLayer: LayerWrapper | undefined;
 }
 
-const t = prefixedTranslation('MapView:');
-const tTools = prefixedTranslation('tools:');
+export function ToolSelector(props: Props) {
+  const { t } = useTranslation('MapView');
+  const { t: tTools } = useTranslation('tools');
 
-function ToolSelector(props: Props) {
   const { activeLayer } = props;
   const [activeTool, setActiveTool] = useState<Tool | undefined>();
   const { geo, history } = useServices();
@@ -75,7 +75,7 @@ function ToolSelector(props: Props) {
       const tool = ToolRegistry.getById(toolId);
       mainMap.setTool(tool);
     },
-    [mainMap]
+    [mainMap],
   );
 
   // Called if tools are enabled
@@ -186,5 +186,3 @@ function ToolSelector(props: Props) {
     </div>
   );
 }
-
-export default ToolSelector;

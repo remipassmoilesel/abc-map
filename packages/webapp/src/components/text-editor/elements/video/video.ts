@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Editor, Transforms } from 'slate';
-import { VideoElement } from '@abc-map/shared';
+import type { Editor } from 'slate';
+import { Transforms } from 'slate';
+import type { VideoElement } from '@abc-map/shared';
 
 export const video = {
   create(editor: Editor, url: string) {

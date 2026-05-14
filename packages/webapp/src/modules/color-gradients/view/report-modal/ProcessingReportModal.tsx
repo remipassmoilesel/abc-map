@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,22 +18,22 @@
 
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ProcessingResult, Status } from '../../typings/ProcessingResult';
-import { Parameters } from '../../typings/Parameters';
-import { prefixedTranslation } from '../../../../i18n/i18n';
+import type { ProcessingResult } from '../../typings/ProcessingResult';
+import { Status } from '../../typings/ProcessingResult';
+import type { Parameters } from '../../typings/Parameters';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import Cls from './ProcessingReportModal.module.scss';
 
-interface Props {
+interface Props extends WithTranslation {
   result: ProcessingResult;
   params: Parameters;
   onClose: () => void;
 }
 
-const t = prefixedTranslation('ColorGradientsModule:');
-
-class ProcessingReportModal extends Component<Props, {}> {
+class ProcessingReportModal extends Component<Props, unknown> {
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorGradientsModule');
     const result = this.props.result;
     const params = this.props.params;
     const handleClose = this.props.onClose;
@@ -104,6 +104,7 @@ class ProcessingReportModal extends Component<Props, {}> {
   }
 
   private getStatusFromResult(result: ProcessingResult) {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorGradientsModule');
     switch (result.status) {
       case Status.Succeed:
         return <div className={'alert alert-primary'}>{t('Processing_done')} 🥳 </div>;

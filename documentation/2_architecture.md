@@ -1,28 +1,42 @@
 # Architecture of Abc-Map
 
+<!-- toc -->
+
+- [Components](#components)
+- [Code repository](#code-repository)
+- [Continuous integration](#continuous-integration)
+
+<!-- tocstop -->
+
 ## Components
 
 Abc-Map is designed to be scalable but also to operate in an environment with limited resources.
 
 For this purpose:
 
-- server processes are stateless
-- the number of mandatory processes is limited
+- the majority of Abc-map functionalities are client-side, in a [progressive web app](https://en.wikipedia.org/wiki/Progressive_web_app): `webapp`.
+- the web app is served by a [Fastify](https://fastify.dev/) server: `server`. This server is stateless and can be scaled horizontally.
+- the mandatory software infrastructure is limited (one [Mongodb](https://www.mongodb.com/) database). A SMTP server can be added.
 
-Processes:
-
-- One backend server, which serves frontend as static ressources
-- One Mongodb server, which can be external and shared with other applications
-- One SMTP server, which can be external and shared with other applications
-
-Backend is stateless, so it can be horizontally scaled.
-
-All communications between backend and frontend are done via HTTP, with a REST-like API.
+All communications between server and client-side are done via HTTP, with a REST-like API.
 
 ## Code repository
 
-Code repository is a monorepo managed with [Lerna](https://lerna.js.org/). Most used commands are wrapped
-in a custom CLI: `abc-cli`. See `./abc-cli help` command.
+Code repository is a monorepo managed with [PNPM](https://pnpm.io/fr/) and [Turbo](https://turbo.build/). Some development tools are available via `abc-cli`.
+See `./abc-cli help` command.
+
+```
+    `abc-cli` helps to build and deploy Abc-Map.
+
+    Common commands are:
+
+      $ ./abc-cli install                    Init project and install dependencies.
+      $ ./abc-cli build                      Build all packages. Generally needed once only.
+      $ ./abc-cli watch                      Watch source code of all packages and compile on change.
+      $ ./abc-cli start                      Start project and associated services (database, mail server, ...).
+      $ ./abc-cli clean-restart-services     Stop services, clean data, then start services.
+      $ ./abc-cli ci [--light]               Execute a full/light continuous integration pipeline locally.
+```
 
 ## Continuous integration
 

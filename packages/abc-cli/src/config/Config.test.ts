@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from './Config';
-import { assert } from 'chai';
-import * as fs from 'fs';
-import * as path from 'path';
+import { Config } from './Config.js';
+import fs from 'fs';
+import path from 'path';
+import { assert, describe, it } from 'vitest';
 
 describe('Config', () => {
   it('should return correct paths', () => {

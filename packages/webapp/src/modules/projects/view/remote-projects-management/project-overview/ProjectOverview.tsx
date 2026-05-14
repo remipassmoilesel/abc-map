@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,8 +20,9 @@ import { useServices } from '../../../../../core/useServices';
 import React, { useCallback, useMemo, useState } from 'react';
 import { CopyToClipboardButton } from '../../../../../components/copy-to-clipboard-button/CopyToClipboardButton';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../../../../core/store/hooks';
-import { AbcProjectMetadata, Logger } from '@abc-map/shared';
+import { useAppSelector } from '../../../../../store/hooks';
+import type { AbcProjectMetadata } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import clsx from 'clsx';
 import Cls from './ProjectOverview.module.scss';
 import { FaIcon } from '../../../../../components/icon/FaIcon';

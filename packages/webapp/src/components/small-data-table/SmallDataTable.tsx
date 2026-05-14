@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { DataRow, DataValue } from '../../core/data/data-source/DataSource';
+import type { DataRow, DataValue } from '../../core/data/data-source/DataSource';
 import Cls from './SmallDataTable.module.scss';
 import clsx from 'clsx';
 import { getAllFieldNames } from '../../core/data/getFieldNames';
@@ -59,7 +59,7 @@ export function SmallDataTable(props: Props) {
         return field + '';
       }
     },
-    [t]
+    [t],
   );
 
   if (!rows.length) {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../../../core/store/hooks';
+import { useAppSelector } from '../../../../store/hooks';
 import clsx from 'clsx';
 import { getLang } from '../../../../i18n/i18n';
 import { FaIcon } from '../../../../components/icon/FaIcon';
@@ -82,7 +82,7 @@ export function ProjectionStatus(props: Props) {
         return Promise.reject(err);
       });
     },
-    [geo, project, t, toasts]
+    [geo, project, t, toasts],
   );
 
   const handleChangeProjection = useCallback(() => {

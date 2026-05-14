@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,11 +18,12 @@
 
 import Cls from './LayoutPreview.module.scss';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
-import { AbcLayout } from '@abc-map/shared';
+import type { AbcNorth, AbcScale, AbcTextFrame, AbcView } from '@abc-map/shared';
+import { getAbcWindow, Logger } from '@abc-map/shared';
+import type { AbcLayout } from '@abc-map/shared';
 import isEqual from 'lodash/isEqual';
 import { LayoutHelper } from '../../../../core/project/LayoutHelper';
-import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../../core/geo/map/MapFactory';
 import { E2eMapWrapper } from '../../../../core/geo/map/E2eMapWrapper';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +31,7 @@ import { IconDefs } from '../../../../components/icon/IconDefs';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { StaticAttributions } from '../../../../components/static-attributions/StaticAttributions';
 import { MapUi } from '../../../../components/map-ui/MapUi';
-import { DimensionsPx } from '../../../../core/utils/DimensionsPx';
+import type { DimensionsPx } from '../../../../core/utils/DimensionsPx';
 import { useServices } from '../../../../core/useServices';
 import { Views } from '../../../../core/geo/Views';
 import { FloatingTextFrame } from '../../../../components/text-frame/FloatingTextFrame';
@@ -38,7 +39,7 @@ import { FloatingScale } from '../../../../components/floating-scale/FloatingSca
 import { LayoutRenderer } from '../../../../core/project/rendering/LayoutRenderer';
 import { normalize, toPrecision } from '../../../../core/utils/numbers';
 import { FloatingNorthArrow } from '../../../../components/floating-north-arrow/FloatingNorthArrow';
-import { useAppSelector } from '../../../../core/store/hooks';
+import { useAppSelector } from '../../../../store/hooks';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -121,7 +122,7 @@ export function LayoutPreview(props: Props) {
   }, [layout, layout?.format, layout?.view, previewDimensions, previewMap, previewRatio, previewView]);
 
   // We keep track of the latest layout changes because we need to prevent events from being triggered during preview setup
-  const lastPreviewChange = useRef<number>();
+  const lastPreviewChange = useRef<number>(0);
   useEffect(() => {
     lastPreviewChange.current = Date.now();
   }, [layout?.id, layout?.format.id]);
@@ -144,7 +145,7 @@ export function LayoutPreview(props: Props) {
         onLayoutChanged(updated);
       }
     },
-    [layout, onLayoutChanged, previewRatio]
+    [layout, onLayoutChanged, previewRatio],
   );
 
   // Triggered when user change a text frame
@@ -178,10 +179,10 @@ export function LayoutPreview(props: Props) {
             width: normalize(after.size.width * previewRatio, 0, width),
             height: normalize(after.size.height * previewRatio, 0, height),
           },
-        }
+        },
       );
     },
-    [layout?.format, onTextFrameChange, previewRatio]
+    [layout, onTextFrameChange, previewRatio],
   );
 
   // Adapt text frame positions and sizes to preview
@@ -223,7 +224,7 @@ export function LayoutPreview(props: Props) {
         y: normalize(scale.y * previewRatio, 0, height),
       });
     },
-    [layout?.format, onScaleChange, previewRatio]
+    [layout, onScaleChange, previewRatio],
   );
 
   // Adapt scale position to preview
@@ -242,7 +243,7 @@ export function LayoutPreview(props: Props) {
     };
 
     setPreviewScale(previewScale);
-  }, [layout?.scale, previewDimensions, previewMap, previewRatio]);
+  }, [layout, previewDimensions, previewMap, previewRatio]);
 
   // Triggered when user modify north position
   const handleNorthChange = useCallback(
@@ -259,7 +260,7 @@ export function LayoutPreview(props: Props) {
         y: normalize(north.y * previewRatio, 0, height),
       });
     },
-    [layout?.format, onNorthChange, previewRatio]
+    [layout, onNorthChange, previewRatio],
   );
 
   // Adapt north position to preview

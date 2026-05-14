@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,26 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import { FormState } from './FormState';
 import MessageLabel from '../message-label/MessageLabel';
 import { Logger } from '@abc-map/shared';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { IconDefs } from '../icon/IconDefs';
 
 const logger = Logger.get('FormValidationLabel.tsx');
 
-export interface Props {
+export interface Props extends WithTranslation {
   state: FormState;
   className?: string;
 }
 
-const t = prefixedTranslation('FormValidationLabel:');
-
-class FormValidationLabel extends Component<Props, {}> {
+class FormValidationLabel extends Component<Props, unknown> {
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'FormValidationLabel');
     const formState = this.props.state;
     const className = this.props.className;
     const { icon, message } = this.getIconAndMessage(formState);
@@ -59,6 +59,8 @@ class FormValidationLabel extends Component<Props, {}> {
   }
 
   private getIconAndMessage(formState: FormState): { icon: IconDefinition; message: string } {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'FormValidationLabel');
+
     let icon = IconDefs.faExclamationCircle;
     let message = '';
     switch (formState) {

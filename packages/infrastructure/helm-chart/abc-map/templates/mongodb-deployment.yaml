@@ -33,24 +33,20 @@ spec:
           livenessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
                 - --eval
                 - "db.adminCommand('ping')"
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            periodSeconds: 30
             timeoutSeconds: 5
-            successThreshold: 1
             failureThreshold: 6
           readinessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
                 - --eval
                 - "db.adminCommand('ping')"
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            periodSeconds: 30
             timeoutSeconds: 5
-            successThreshold: 1
             failureThreshold: 6
           resources:
             {{- toYaml .Values.mongodb.resources | nindent 12 }}

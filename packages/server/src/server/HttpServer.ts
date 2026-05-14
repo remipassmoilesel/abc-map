@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,24 +17,25 @@
  */
 
 import { Language, Logger } from '@abc-map/shared';
-import { Config } from '../config/Config';
-import { Services } from '../services/services';
-import * as path from 'path';
-import { fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { Config } from '../config/Config.js';
+import type { Services } from '../services/services.js';
+import path from 'path';
+import type { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
+import { fastify } from 'fastify';
 import fastifySensible from '@fastify/sensible';
-import { Controller } from './Controller';
-import { jwtPlugin } from './helpers/jwtPlugin';
+import type { Controller } from './Controller.js';
+import { jwtPlugin } from './helpers/jwtPlugin.js';
 import fastifyRateLimit from '@fastify/rate-limit';
 import helmet from '@fastify/helmet';
 import fastifyView from '@fastify/view';
-import { getLang } from './helpers/getLang';
-import { HookHandlerDoneFunction } from 'fastify/types/hooks';
-import { FastifyError } from '@fastify/error';
-import { privateControllers, publicControllers } from './controllers';
+import { getLang } from './helpers/getLang.js';
+import type { FastifyError } from '@fastify/error';
+import { privateControllers, publicControllers } from './controllers.js';
 import metricsPlugin from 'fastify-metrics';
-import { defaultRateLimitConfig } from './helpers/defaultRateLimitConfig';
-import { hashRequestSource } from './helpers/hashRequestSource';
-import { isItWorthLogging } from './helpers/isItWorthLogging';
+import { defaultRateLimitConfig } from './helpers/defaultRateLimitConfig.js';
+import { hashRequestSource } from './helpers/hashRequestSource.js';
+import { isItWorthLogging } from './helpers/isItWorthLogging.js';
+import handlebars from 'handlebars';
 
 const logger = Logger.get('HttpServer.ts', 'info');
 
@@ -58,7 +59,11 @@ export class HttpServer {
   private debugRoutes = false;
   private routes: string[] = [];
 
-  constructor(private config: Config, private services: Services, private controllers: { public: Controller[]; private: Controller[] }) {
+  constructor(
+    private config: Config,
+    private services: Services,
+    private controllers: { public: Controller[]; private: Controller[] },
+  ) {
     // This server is designed to be used behind a TLS proxy
     this.app = fastify({ trustProxy: true });
   }
@@ -97,7 +102,7 @@ export class HttpServer {
             method: routeOptions.method,
             url: routeOptions.url,
             prefix: routeOptions.prefix,
-          })
+          }),
         );
       });
     }
@@ -119,18 +124,18 @@ export class HttpServer {
     await this.app.register(fastifySensible);
 
     // Metrics
-    await this.app.register(metricsPlugin, { defaultMetrics: { enabled: false }, clearRegisterOnInit: true });
+    await this.app.register(metricsPlugin.default, { defaultMetrics: { enabled: false }, clearRegisterOnInit: true });
 
     // Templating engine
     await this.app.register(fastifyView, {
-      engine: { handlebars: require('handlebars') },
-      root: path.resolve(__dirname, '../../public'),
+      engine: { handlebars: handlebars },
+      root: path.resolve(import.meta.dirname, '../../public'),
       viewExt: 'html',
     });
 
     // Add security headers
     // We allow iframes for shared maps
-    await this.app.register(helmet, { contentSecurityPolicy: false, frameguard: false });
+    await this.app.register(helmet, { contentSecurityPolicy: false, frameguard: false, referrerPolicy: { policy: 'origin' } });
 
     // Public controllers
     await this.app.register(async (app) => {
@@ -157,7 +162,7 @@ export class HttpServer {
       const logTrace = {
         date: new Date().toISOString(),
         error: err.message,
-        source: hashRequestSource(request, !this.config.server.log.warnings),
+        source: hashRequestSource(request, this.config.server.log.warnings),
         userAgent: request.headers['user-agent'],
         method: request.method,
         url: request.url,
@@ -188,7 +193,7 @@ export class HttpServer {
 
     const logTrace = {
       date: new Date().toISOString(),
-      source: hashRequestSource(request, !this.config.server.log.warnings),
+      source: hashRequestSource(request, this.config.server.log.warnings),
       userAgent: request.headers['user-agent'],
       method: request.method,
       url: request.url,
@@ -204,8 +209,8 @@ export class HttpServer {
     app.addHook('onRequest', async (request, reply) => {
       try {
         await request.jwtVerify();
-      } catch (err) {
-        reply.forbidden();
+      } catch {
+        await reply.forbidden();
       }
     });
   }

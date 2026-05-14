@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,13 @@
  */
 
 import Cls from './LicenceModal.module.scss';
-import { withTranslation } from 'react-i18next';
-import { AbcArtefact, getTextByLang, Logger } from '@abc-map/shared';
+import { useTranslation, withTranslation } from 'react-i18next';
+import type { AbcArtefact } from '@abc-map/shared';
+import { getTextByLang, Logger } from '@abc-map/shared';
 import { useServices } from '../../../core/useServices';
 import { Modal } from 'react-bootstrap';
 import React, { useCallback, useEffect, useState } from 'react';
-import { getLang, prefixedTranslation } from '../../../i18n/i18n';
+import { getLang } from '../../../i18n/i18n';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { linkify } from '../../../core/utils/strings';
@@ -32,14 +33,13 @@ import { FoldingInfo } from '../../../components/folding-info/FoldingInfo';
 
 const logger = Logger.get('LicenceModal.tsx');
 
-const t = prefixedTranslation('DataStoreModule:');
-
 interface Props {
   artefact: AbcArtefact;
   className?: string;
 }
 
 function LicenceModal(props: Props) {
+  const { t } = useTranslation('DataStoreModule');
   const { artefact, className } = props;
   const { dataStore } = useServices();
   const [visible, setVisible] = useState(false);

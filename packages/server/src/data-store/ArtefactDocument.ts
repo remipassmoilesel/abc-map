@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbDocument } from '../mongodb/MongodbDocument';
-import { MongoI18nList, MongoI18nText } from '../mongodb/MongodbI18n';
-import { ArtefactType } from '@abc-map/shared';
+import type { MongodbDocument } from '../mongodb/MongodbDocument.js';
+import type { MongoI18nList, MongoI18nText } from '../mongodb/MongodbI18n.js';
+import type { ArtefactType } from '@abc-map/shared';
 
 /**
  * There is no need to migrate artefacts, as they are recreated at each startup

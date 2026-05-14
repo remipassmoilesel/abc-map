@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,16 @@
  *
  *
  */
-import { Options } from 'k6/options';
-import http, { batch, ObjectBatchRequest } from 'k6/http';
+import type { Options } from 'k6/options';
+import type { ObjectBatchRequest } from 'k6/http';
+import http, { batch } from 'k6/http';
 import { parseHTML } from 'k6/html';
 import { check, sleep } from 'k6';
-import { AuthenticationRequest } from '@abc-map/shared';
-import { extractAuthentication, get, jsonGet, jsonPost, sampleProjectMetadata } from './utils/helpers';
+import type { AuthenticationRequest } from '@abc-map/shared';
+import { assertMinBodyLength, assertStatusCode, extractAuthentication, get, jsonGet, jsonPost, sampleProjectMetadata } from './utils/helpers';
 import { FormData } from './utils/FormDataPolyfill';
-import { Config } from './utils/Config';
+import type { Config } from './utils/Config';
+import urlJoin from 'url-join';
 
 /*
  *
@@ -64,7 +66,7 @@ export default () => {
   const badCredentials: AuthenticationRequest = { email: 'bad email', password: 'bad password' };
   const req1 = jsonPost(`${fileOptions.host}/api/authentication`, badCredentials);
   check(req1, {
-    'Bad authentication status is 401': (res) => res.status === 401,
+    'Bad authentication status is 401': assertStatusCode(401),
   });
 
   // We log in with correct credentials
@@ -72,7 +74,7 @@ export default () => {
   const req2 = jsonPost(`${fileOptions.host}/api/authentication`, goodCredentials);
   const auth = extractAuthentication(req2.body);
   check(req2, {
-    'Good authentication status is 200': (res) => res.status === 200,
+    'Good authentication status is 200': assertStatusCode(200),
   });
 
   sleep(3);
@@ -80,27 +82,29 @@ export default () => {
   // We list artefacts
   const req3 = jsonGet(`${fileOptions.host}/api/datastore/list?limit=6&offset=0&filter=All`, auth);
   check(req3, {
-    'List artefacts status is 200': (res) => res.status === 200,
+    'List artefacts status is 200': assertStatusCode(200),
   });
 
   // We search artefacts
   const req4 = jsonGet(`${fileOptions.host}/api/datastore/search?query=world&lang=en&limit=6&offset=0&filter=All`, auth);
   check(req4, {
-    'Search artefacts status is 200': (res) => res.status === 200,
+    'Search artefacts status is 200': assertStatusCode(200),
   });
 
   // We download artefact 1
+  // FIXME: Better assertions
   const req5 = get(`${fileOptions.host}/api/datastore/download/tapiquen-sig/world/world-cities/world-cities.zip`, auth);
   check(req5, {
-    'Download artefact 1 status is 200': (res) => res.status === 200,
-    'Artefact 1 is heavy': (res) => (res.body?.length || 0) > 10_000,
+    'Download artefact 1 status is 200': assertStatusCode(200),
+    'Artefact 1 is heavy': assertMinBodyLength(10_000),
   });
 
   // We download artefact 2
+  // FIXME: Better assertions
   const req6 = get(`${fileOptions.host}/api/datastore/download/tapiquen-sig/world/world-countries/ne_10m_admin_0_countries.zip`, auth);
   check(req6, {
-    'Download artefact 2 status is 200': (res) => res.status === 200,
-    'Artefact 2 is heavy': (res) => (res.body?.length || 0) > 10_000,
+    'Download artefact 2 status is 200': assertStatusCode(200),
+    'Artefact 2 is heavy': assertMinBodyLength(10_000),
   });
 
   sleep(3);
@@ -115,7 +119,7 @@ export default () => {
     headers: { ...auth, 'Content-Type': `multipart/form-data; boundary=${formData.boundary}` },
   });
   check(req7, {
-    'Project save status is 200': (res) => res.status === 200,
+    'Project save status is 200': assertStatusCode(200),
   });
 
   sleep(3);
@@ -123,13 +127,13 @@ export default () => {
   // We list projects
   const req8 = jsonGet(`${fileOptions.host}/api/projects`, auth);
   check(req8, {
-    'List projects status is 200': (res) => res.status === 200,
+    'List projects status is 200': assertStatusCode(200),
   });
 
   // We download project
   const req9 = jsonGet(`${fileOptions.host}/api/projects/${projectMetadata.id}`, auth);
   check(req9, {
-    'Get project status is 200': (res) => res.status === 200,
+    'Get project status is 200': assertStatusCode(200),
     // FIXME: Test setup freeze if size exceed few kb, probably due to k6 memory usage and FormDataPolyfill.ts
     // 'Project is heavy': (res) => (res.body?.length || 0) > 100_000,
   });
@@ -137,7 +141,7 @@ export default () => {
   // We delete project
   const req10 = http.del(`${fileOptions.host}/api/projects/${projectMetadata.id}`, undefined, { headers: auth });
   check(req10, {
-    'Delete project status is 200': (res) => res.status === 200,
+    'Delete project status is 200': assertStatusCode(200),
   });
 };
 
@@ -166,7 +170,7 @@ function fetchFrontend() {
     .filter((s): s is string => !!s)
     .map((url) => {
       if (!url.startsWith('http')) {
-        return fileOptions.host + url;
+        return urlJoin(fileOptions.host, url);
       }
       return url;
     });

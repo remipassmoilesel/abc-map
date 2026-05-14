@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -24,11 +24,11 @@ files. This can happen when there are errors in worker code for example.
 
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const root = path.resolve('build');
-const files = ['index.html', 'static', 'static/css', 'static/js'];
+const files = ['index.html', 'assets', 'static'];
 
 files.forEach((relativePath) => {
   const fullPath = path.resolve(root, relativePath);

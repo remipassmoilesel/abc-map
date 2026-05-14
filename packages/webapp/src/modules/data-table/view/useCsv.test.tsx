@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,19 +18,22 @@
 
 import { abcRender } from '../../../core/utils/test/abcRender';
 import { useCsv } from './useCsv';
-import { useEffect, useMemo } from 'react';
+import { act, useEffect, useMemo } from 'react';
+import { screen } from '@testing-library/react';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
-import { FileIO, FilesSelected, InputResultType } from '../../../core/utils/FileIO';
+import type { FilesSelected } from '../../../core/utils/FileIO';
+import { FileIO, InputResultType } from '../../../core/utils/FileIO';
 import { TestHelper } from '../../../core/utils/test/TestHelper';
 import { CsvParser } from '../../../core/data/csv-parser/CsvParser';
-import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import { act } from '@testing-library/react';
+import type { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { errorMessage } from '@abc-map/shared';
+import type { Mock } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-jest.mock('../../../core/utils/FileIO');
+vi.mock('../../../core/utils/FileIO');
 
-describe('useCsv', () => {
+describe('useCsv()', () => {
   const sampleLayer = () => {
     const layer = LayerFactory.newVectorLayer();
     layer
@@ -59,21 +62,25 @@ describe('useCsv', () => {
       const { exportFile, result } = useCsv(layer, rows);
       useEffect(() => exportFile(), [exportFile]);
 
-      return <>{JSON.stringify({ result })}</>;
+      return <div data-testid={'result'}>{JSON.stringify({ result })}</div>;
     }
 
     // Act
-    const { container } = abcRender(<TestComponent />);
-    await TestHelper.wait(10); // We wait for an internal promise
+    await act(async () => {
+      abcRender(<TestComponent />);
+    });
+    // We wait for an internal promise
+    await act(async () => TestHelper.wait(10));
 
     // Assert
-    expect(container).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot();
     expect(FileIO.downloadBlob).toBeCalledTimes(1);
 
-    const file = (FileIO.downloadBlob as jest.MockedFn<any>).mock.calls[0][0] as File;
+    const file = (FileIO.downloadBlob as Mock<any>).mock.calls[0][0] as File;
     expect(file).toBeDefined();
 
     const rows = await CsvParser.parse(file);
+    expect(rows).toHaveLength(4);
     expect(rows).toMatchSnapshot();
   });
 
@@ -83,7 +90,7 @@ describe('useCsv', () => {
       type: InputResultType.Confirmed,
       files: [new Blob(['jsjsajsjasjajsajsjasjajs']) as File],
     };
-    (FileIO.openPrompt as jest.MockedFn<any>).mockResolvedValue(prompt);
+    (FileIO.openPrompt as Mock<any>).mockResolvedValue(prompt);
 
     function TestComponent() {
       const layer = useMemo(() => sampleLayer(), []);
@@ -92,17 +99,20 @@ describe('useCsv', () => {
       const { importFile, result } = useCsv(layer, rows);
       useEffect(() => importFile(), [importFile]);
 
-      return <>{JSON.stringify({ result, error: errorMessage(result?.error) })}</>;
+      return <div data-testid={'result'}>{JSON.stringify({ result, error: errorMessage(result?.error) })}</div>;
     }
 
     // Act
-    const { container } = abcRender(<TestComponent />);
     await act(async () => {
-      await TestHelper.wait(10); // We wait for an internal promise
+      abcRender(<TestComponent />);
     });
+    // We wait for an internal promise
+    await act(async () => TestHelper.wait(10));
 
     // Assert
-    expect(container).toMatchSnapshot();
+    expect(screen.getByTestId('result').innerHTML).toEqual(
+      '{"result":{"file":{},"imported":0,"skipped":0,"skippedIds":[],"error":{}},"error":"Invalid CSV file, nothing was parsed"}',
+    );
   });
 
   it('importFile() should update layer', async () => {
@@ -132,13 +142,13 @@ describe('useCsv', () => {
           id: '55',
         },
       ],
-      'file.csv'
+      'file.csv',
     );
     const prompt: FilesSelected = {
       type: InputResultType.Confirmed,
       files: [csvFile],
     };
-    (FileIO.openPrompt as jest.MockedFn<any>).mockResolvedValue(prompt);
+    (FileIO.openPrompt as Mock<any>).mockResolvedValue(prompt);
 
     const layer = sampleLayer();
 
@@ -148,17 +158,18 @@ describe('useCsv', () => {
       const { importFile, result } = useCsv(layer, rows);
       useEffect(() => importFile(), [importFile]);
 
-      return <>{JSON.stringify({ result })}</>;
+      return <div data-testid={'result'}>{JSON.stringify({ result })}</div>;
     }
 
     // Act
-    const { container } = abcRender(<TestComponent layer={layer} />);
     await act(async () => {
-      await TestHelper.wait(10); // We wait for an internal promise
+      abcRender(<TestComponent layer={layer} />);
     });
+    // We wait for an internal promise
+    await act(async () => TestHelper.wait(10));
 
     // Assert
-    expect(container).toMatchSnapshot();
+    expect(screen.getByTestId('result').innerHTML).toEqual('{"result":{"file":{},"imported":3,"skipped":1,"skippedIds":["C5VurN_4k_"],"error":null}}');
 
     const dataRows = layer
       .getSource()

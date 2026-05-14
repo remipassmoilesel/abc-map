@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -26,7 +26,8 @@ import { ModuleContainer } from '../../../components/module-container/ModuleCont
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 import { usePersistentStore } from './state';
 import Cls from './ScriptsView.module.scss';
-import { AllScriptExamples, ScriptExample } from '../examples';
+import type { ScriptExample } from '../examples';
+import { AllScriptExamples } from '../examples';
 import { useServices } from '../../../core/useServices';
 import { getScriptErrorOutput } from '../script-api/errors';
 
@@ -72,8 +73,7 @@ export function ScriptsView(props: Props) {
 
       example
         .setup(geo.getMainMap())
-        .then(() => fetch(example.codeUrl))
-        .then((response) => response.text())
+        .then(() => example.codeSample())
         .then((scriptContent) => {
           setScript(scriptContent);
           toasts.info(t('Example_loaded'));
@@ -84,7 +84,7 @@ export function ScriptsView(props: Props) {
         })
         .finally(() => setExampleLoading(false));
     },
-    [geo, setScript, t, toasts]
+    [geo, setScript, t, toasts],
   );
 
   return (

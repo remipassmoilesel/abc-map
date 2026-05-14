@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-const fs = require('fs');
-const path = require('path');
-const showdown = require('showdown');
+import fs from 'fs';
+import path from 'path';
+import showdown from 'showdown';
 
-const projectRoot = path.resolve(__dirname, '../../../');
+const projectRoot = path.resolve(import.meta.dirname, '../../../');
 const source = path.resolve(projectRoot, 'CHANGELOG.md');
 const target = path.resolve(projectRoot, 'packages/webapp/public/static/CHANGELOG.html');
 const commitBaseUrl = 'https://gitlab.com/abc-map/abc-map/-/tree';

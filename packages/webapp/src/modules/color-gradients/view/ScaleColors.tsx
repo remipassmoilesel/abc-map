@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from 'react';
+import React, { useCallback } from 'react';
 import { Logger } from '@abc-map/shared';
-import ColorPicker from '../../../components/color-picker/ColorPickerButton';
+import { ColorPickerButton } from '../../../components/color-picker/ColorPickerButton';
 import FormLine from '../../../components/form-line/FormLine';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
-const logger = Logger.get('ColorScaleSelection.tsx');
+const logger = Logger.get('ScaleColors.tsx');
 
 interface Props {
   start: string;
@@ -30,35 +30,35 @@ interface Props {
   onChange: (start: string, end: string) => void;
 }
 
-const t = prefixedTranslation('ColorGradientsModule:');
+export function ScaleColors(props: Props) {
+  const { start, end } = props;
+  const { t } = useTranslation('ColorGradientsModule');
 
-class ScaleColors extends Component<Props, {}> {
-  public render() {
-    const start = this.props.start;
-    const end = this.props.end;
+  const handleStartChanged = useCallback(
+    (value: string) => {
+      props.onChange(value, props.end);
+    },
+    [props],
+  );
 
-    return (
-      <>
-        <FormLine>
-          <div className={'flex-grow-1'}>{t('Start_color')}:</div>
-          <ColorPicker value={start} onClose={this.handleStartChanged} />
-        </FormLine>
+  const handleEndChanged = useCallback(
+    (value: string) => {
+      props.onChange(props.start, value);
+    },
+    [props],
+  );
 
-        <FormLine>
-          <div className={'flex-grow-1'}>{t('End_color')}:</div>
-          <ColorPicker value={end} onClose={this.handleEndChanged} />
-        </FormLine>
-      </>
-    );
-  }
+  return (
+    <>
+      <FormLine>
+        <div className={'flex-grow-1'}>{t('Start_color')}:</div>
+        <ColorPickerButton value={start} onClose={handleStartChanged} />
+      </FormLine>
 
-  private handleStartChanged = (value: string) => {
-    this.props.onChange(value, this.props.end);
-  };
-
-  private handleEndChanged = (value: string) => {
-    this.props.onChange(this.props.start, value);
-  };
+      <FormLine>
+        <div className={'flex-grow-1'}>{t('End_color')}:</div>
+        <ColorPickerButton value={end} onClose={handleEndChanged} />
+      </FormLine>
+    </>
+  );
 }
-
-export default ScaleColors;

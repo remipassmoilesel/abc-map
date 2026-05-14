@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import React from 'react';
-import { BundledModuleId, LayerType, Logger } from '@abc-map/shared';
+import { ModuleId, LayerType, Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Routes } from '../../../../../routes';
@@ -48,7 +48,7 @@ export function HelpPanel(props: Props) {
 
       <div className={clsx(Cls.datastoreAdvice, 'd-flex flex-row flex-wrap align-items-center mb-5')}>
         <div className={'me-2'}>{t('Cant_find_what_you_re_looking_for')}</div>
-        <Link to={Routes.module().withParams({ moduleId: BundledModuleId.DataStore })}>{t('Try_data_store')}</Link>
+        <Link to={Routes.module().withParams({ moduleId: ModuleId.DataStore })}>{t('Try_data_store')}</Link>
       </div>
     </div>
   );

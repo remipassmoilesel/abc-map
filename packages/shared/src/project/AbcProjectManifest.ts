@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer } from './layer';
-import { AbcLayout } from './layout';
-import { AbcView } from './AbcView';
-import { AbcSharedView } from './shared-views';
+import type { AbcLayer } from './layer/index.js';
+import type { AbcLayout } from './layout/index.js';
+import type { AbcView } from './AbcView.js';
+import type { AbcSharedView } from './shared-views/index.js';
 
 export interface AbcProjectManifest {
   // Metadata: id, version, etc ...

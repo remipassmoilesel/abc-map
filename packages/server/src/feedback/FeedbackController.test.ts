@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HttpServer } from '../server/HttpServer';
-import { Services, servicesFactory } from '../services/services';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { assert } from 'chai';
-import { Config } from '../config/Config';
-import { AbcVote, VoteValue } from '@abc-map/shared';
-import { TestAuthentication } from '../utils/TestAuthentication';
+import { HttpServer } from '../server/HttpServer.js';
+import type { Services } from '../services/services.js';
+import { servicesFactory } from '../services/services.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { afterAll, assert, beforeAll, beforeEach, describe, it } from 'vitest';
+import type { Config } from '../config/Config.js';
+import type { AbcVote } from '@abc-map/shared';
+import { VoteValue } from '@abc-map/shared';
+import { TestAuthentication } from '../utils/TestAuthentication.js';
 
 describe('FeedbackController', () => {
   let config: Config;
@@ -30,7 +32,7 @@ describe('FeedbackController', () => {
   let server: HttpServer;
   let testAuth: TestAuthentication;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
@@ -47,7 +49,7 @@ describe('FeedbackController', () => {
     await server.initialize();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await services.shutdown();
     await server.shutdown();
   });

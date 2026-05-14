@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,22 +16,24 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { Buffers } from './index';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
-import sinon, { SinonStub } from 'sinon';
-import * as fs from 'fs';
-import * as path from 'path';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
+import fs from 'fs';
+import path from 'path';
 import { createScript } from '../script-api/createScript';
-import { ScriptContext } from '../script-api/ScriptContext';
-import { getModuleApi } from '../../../core/modules/registry/getModuleApi';
-import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import type { ScriptContext } from '../script-api/ScriptContext';
+import type { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { TestServices } from '../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../core/utils/test/TestServices';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { getScriptApi } from '../script-api/ScriptApi';
-import * as turf from '@turf/turf';
 import sortBy from 'lodash/sortBy';
 import { logger } from './data';
+import { beforeEach, describe, expect, it, afterEach } from 'vitest';
+import { buffer } from '@turf/turf';
 
 logger.disable();
 
@@ -49,12 +51,10 @@ describe('buffers.js-txt', () => {
 
     (fetch as SinonStub).callsFake(async function (url: string | undefined) {
       if (url?.endsWith('.geojson')) {
-        const filePath = path.resolve(__dirname, 'data/' + url);
+        const filePath = path.resolve(import.meta.dirname, 'data/' + url);
         return fs.promises.readFile(filePath).then((res) => ({ json: async () => res.toString('utf-8') }));
       }
     });
-
-    (global as any).turf = turf;
   });
 
   afterEach(() => {
@@ -72,14 +72,19 @@ describe('buffers.js-txt', () => {
     // Prepare
     await Buffers.setup(map);
 
-    const scriptContent = await fs.promises.readFile(path.resolve(__dirname, Buffers.codeUrl));
-    const script = createScript(scriptContent.toString('utf-8'));
+    const scriptContent = await Buffers.codeSample();
+    const script = createScript(scriptContent);
 
     const context: ScriptContext = {
-      moduleApi: getModuleApi(testServices),
       scriptApi: {
         ...getScriptApi(testServices),
-        loadScript: sinon.stub(),
+        loadScript: async (scriptUrl: string) => {
+          if (scriptUrl.includes('turf')) {
+            (global as any).turf = { buffer: buffer };
+          } else {
+            throw new Error('Unsupported script: ' + JSON.stringify(scriptUrl));
+          }
+        },
       },
       log: logStub,
     };
@@ -89,6 +94,8 @@ describe('buffers.js-txt', () => {
 
     // Assert
     const layers = map.getLayers();
+    expect(layers.length).toEqual(3);
+
     const updatedLayer = layers[layers.length - 1] as VectorLayerWrapper;
     expect(updatedLayer.isVector()).toBe(true);
 
@@ -96,6 +103,7 @@ describe('buffers.js-txt', () => {
       .getSource()
       .getFeatures()
       .map((feature) => FeatureWrapper.from(feature).toGeoJSON());
+    expect(features.length).toEqual(5);
     expect(sortBy(features, (v) => v.id)).toMatchSnapshot();
   });
 });

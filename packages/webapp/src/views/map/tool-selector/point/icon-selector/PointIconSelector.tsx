@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../../../../core/store/reducer';
-import { MapActions } from '../../../../../core/store/map/actions';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
+import type { MainState } from '../../../../../store/reducer';
+import { MapActions } from '../../../../../store/map/actions';
+import type { ServiceProps } from '../../../../../core/withServices';
+import { withServices } from '../../../../../core/withServices';
 import OptionRow from '../../_common/option-row/OptionRow';
 import { PointIconPicker } from '../../../../../components/point-icon-picker/PointIconPicker';
-import { IconName } from '@abc-map/point-icons';
-import { WithTranslation, withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import type { IconName } from '@abc-map/point-icons';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: MainState) => ({
   point: state.map.currentStyle.point,
@@ -39,11 +42,11 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps & WithTranslation;
 
-const t = prefixedTranslation('MapView:');
-
-class PointIconSelector extends Component<Props, {}> {
+class PointIconSelector extends Component<Props, unknown> {
   public render(): ReactNode {
     const selected = this.props.point?.icon as IconName;
+    const lang = this.props.i18n.language;
+    const t = this.props.i18n.getFixedT(lang, 'MapView');
 
     return (
       <OptionRow>

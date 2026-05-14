@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,17 +18,15 @@
 
 import { useServices } from '../../core/useServices';
 import { useCallback, useEffect } from 'react';
-import { Env } from '../../core/utils/Env';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { Logger, UserStatus } from '@abc-map/shared';
-import { useAppSelector } from '../../core/store/hooks';
+import { Logger, UserStatus, isE2eTests } from '@abc-map/shared';
+import { useAppSelector } from '../../store/hooks';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('TokenWatcher.tsx');
 
-const t = prefixedTranslation('TokenWatcher:');
-
 export function TokenWatcher() {
   const { authentication, toasts } = useServices();
+  const { t } = useTranslation('TokenWatcher');
   const userStatus = useAppSelector((st) => st.authentication.userStatus);
 
   // When a tab is focused after a long period of inactivity, we must try to renew token or login
@@ -48,17 +46,17 @@ export function TokenWatcher() {
         logger.error('Cannot login as anonymous: ', err);
         toasts.genericError(err);
       });
-  }, [authentication, toasts, userStatus]);
+  }, [authentication, t, toasts, userStatus]);
 
   // We watch token and renew it when it is about to expire
   useEffect(() => {
-    if (!Env.isE2e()) {
+    if (!isE2eTests()) {
       window.addEventListener('focus', handleFocus);
       authentication.watchToken();
     }
 
     return () => {
-      if (!Env.isE2e()) {
+      if (!isE2eTests()) {
         window.removeEventListener('focus', handleFocus);
         authentication.unwatchToken();
       }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -48,12 +48,6 @@ function ChangelogView() {
     <div className={Cls.view}>
       <div className={Cls.viewport}>
         <h1 className={'text-center'}>{t('Changelog')}</h1>
-
-        <div className={'d-flex justify-content-center'}>
-          <a href={'https://twitter.com/abcmapfr'} target={'_blank'} rel="noreferrer" className={Cls.followLink}>
-            {t('Follow_us_on_twitter')} 🐦
-          </a>
-        </div>
 
         <div className={'alert alert-info mb-4'}>
           <div className={'fst-italic mb-4'}>🇬🇧 Changelog is only available in English !</div>

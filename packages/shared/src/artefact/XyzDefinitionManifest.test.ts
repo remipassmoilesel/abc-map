@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Language } from '../lang';
-import { XyzDefinitionManifest } from './XyzDefinitionManifest';
+import { Language } from '../lang/index.js';
+import type { XyzDefinitionManifest } from './XyzDefinitionManifest.js';
+import { describe, expect, it } from 'vitest';
 
 describe('XyzDefinitionManifest', () => {
   it('should not change without datastore migration', () => {

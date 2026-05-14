@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,23 +17,21 @@
  */
 
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import Geometry from 'ol/geom/Geometry';
-import VectorSource from 'ol/source/Vector';
 import { Select } from 'ol/interaction';
 import { withGeometryOfType } from '../helpers/common-conditions';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { DefaultTolerancePx } from '../constants';
-import { SelectEvent } from 'ol/interaction/Select';
-import { SupportedGeometry } from './SupportedGeometry';
-import { FeatureStyle } from '@abc-map/shared';
-import Map from 'ol/Map';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import type { SelectEvent } from 'ol/interaction/Select';
+import type { SupportedGeometry } from './SupportedGeometry';
+import type { FeatureStyle } from '@abc-map/shared';
+import type Map from 'ol/Map';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
 import { getSelectionFromMap } from '../../../geo/feature-selection/getSelectionFromMap';
 
 export declare type StyleSelectionHandler = (style: FeatureStyle, feat: FeatureWrapper) => void;
 
 export interface Options {
-  condition: (ev: MapBrowserEvent<UIEvent>) => boolean;
+  condition: (ev: MapBrowserEvent) => boolean;
 }
 
 /**
@@ -51,7 +49,7 @@ export class SelectionInteractionsBundle {
 
   constructor(private options: Options) {}
 
-  public setup(map: Map, source: VectorSource<Geometry>, geometryTypes: SupportedGeometry[]) {
+  public setup(map: Map, geometryTypes: SupportedGeometry[]) {
     this.map = map;
 
     const selection = getSelectionFromMap(map);
@@ -76,7 +74,7 @@ export class SelectionInteractionsBundle {
       // We dispatch style of last selected feature
       if (ev.selected.length) {
         const last = FeatureWrapper.from(ev.selected[ev.selected.length - 1]);
-        this.onStyleSelected && this.onStyleSelected(last.getStyleProperties(), last);
+        if (this.onStyleSelected) this.onStyleSelected(last.getStyleProperties(), last);
       }
     });
 

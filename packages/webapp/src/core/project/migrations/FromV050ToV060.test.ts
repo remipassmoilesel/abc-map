@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,11 @@
  */
 
 import { TestData } from './test-data/TestData';
-import { MigrationProject } from './typings';
+import type { MigrationProject } from './typings';
 import { FromV050ToV060 } from './FromV050ToV060';
-import { AbcProjectMetadata120 } from './dependencies/120-project-types';
-import { AbcProjectManifest050 } from './dependencies/050-project-types';
+import type { AbcProjectMetadata120 } from './dependencies/120-project-types';
+import type { AbcProjectManifest050 } from './dependencies/050-project-types';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV050ToV060', () => {
   let sampleProject: MigrationProject<AbcProjectManifest050>;

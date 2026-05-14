@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,10 +17,14 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { FeatureWrapper, DataPropertiesMap } from '../../../geo/features/FeatureWrapper';
+import type { FeatureWrapper, DataPropertiesMap } from '../../../geo/features/FeatureWrapper';
 
 export class SetFeaturePropertiesChangeset extends Changeset {
-  constructor(private feature: FeatureWrapper, public readonly before: DataPropertiesMap, public readonly after: DataPropertiesMap) {
+  constructor(
+    private feature: FeatureWrapper,
+    public readonly before: DataPropertiesMap,
+    public readonly after: DataPropertiesMap,
+  ) {
     super();
   }
 

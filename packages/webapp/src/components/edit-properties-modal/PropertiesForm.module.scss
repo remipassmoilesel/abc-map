@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -43,14 +43,14 @@
 }
 
 .value {
+  display: flex;
+  align-items: center;
   width: 35rem;
+
   @include media-breakpoint-down(md) {
     width: 25rem;
     max-width: 100%;
   }
-
-  display: flex;
-  align-items: center;
 }
 
 .buttonNew {

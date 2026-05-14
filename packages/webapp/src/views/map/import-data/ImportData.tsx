@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import React, { useCallback } from 'react';
 import Cls from './ImportData.module.scss';
-import { AbcFile, Logger } from '@abc-map/shared';
+import type { AbcFile } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { useTranslation } from 'react-i18next';
 import { DataReader } from '../../../core/data/DataReader';
@@ -26,7 +27,7 @@ import { ReadStatus } from '../../../core/data/ReadResult';
 import { useServices } from '../../../core/useServices';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../../routes';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 
 const logger = Logger.get('ImportData.tsx');
 
@@ -35,7 +36,7 @@ export function ImportData() {
   const { t } = useTranslation('MapView');
   const navigate = useNavigate();
 
-  const handleBrowseDocumentation = useCallback(() => navigate(Routes.module().withParams({ moduleId: BundledModuleId.Documentation })), [navigate]);
+  const handleBrowseDocumentation = useCallback(() => navigate(Routes.module().withParams({ moduleId: ModuleId.Documentation })), [navigate]);
 
   const handleImportLocalFile = useCallback(() => {
     const dataReader = DataReader.create();
@@ -65,6 +66,7 @@ export function ImportData() {
           return importFiles(files);
         }
       })
+      .then(() => toasts.info(t('Import_done')))
       .catch((err) => {
         logger.error('File import error:', err);
         toasts.genericError();
@@ -76,7 +78,7 @@ export function ImportData() {
       });
   }, [t, toasts]);
 
-  const handleBrowseDatastore = useCallback(() => navigate(Routes.module().withParams({ moduleId: BundledModuleId.DataStore })), [navigate]);
+  const handleBrowseDatastore = useCallback(() => navigate(Routes.module().withParams({ moduleId: ModuleId.DataStore })), [navigate]);
 
   return (
     <div className={'d-flex flex-column p-3'}>

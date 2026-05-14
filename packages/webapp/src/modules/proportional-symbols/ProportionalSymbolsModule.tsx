@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,41 +17,39 @@
  */
 
 import React from 'react';
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import ProportionalSymbolsView from './view/ProportionalSymbolsView';
-import { newParameters, Parameters } from './Parameters';
+import type { Parameters } from './Parameters';
+import { newParameters } from './Parameters';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
-import { Services } from '../../core/Services';
+import type { Services } from '../../core/Services';
 import { getCenter } from 'ol/extent';
 import { FeatureWrapper } from '../../core/geo/features/FeatureWrapper';
 import { Point } from 'ol/geom';
-import Geometry from 'ol/geom/Geometry';
-import Feature from 'ol/Feature';
-import { Logger } from '@abc-map/shared';
+import type Geometry from 'ol/geom/Geometry';
+import type Feature from 'ol/Feature';
+import { Logger, ModuleId } from '@abc-map/shared';
 import { ScaleAlgorithm } from '../../core/modules/Algorithm';
 import { Stats } from '../../core/modules/Stats';
 import { asValidNumber } from '../../core/utils/numbers';
-import { ProcessingResult } from './ProcessingResult';
+import type { ProcessingResult } from './ProcessingResult';
 import { Status } from '../color-gradients/typings/ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
 import { AddLayersChangeset } from '../../core/history/changesets/layers/AddLayersChangeset';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('ProportionalSymbolsModule:');
+const t = prefixedTranslation('ProportionalSymbolsModule');
 
 export const logger = Logger.get('ProportionalSymbolsModule.tsx');
 
-export class ProportionalSymbolsModule extends ModuleAdapter {
+export class ProportionalSymbolsModule implements AbcModule {
   private params = newParameters();
 
-  constructor(private services: Services) {
-    super();
-  }
+  constructor(private services: Services) {}
 
-  public getId(): ModuleId {
-    return BundledModuleId.ProportionalSymbols;
+  public getId() {
+    return ModuleId.ProportionalSymbols;
   }
 
   public getReadableName(): string {
@@ -63,7 +61,7 @@ export class ProportionalSymbolsModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <ProportionalSymbolsView initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
+    return () => <ProportionalSymbolsView initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
   }
 
   public async process(params: Parameters): Promise<ProcessingResult> {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Editor, Transforms } from 'slate';
-import { AbcGeometryType, FeatureStyle, Logger, MapSymbolElement, TableElement, TableRowElement } from '@abc-map/shared';
+import type { Editor } from 'slate';
+import { Transforms } from 'slate';
+import type { AbcGeometryType, FeatureStyle, MapSymbolElement, TableElement, TableRowElement } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('mapSymbol.ts');
 

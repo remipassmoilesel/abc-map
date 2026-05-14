@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -26,7 +26,8 @@ import { useSaveProjectOnline } from '../../../../core/project/useSaveProjectOnl
 import { useIsUserAuthenticated } from '../../../../core/authentication/useIsUserAuthenticated';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { useAppSelector } from '../../../../core/store/hooks';
+import { useAppSelector } from '../../../../store/hooks';
+import { DateTime } from 'luxon';
 
 interface Props {
   className?: string;
@@ -49,10 +50,10 @@ export function Actions(props: Props) {
       {/* Last save */}
       <div className={'d-flex mb-3'}>
         <small className={'me-3'}>
-          {t('Last_export')}: {lastExport ? lastExport.toFormat('HH:mm') : t('Project_not_saved')}
+          {t('Last_export')}: {lastExport ? DateTime.fromMillis(lastExport).toFormat('HH:mm') : t('Project_not_saved')}
         </small>
         <small>
-          {t('Last_online_save')}: {lastSaveOnline ? lastSaveOnline.toFormat('HH:mm') : t('Project_not_saved')}
+          {t('Last_online_save')}: {lastSaveOnline ? DateTime.fromMillis(lastSaveOnline).toFormat('HH:mm') : t('Project_not_saved')}
         </small>
       </div>
 

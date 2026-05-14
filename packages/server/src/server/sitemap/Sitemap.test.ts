@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Sitemap } from './Sitemap';
+import { Sitemap } from './Sitemap.js';
 import { Language } from '@abc-map/shared';
-import { expect } from 'chai';
-import { SinonStubbedInstance } from 'sinon';
-import { DocumentationIndex } from '../../documentation/DocumentationIndex';
-import * as sinon from 'sinon';
+import { beforeEach, describe, expect, it } from 'vitest';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
+import { DocumentationIndex } from '../../documentation/DocumentationIndex.js';
 import { promises as fs } from 'fs';
-import * as path from 'path';
+import path from 'path';
 
 describe('Sitemap', () => {
   describe('With a fake documentation index', () => {
@@ -47,9 +47,9 @@ describe('Sitemap', () => {
 
       // Assert
       // For debugging purposes
-      await fs.writeFile(path.join(__dirname, 'test-data/actual-1.xml'), actual);
+      await fs.writeFile(path.join(import.meta.dirname, 'test-data/actual-1.xml'), actual);
 
-      const expected = (await fs.readFile(path.join(__dirname, 'test-data/expected-1.xml'))).toString('utf-8');
+      const expected = (await fs.readFile(path.join(import.meta.dirname, 'test-data/expected-1.xml'))).toString('utf-8');
       expect(removeBlanks(removeDates(actual))).equals(removeBlanks(removeDates(expected)));
     });
   });
@@ -66,9 +66,9 @@ describe('Sitemap', () => {
 
       // Assert
       // For debugging purposes
-      await fs.writeFile(path.join(__dirname, 'test-data/actual-2.xml'), actual);
+      await fs.writeFile(path.join(import.meta.dirname, 'test-data/actual-2.xml'), actual);
 
-      const expected = (await fs.readFile(path.join(__dirname, 'test-data/expected-2.xml'))).toString('utf-8');
+      const expected = (await fs.readFile(path.join(import.meta.dirname, 'test-data/expected-2.xml'))).toString('utf-8');
       expect(removeBlanks(removeDates(actual))).equals(removeBlanks(removeDates(expected)));
     });
   });

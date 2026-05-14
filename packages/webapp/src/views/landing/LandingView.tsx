@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
-import { AbcVoteAggregation, Logger, UserStatus } from '@abc-map/shared';
+import type { CSSProperties } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import type { AbcVoteAggregation } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
 import { Link, useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import Illustration1 from '../../assets/illustrations/illustration-1.svg';
@@ -29,10 +31,10 @@ import { Routes } from '../../routes';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
 import Cls from './LandingView.module.scss';
-import { useAppSelector } from '../../core/store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { useServices } from '../../core/useServices';
 import { useTranslation } from 'react-i18next';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import clsx from 'clsx';
 import { VERSION } from '../../version';
 
@@ -60,7 +62,7 @@ function LandingView() {
   const illustration = useMemo<Illustration>(() => sample(Illustrations) || Illustrations[0], []);
   const illustrationSize = useMemo<CSSProperties>(
     () => ({ width: illustration.width, height: illustration.height }),
-    [illustration.height, illustration.width]
+    [illustration.height, illustration.width],
   );
 
   // Setup view
@@ -107,7 +109,7 @@ function LandingView() {
 
             <ul className={'mb-4'}>
               <li>
-                <Link to={Routes.module().withParams({ moduleId: BundledModuleId.Documentation })}>{t('Browse_the_doc')} 📖</Link>
+                <Link to={Routes.module().withParams({ moduleId: ModuleId.Documentation })}>{t('Browse_the_doc')} 📖</Link>
               </li>
               <li>
                 <Link to={Routes.map().format()}>{t('Then_open_map')} 🌍</Link>

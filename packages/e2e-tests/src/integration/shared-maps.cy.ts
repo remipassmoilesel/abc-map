@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,19 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { MainMap } from '../helpers/MainMap';
-import { Routes } from '../helpers/Routes';
-import { Registration } from '../helpers/Registration';
-import { Authentication } from '../helpers/Authentication';
-import { SharingLayoutMap } from '../helpers/SharingLayoutMap';
-import { UrlHelper } from '../helpers/UrlHelper';
-import { SharedMap } from '../helpers/SharedMap';
-import { Toasts } from '../helpers/Toasts';
-import { ToolSelector } from '../helpers/ToolSelector';
-import { Draw } from '../helpers/Draw';
-import { BundledModuleId, MapTool } from '@abc-map/shared';
-import { Modules } from '../helpers/Modules';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { Routes } from '../helpers/Routes.js';
+import { Registration } from '../helpers/Registration.js';
+import { Authentication } from '../helpers/Authentication.js';
+import { SharingLayoutMap } from '../helpers/SharingLayoutMap.js';
+import { UrlHelper } from '../helpers/UrlHelper.js';
+import { SharedMap } from '../helpers/SharedMap.js';
+import { Toasts } from '../helpers/Toasts.js';
+import { ToolSelector } from '../helpers/ToolSelector.js';
+import { Draw } from '../helpers/Draw.js';
+import { ModuleId, MapTool } from '@abc-map/shared';
+import { Modules } from '../helpers/Modules.js';
 
 describe('Shared maps', function () {
   beforeEach(() => {
@@ -47,7 +47,7 @@ describe('Shared maps', function () {
       .then(() => Draw.click(300, 300))
       .then(() => Draw.click(350, 350))
       // Show share settings, enable sharing
-      .then(() => Modules.open(BundledModuleId.SharedMapSettings))
+      .then(() => Modules.open(ModuleId.SharedMapSettings))
       .get('[data-cy=enable-sharing]')
       .click()
       .then(() => Toasts.assertText('Project saved !'))

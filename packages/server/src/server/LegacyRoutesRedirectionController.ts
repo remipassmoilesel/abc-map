@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { Language, LegacyRouteRedirections, Logger, WebappRoutes } from '@abc-map/shared';
-import { Controller } from './Controller';
+import { Controller } from './Controller.js';
 
 export const logger = Logger.get('LegacyRoutesRedirectionController.ts');
 

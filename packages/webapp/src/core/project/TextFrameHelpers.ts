@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayout, AbcSharedView, AbcTextFrame, Logger, TextFrameChild } from '@abc-map/shared';
+import type { AbcFile, AbcLayout, AbcSharedView, AbcTextFrame, TextFrameChild } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import cloneDeep from 'lodash/cloneDeep';
 

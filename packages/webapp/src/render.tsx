@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,20 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import { Services } from './core/Services';
+import type { Services } from './core/Services';
 import { getAbcWindow } from '@abc-map/shared';
 import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
-import { MainStore } from './core/store/store';
+import type { MainStore } from './store/store';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ServiceProvider } from './core/context';
 import ErrorBoundary from './views/error-boundary/ErrorBoundary';
 import { BrowserRouter } from 'react-router-dom';
-import { OnlineStatusProvider } from './core/pwa/OnlineStatusContext';
 import { PwaInstallPromptProvider } from './core/pwa/PwaInstallReadinessContext';
 import { ModuleRegistryProvider } from './core/modules/registry/context';
 import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
 import App from './App';
 import { createRoot } from 'react-dom/client';
+import { OnlineStatusProvider } from './core/pwa/OnlineStatusProvider.tsx';
 
 export function render(svc: Services, store: MainStore) {
   const container = document.getElementById('root');
@@ -61,6 +61,6 @@ export function render(svc: Services, store: MainStore) {
           </ModuleRegistryProvider>
         </ServiceProvider>
       </React.StrictMode>
-    </ReduxProvider>
+    </ReduxProvider>,
   );
 }

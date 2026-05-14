@@ -3,9 +3,9 @@
 <!-- toc -->
 
 - [Introduction](#introduction)
-- [Have you heard of modules ?](#have-you-heard-of-modules-)
 - [Basic setup](#basic-setup)
   - [Ubuntu 22.04 (recommended)](#ubuntu-2204-recommended)
+  - [Fedora 42](#fedora-42)
   - [Windows 11, Windows Subsystem for Linux version 2 (not recommended)](#windows-11-windows-subsystem-for-linux-version-2-not-recommended)
 - [Start and build Abc-Map locally](#start-and-build-abc-map-locally)
 - [Local services](#local-services)
@@ -22,15 +22,12 @@ Although these operations are simple and common, apply the steps described below
 
 This setup has been tested on these operating systems:
 
+- Fedora 42
 - Manjaro Linux
 - Ubuntu 22.04
 - Windows 11, Windows Subsystem for Linux version 2
 
-**The easiest and most reliable way to start developing on Abc-Map is to use Ubuntu 22.04.**
-
-## Have you heard of modules ?
-
-They make it easier to add features to Abc-Map. See [6_modules.md](6_modules.md).
+**The easiest and most reliable way to start developing on Abc-Map is to use Ubuntu LTS.**
 
 ## Basic setup
 
@@ -39,7 +36,8 @@ They make it easier to add features to Abc-Map. See [6_modules.md](6_modules.md)
 Install basic tools and dependencies:
 
     $ sudo apt-get update
-    $ sudo apt-get install ca-certificates curl gnupg lsb-release git build-essential
+    $ sudo apt-get install ca-certificates curl gnupg lsb-release git libcairo2-dev libjpeg8-dev libpango1.0-dev \
+        libgif-dev build-essential g++
     $ sudo mkdir -m 0755 -p /etc/apt/keyrings
     $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     $ echo \
@@ -55,6 +53,30 @@ Install basic tools and dependencies:
 Install Node.js and pnpm. There are several ways to do that.
 
     $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+    $ curl -fsSL https://get.pnpm.io/install.sh | sh -
+    $ source ~/.bashrc  # or restart your terminal
+
+Clone source code:
+
+    $ git clone https://gitlab.com/abc-map/abc-map.git
+    $ cd abc-map
+
+### Fedora 42
+
+Install dependencies:
+
+    $ sudo dnf install @development-tools make automake gcc gcc-c++ g++ kernel-devel cairo-devel  \
+        cairo cairo-devel cairomm-devel libjpeg-turbo-devel pango pango-devel pangomm pangomm-devel giflib-devel
+
+Install Docker:
+
+    $ sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    $ sudo systemctl enable --now docker
+    $ sudo usermod -aG docker $USER
+
+Install Node.js and pnpm. There are several ways to do that.
+
+    $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
     $ curl -fsSL https://get.pnpm.io/install.sh | sh -
     $ source ~/.bashrc  # or restart your terminal
 
@@ -134,6 +156,8 @@ You can build, test, start packages independently too:
     $ pnpm run lint:fix               # Apply eslint and fix when possible
     $ pnpm run dependency-check       # Dependency analysis with dependency-cruiser
 
+All commands available with `pnpm` and `turborepo` obviously works !
+
 ## Local services
 
 After startup, several local services are accessible:
@@ -154,7 +178,9 @@ not be able to deploy your own instance of Abc-Map
 
 With these tools, all tests should pass, and you can deploy your own instance of Abc-Map.
 
-- K6 (k6-v0.32.0): https://k6.io/docs/getting-started/installation/
-- Kubectl (v1.22.3): https://kubernetes.io/fr/docs/tasks/tools/install-kubectl/
-- Helm (v3.7.1): https://helm.sh/docs/intro/install/
-- addlicense: https://github.com/google/addlicense
+- `K6` (v1.7.1): https://k6.io/docs/getting-started/installation/
+- `Kubectl` (v1.29.15): https://kubernetes.io/fr/docs/tasks/tools/install-kubectl/
+- `Helm` (v4.1.4): https://helm.sh/docs/intro/install/
+- `addlicense`: https://github.com/google/addlicense
+
+You may also need `mongodump` and `mongorestore` (v100.16.0).

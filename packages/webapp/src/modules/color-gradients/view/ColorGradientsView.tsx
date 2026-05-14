@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,26 +19,32 @@
 import Cls from './ColorGradientsView.module.scss';
 import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { newParameters, Parameters } from '../typings/Parameters';
+import type { Parameters } from '../typings/Parameters';
+import { newParameters } from '../typings/Parameters';
 import FoldingCard from '../../../components/folding-card/FoldingCard';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import DataSourceForm, { DataSourceFormValues } from '../../../components/data-source-form/DataSourceForm';
-import GradientsConfigForm, { ColorsConfigFormValues } from './GradientsConfigForm';
-import GeometryLayerForm, { GeometryLayerFormValues } from '../../../components/geometry-layer-form/GeometryLayerForm';
+import type { ServiceProps } from '../../../core/withServices';
+import { withServices } from '../../../core/withServices';
+import type { DataSourceFormValues } from '../../../components/data-source-form/DataSourceForm';
+import DataSourceForm from '../../../components/data-source-form/DataSourceForm';
+import type { ColorsConfigFormValues } from './GradientsConfigForm';
+import { GradientsConfigForm } from './GradientsConfigForm';
+import type { GeometryLayerFormValues } from '../../../components/geometry-layer-form/GeometryLayerForm';
+import GeometryLayerForm from '../../../components/geometry-layer-form/GeometryLayerForm';
 import Sample from './sample.png';
 import { ColorGradientTips } from '../../../core/tips';
 import { FormState } from '../../../components/form-validation-label/FormState';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
-import { isProcessingResult, ProcessingResult } from '../typings/ProcessingResult';
+import type { ProcessingResult } from '../typings/ProcessingResult';
+import { isProcessingResult } from '../typings/ProcessingResult';
 import ProcessingReportModal from './report-modal/ProcessingReportModal';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { ModuleContainer } from '../../../components/module-container/ModuleContainer';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 
 const logger = Logger.get('ColorGradientsView.tsx');
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   initialValue: Parameters;
   onChange: (params: Parameters) => void;
   onProcess: () => Promise<ProcessingResult>;
@@ -50,8 +56,6 @@ interface State {
   result?: ProcessingResult;
 }
 
-const t = prefixedTranslation('ColorGradientsModule:');
-
 class ColorGradientsView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -59,6 +63,7 @@ class ColorGradientsView extends Component<Props, State> {
   }
 
   public render() {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorGradientsModule');
     const params = this.state.params;
     const formState = this.state.formState;
     const result = this.state.result;
@@ -209,6 +214,7 @@ class ColorGradientsView extends Component<Props, State> {
   };
 
   private handleSubmit = () => {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'ColorGradientsModule');
     const { toasts } = this.props.services;
 
     const formState = this.validateParameters();

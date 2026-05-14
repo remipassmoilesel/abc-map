@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import 'fastify';
 
 declare module 'fastify' {
-  import { RateLimitOptions } from '@fastify/rate-limit';
+  import type { RateLimitOptions } from '@fastify/rate-limit';
 
   // FIXME: This section should be part of '@fastify/rate-limit'
   interface FastifyContextConfig {

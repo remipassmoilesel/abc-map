@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,14 +21,14 @@
 $transition: 0.15s;
 
 .toggle {
+  display: inline-block;
+  cursor: pointer;
+
   *,
   *:before,
   *:after {
     box-sizing: border-box;
   }
-  display: inline-block;
-
-  cursor: pointer;
 
   &.disabled {
     cursor: not-allowed;

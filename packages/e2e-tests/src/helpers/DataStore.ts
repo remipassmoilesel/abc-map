@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Toasts } from './Toasts';
-import { Modules } from './Modules';
-import { BundledModuleId } from '@abc-map/shared';
+import { Toasts } from './Toasts.js';
+import { Modules } from './Modules.js';
+import { ModuleId } from '@abc-map/shared';
 
 export class DataStore {
   public static importByName(name: string): Cypress.Chainable<any> {
-    return Modules.open(BundledModuleId.DataStore)
+    return Modules.open(ModuleId.DataStore)
       .get('[data-cy=data-store-search]')
       .type(name)
       .type('{enter}')

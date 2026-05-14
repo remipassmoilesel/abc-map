@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,12 +19,14 @@
 import { LayerType } from '@abc-map/shared';
 import { FromV020ToV030 } from './FromV020ToV030';
 import { ModalService } from '../../ui/ModalService';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import { TestData } from './test-data/TestData';
-import { MigrationProject } from './typings';
-import { WmsMetadata030 } from './dependencies/030-project-types';
-import { AbcProjectManifest020 } from './dependencies/020-project-types';
+import type { MigrationProject } from './typings';
+import type { WmsMetadata030 } from './dependencies/030-project-types';
+import type { AbcProjectManifest020 } from './dependencies/020-project-types';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV020ToV030', () => {
   let modals: SinonStubbedInstance<ModalService>;

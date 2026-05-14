@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import { getLength, getArea } from 'ol/sphere';
-import { AbcProjection } from '@abc-map/shared';
-import Geometry from 'ol/geom/Geometry';
+import type { AbcProjection } from '@abc-map/shared';
+import type Geometry from 'ol/geom/Geometry';
 import { getNumberFormatter } from '../../../../i18n/i18n';
 
 export function formatLength(geometry: Geometry, projection?: AbcProjection): string {

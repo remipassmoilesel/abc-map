@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Collection } from 'mongodb';
-import { MigrationDocument } from './MigrationDocument';
-import { MongodbClient } from '../MongodbClient';
-import { MongodbCollection } from '../MongodbCollection';
+import type { Collection } from 'mongodb';
+import type { MigrationDocument } from './MigrationDocument.js';
+import type { MongodbClient } from '../MongodbClient.js';
+import { MongodbCollection } from '../MongodbCollection.js';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('MigrationDao.ts', 'info');

@@ -1,4 +1,4 @@
-# Copyright © 2023 Rémi Pace.
+# Copyright © 2026 Rémi Pace.
 # This file is part of Abc-Map.
 #
 # Abc-Map is free software: you can redistribute it and/or modify
@@ -22,12 +22,12 @@ fullnameOverride: ''
 abcMap:
   replicaCount: 2
   image:
-    tag: '0.1.0'
+    tag: '0.0.0'
     repository: registry.gitlab.com/abc-map/abc-map/server
     pullPolicy: IfNotPresent
 
   config: |
-    module.exports = {
+    export default {
       environmentName: 'production',
       externalUrl: 'https://<CHANGE_ME>',
       server: {
@@ -111,7 +111,7 @@ abcMap:
 
   ingress:
     enabled: false
-    host: <CHANGE_ME>
+    host: '<CHANGE_ME>'
     annotations: {}
     tls:
       enabled: false
@@ -130,12 +130,12 @@ abcMap:
 
 mongodb:
   enabled: true
-  image: "mongo:5.0.20-focal"
+  image: "mongo:7"
   auth:
     rootUsername: '<CHANGE_ME>'
     rootPassword: '<CHANGE_ME>'
   persistence:
-    existingClaim: <CHANGE_ME>
+    existingClaim: '<CHANGE_ME>'
 
   resources: {}
   nodeSelector: {}
@@ -144,6 +144,8 @@ mongodb:
 
 mongoexpress:
   enabled: true
+  username: '<CHANGE_ME>'
+  password: '<CHANGE_ME>'
 
   resources: {}
   nodeSelector: {}
@@ -154,8 +156,8 @@ smtp:
   enabled: true
   replicaCount: 1
   dkim:
-    domain: <CHANGE_ME>
-    selector: <CHANGE_ME>
+    domain: '<CHANGE_ME>'
+    selector: '<CHANGE_ME>'
     private_key: |
       -----BEGIN RSA PRIVATE KEY-----
       <CHANGE_ME>

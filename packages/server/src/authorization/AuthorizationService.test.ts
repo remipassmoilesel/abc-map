@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,17 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { AuthorizationService } from './AuthorizationService';
-import { Config } from '../config/Config';
-import { ProjectDao } from '../projects/ProjectDao';
-import { AnonymousUser, AuthenticationToken, UserStatus } from '@abc-map/shared';
-import * as uuid from 'uuid-random';
-import { assert } from 'chai';
-import { ProjectDocument } from '../projects/ProjectDocument';
-import { TestHelper } from '../utils/TestHelper';
-import { FastifyRequest } from 'fastify';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { AuthorizationService } from './AuthorizationService.js';
+import type { Config } from '../config/Config.js';
+import { ProjectDao } from '../projects/ProjectDao.js';
+import type { AuthenticationToken } from '@abc-map/shared';
+import { AnonymousUser, UserStatus } from '@abc-map/shared';
+import uuid from 'uuid-random';
+import { afterAll, assert, beforeAll, describe, it } from 'vitest';
+import type { ProjectDocument } from '../projects/ProjectDocument.js';
+import { TestHelper } from '../utils/TestHelper.js';
+import type { FastifyRequest } from 'fastify';
 
 // TODO: terminate tests
 // TODO: double-check tests
@@ -37,7 +38,7 @@ describe('AuthorizationService', () => {
   let projectDao: ProjectDao;
   let service: AuthorizationService;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     client = await MongodbClient.createAndConnect(config);
     projectDao = new ProjectDao(client);
@@ -46,7 +47,7 @@ describe('AuthorizationService', () => {
     await service.init();
   });
 
-  after(() => client.disconnect());
+  afterAll(() => client.disconnect());
 
   describe('canListProjects()', () => {
     it('anonymous cannot', async () => {

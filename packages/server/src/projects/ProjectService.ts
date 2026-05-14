@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,20 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { ProjectDao } from './ProjectDao';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcProjectMetadata, AbcProjectQuotas, CompressedProject, CompressedProjectStream } from '@abc-map/shared';
-import { ProjectMapper } from './ProjectMapper';
-import { AbstractService } from '../services/AbstractService';
-import { StreamReader } from '../utils/StreamReader';
+import type { Config } from '../config/Config.js';
+import { ProjectDao } from './ProjectDao.js';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { AbcProjectMetadata, AbcProjectQuotas, CompressedProject, CompressedProjectStream } from '@abc-map/shared';
+import { ProjectMapper } from './ProjectMapper.js';
+import { AbstractService } from '../services/AbstractService.js';
+import { StreamReader } from '../utils/StreamReader.js';
 
 export class ProjectService extends AbstractService {
   public static create(config: Config, client: MongodbClient): ProjectService {
     return new ProjectService(config, new ProjectDao(client));
   }
 
-  constructor(private config: Config, private dao: ProjectDao) {
+  constructor(
+    private config: Config,
+    private dao: ProjectDao,
+  ) {
     super();
   }
 

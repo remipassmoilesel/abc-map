@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,12 +18,14 @@
 
 import { LineStringTool } from './LineStringTool';
 import { Map } from 'ol';
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import { HistoryService } from '../../history/HistoryService';
-import { MainStore, storeFactory } from '../../store/store';
+import type { MainStore } from '../../../store/store';
+import { storeFactory } from '../../../store/store';
 import VectorSource from 'ol/source/Vector';
 import { TestHelper } from '../../utils/test/TestHelper';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('LineStringTool', () => {
   let history: SinonStubbedInstance<HistoryService>;

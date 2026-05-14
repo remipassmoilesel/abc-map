@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,21 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback } from 'react';
-import { MapActions } from '../../../../../core/store/map/actions';
-import ColorPicker from '../../../../../components/color-picker/ColorPickerButton';
+import type { InputEvent } from 'react';
+import React, { useCallback } from 'react';
+import { MapActions } from '../../../../../store/map/actions';
+import { ColorPickerButton } from '../../../../../components/color-picker/ColorPickerButton';
 import OptionRow from '../option-row/OptionRow';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../../../../core/store/hooks';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { useServices } from '../../../../../core/useServices';
 import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 import Cls from './TextFormat.module.scss';
 
-const t = prefixedTranslation('MapView:');
-
-function TextFormat() {
+export function TextFormat() {
   const { geo } = useServices();
+  const { t } = useTranslation('MapView');
 
   const color = useAppSelector((st) => st.map.currentStyle.text.color);
   const size = useAppSelector((st) => st.map.currentStyle.text.size);
@@ -47,12 +46,12 @@ function TextFormat() {
       dispatch(MapActions.setTextColor(color));
       geo.updateSelectedFeatures((style) => ({ ...style, text: { ...style.text, color } }));
     },
-    [dispatch, geo]
+    [dispatch, geo],
   );
 
   const handleSizeChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>): void => {
-      const value = parseInt(ev.target.value);
+    (ev: InputEvent<HTMLInputElement>): void => {
+      const value = parseInt((ev.target as HTMLInputElement).value);
       if (isNaN(value)) {
         return;
       }
@@ -60,12 +59,12 @@ function TextFormat() {
       dispatch(MapActions.setTextSize(value));
       styleTransform((style) => ({ ...style, text: { ...style.text, size: value } }));
     },
-    [dispatch, styleTransform]
+    [dispatch, styleTransform],
   );
 
   const handleOffsetXChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(ev.target.value);
+    (ev: InputEvent<HTMLInputElement>) => {
+      const value = parseInt((ev.target as HTMLInputElement).value);
       if (isNaN(value)) {
         return;
       }
@@ -73,12 +72,12 @@ function TextFormat() {
       dispatch(MapActions.setTextOffsetX(value));
       styleTransform((style) => ({ ...style, text: { ...style.text, offsetX: value } }));
     },
-    [styleTransform, dispatch]
+    [styleTransform, dispatch],
   );
 
   const handleOffsetYChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(ev.target.value);
+    (ev: InputEvent<HTMLInputElement>) => {
+      const value = parseInt((ev.target as HTMLInputElement).value);
       if (isNaN(value)) {
         return;
       }
@@ -86,12 +85,12 @@ function TextFormat() {
       dispatch(MapActions.setTextOffsetY(value));
       styleTransform((style) => ({ ...style, text: { ...style.text, offsetY: value } }));
     },
-    [styleTransform, dispatch]
+    [styleTransform, dispatch],
   );
 
   const handleRotationChange = useCallback(
-    (ev: ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(ev.target.value);
+    (ev: InputEvent<HTMLInputElement>) => {
+      const value = parseInt((ev.target as HTMLInputElement).value);
       if (isNaN(value)) {
         return;
       }
@@ -99,7 +98,7 @@ function TextFormat() {
       dispatch(MapActions.setTextRotation(value));
       styleTransform((style) => ({ ...style, text: { ...style.text, rotation: value } }));
     },
-    [styleTransform, dispatch]
+    [styleTransform, dispatch],
   );
 
   return (
@@ -107,7 +106,7 @@ function TextFormat() {
       {/* Color */}
       <OptionRow>
         <div>{t('Color')}:</div>
-        <ColorPicker value={color} onClose={handleColorSelected} />
+        <ColorPickerButton value={color} onClose={handleColorSelected} />
       </OptionRow>
 
       {/* Size */}
@@ -162,5 +161,3 @@ function TextFormat() {
     </>
   );
 }
-
-export default withTranslation()(TextFormat);

@@ -4,11 +4,11 @@
  * This script copy webapp build to server directory.
  */
 
-const { execSync } = require('child_process');
-const path = require('path');
+import { execSync } from 'child_process';
+import path from 'path';
 
-const sourceDir = path.resolve(`${__dirname}/../build`);
-const targetDir = path.resolve(`${__dirname}/../../server/public/webapp`);
+const sourceDir = path.resolve(`${import.meta.dirname}/../build`);
+const targetDir = path.resolve(`${import.meta.dirname}/../../server/public/webapp`);
 
 console.info(`Copying webapp build to ${targetDir}`);
 

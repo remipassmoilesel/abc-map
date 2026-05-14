@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Env } from '../../core/utils/Env';
+import { isE2eTests } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 
-const t = prefixedTranslation('WarningBeforeUnload:');
+const t = prefixedTranslation('WarningBeforeUnload');
 
 let instance: BeforeUnloadWarning | undefined;
 
@@ -33,7 +33,7 @@ export class BeforeUnloadWarning {
 
   public setEnabled(enabled: boolean): void {
     // Warning is never enabled in E2E tests
-    if (Env.isE2e()) {
+    if (isE2eTests()) {
       return;
     }
 

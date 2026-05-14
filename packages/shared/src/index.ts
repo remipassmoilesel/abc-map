@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './artefact';
-export * from './authentication';
-export * from './commons';
-export * from './e2e';
-export * from './webapp';
-export * from './lang';
-export * from './point-icons';
-export * from './project';
-export * from './feedback';
-export * from './zip';
+export * from './artefact/index.js';
+export * from './authentication/index.js';
+export * from './common/index.js';
+export * from './e2e/index.js';
+export * from './feedback/index.js';
+export * from './lang/index.js';
+export * from './point-icons/index.js';
+export * from './project/index.js';
+export * from './projection/index.js';
+export * from './webapp/index.js';
+export * from './zip/index.js';

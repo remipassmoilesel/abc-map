@@ -6,47 +6,47 @@ This is a helper forwarding commands to packages/abc-cli/build/main.js
 
  */
 
-const path = require('path');
-const fs = require('fs');
-const { execSync } = require('child_process');
+import path from 'path';
+import fs from 'fs/promises';
+import { exec, execSync } from 'child_process';
+import util from 'util';
+const execPromise = util.promisify(exec);
 
-const NodeVersionMin = 18;
+const NodeVersionMin = 22;
+const ProjectRoot = path.resolve(import.meta.dirname);
+const CliRoot = path.resolve(ProjectRoot, 'packages/abc-cli');
+const CliMain = path.resolve(CliRoot, 'build', 'main.js');
+const RootNodeModules = path.resolve(CliRoot, 'node_modules');
+const CliNodeModules = path.resolve(CliRoot, 'node_modules');
+const LastCommitBuiltFile = path.resolve(CliRoot, '.last-commit-built.txt');
 
-const projectRoot = path.resolve(__dirname);
-const cliRoot = path.resolve(projectRoot, 'packages/abc-cli');
-const cliMain = path.resolve(cliRoot, 'build', 'main.js');
-const rootNodeModules = path.resolve(cliRoot, 'node_modules');
-const cliNodeModules = path.resolve(cliRoot, 'node_modules');
-const lastBuildDateFile = path.resolve(cliRoot, '.last-build-date.json');
-
-if (require.main === module) {
-  try {
-    main(process.argv);
+main(process.argv)
+  .then(() => {
     process.exit(0);
-  } catch (err) {
-    if (process.env.DEBUG) {
+  })
+  .catch((err) => {
+    if (isDebug()) {
       console.error(err);
     } else {
       console.error(err.message);
     }
+
     process.exit(1);
-  }
-}
+  });
 
-function main(args) {
-  checkNodeVersion();
-  checkPrerequisites();
+async function main(args) {
+  const [, , cliIsUpToDate] = await Promise.all([checkNodeVersion(), checkPrerequisites(), isCliUpToDate()]);
 
-  if (!isCliUpToDate()) {
-    updateCli();
+  if (!cliIsUpToDate) {
+    await updateCli();
   }
 
   abcCliCommand(args);
 }
 
-function checkNodeVersion() {
-  const output = execSync('node -v', { cwd: cliRoot, stdio: 'pipe' });
-  const versionMatch = output && output.toString('utf-8').match(/^v([0-9]+)/);
+async function checkNodeVersion() {
+  const output = await execPromise('node -v', { cwd: CliRoot, stdio: 'pipe' });
+  const versionMatch = output.stdout.toString('utf-8').match(/^v([0-9]+)/);
   const version = versionMatch && versionMatch.length && parseInt(versionMatch[1]);
 
   if (!version || version < NodeVersionMin) {
@@ -54,46 +54,51 @@ function checkNodeVersion() {
   }
 }
 
-function checkPrerequisites() {
+async function checkPrerequisites() {
   const tools = [{ name: 'pnpm', doc: 'https://pnpm.io/fr/installation' }];
   for (const tool of tools) {
     try {
-      execSync('command -v ' + tool.name);
+      await execPromise('command -v ' + tool.name);
     } catch (err) {
       throw new Error('You must install "' + tool.name + '", see: ' + tool.doc);
     }
   }
 }
 
-function isCliUpToDate() {
+async function isCliUpToDate() {
   if (isContinuousIntegration()) {
     return false;
   }
 
-  const nodeModulesExists = fs.existsSync(cliNodeModules) && fs.existsSync(rootNodeModules);
-  const cliMainExists = fs.existsSync(cliMain);
-  const lastBuildDateExists = fs.existsSync(lastBuildDateFile);
-  if (!nodeModulesExists || !cliMainExists || !lastBuildDateExists) {
+  const nodeModulesExists = (await isDirectory(CliNodeModules)) && (await isDirectory(RootNodeModules));
+  const cliMainExists = await isFile(CliMain);
+  const lastCommitBuiltExists = await isFile(LastCommitBuiltFile);
+
+  if (!nodeModulesExists || !cliMainExists || !lastCommitBuiltExists) {
     return false;
   }
-  const lastModification = new Date(execSync(`git log -1 --pretty="format:%ci" ${cliRoot}`, { cwd: cliRoot }).toString());
-  const lastBuildDate = new Date(require(lastBuildDateFile).date);
-  return lastModification <= lastBuildDate;
+
+  const currentCommit = await getCliLastCommit();
+  const lastCommitBuilt = (await fs.readFile(LastCommitBuiltFile)).toString('utf-8').trim();
+
+  const upToDate = currentCommit === lastCommitBuilt;
+  if (isDebug()) {
+    console.log('CLI build status: ' + JSON.stringify({ upToDate, currentCommit, lastCommitBuilt }));
+  }
+
+  return upToDate;
 }
 
-function updateCli() {
+async function updateCli() {
   console.log('\n🔨 Abc CLI must be initialized, it may take a few minutes ... 🔧\n');
 
-  // When we are in CI, we must configure PNPM before the first install
-  if (isContinuousIntegration()) {
-    console.log('CI environment detected, applying configuration...\n');
-    const storePath = path.resolve(projectRoot, '.pnpm-store');
-    execSync('pnpm config set store-dir ' + storePath);
-  }
+  // We use sync to show outputs in a convenient way
+  execSync('pnpm install -f', { cwd: ProjectRoot, stdio: 'inherit' });
+  execSync('pnpm run clean-build', { cwd: CliRoot, stdio: 'inherit' });
 
-  execSync('pnpm install -f', { cwd: projectRoot, stdio: 'inherit' });
-  execSync('pnpm run clean-build', { cwd: cliRoot, stdio: 'inherit' });
-  fs.writeFileSync(lastBuildDateFile, JSON.stringify({ date: new Date() }));
+  const currentCommit = await getCliLastCommit();
+  await fs.writeFile(LastCommitBuiltFile, currentCommit);
+
   console.log('\n');
 }
 
@@ -103,5 +108,32 @@ function isContinuousIntegration() {
 
 function abcCliCommand(args) {
   const argsStr = args.slice(2).join(' ');
-  execSync(`node ${cliMain} ${argsStr}`, { cwd: process.cwd(), stdio: 'inherit' });
+  // We use sync to show outputs in a convenient way
+  execSync(`node ${CliMain} ${argsStr}`, { cwd: process.cwd(), stdio: 'inherit' });
+}
+
+async function getCliLastCommit() {
+  const output = await execPromise(`git rev-list HEAD -- packages/abc-cli | head -1`, { cwd: ProjectRoot });
+  if (!output.stdout) {
+    throw new Error('Invalid stdout: ' + JSON.stringify(output));
+  }
+  return output.stdout.toString().trim();
+}
+
+function isDirectory(path) {
+  return fs
+    .stat(path)
+    .then((s) => s.isDirectory())
+    .catch(() => false);
+}
+
+function isFile(path) {
+  return fs
+    .stat(path)
+    .then((s) => s.isFile())
+    .catch(() => false);
+}
+
+function isDebug() {
+  return process.env.DEBUG === 'true';
 }

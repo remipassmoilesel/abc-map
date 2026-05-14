@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -71,7 +71,7 @@ export function NavigationBar(props: Props) {
 
       onChange(offset);
     },
-    [limit, onChange, total]
+    [limit, onChange, total],
   );
 
   return (

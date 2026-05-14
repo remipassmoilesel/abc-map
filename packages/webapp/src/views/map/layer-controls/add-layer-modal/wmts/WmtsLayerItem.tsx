@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { WmtsLayer } from '../../../../../core/geo/WmtsCapabilities';
+import type { WmtsLayer } from '../../../../../core/geo/WmtsCapabilities';
 import Cls from './WmtsLayerItem.module.scss';
 
 const logger = Logger.get('WmtsLayerItem.tsx');
@@ -29,7 +30,7 @@ interface Props {
   onSelected: (lay: WmtsLayer) => void;
 }
 
-class WmtsLayerItem extends Component<Props, {}> {
+class WmtsLayerItem extends Component<Props, unknown> {
   public render(): ReactNode {
     const layer = this.props.layer;
     const classes = this.props.selected ? `${Cls.wmtsLayerItem} ${Cls.selected}` : Cls.wmtsLayerItem;

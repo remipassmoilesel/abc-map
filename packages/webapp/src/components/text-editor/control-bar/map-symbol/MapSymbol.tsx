@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,20 +17,18 @@
  */
 
 import { useCallback, useState } from 'react';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { IconDefs } from '../../../icon/IconDefs';
 import MapSymbolPickerModal from './picker-modal/MapSymbolPickerModal';
 import { useEditor } from '../../useEditor';
-import { StyleCacheEntry } from '../../../../core/geo/styles/StyleCache';
+import type { StyleCacheEntry } from '../../../../core/geo/styles/StyleCache';
 import { CustomEditor } from '../../CustomEditor';
 import { ButtonMenu } from '../../../button-menu/ButtonMenu';
 import { Action } from '../../../button-menu/Action';
 import { StyleFactory } from '../../../../core/geo/styles/StyleFactory';
 import { useServices } from '../../../../core/useServices';
 import { toAbcGeometryType } from '@abc-map/shared';
-import { StyleInput } from '../../elements/map-symbol/map-symbol';
-
-const t = prefixedTranslation('TextEditor:');
+import type { StyleInput } from '../../elements/map-symbol/map-symbol';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   className?: string;
@@ -39,6 +37,7 @@ interface Props {
 const styleFactory = StyleFactory.get();
 
 export function MapSymbol(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { toasts } = useServices();
   const { className } = props;
   const { editor } = useEditor();
@@ -51,7 +50,7 @@ export function MapSymbol(props: Props) {
       CustomEditor.mapSymbol.create(editor, style.properties, toAbcGeometryType(style.geomType));
       showModal(false);
     },
-    [editor]
+    [editor],
   );
 
   const handleCreateLegend = useCallback(() => {
@@ -62,7 +61,7 @@ export function MapSymbol(props: Props) {
     }
 
     CustomEditor.mapSymbol.createLegend(editor, styles);
-  }, [editor, toasts]);
+  }, [editor, t, toasts]);
 
   return (
     <>

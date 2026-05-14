@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,11 +17,12 @@
  */
 
 import { DEFAULT_PROJECTION, LayerProperties } from '@abc-map/shared';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import { MapFactory } from './MapFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { TestHelper } from '../../utils/test/TestHelper';
+import { describe, expect, it } from 'vitest';
 
 describe('MapFactory', () => {
   it('createDefault()', () => {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import { CodeElement } from './elements/code/CodeElement';
-import { RenderElementProps, RenderLeafProps } from 'slate-react';
+import type { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { ParagraphElement } from './elements/paragraph/ParagraphElement';
 import { TitleElement } from './elements/title/TitleElement';
 import { Leaf } from './leaf/Leaf';

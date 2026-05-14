@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import Chainable = Cypress.Chainable;
-import { Toasts } from './Toasts';
-import { MainMenu } from './MainMenu';
+import { Toasts } from './Toasts.js';
+import { MainMenu } from './MainMenu.js';
 
 export class Authentication {
   public static login(email: string, password: string): Chainable<any> {

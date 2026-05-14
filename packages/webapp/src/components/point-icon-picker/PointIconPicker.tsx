@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
+import type { MouseEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { AllPointIcons, getSafeIconName, IconCategory, IconName } from '@abc-map/point-icons';
+import type { IconCategory, IconName } from '@abc-map/point-icons';
+import { AllPointIcons, getSafeIconName } from '@abc-map/point-icons';
 import { IconProcessor } from '../../core/point-icons/IconProcessor';
 import { LabeledIconCategories } from './LabeledIconCategory';
-import { IconPreview } from './IconPreview';
+import type { IconPreview } from './IconPreview';
 import { useTranslation } from 'react-i18next';
 import Cls from './PointIconPicker.module.scss';
 import { Logger } from '@abc-map/shared';
@@ -103,7 +105,7 @@ export function PointIconPicker(props: Props) {
         setCategoriesOpen((st) => st.filter((categoryB) => categoryB !== category));
       }
     },
-    [categoriesOpen]
+    [categoriesOpen],
   );
 
   // Generate previews for specified category.
@@ -144,7 +146,7 @@ export function PointIconPicker(props: Props) {
       showModal(false);
       onChange(preview.icon.name);
     },
-    [onChange]
+    [onChange],
   );
 
   return (

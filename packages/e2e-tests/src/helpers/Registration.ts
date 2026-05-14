@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  */
 
 import Chainable = Cypress.Chainable;
-import { Routes } from './Routes';
-import { UrlHelper } from './UrlHelper';
+import { Routes } from './Routes.js';
+import { UrlHelper } from './UrlHelper.js';
 import { customAlphabet } from 'nanoid';
 
 const emailIdGenerator = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 15);

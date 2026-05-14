@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,16 +17,15 @@
  */
 
 import Cls from './MapRotation.module.scss';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import clsx from 'clsx';
 import { toRadians } from '../../core/utils/numbers';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { NorthArrow } from '../north-arrow/NorthArrow';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
-
-const t = prefixedTranslation('MapRotation:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   map: MapWrapper;
@@ -38,6 +37,7 @@ export function MapRotation(props: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [rotationDegrees, setRotationDegrees] = useState(Infinity);
   const [sliderValue, setSliderValue] = useState(Infinity);
+  const { t } = useTranslation('MapRotation');
 
   useEffect(() => {
     const handleViewChange = () => {
@@ -76,7 +76,7 @@ export function MapRotation(props: Props) {
       setRotationDegrees(value);
       setSliderValue(value);
     },
-    [map]
+    [map],
   );
 
   return (

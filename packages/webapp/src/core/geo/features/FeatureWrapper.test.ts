@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcGeometryType, DefaultStyle, FeatureProperties, FeatureStyle, FillPatterns, StyleProperties } from '@abc-map/shared';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, DefaultStyle, FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { FeatureWrapper, HlPreviousStyleKey, HlStyleKey } from './FeatureWrapper';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
+import type Geometry from 'ol/geom/Geometry';
 import { IconName } from '@abc-map/point-icons';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
+import { describe, expect, it } from 'vitest';
 
 describe('FeatureWrapper', () => {
   describe('create(), from(), fromUnknwon()', () => {
@@ -154,7 +156,7 @@ describe('FeatureWrapper', () => {
               [2, 2],
               [1, 1],
             ],
-          ])
+          ]),
         );
 
         // Act
@@ -192,7 +194,7 @@ describe('FeatureWrapper', () => {
             [1, 1],
             [2, 2],
             [1, 1],
-          ])
+          ]),
         );
 
         // Act
@@ -214,7 +216,7 @@ describe('FeatureWrapper', () => {
             [1, 1],
             [2, 2],
             [1, 1],
-          ])
+          ]),
         );
         feature.setText('Ho !');
 

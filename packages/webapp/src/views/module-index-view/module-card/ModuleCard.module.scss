@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -28,18 +28,18 @@
   max-width: 25rem;
   min-height: 18rem;
 
-  @include media-breakpoint-down(md) {
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-  }
-
   padding: 1rem;
 
   border: solid 1px $gray-400;
   border-radius: 0.2rem;
 
   box-shadow: $box-shadow;
+
+  @include media-breakpoint-down(md) {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
 }
 
 .name {

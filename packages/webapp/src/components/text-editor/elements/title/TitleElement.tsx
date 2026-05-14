@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
  */
 
 import Cls from './TitleElement.module.scss';
-import { RenderElementProps } from 'slate-react';
-import { TitleElement as TitleElementDef } from '@abc-map/shared';
-import { ReactElement } from 'react';
+import type { RenderElementProps } from 'slate-react';
+import type { TitleElement as TitleElementDef } from '@abc-map/shared';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 type Props = RenderElementProps & { element: TitleElementDef };
@@ -32,7 +32,7 @@ export function TitleElement(props: Props) {
     element.align === 'left' && Cls.alignLeft,
     element.align === 'center' && Cls.alignCenter,
     element.align === 'right' && Cls.alignRight,
-    element.align === 'justify' && Cls.alignJustify
+    element.align === 'justify' && Cls.alignJustify,
   );
 
   let title: ReactElement;

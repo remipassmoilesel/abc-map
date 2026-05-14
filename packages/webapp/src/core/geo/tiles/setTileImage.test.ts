@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,10 @@
  */
 
 import { disableTileImageLogging, setMaxObjectsUrl, setTileImage } from './setTileImage';
-import * as sinon from 'sinon';
-import { SinonStub, SinonStubbedInstance } from 'sinon';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import ImageTile from 'ol/ImageTile';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 disableTileImageLogging();
 

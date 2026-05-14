@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectService } from './ProjectService';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { TestHelper } from '../utils/TestHelper';
-import { assert } from 'chai';
-import * as uuid from 'uuid-random';
+import { ProjectService } from './ProjectService.js';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { TestHelper } from '../utils/TestHelper.js';
+import { assert } from 'vitest';
+import uuid from 'uuid-random';
 import { Readable } from 'stream';
-import { CompressedProjectStream } from '@abc-map/shared';
-import { UserService } from '../users/UserService';
+import type { CompressedProjectStream } from '@abc-map/shared';
+import { UserService } from '../users/UserService.js';
+import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 
 describe('ProjectService', () => {
   let userId: string;
@@ -32,7 +33,7 @@ describe('ProjectService', () => {
   let userService: UserService;
   let service: ProjectService;
 
-  before(async () => {
+  beforeAll(async () => {
     const config = await ConfigLoader.load();
     client = await MongodbClient.createAndConnect(config);
     userService = UserService.create(config, client);
@@ -44,7 +45,7 @@ describe('ProjectService', () => {
     userId = uuid();
   });
 
-  after(() => {
+  afterAll(() => {
     return client.disconnect();
   });
 

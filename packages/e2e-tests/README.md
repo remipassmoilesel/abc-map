@@ -19,15 +19,11 @@ You can inspect differences in `generated/` folder.
 
 Pass only rendering test:
 
-    $ pnpm run e2e:ci:3005 --spec src/integration/rendering-spec.ts
+    $ pnpm run e2e:headless:3005 --spec src/integration/rendering-spec.ts
 
 ### Run only one test headless
 
-    $ pnpm run e2e:ci:3005 --spec src/integration/tool-linestring-spec.ts
-
-### Show debug console output
-
-    $ DEBUG=true pnpm run e2e:ci
+    $ pnpm run e2e:headless:3005 --spec src/integration/tool-linestring-spec.ts
 
 ### Why numTestsKeptInMemory = 0 ?
 

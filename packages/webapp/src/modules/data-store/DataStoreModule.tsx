@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleAdapter } from '@abc-map/module-api';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import DataStoreView from './DataStoreView';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('DataStoreModule:');
+const t = prefixedTranslation('DataStoreModule');
 
-export class DataStoreModule extends ModuleAdapter {
+export class DataStoreModule implements AbcModule {
   public getId() {
-    return BundledModuleId.DataStore;
+    return ModuleId.DataStore;
   }
 
   public getReadableName(): string {
@@ -37,6 +37,6 @@ export class DataStoreModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <DataStoreView />;
+    return () => <DataStoreView />;
   }
 }

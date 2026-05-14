@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -26,10 +26,11 @@
 
   width: 80vw;
   height: 100%;
-  @include media-breakpoint-down(md) {
-    width: 100%;
-  }
 
   margin: auto;
   padding: 1rem;
+
+  @include media-breakpoint-down(md) {
+    width: 100%;
+  }
 }

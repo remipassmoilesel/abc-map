@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { disableSmtpClientLogging } from '../email/SmtpClient';
-import { Config } from '../config/Config';
-import { Services, servicesFactory } from '../services/services';
-import { HttpServer } from '../server/HttpServer';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { TestHelper } from '../utils/TestHelper';
-import { assert } from 'chai';
-import { IncomingHttpHeaders } from 'http';
-import * as uuid from 'uuid-random';
-import { TestAuthentication } from '../utils/TestAuthentication';
+import { disableSmtpClientLogging } from '../email/SmtpClient.js';
+import type { Config } from '../config/Config.js';
+import type { Services } from '../services/services.js';
+import { servicesFactory } from '../services/services.js';
+import { HttpServer } from '../server/HttpServer.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { TestHelper } from '../utils/TestHelper.js';
+import { afterAll, assert, beforeAll, describe, it } from 'vitest';
+import type { IncomingHttpHeaders } from 'http';
+import uuid from 'uuid-random';
+import { TestAuthentication } from '../utils/TestAuthentication.js';
 import { ArtefactFilter } from '@abc-map/shared';
 
 disableSmtpClientLogging();
@@ -36,7 +37,7 @@ describe('DataStoreController', () => {
   let server: HttpServer;
   let authentication: IncomingHttpHeaders;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
@@ -49,7 +50,7 @@ describe('DataStoreController', () => {
     authentication = auth.connectedUser();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await services.shutdown();
     await server.shutdown();
   });

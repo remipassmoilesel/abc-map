@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PromptDefinition } from '../../core/ui/PromptDefinition';
+import type { PromptDefinition } from '../../core/ui/PromptDefinition';
 import { getLang } from '../../i18n/i18n';
 import { getTextByLang } from '@abc-map/shared';
-import { ChangeEvent, useCallback } from 'react';
-import { VariableMap } from '../../core/utils/variableExpansion';
+import type { ChangeEvent } from 'react';
+import { useCallback } from 'react';
+import type { VariableMap } from '../../core/utils/variableExpansion';
 
 interface Props {
   definition: PromptDefinition;
@@ -47,7 +48,7 @@ export function PromptField(props: Props) {
 
       onChange({ ...valueMap, [definition.name]: value });
     },
-    [definition.name, definition.type, onChange, valueMap]
+    [definition.name, definition.type, onChange, valueMap],
   );
 
   return (

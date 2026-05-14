@@ -32,6 +32,6 @@ head: |
 ---
 
 <div class="d-flex flex-column content">
-  <a href="en/" class="btn btn-primary mb-4"> 🇬🇧 English documentation</a>
-  <a href="fr/" class="btn btn-outline-secondary"> 🇫🇷 Documentation en français</a>
+  <a href="en/" class="btn btn-primary mb-4"> 🇬🇧 English</a>
+  <a href="fr/" class="btn btn-outline-secondary"> 🇫🇷 Français</a>
 </div>

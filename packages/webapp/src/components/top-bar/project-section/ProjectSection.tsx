@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -26,11 +26,12 @@ import { useExportProject } from '../../../core/project/useExportProject';
 import { useSaveProjectOnline } from '../../../core/project/useSaveProjectOnline';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../../routes';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import clsx from 'clsx';
 import Cls from './ProjectSection.module.scss';
 import { useImportProject } from '../../../core/project/useImportProject';
 import { ActionButton } from '../action-button/ActionButton';
+import { useServices } from '../../../core/useServices.ts';
 
 const logger = Logger.get('ProjectSection.tsx');
 
@@ -47,11 +48,12 @@ export function ProjectSection(props: Props) {
   const exportProject = useExportProject();
   const handleSaveProjectOnline = useSaveProjectOnline();
   const navigate = useNavigate();
+  const { toasts } = useServices();
 
   const handleShowMore = useCallback(() => {
-    navigate(Routes.module().withParams({ moduleId: BundledModuleId.ProjectManagement }));
+    navigate(Routes.module().withParams({ moduleId: ModuleId.ProjectManagement }))?.catch((err) => toasts.genericError(err));
     toggleMenu();
-  }, [navigate, toggleMenu]);
+  }, [navigate, toasts, toggleMenu]);
 
   const handleExportProject = useCallback(() => {
     exportProject().catch((err) => logger.error('Export error: ', err));

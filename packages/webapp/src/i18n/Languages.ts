@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,20 +20,20 @@ import frIcon from './icons/fr.svg';
 import enIcon from './icons/en.svg';
 import { Language } from '@abc-map/shared';
 
-export interface LabeledLanguages {
+export interface LabeledLanguage {
   value: Language;
   label: string;
   icon: string;
 }
 
 export class LabeledLanguages {
-  public static French: LabeledLanguages = {
+  public static French: LabeledLanguage = {
     value: Language.French,
     label: 'Français',
     icon: frIcon,
   };
 
-  public static English: LabeledLanguages = {
+  public static English: LabeledLanguage = {
     value: Language.English,
     label: 'English',
     icon: enIcon,

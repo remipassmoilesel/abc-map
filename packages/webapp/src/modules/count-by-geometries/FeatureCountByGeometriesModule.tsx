@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,15 +17,15 @@
  */
 
 import FeatureCountByGeometriesUi from './view/FeatureCountByGeometriesView';
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('FeatureCountByGeometriesModule:');
+const t = prefixedTranslation('FeatureCountByGeometriesModule');
 
-export class FeatureCountByGeometriesModule extends ModuleAdapter {
-  public getId(): ModuleId {
-    return BundledModuleId.CountPointsInPolygon;
+export class FeatureCountByGeometriesModule implements AbcModule {
+  public getId() {
+    return ModuleId.CountPointsInPolygon;
   }
 
   public getReadableName(): string {
@@ -37,6 +37,6 @@ export class FeatureCountByGeometriesModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <FeatureCountByGeometriesUi />;
+    return () => <FeatureCountByGeometriesUi />;
   }
 }

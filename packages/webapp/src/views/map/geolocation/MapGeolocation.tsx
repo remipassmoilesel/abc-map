@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { prefixedTranslation } from '../../../i18n/i18n';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { Switch } from '../../../components/switch/Switch';
 import { Logger } from '@abc-map/shared';
 import { FoldingInfo } from '../../../components/folding-info/FoldingInfo';
@@ -26,20 +25,20 @@ import { toDegrees, toPrecision } from '../../../core/utils/numbers';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { useServices } from '../../../core/useServices';
-import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
-import { MapActions } from '../../../core/store/map/actions';
-import { GeolocationChanged, GeolocationError, Position } from '../../../core/geo/geolocation/events';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { MapActions } from '../../../store/map/actions';
+import type { GeolocationChanged, GeolocationError, Position } from '../../../core/geo/geolocation/events';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('MapGeolocation.tsx');
-
-const t = prefixedTranslation('MapView:');
 
 export interface Props {
   map: MapWrapper;
 }
 
 export function MapGeolocation(props: Props) {
+  const { t } = useTranslation('MapView');
   const { geo, toasts } = useServices();
   const { map } = props;
   const dispatch = useAppDispatch();
@@ -90,7 +89,7 @@ export function MapGeolocation(props: Props) {
       geolocation.removeErrorListener(handleError);
       geolocation.removeChangeListener(handleChange);
     };
-  }, [followPosition, geolocEnabled, map]);
+  }, [followPosition, geolocEnabled, map, t]);
 
   const handleGeolocEnabled = useCallback(
     (val: boolean) => {
@@ -106,7 +105,7 @@ export function MapGeolocation(props: Props) {
 
       dispatch(MapActions.setGeolocation(val));
     },
-    [dispatch, map]
+    [dispatch, map],
   );
 
   const handleFollowPosition = useCallback(
@@ -120,7 +119,7 @@ export function MapGeolocation(props: Props) {
       map.getGeolocation()?.followPosition(val);
       dispatch(MapActions.setFollowPosition(val));
     },
-    [dispatch, map]
+    [dispatch, map],
   );
 
   const handleRotateMap = useCallback(
@@ -132,7 +131,7 @@ export function MapGeolocation(props: Props) {
       map.getGeolocation()?.rotateMap(val);
       dispatch(MapActions.setRotateMap(val));
     },
-    [dispatch, map]
+    [dispatch, map],
   );
 
   const handleMapAroundMe = useCallback(() => {

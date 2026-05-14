@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,7 +21,11 @@ export declare type CsvRow = { [k: string]: string | number | undefined };
 export const UnknownLineNumber = -1;
 
 export class CsvParsingError extends Error {
-  constructor(message: string, public line: number) {
+  constructor(
+    message: string,
+    // Line number, starting from 1, or -1 if not known.
+    public line: number,
+  ) {
     super(message);
   }
 }

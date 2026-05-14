@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,16 +21,17 @@ import { MapUi } from '../../../../../components/map-ui/MapUi';
 import { FloatingTextFrame } from '../../../../../components/text-frame/FloatingTextFrame';
 import { FloatingScale } from '../../../../../components/floating-scale/FloatingScale';
 import { useCallback, useEffect, useState } from 'react';
-import { MapWrapper } from '../../../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../../../core/geo/map/MapFactory';
 import { E2eMapWrapper } from '../../../../../core/geo/map/E2eMapWrapper';
 import { useServices } from '../../../../../core/useServices';
-import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
+import type { AbcNorth, AbcScale, AbcTextFrame, AbcView } from '@abc-map/shared';
+import { getAbcWindow, Logger } from '@abc-map/shared';
 import { useActiveSharedView } from '../../../../../core/project/useActiveSharedView';
 import { Views } from '../../../../../core/geo/Views';
-import { useAppSelector } from '../../../../../core/store/hooks';
+import { useAppSelector } from '../../../../../store/hooks';
 import { normalize } from '../../../../../core/utils/numbers';
-import { DimensionsStyle } from '../../../../../core/utils/DimensionsStyle';
+import type { DimensionsStyle } from '../../../../../core/utils/DimensionsStyle';
 import { adaptMapDimensions } from '../../../../../core/project/adaptMapDimensions';
 import SharedViewNavigation from '../../../../../components/shared-view-navigation/SharedViewNavigation';
 import SharedViewList from '../shared-view-list/SharedViewList';
@@ -107,7 +108,7 @@ export function PreviewMap(props: Props) {
         projection: previewView.projection,
         center: previewView.center,
         rotation: previewView.rotation,
-      })
+      }),
     );
   }, [map, onViewMove]);
 
@@ -161,10 +162,10 @@ export function PreviewMap(props: Props) {
             width: normalize((after.size.width / width) * 100, 0, 100, 2),
             height: normalize((after.size.height / height) * 100, 0, 100, 2),
           },
-        }
+        },
       );
     },
-    [fullscreen, mapDimensions, onTextFrameChange]
+    [fullscreen, mapDimensions, onTextFrameChange],
   );
 
   // Adapt relative position of scale
@@ -195,7 +196,7 @@ export function PreviewMap(props: Props) {
         y: normalize((before.y / height) * 100, 0, 100, 2),
       });
     },
-    [fullscreen, mapDimensions, onScaleChange]
+    [fullscreen, mapDimensions, onScaleChange],
   );
 
   // Adapt relative position of north
@@ -226,7 +227,7 @@ export function PreviewMap(props: Props) {
         y: normalize((before.y / height) * 100, 0, 100, 2),
       });
     },
-    [fullscreen, mapDimensions, onNorthChange]
+    [fullscreen, mapDimensions, onNorthChange],
   );
 
   // List of views

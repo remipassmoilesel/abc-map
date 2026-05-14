@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../MongodbClient';
-import { MigrationDao } from './MigrationDao';
-import { DatabaseMigrationScript } from './DatabaseMigrationScript';
-import { getScripts } from './scripts';
-import { Config } from '../../config/Config';
+import { MongodbClient } from '../MongodbClient.js';
+import { MigrationDao } from './MigrationDao.js';
+import type { DatabaseMigrationScript } from './DatabaseMigrationScript.js';
+import { getScripts } from './scripts/index.js';
+import type { Config } from '../../config/Config.js';
 import { Logger } from '@abc-map/shared';
-import * as uuid from 'uuid-random';
+import uuid from 'uuid-random';
 
 export const logger = Logger.get('MigrationLauncher', 'info');
 
@@ -38,7 +38,11 @@ export class DbMigrationsLauncher {
     return new DbMigrationsLauncher(client, dao, getScripts(client));
   }
 
-  constructor(private client: MongodbClient, private dao: MigrationDao, private scripts: DatabaseMigrationScript[]) {}
+  constructor(
+    private client: MongodbClient,
+    private dao: MigrationDao,
+    private scripts: DatabaseMigrationScript[],
+  ) {}
 
   public async migrate() {
     try {

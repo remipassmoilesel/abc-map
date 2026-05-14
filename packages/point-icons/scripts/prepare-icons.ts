@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,20 +17,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable */
-
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 import camelCase from 'camelcase';
 import { XMLParser, XMLBuilder, XMLValidator } from 'fast-xml-parser';
-import * as process from 'process';
+import process from 'process';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /*
  * This script prepare a directory of SVG files for icon usage, and generate typescript code.
  *
  * Usage:
  *
- *      $ ts-node prepare-icons.ts
+ *      $ tsx prepare-icons.ts
  *
  */
 
@@ -47,7 +47,7 @@ main({ directoryName: 'iso7010', category: 'Iso7010' }).catch((err) => {
 
 async function main(options: Settings) {
   const { directoryName, category, staticColors } = options;
-  const targetFullPath = path.resolve(__dirname, '../icons/', directoryName);
+  const targetFullPath = path.resolve(import.meta.dirname, '../icons/', directoryName);
 
   let fileNames = fs.readdirSync(targetFullPath);
 

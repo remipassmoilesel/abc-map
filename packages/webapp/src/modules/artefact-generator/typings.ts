@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcView, LayerAuthentication, LayerType } from '@abc-map/shared';
-import { I18nText, Language } from '@abc-map/shared';
+import type { AbcView, LayerAuthentication } from '@abc-map/shared';
+import { LayerType } from '@abc-map/shared';
+import type { I18nText } from '@abc-map/shared';
+import { Language } from '@abc-map/shared';
 
 export interface Parameters {
   type: LayerType;

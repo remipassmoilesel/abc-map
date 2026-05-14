@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, LayerType } from '@abc-map/shared';
-import { MigrationProject, ProjectMigration, ProjectMigrationSettings } from './typings';
+import type { AbcFile } from '@abc-map/shared';
+import { LayerType } from '@abc-map/shared';
+import type { MigrationProject, ProjectMigration, ProjectMigrationSettings } from './typings';
 import semver from 'semver';
-import { ModalService } from '../../ui/ModalService';
+import type { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
-import { AbcProjectManifest020, AbcWmsLayer020, WmsMetadata020 } from './dependencies/020-project-types';
+import type { AbcProjectManifest020, AbcWmsLayer020, WmsMetadata020 } from './dependencies/020-project-types';
 import { Encryption } from '../../utils/Encryption';
-import { AbcProjectManifest030 } from './dependencies/030-project-types';
+import type { AbcProjectManifest030 } from './dependencies/030-project-types';
 
 const NEXT = '0.3.0';
 
@@ -41,7 +42,7 @@ export class FromV020ToV030 implements ProjectMigration<AbcProjectManifest020, A
   public async migrate(
     manifest: AbcProjectManifest020,
     files: AbcFile<Blob>[],
-    settings?: ProjectMigrationSettings
+    settings?: ProjectMigrationSettings,
   ): Promise<MigrationProject<AbcProjectManifest030>> {
     const wmsLayers = manifest.layers.filter((lay) => lay.metadata.type === LayerType.Wms) as unknown as AbcWmsLayer020[];
     const clearUrl = wmsLayers?.find((layer) => !layer.metadata.remoteUrl.startsWith('encrypted:'))?.metadata.remoteUrl;

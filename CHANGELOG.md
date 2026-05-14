@@ -1,8 +1,27 @@
 # Changelog
 
-For the moment we use git hashes as version, since no one complained about it 👍
+For the moment we use git hashes as version, since no one care about it 👍
 
-## 22/10/2023 - End of Stamen layers 😭 (git: master)
+## 14/05/2026 - (git: main)
+
+- Well, well, well, that was what you call a pause in development
+- Replaced CRA by Vite, and whoa ! (RIP CRA, you were hacky but useful)
+- Replaced Jest by Vitest, and whoa !
+- Migration to ESM, it's always easier when you're a little behind schedule
+- Fixed handling of "Referer" headers (to remove warnings on maps)
+- Removed JavaScript modules, they were so impractical !
+- The use of the feature property name "geometry" is now prohibited; it is a reserved name
+- Renamed `master` branch to `main`, just in time again !
+- Updated Mongodb to version 7:
+  - Version 8 crash a lot on Fedora !
+  - Before updates, you must `mongodump` then `mongorestore`, otherwise deployment will fail !
+- Updated various things (k6, Helm, a lot of dependencies, and God only knows what else)
+
+## 12/11/2023 - Better icons (git: 4099b730)
+
+- New icons and a new user interface for a smoother display.
+
+## 22/10/2023 - End of Stamen layers 😭 (git: 4099b730)
 
 - Removed Stamen layers from source code and data store
 - Added Stadia Maps layers in data store

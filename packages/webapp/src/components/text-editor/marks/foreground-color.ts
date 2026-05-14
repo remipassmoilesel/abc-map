@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Editor, Text, Transforms } from 'slate';
+import type { Editor } from 'slate';
+import { Text, Transforms } from 'slate';
 
 export const foregroundColor = {
   unset(editor: Editor) {

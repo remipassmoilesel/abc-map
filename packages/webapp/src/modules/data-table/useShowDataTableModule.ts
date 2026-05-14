@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,22 +17,24 @@
  */
 
 import { Routes } from '../../routes';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
+import { useServices } from '../../core/useServices.ts';
 
 export type ReturnType = (layerId?: string) => void;
 
 export function useShowDataTableModule(): ReturnType {
   const navigate = useNavigate();
+  const { toasts } = useServices();
 
   return useMemo(
     () => (layerId?: string) => {
       navigate({
-        pathname: Routes.module().withParams({ moduleId: BundledModuleId.DataTable }),
+        pathname: Routes.module().withParams({ moduleId: ModuleId.DataTable }),
         search: layerId ? createSearchParams({ layerId }).toString() : undefined,
-      });
+      })?.catch((err) => toasts.genericError(err));
     },
-    [navigate]
+    [navigate, toasts],
   );
 }

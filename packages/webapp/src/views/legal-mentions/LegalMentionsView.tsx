@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,29 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { pageSetup } from '../../core/utils/page-setup';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { ServiceProps } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import Cls from './LegalMentionsView.module.scss';
 
 const logger = Logger.get('LegalMentionsView.tsx', 'info');
 
+type Props = ServiceProps & WithTranslation;
+
 interface State {
   legalMentions?: string;
 }
 
-const t = prefixedTranslation('LegalMentionsView:');
-
-class LegalMentionsView extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
+class LegalMentionsView extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {};
   }
 
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'LegalMentionsView');
     const legalMentions = this.state.legalMentions;
     return (
       <div className={Cls.legalMentions}>
@@ -52,9 +55,10 @@ class LegalMentionsView extends Component<ServiceProps, State> {
   }
 
   public componentDidMount() {
-    pageSetup(t('About_this_platform'));
-
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'LegalMentionsView');
     const { legalMentions } = this.props.services;
+
+    pageSetup(t('About_this_platform'));
     legalMentions
       .get()
       .then((legalMentions) => this.setState({ legalMentions }))

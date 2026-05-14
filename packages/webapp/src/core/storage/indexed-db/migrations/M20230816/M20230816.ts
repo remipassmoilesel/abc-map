@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IndexedDbMigration, StorageMigrationContext } from '../IndexedDbMigration';
-import { IDBProjectMetadataV0 } from '../typings/ProjectIDBEntryV0';
+import type { IndexedDbMigration, StorageMigrationContext } from '../IndexedDbMigration';
+import type { IDBProjectMetadataV0 } from '../typings/ProjectIDBEntryV0';
 import { ObjectStore } from '../../client/ObjectStore';
-import { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
+import type { ProjectIDBEntry } from '../../projects/ProjectIDBEntry';
 import { Logger } from '@abc-map/shared';
 
 const NEXT = 3;
@@ -65,7 +65,7 @@ export class M20230816 implements IndexedDbMigration {
     if (migratedProjects.length) {
       await client.putAll<ProjectIDBEntry>(
         ObjectStore.Projects,
-        migratedProjects.map((entry) => ({ key: entry.metadata.id, value: entry }))
+        migratedProjects.map((entry) => ({ key: entry.metadata.id, value: entry })),
       );
     }
   }

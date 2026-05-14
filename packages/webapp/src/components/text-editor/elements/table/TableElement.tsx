@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
  */
 
 import Cls from './TableElement.module.scss';
-import { RenderElementProps } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
 import clsx from 'clsx';
-import { TableElement as TableElementDef } from '@abc-map/shared';
+import type { TableElement as TableElementDef } from '@abc-map/shared';
 import { useEditor } from '../../useEditor';
 
 const classes = [Cls.border0, Cls.border1, Cls.border2, Cls.border3];

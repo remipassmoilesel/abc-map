@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,18 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback } from 'react';
-import { MapActions } from '../../../../../core/store/map/actions';
+import type { ChangeEvent } from 'react';
+import React, { useCallback } from 'react';
+import { MapActions } from '../../../../../store/map/actions';
 import OptionRow from '../option-row/OptionRow';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../../../../core/store/hooks';
+import { useTranslation, withTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 import Cls from './StrokeWidthSelector.module.scss';
 
-const t = prefixedTranslation('MapView:');
-
 function StrokeWidthSelector() {
+  const { t } = useTranslation('MapView');
   const strokeWidth = useAppSelector((st) => st.map.currentStyle.stroke.width);
   const dispatch = useAppDispatch();
 
@@ -40,7 +39,7 @@ function StrokeWidthSelector() {
 
       styleTransform((style) => ({ ...style, stroke: { ...style.stroke, width } }));
     },
-    [dispatch, styleTransform]
+    [dispatch, styleTransform],
   );
 
   return (

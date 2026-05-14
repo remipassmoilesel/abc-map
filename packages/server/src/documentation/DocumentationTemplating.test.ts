@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,17 +19,17 @@
  *
  */
 
-import { DocumentationTemplating, EndMark, StartMark } from './DocumentationTemplating';
-import { Config, UserDocConfig } from '../config/Config';
-import { SinonStubbedInstance } from 'sinon';
-import { DocumentationIndex } from './DocumentationIndex';
-import * as sinon from 'sinon';
-import * as fs from 'fs';
-import * as uuid from 'uuid-random';
-import { expect } from 'chai';
+import { DocumentationTemplating, EndMark, StartMark } from './DocumentationTemplating.js';
+import type { Config, UserDocConfig } from '../config/Config.js';
+import sinon from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import { DocumentationIndex } from './DocumentationIndex.js';
+import fs from 'fs';
+import uuid from 'uuid-random';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { execSync } from 'child_process';
-import { ConfigLoader } from '../config/ConfigLoader';
-import * as path from 'path';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import path from 'path';
 
 describe('DocumentationTemplating', () => {
   describe('with a fake index', () => {
@@ -89,7 +89,7 @@ describe('DocumentationTemplating', () => {
       // Prepare
       await fs.writeFileSync(
         testRoot + '/index-1.html',
-        '<html><head></head><body><div style="display: none">%%%append-to-body%%%   %%%end-append-to-body%%%</div></body></html>'
+        '<html><head></head><body><div style="display: none">%%%append-to-body%%%   %%%end-append-to-body%%%</div></body></html>',
       );
       await fs.writeFileSync(testRoot + '/index-2.html', '<html><head></head></html>\n\n\n');
 
@@ -138,8 +138,8 @@ describe('DocumentationTemplating', () => {
 
       const beforeContent = files.map((filePath) => fs.readFileSync(filePath).toString('utf-8'));
       beforeContent.forEach((content) => {
-        expect(content.includes(StartMark)).true;
-        expect(content.includes(EndMark)).true;
+        expect(content.includes(StartMark)).to.eq(true);
+        expect(content.includes(EndMark)).to.eq(true);
       });
 
       // Act
@@ -148,10 +148,10 @@ describe('DocumentationTemplating', () => {
       // Assert
       const afterContent = files.map((filePath) => [filePath, fs.readFileSync(filePath).toString('utf-8')]);
       afterContent.forEach(([, content]) => {
-        expect(content.includes(StartMark)).true;
-        expect(content.includes(EndMark)).true;
-        expect(content.includes('analytics.61ef55a258496.js')).true;
-        expect(content.includes('analytics.87fcfef6ee362852.js')).true;
+        expect(content.includes(StartMark)).to.eq(true);
+        expect(content.includes(EndMark)).to.eq(true);
+        expect(content.includes('analytics.61ef55a258496.js')).to.eq(true);
+        expect(content.includes('analytics.87fcfef6ee362852.js')).to.eq(true);
       });
     });
   });

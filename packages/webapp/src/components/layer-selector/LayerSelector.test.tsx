@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../core/geo/map/MapFactory';
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { act } from 'react';
 import { LayerSelector } from './LayerSelector';
-import sinon, { SinonStub } from 'sinon';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
 import { PredefinedLayerModel } from '@abc-map/shared';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('LayerSelector', () => {
   let map: MapWrapper;
@@ -44,7 +48,7 @@ describe('LayerSelector', () => {
     // Act
     abcRender(
       <LayerSelector value={undefined} label={'Couche vecteur:'} onSelected={handleSelected} data-testid={'layer-selector'} data-cy={'test-data-cy'} />,
-      { services }
+      { services },
     );
 
     // Assert

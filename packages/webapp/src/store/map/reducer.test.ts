@@ -1,0 +1,200 @@
+/**
+ * Copyright © 2026 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import type { MapState } from './state.ts';
+import { mapInitialState } from './state.ts';
+import { MapActions } from './actions.ts';
+import { mapReducer } from './reducer.ts';
+import { deepFreeze } from '../../core/utils/deepFreeze.ts';
+import { describe, expect, it } from 'vitest';
+
+describe('Map reducer', function () {
+  it('SetFillColor', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        fill: {
+          ...mapInitialState.currentStyle.fill,
+          color1: '#000',
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setFillColor1('#111'));
+
+    // Assert
+    expect(state.currentStyle.fill?.color1).toEqual('#111');
+  });
+
+  it('SetStrokeColor', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        stroke: {
+          ...mapInitialState.currentStyle.stroke,
+          color: '#000',
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setStrokeColor('#111'));
+
+    // Assert
+    expect(state.currentStyle.stroke?.color).toEqual('#111');
+  });
+
+  it('SetStrokeWidth', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        stroke: {
+          ...mapInitialState.currentStyle.stroke,
+          width: 5,
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setStrokeWidth(10));
+
+    // Assert
+    expect(state.currentStyle.stroke?.width).toEqual(10);
+  });
+
+  it('SetTextOffsetX', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        text: {
+          ...mapInitialState.currentStyle.text,
+          offsetX: 5,
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setTextOffsetX(10));
+
+    // Assert
+    expect(state.currentStyle.text?.offsetX).toEqual(10);
+  });
+
+  it('SetTextOffsetY', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        text: {
+          ...mapInitialState.currentStyle.text,
+          offsetY: 5,
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setTextOffsetY(10));
+
+    // Assert
+    expect(state.currentStyle.text?.offsetY).toEqual(10);
+  });
+
+  it('SetTextRotation', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        text: {
+          ...mapInitialState.currentStyle.text,
+          rotation: 5,
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setTextRotation(10));
+
+    // Assert
+    expect(state.currentStyle.text?.rotation).toEqual(10);
+  });
+
+  it('SetGeolocation', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      geolocation: {
+        enabled: false,
+        followPosition: false,
+        rotateMap: false,
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setGeolocation(true));
+
+    // Assert
+    expect(state.geolocation.enabled).toEqual(true);
+  });
+
+  it('SetGeolocation', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      geolocation: {
+        enabled: false,
+        followPosition: false,
+        rotateMap: false,
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setFollowPosition(true));
+
+    // Assert
+    expect(state.geolocation.followPosition).toEqual(true);
+  });
+
+  it('SetRotateMap', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      geolocation: {
+        enabled: false,
+        followPosition: false,
+        rotateMap: false,
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setRotateMap(true));
+
+    // Assert
+    expect(state.geolocation.rotateMap).toEqual(true);
+  });
+});

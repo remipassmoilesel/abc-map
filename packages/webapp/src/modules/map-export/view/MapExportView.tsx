@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 import Cls from './MapExportView.module.scss';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { AbcLayout, AbcNorth, AbcProjection, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
+import type { AbcLayout, AbcNorth, AbcProjection, AbcTextFrame, LayoutFormat } from '@abc-map/shared';
+import { LayoutFormats, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayoutsChangeset } from '../../../core/history/changesets/layouts/AddLayoutsChangeset';
@@ -34,7 +35,7 @@ import uuid from 'uuid-random';
 import SideMenu from '../../../components/side-menu/SideMenu';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { useServices } from '../../../core/useServices';
-import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { useTranslation } from 'react-i18next';
 import { ExportKeyboardListener } from './ExportKeyboardListener';
 import { isDesktopDevice } from '../../../core/ui/isDesktopDevice';
@@ -46,7 +47,7 @@ import { RemoveLayoutTextFrameChangeset } from '../../../core/history/changesets
 import { UpdateTextFrameChangeset } from '../../../core/history/changesets/UpdateTextFrameChangeset';
 import debounce from 'lodash/debounce';
 import { AddLayoutScaleChangeset } from '../../../core/history/changesets/layouts/AddLayoutScaleChangeset';
-import { AbcScale } from '@abc-map/shared';
+import type { AbcScale } from '@abc-map/shared';
 import { RemoveLayoutScaleChangeset } from '../../../core/history/changesets/layouts/RemoveLayoutScaleChangeset';
 import { UpdateLayoutScaleChangeset } from '../../../core/history/changesets/layouts/UpdateLayoutScaleChangeset';
 import { useActiveLayout } from '../../../core/project/useActiveLayout';
@@ -57,7 +58,7 @@ import { RemoveLayoutNorthChangeset } from '../../../core/history/changesets/lay
 import { UpdateLayoutNorthChangeset } from '../../../core/history/changesets/layouts/UpdateLayoutNorthChangeset';
 import isEqual from 'lodash/isEqual';
 import { LayoutPreview } from './layout-preview/LayoutPreview';
-import { ProjectActions } from '../../../core/store/project/actions';
+import { ProjectActions } from '../../../store/project/actions';
 
 const logger = Logger.get('MapExportView.tsx', 'warn');
 
@@ -92,7 +93,7 @@ export function MapExportView() {
         .then(() => history.register(HistoryKey.MapExport, setActiveLayout))
         .catch((err) => logger.error('Cannot set active layout: ', err));
     },
-    [history]
+    [history],
   );
 
   // User creates a new layout
@@ -155,7 +156,7 @@ export function MapExportView() {
 
       apply().catch((err) => logger.error('Cannot change layout index', err));
     },
-    [activeLayout, history, layouts, t, toasts]
+    [activeLayout, history, layouts, t, toasts],
   );
 
   const handleLayoutUp = useCallback(() => updateLayoutIndex(-1), [updateLayoutIndex]);
@@ -183,7 +184,7 @@ export function MapExportView() {
 
       apply().catch((err) => logger.error('Cannot delete layout: ', err));
     },
-    [history]
+    [history],
   );
 
   // User change layout format
@@ -207,7 +208,7 @@ export function MapExportView() {
 
       apply().catch((err) => logger.error('Cannot update layout: ', err));
     },
-    [activeLayout, history]
+    [activeLayout, history],
   );
 
   // User change layout view (scroll or drag)
@@ -227,7 +228,7 @@ export function MapExportView() {
 
       apply().catch((err) => logger.error('Cannot update layout: ', err));
     },
-    [history, layouts]
+    [history, layouts],
   );
 
   const abcMapAttributions = useAppSelector((st) => st.project.layouts.abcMapAttributionsEnabled);
@@ -276,7 +277,7 @@ export function MapExportView() {
         })
         .finally(() => renderer.dispose());
     },
-    [abcMapAttributions, geo, layouts, modals, t, toasts]
+    [abcMapAttributions, geo, layouts, modals, t, toasts],
   );
 
   const handleAddTextFrame = useCallback(
@@ -291,7 +292,7 @@ export function MapExportView() {
         .then(() => history.register(HistoryKey.MapExport, addFrame))
         .catch((err) => logger.error('Cannot add text frame: ', err));
     },
-    [activeLayout, history]
+    [activeLayout, history],
   );
 
   const handleDeleteTextFrame = useCallback(
@@ -306,7 +307,7 @@ export function MapExportView() {
         .then(() => history.register(HistoryKey.MapExport, removeFrame))
         .catch((err) => logger.error('Cannot remove text frame: ', err));
     },
-    [activeLayout, history]
+    [activeLayout, history],
   );
 
   const handleTextFrameChangeDebounced = useMemo(
@@ -324,7 +325,7 @@ export function MapExportView() {
           .then(() => history.register(HistoryKey.MapExport, changeset))
           .catch((err) => logger.error('Cannot update text frame: ', err));
       }, 150),
-    [history, project]
+    [history, project],
   );
 
   const handleTextFrameChange = useCallback(
@@ -337,7 +338,7 @@ export function MapExportView() {
       project.updateTextFrame(after);
       handleTextFrameChangeDebounced(before, after);
     },
-    [activeLayout, handleTextFrameChangeDebounced, project]
+    [activeLayout, handleTextFrameChangeDebounced, project],
   );
 
   const handleAddScale = useCallback(
@@ -352,7 +353,7 @@ export function MapExportView() {
         .then(() => history.register(HistoryKey.MapExport, changeset))
         .catch((err) => logger.error('Cannot add scale: ', err));
     },
-    [activeLayout, history]
+    [activeLayout, history],
   );
 
   const handleRemoveScale = useCallback(() => {
@@ -379,7 +380,7 @@ export function MapExportView() {
         .then(() => history.register(HistoryKey.MapExport, changeset))
         .catch((err) => logger.error('Cannot add scale: ', err));
     },
-    [activeLayout, history]
+    [activeLayout, history],
   );
 
   const handleRemoveNorth = useCallback(() => {
@@ -410,7 +411,7 @@ export function MapExportView() {
         .then(() => history.register(HistoryKey.MapExport, changeset))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
-    [activeLayout, history]
+    [activeLayout, history],
   );
 
   const handleNorthChange = useCallback(
@@ -429,7 +430,7 @@ export function MapExportView() {
         .then(() => history.register(HistoryKey.MapExport, changeset))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
-    [activeLayout, history]
+    [activeLayout, history],
   );
 
   const dispatch = useAppDispatch();

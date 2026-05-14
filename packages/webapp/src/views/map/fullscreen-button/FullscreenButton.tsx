@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,16 +17,15 @@
  */
 
 import { IconDefs } from '../../../components/icon/IconDefs';
-import React, { CSSProperties, useCallback } from 'react';
+import type { CSSProperties } from 'react';
+import React, { useCallback } from 'react';
 import { useServices } from '../../../core/useServices';
 import { Logger } from '@abc-map/shared';
 import { FloatingButton } from '../../../components/floating-button/FloatingButton';
-import { prefixedTranslation } from '../../../i18n/i18n';
 import { useFullscreen } from '../../../core/ui/useFullscreen';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('FullscreenButton.tsx');
-
-const t = prefixedTranslation('MapView:');
 
 interface Props {
   style: CSSProperties;
@@ -36,6 +35,7 @@ export function FullscreenButton(props: Props) {
   const { style } = props;
   const { toasts } = useServices();
   const { fullscreen, toggleFullscreen } = useFullscreen();
+  const { t } = useTranslation('MapView');
 
   const handleToggleFullscreen = useCallback(() => {
     toggleFullscreen().catch((err) => {

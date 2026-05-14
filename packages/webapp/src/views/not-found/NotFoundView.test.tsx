@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 import { render } from '@testing-library/react';
 import NotFoundView from './NotFoundView';
 import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
 
 describe('NotFoundView', () => {
   it('should add noindex meta', () => {

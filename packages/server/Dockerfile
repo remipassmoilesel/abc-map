@@ -1,4 +1,4 @@
-# Copyright © 2023 Rémi Pace.
+# Copyright © 2026 Rémi Pace.
 # This file is part of Abc-Map.
 #
 # Abc-Map is free software: you can redistribute it and/or modify
@@ -14,20 +14,17 @@
 # You should have received a copy of the GNU Affero General
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
-FROM node:18-alpine
+FROM node:24-alpine3.22
 
 # Dockerfiles are built with a context path at the root of the git repository
-
-RUN npm i -g pnpm
 
 RUN mkdir -p /srv
 WORKDIR /srv
 
-COPY pnpm-lock.yaml .
-RUN pnpm fetch --prod
+RUN corepack enable pnpm && corepack install -g pnpm@latest-10
 
 COPY . .
-RUN pnpm install --frozen-lockfile --prod -f --filter @abc-map/server
+RUN pnpm install --frozen-lockfile --recursive --prod --force
 
 ENV NODE_ENV=production
-CMD node /srv/packages/server/build/main.js
+CMD ["node", "/srv/packages/server/build/main.js"]

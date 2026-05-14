@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { MainMap } from '../helpers/MainMap';
-import { Routes } from '../helpers/Routes';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { Routes } from '../helpers/Routes.js';
 import { round } from 'lodash';
 
 describe('Search on map', function () {

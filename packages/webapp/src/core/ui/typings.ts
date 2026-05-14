@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DataPropertiesMap } from '../geo/features/FeatureWrapper';
-import { PromptDefinition } from './PromptDefinition';
-import { VariableMap } from '../utils/variableExpansion';
+import type { DataPropertiesMap } from '../geo/features/FeatureWrapper';
+import type { PromptDefinition } from './PromptDefinition';
+import type { VariableMap } from '../utils/variableExpansion';
 
 export enum ModalEventType {
   ShowPasswordInput = 'ShowPasswordInput',
@@ -237,7 +237,10 @@ export declare type ModalEvent =
   | WarningClosed;
 
 export class InternalEvent extends Event {
-  constructor(type: ModalEventType, public readonly payload: ModalEvent) {
+  constructor(
+    type: ModalEventType,
+    public readonly payload: ModalEvent,
+  ) {
     super(type);
   }
 }

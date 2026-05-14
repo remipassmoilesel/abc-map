@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,13 +17,14 @@
  */
 
 import React, { useCallback } from 'react';
-import { AbcGeometryType, FeatureStyle, Logger } from '@abc-map/shared';
-import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, Logger } from '@abc-map/shared';
+import type { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddFeaturesChangeset } from '../../../../../core/history/changesets/features/AddFeaturesChangeset';
 import { RemoveFeaturesChangeset } from '../../../../../core/history/changesets/features/RemoveFeaturesChangeset';
 import Cls from './CommonActions.module.scss';
-import { useAppSelector } from '../../../../../core/store/hooks';
+import { useAppSelector } from '../../../../../store/hooks';
 import { useServices } from '../../../../../core/useServices';
 import { ActionButton } from './ActionButton';
 import { IconDefs } from '../../../../../components/icon/IconDefs';

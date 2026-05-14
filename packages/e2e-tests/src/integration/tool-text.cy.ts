@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
  */
 
 import { MapTool, StyleProperties } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { ToolSelector } from '../helpers/ToolSelector';
-import { Draw } from '../helpers/Draw';
-import { MainMap } from '../helpers/MainMap';
-import { Routes } from '../helpers/Routes';
-import { Project } from '../helpers/Project';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { ToolSelector } from '../helpers/ToolSelector.js';
+import { Draw } from '../helpers/Draw.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { Routes } from '../helpers/Routes.js';
+import { Project } from '../helpers/Project.js';
 
 describe('Tool Text', function () {
   beforeEach(() => {

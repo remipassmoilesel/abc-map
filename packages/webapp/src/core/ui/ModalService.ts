@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,16 +17,14 @@
  */
 
 import { Logger } from '@abc-map/shared';
-import {
+import type {
   ConfirmationClosedEvent,
   CreatePasswordModalClosedEvent,
   EditPropertiesClosedEvent,
   LoginClosedEvent,
   ModalEvent,
   ModalEventListener,
-  ModalEventType,
   ModalStatus,
-  OperationStatus,
   PasswordInputClosedEvent,
   PromptVariablesClosed,
   PwaInstallClosed,
@@ -35,15 +33,16 @@ import {
   SolicitationClosedEvent,
   TextFeedbackClosed,
 } from './typings';
-import { DataPropertiesMap } from '../geo/features/FeatureWrapper';
+import { ModalEventType, OperationStatus } from './typings';
+import type { DataPropertiesMap } from '../geo/features/FeatureWrapper';
 import { resolveInAtLeast } from '../utils/resolveInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { PromptDefinition } from './PromptDefinition';
+import type { PromptDefinition } from './PromptDefinition';
 import EventEmitter from 'eventemitter3';
 
 const logger = Logger.get('ModalService.ts', 'warn');
 
-const t = prefixedTranslation('ModalService:');
+const t = prefixedTranslation('ModalService');
 
 export class ModalService {
   private emitter = new EventEmitter();

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,57 +16,48 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import React from 'react';
-import { Services } from '../../core/Services';
-import {
-  AbcFile,
-  ArtefactManifest,
-  isProjectionEqual,
-  Logger,
-  normalizedProjectionName,
-  WmsDefinitionManifest,
-  WmtsDefinitionManifest,
-  XyzDefinitionManifest,
-  Zipper,
-  LayerType,
-  ArtefactType,
-} from '@abc-map/shared';
-import { defaultPreviewViews, newParameters, Parameters, ProgressHandler } from './typings';
+import type { Services } from '../../core/Services';
+import type { AbcFile, ArtefactManifest, WmsDefinitionManifest, WmtsDefinitionManifest, XyzDefinitionManifest } from '@abc-map/shared';
+import { isProjectionEqual, Logger, normalizedProjectionName, Zipper, LayerType, ArtefactType } from '@abc-map/shared';
+import type { Parameters, ProgressHandler } from './typings';
+import { defaultPreviewViews, newParameters } from './typings';
 import ArtefactGeneratorUi from './view/ArtefactGeneratorView';
 import { FileIO } from '../../core/utils/FileIO';
 import yaml from 'js-yaml';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
 import { PreviewExporter } from './PreviewExporter';
-import { DimensionsPx } from '../../core/utils/DimensionsPx';
-import { WmsSettings, WmtsSettings } from '../../core/geo/layers/LayerFactory.types';
+import type { DimensionsPx } from '../../core/utils/DimensionsPx';
+import type { WmsSettings, WmtsSettings } from '../../core/geo/layers/LayerFactory.types';
 import { toSlug } from '../../core/utils/toSlug';
-import { BundledModuleId } from '@abc-map/shared';
+import { ModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { isOpenlayersProjection } from '../../core/utils/crossContextInstanceof';
+import { isOpenlayersProjection } from '../../core/utils/instanceof.ts';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('ArtefactGeneratorModule:');
+const t = prefixedTranslation('ArtefactGeneratorModule');
 
-export const logger = Logger.get('ArtefactGenerator.tsx', 'info');
+const logger = Logger.get('ArtefactGenerator.tsx', 'info');
 
 /**
  * This module generates artifacts usable in the datastore from url XYZ, WMS, or WMTS.
  *
  * It will remain an experimental feature since there is little chance that it will interest ordinary users.
  */
-export class ArtefactGeneratorModule extends ModuleAdapter {
+export class ArtefactGeneratorModule implements AbcModule {
   public static create(services: Services): ArtefactGeneratorModule {
     return new ArtefactGeneratorModule(services, new PreviewExporter());
   }
 
   private parameters = newParameters();
 
-  constructor(private services: Services, private previewExporter: PreviewExporter) {
-    super();
-  }
+  constructor(
+    private services: Services,
+    private previewExporter: PreviewExporter,
+  ) {}
 
-  public getId(): ModuleId {
-    return BundledModuleId.ArtefactGenerator;
+  public getId() {
+    return ModuleId.ArtefactGenerator;
   }
 
   public getReadableName(): string {
@@ -77,8 +68,8 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
     return t('Generate_data_store_artefacts');
   }
 
-  public getView() {
-    return <ArtefactGeneratorUi initialValue={this.parameters} onChange={this.handleParametersChange} onProcess={this.process} />;
+  public getView(): React.FC {
+    return () => <ArtefactGeneratorUi initialValue={this.parameters} onChange={this.handleParametersChange} onProcess={this.process} />;
   }
 
   public process = async (onProgress: ProgressHandler): Promise<void> => {
@@ -150,7 +141,7 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
     };
 
     if (params.previews.enabled) {
-      manifest.artefact.previews = images.map((image, i) => `preview-${i}.png`);
+      manifest.artefact.previews = images.map((_, i) => `preview-${i}.png`);
     }
 
     files.push({ path: `artefact.yml`, content: new Blob([yaml.dump(manifest)]) });
@@ -256,7 +247,7 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
         };
 
         if (params.previews.enabled) {
-          manifest.artefact.previews = images.map((preview, i) => `preview-${i}.png`);
+          manifest.artefact.previews = images.map((_, i) => `preview-${i}.png`);
         }
 
         files.push({ path: `${layerSlug}/artefact.yml`, content: new Blob([yaml.dump(manifest)]) });
@@ -365,7 +356,7 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
         };
 
         if (params.previews.enabled) {
-          manifest.artefact.previews = images.map((preview, i) => `preview-${i}.png`);
+          manifest.artefact.previews = images.map((_, i) => `preview-${i}.png`);
         }
 
         files.push({ path: `${layerSlug}/artefact.yml`, content: new Blob([yaml.dump(manifest)]) });

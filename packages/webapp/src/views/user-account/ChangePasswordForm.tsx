@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
+import React, { Component } from 'react';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
-import { WithTranslation, withTranslation } from 'react-i18next';
-import { prefixI18nTFunc } from '../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 interface Props extends WithTranslation {
   onSubmit: (previousPassword: string, newPassword: string) => void;
@@ -46,7 +47,7 @@ class ChangePasswordForm extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const t = prefixI18nTFunc('UserAccountView:', this.props.t);
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'UserAccountView');
     const { formState, previousPassword, newPassword, confirmation } = this.state;
 
     return (

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,21 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectService } from '../projects/ProjectService';
-import { Config } from '../config/Config';
-import { MongodbClient } from '../mongodb/MongodbClient';
+import { ProjectService } from '../projects/ProjectService.js';
+import type { Config } from '../config/Config.js';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
 import { Logger } from '@abc-map/shared';
-import { UserService } from '../users/UserService';
-import { AuthenticationService } from '../authentication/AuthenticationService';
-import { HealthCheckService } from '../health/HealthCheckService';
-import { AbstractService } from './AbstractService';
-import { DataStoreService } from '../data-store/DataStoreService';
-import { AuthorizationService } from '../authorization/AuthorizationService';
-import { FeedbackService } from '../feedback/FeedbackService';
-import { MetricsService } from '../metrics/MetricsService';
-import { EmailService } from '../email/EmailService';
-import { ProjectionService } from '../projections/ProjectionService';
-import { PointIconsService } from '../point-icons/PointIconsService';
+import { UserService } from '../users/UserService.js';
+import { AuthenticationService } from '../authentication/AuthenticationService.js';
+import { HealthCheckService } from '../health/HealthCheckService.js';
+import { AbstractService } from './AbstractService.js';
+import { DataStoreService } from '../data-store/DataStoreService.js';
+import { AuthorizationService } from '../authorization/AuthorizationService.js';
+import { FeedbackService } from '../feedback/FeedbackService.js';
+import { MetricsService } from '../metrics/MetricsService.js';
+import { EmailService } from '../email/EmailService.js';
+import { ProjectionService } from '../projections/ProjectionService.js';
+import { PointIconsService } from '../point-icons/PointIconsService.js';
 
 const logger = Logger.get('services.ts');
 

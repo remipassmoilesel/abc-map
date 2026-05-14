@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,10 @@ export const FirefoxErrorRegexp = new RegExp(/AsyncFunction:([0-9]+):([0-9]+)/);
 export const ChromiumErrorRegexp = new RegExp(/<anonymous>:([0-9]+):([0-9]+)/);
 
 export class ScriptError extends Error {
-  constructor(message: string, public output: string[] = []) {
+  constructor(
+    message: string,
+    public output: string[] = [],
+  ) {
     super(message);
   }
 }

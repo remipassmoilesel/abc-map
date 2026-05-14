@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,19 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { DataStoreService, logger } from './DataStoreService';
-import { assert } from 'chai';
-import { ArtefactDao } from './ArtefactDao';
-import { DataStoreScanner } from './DataStoreScanner';
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
-import { AbcArtefact, ArtefactFilter, ArtefactType, Language } from '@abc-map/shared';
-import { TestHelper } from '../utils/TestHelper';
-import * as _ from 'lodash';
-import * as uuid from 'uuid-random';
-import { ArtefactManifestWithPath } from './ArtefactManifestSchema';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { DataStoreService, logger } from './DataStoreService.js';
+import { afterAll, assert, beforeAll, describe, it } from 'vitest';
+import { ArtefactDao } from './ArtefactDao.js';
+import { DataStoreScanner } from './DataStoreScanner.js';
+import sinon from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
+import type { AbcArtefact } from '@abc-map/shared';
+import { ArtefactFilter, ArtefactType, Language } from '@abc-map/shared';
+import { TestHelper } from '../utils/TestHelper.js';
+import _ from 'lodash';
+import uuid from 'uuid-random';
+import type { ArtefactManifestWithPath } from './ArtefactManifestSchema.js';
 
 logger.disable();
 
@@ -37,7 +38,7 @@ describe('DatastoreService', () => {
   let client: MongodbClient;
   let service: DataStoreService;
 
-  before(async () => {
+  beforeAll(async () => {
     const config = await ConfigLoader.load();
     config.datastore.path = '/datastore/ '; // With trailing slash and space
     client = await MongodbClient.createAndConnect(config);
@@ -48,7 +49,7 @@ describe('DatastoreService', () => {
     await service.init();
   });
 
-  after(async () => {
+  afterAll(async () => {
     return client.disconnect();
   });
 
@@ -106,7 +107,7 @@ describe('DatastoreService', () => {
         _(artefacts)
           .sortBy((r) => r.id)
           .map((r) => r.id)
-          .value()
+          .value(),
       );
     });
 
@@ -191,7 +192,7 @@ describe('DatastoreService', () => {
       // Downloadable file paths must be relative to datastore path
       assert.deepEqual(
         actual.files,
-        expected.artefact.files?.map((file) => `${testId}-${i}/${file}`)
+        expected.artefact.files?.map((file) => `${testId}-${i}/${file}`),
       );
       assert.deepEqual(actual.license, `${testId}-${i}/${expected.artefact.license}`);
     }

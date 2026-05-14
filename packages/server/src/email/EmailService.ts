@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractService } from '../services/AbstractService';
-import { SmtpClient } from './SmtpClient';
-import { Config } from '../config/Config';
+import { AbstractService } from '../services/AbstractService.js';
+import { SmtpClient } from './SmtpClient.js';
+import type { Config } from '../config/Config.js';
 import { WebappRoutes, Language, ConfirmAccountTokenParam, ResetPasswordTokenParam } from '@abc-map/shared';
 
 const Routes = {
@@ -44,7 +44,10 @@ export class EmailService extends AbstractService {
     return new EmailService(config, smtp);
   }
 
-  constructor(private config: Config, private smtp: SmtpClient) {
+  constructor(
+    private config: Config,
+    private smtp: SmtpClient,
+  ) {
     super();
   }
 

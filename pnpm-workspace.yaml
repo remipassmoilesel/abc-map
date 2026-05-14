@@ -1,4 +1,27 @@
 packages:
-  - 'documentation'
-  - 'packages/**'
-  - '!notes/**'
+  - .
+  - documentation
+  - packages/**
+
+# In order to prevent supply chain attacks, we disable git and tgz sub dependencies.
+# See https://pnpm.io/supply-chain-security#block-risky-postinstall-scripts
+blockExoticSubdeps: true
+
+# In order to prevent supply chain attacks, we ensure that versions are more than one week old.
+# See https://pnpm.io/supply-chain-security#delay-dependency-updates
+minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - react
+  - react-dom
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - canvas
+  - core-js
+  - core-js-pure
+  - cypress
+  - esbuild
+  - sharp
+  - unrs-resolver
+
+storeDir: .pnpm-store

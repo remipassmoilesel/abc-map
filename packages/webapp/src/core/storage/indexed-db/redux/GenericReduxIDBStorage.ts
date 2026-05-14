@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,15 @@
  */
 
 import { Logger } from '@abc-map/shared';
-import { MainStore } from '../../../store/store';
-import { Unsubscribe } from 'redux';
+import type { MainStore } from '../../../../store/store';
+import type { Unsubscribe } from 'redux';
 import isEqual from 'lodash/isEqual';
-import { IndexedDbClient, toKvPair } from '../client/IndexedDbClient';
-import { MainState } from '../../../store/reducer';
+import type { IndexedDbClient } from '../client/IndexedDbClient';
+import { toKvPair } from '../client/IndexedDbClient';
+import type { MainState } from '../../../../store/reducer';
 import { getMainDbClient } from '../main-database';
 import { throttleDbStorage } from '../client/throttleDbStorage';
-import { GenericReduxIDBEntry } from './GenericReduxIDBEntry';
+import type { GenericReduxIDBEntry } from './GenericReduxIDBEntry';
 
 export const logger = Logger.get('GenericReduxStorage.ts');
 
@@ -50,7 +51,7 @@ export class GenericReduxIDBStorage<T extends ValidEntity> {
     private getClient: () => IndexedDbClient | undefined,
     private storeName: string,
     private selector: ReduxStoreSelector<T>,
-    private version: number
+    private version: number,
   ) {}
 
   public watch(store: MainStore, throttlingMs = 5_000) {
@@ -78,7 +79,7 @@ export class GenericReduxIDBStorage<T extends ValidEntity> {
   }
 
   public unwatch() {
-    this.unsubscribe && this.unsubscribe();
+    if (this.unsubscribe) this.unsubscribe();
   }
 
   public async putAll(values: T[]): Promise<void> {

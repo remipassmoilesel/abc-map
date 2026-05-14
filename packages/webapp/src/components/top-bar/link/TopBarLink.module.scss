@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -31,13 +31,12 @@
   &.horizontal {
     padding: 0.9rem 0.5rem 0.5rem 0.5rem;
     justify-content: center;
-
+    height: 100%;
     border-bottom: solid 0.35rem white;
+
     &.active {
       border-bottom: solid 0.35rem $primary;
     }
-
-    height: 100%;
   }
 
   &.vertical {

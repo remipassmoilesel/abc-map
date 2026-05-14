@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { ModuleRegistry } from './ModuleRegistry';
-import { ReactNode, useEffect, useState } from 'react';
+import React from 'react';
+import type { ModuleRegistry } from './ModuleRegistry';
+import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 
 export const ModuleRegistryContext = React.createContext<[ModuleRegistry, string[]] | false>(false);
 

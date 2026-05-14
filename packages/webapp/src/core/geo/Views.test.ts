@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Views } from './Views';
-import { AbcView } from '@abc-map/shared';
+import type { AbcView } from '@abc-map/shared';
 import View from 'ol/View';
 import { deepFreeze } from '../utils/deepFreeze';
+import { describe, expect, it } from 'vitest';
 
 describe('Views', () => {
   it('defaultView()', () => {

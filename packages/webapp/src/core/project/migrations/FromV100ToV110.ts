@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcView, Logger } from '@abc-map/shared';
-import { MigrationProject, ProjectMigration } from './typings';
+import type { AbcFile, AbcView } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
+import type { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcProjectManifest100 } from './dependencies/100-project-types';
-import { AbcProjectManifest110 } from './dependencies/110-project-types';
+import type { AbcProjectManifest100 } from './dependencies/100-project-types';
+import type { AbcProjectManifest110 } from './dependencies/110-project-types';
 
 const NEXT = '1.1.0';
 

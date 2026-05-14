@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,14 +18,13 @@
 
 import Cls from './FormOfflineIndicator.module.scss';
 import { useOnlineStatus } from '../../core/pwa/OnlineStatusContext';
-import { prefixedTranslation } from '../../i18n/i18n';
 import OfflineIcon from './offline.svg';
 import clsx from 'clsx';
-
-const t = prefixedTranslation('FormOfflineIndicator:');
+import { useTranslation } from 'react-i18next';
 
 export function FormOfflineIndicator() {
   const online = useOnlineStatus();
+  const { t } = useTranslation('FormOfflineIndicator');
 
   // User is online, nothing to show
   if (online) {

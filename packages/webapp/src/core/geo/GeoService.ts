@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,30 +16,35 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer, BasicAuthentication, EPSG_4326, FeatureStyle, LayerType, Logger, normalizedProjectionName, ProjectionDto } from '@abc-map/shared';
-import { MapWrapper } from './map/MapWrapper';
+import type { AbcLayer, BasicAuthentication, FeatureStyle, ProjectionDto } from '@abc-map/shared';
+import { EPSG_4326, LayerType, Logger, normalizedProjectionName } from '@abc-map/shared';
+import type { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
-import { mainStore, MainStore } from '../store/store';
-import { AxiosInstance } from 'axios';
+import type { MainStore } from '../../store/store';
+import { mainStore } from '../../store/store';
+import type { AxiosInstance } from 'axios';
 import { GeoJSON } from 'ol/format';
-import { parseWmsCapabilities, WmsCapabilities } from './WmsCapabilities';
-import { UpdateStyleChangeset, UpdateStyleItem } from '../history/changesets/features/UpdateStyleChangeset';
+import type { WmsCapabilities } from './WmsCapabilities';
+import { parseWmsCapabilities } from './WmsCapabilities';
+import type { UpdateStyleItem } from '../history/changesets/features/UpdateStyleChangeset';
+import { UpdateStyleChangeset } from '../history/changesets/features/UpdateStyleChangeset';
 import { HistoryKey } from '../history/HistoryKey';
-import { HistoryService } from '../history/HistoryService';
-import { NominatimResult } from './NominatimResult';
-import { FeatureWrapper } from './features/FeatureWrapper';
-import { ToastService } from '../ui/ToastService';
+import type { HistoryService } from '../history/HistoryService';
+import type { NominatimResult } from './NominatimResult';
+import type { FeatureWrapper } from './features/FeatureWrapper';
+import type { ToastService } from '../ui/ToastService';
 import { LayerFactory } from './layers/LayerFactory';
-import { Coordinate } from 'ol/coordinate';
-import { parseWmtsCapabilities, WmtsCapabilities } from './WmtsCapabilities';
+import type { Coordinate } from 'ol/coordinate';
+import type { WmtsCapabilities } from './WmtsCapabilities';
+import { parseWmtsCapabilities } from './WmtsCapabilities';
 import { register } from 'ol/proj/proj4';
 import { get as getProjection, transformExtent } from 'ol/proj';
 import proj4 from 'proj4';
-import { Extent } from 'ol/extent';
+import type { Extent } from 'ol/extent';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
-import { LayerWrapper } from './layers/LayerWrapper';
+import type { LayerWrapper } from './layers/LayerWrapper';
 import VectorSource from 'ol/source/Vector';
-import { WmtsSettings, WmtsSourceOptions } from './layers/LayerFactory.types';
+import type { WmtsSettings, WmtsSourceOptions } from './layers/LayerFactory.types';
 import { ProjectionRoutes } from '../http/ApiRoutes';
 import { ApiClient, ExternalClient } from '../http/http-clients';
 
@@ -66,7 +71,7 @@ export class GeoService {
     private history: HistoryService,
     private store: MainStore,
     private wmsCapabilitiesParser = parseWmsCapabilities,
-    private wmtsCapabilitiesParser = parseWmtsCapabilities
+    private wmtsCapabilitiesParser = parseWmtsCapabilities,
   ) {}
 
   /**
@@ -83,7 +88,7 @@ export class GeoService {
     return new Promise<Coordinate>((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         (pos) => resolve([pos.coords.longitude, pos.coords.latitude]),
-        (err) => reject(err)
+        (err) => reject(err),
       );
     });
   }
@@ -314,6 +319,7 @@ export class GeoService {
     // We register it
     proj4.defs(_code, proj4Def);
     proj4.defs(code, proj4Def);
+
     register(proj4);
 
     // We set extent for reprojection

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DragPan, DragRotate, Interaction, MouseWheelZoom, PinchRotate, PinchZoom } from 'ol/interaction';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
-import Map from 'ol/Map';
+import type { Interaction } from 'ol/interaction';
+import { DragPan, DragRotate, MouseWheelZoom, PinchRotate, PinchZoom } from 'ol/interaction';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
+import type Map from 'ol/Map';
 import { altKeyOnly } from 'ol/events/condition';
 
 export interface Options {
-  condition?: (ev: MapBrowserEvent<UIEvent>) => boolean;
+  condition?: (ev: MapBrowserEvent) => boolean;
 }
 
 /**

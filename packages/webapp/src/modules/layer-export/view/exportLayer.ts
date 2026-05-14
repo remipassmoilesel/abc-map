@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { Format } from './Format';
-import { AbcFile, AbcProjection } from '@abc-map/shared';
+import type { AbcFile, AbcProjection } from '@abc-map/shared';
 import { GeoJSON, GPX, KML, WKT } from 'ol/format';
 
 /**

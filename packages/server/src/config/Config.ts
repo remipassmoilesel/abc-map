@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Algorithm } from 'jsonwebtoken';
+import type { Algorithm } from 'jsonwebtoken';
+import type { StringValue } from 'ms';
 
 export const LOCAL_ENVIRONMENT = 'local';
-export const TEST_ENVIRONMENT = 'test';
+export const CI_ENVIRONMENT = 'continuous-integration';
 export const STAGING_ENVIRONMENT = 'staging';
 
 export interface ConfigInput {
@@ -94,14 +95,14 @@ export interface JwtConfig {
 
 export interface AuthenticationConfig {
   secret: string;
-  tokenExpiresIn: string;
-  passwordLostExpiresIn: string;
+  tokenExpiresIn: StringValue;
+  passwordLostExpiresIn: StringValue;
 }
 
 export interface RegistrationConfig {
   passwordSalt: string;
   secret: string;
-  confirmationExpiresIn: string;
+  confirmationExpiresIn: StringValue;
 }
 
 export interface SmtpConfig {

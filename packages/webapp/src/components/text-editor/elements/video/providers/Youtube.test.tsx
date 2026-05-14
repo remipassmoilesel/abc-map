@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 import { Youtube } from './Youtube';
 import { render } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('Youtube', () => {
   let provider: Youtube;

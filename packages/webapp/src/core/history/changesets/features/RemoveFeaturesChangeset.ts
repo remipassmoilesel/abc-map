@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,14 @@
  */
 
 import { Changeset } from '../../Changeset';
-import VectorSource from 'ol/source/Vector';
-import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import Geometry from 'ol/geom/Geometry';
+import type { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
+import type { DefaultVectorSource } from '../../../geo/layers/LayerWrapper';
 
 export class RemoveFeaturesChangeset extends Changeset {
-  constructor(private source: VectorSource<Geometry>, private features: FeatureWrapper[]) {
+  constructor(
+    private source: DefaultVectorSource,
+    private features: FeatureWrapper[],
+  ) {
     super();
   }
 

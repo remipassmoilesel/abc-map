@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import { ckmeans, equalIntervalBreaks, quantileSorted } from 'simple-statistics';
 import { toPrecision } from '../utils/numbers';
 import { ClassificationAlgorithm } from './Algorithm';
-import { Class } from './Class';
+import type { Class } from './Class';
 
 export class Stats {
   public static proportionality(value: number, x: number, y: number, max: number): number {

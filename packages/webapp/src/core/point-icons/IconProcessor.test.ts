@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,9 @@
  */
 
 import { IconProcessor, mountSvg } from './IconProcessor';
-import { IconCategory, IconName, PointIcon } from '@abc-map/point-icons';
+import type { IconName, PointIcon } from '@abc-map/point-icons';
+import { IconCategory } from '@abc-map/point-icons';
+import { describe, expect, it } from 'vitest';
 
 describe('IconProcessor', () => {
   const fakeIcon: PointIcon = {
@@ -37,7 +39,7 @@ describe('IconProcessor', () => {
     expect(svg.getAttribute('height')).toEqual('500');
 
     const rect = svg.querySelector('rect') as SVGElement;
-    expect(rect.getAttribute('style')).toEqual('fill: #FF0000; stroke: none; stroke-width: 0.200643; stroke-linejoin: round;');
+    expect(rect.getAttribute('style')).toEqual('fill: rgb(255, 0, 0); stroke: none; stroke-width: 0.200643; stroke-linejoin: round;');
   });
 
   it('prepare() with sample svg and static colors', () => {

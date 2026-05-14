@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,24 +16,31 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller } from '../server/Controller';
-import { Services } from '../services/services';
-import { AbcUser, ProjectConstants, ProjectSaveResponse, ProjectSaveStatus } from '@abc-map/shared';
-import { Authentication } from '../authentication/Authentication';
-import { AuthorizationService } from '../authorization/AuthorizationService';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import fastifyMultipart, { MultipartValue } from '@fastify/multipart';
-import { ByIdParams, ByIdSchema, ListSchema } from './ProjectController.schemas';
-import { Validation } from '../utils/Validation';
-import { PaginatedQuery, PaginationHelper } from '../server/helpers/PaginationHelper';
-import { Config } from '../config/Config';
-import { CompressedProjectStream } from '@abc-map/shared';
+import { Controller } from '../server/Controller.js';
+import type { Services } from '../services/services.js';
+import type { AbcUser, ProjectSaveResponse } from '@abc-map/shared';
+import { ProjectConstants, ProjectSaveStatus } from '@abc-map/shared';
+import { Authentication } from '../authentication/Authentication.js';
+import type { AuthorizationService } from '../authorization/AuthorizationService.js';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { MultipartValue } from '@fastify/multipart';
+import fastifyMultipart from '@fastify/multipart';
+import type { ByIdParams } from './ProjectController.schemas.js';
+import { ByIdSchema, ListSchema } from './ProjectController.schemas.js';
+import { Validation } from '../utils/Validation.js';
+import type { PaginatedQuery } from '../server/helpers/PaginationHelper.js';
+import { PaginationHelper } from '../server/helpers/PaginationHelper.js';
+import type { Config } from '../config/Config.js';
+import type { CompressedProjectStream } from '@abc-map/shared';
 import '@fastify/sensible';
 
 export class ProjectController extends Controller {
   private authz: AuthorizationService;
 
-  constructor(private config: Config, private services: Services) {
+  constructor(
+    private config: Config,
+    private services: Services,
+  ) {
     super();
     this.authz = this.services.authorization;
   }
@@ -66,37 +73,37 @@ export class ProjectController extends Controller {
 
     const user = Authentication.from(req);
     if (!user) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     const data = await req.file();
     if (!data) {
-      reply.badRequest(`Invalid request`);
+      void reply.badRequest(`Invalid request`);
       return;
     }
 
     // Fastify multipart truncates data, so if we reached max project may be broken
     if (data.file.readableLength === ProjectConstants.MaxSizeBytes) {
-      reply.payloadTooLarge('Max size allowed (bytes): ' + ProjectConstants.MaxSizeBytes);
+      void reply.payloadTooLarge('Max size allowed (bytes): ' + ProjectConstants.MaxSizeBytes);
       return;
     }
 
     const metadataField = data.fields['metadata'] as unknown as MultipartValue<string>;
     if (!metadataField.value) {
-      reply.badRequest(`Invalid request`);
+      void reply.badRequest(`Invalid request`);
       return;
     }
 
     const metadata: unknown = JSON.parse(metadataField.value);
     if (!Validation.ProjectMetadata(metadata)) {
-      reply.badRequest(`Invalid project metadata: ${Validation.formatErrors(Validation.ProjectMetadata)}`);
+      void reply.badRequest(`Invalid project metadata: ${Validation.formatErrors(Validation.ProjectMetadata)}`);
       return;
     }
 
     const [canWrite, isNewProject] = await this.authz.canWriteProject(req, metadata.id);
     if (!canWrite) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
@@ -125,7 +132,7 @@ export class ProjectController extends Controller {
     const { limit, offset } = PaginationHelper.fromQuery(req);
 
     if (!(await this.authz.canListProjects(req))) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
@@ -141,13 +148,13 @@ export class ProjectController extends Controller {
 
     const projectId = req.params.projectId;
     if (!(await this.authz.canReadProject(req, projectId))) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     const result = await project.findStreamById(projectId);
     if (!result) {
-      reply.notFound();
+      void reply.notFound();
       return;
     }
 
@@ -164,13 +171,13 @@ export class ProjectController extends Controller {
 
     const projectId = req.params.projectId;
     if (!(await this.authz.canReadSharedProject(req, projectId))) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     const result = await project.findStreamById(projectId);
     if (!result) {
-      reply.notFound();
+      void reply.notFound();
       return;
     }
 
@@ -185,7 +192,7 @@ export class ProjectController extends Controller {
   private deleteById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
     const projectId = req.params.projectId;
     if (!(await this.authz.canDeleteProject(req, projectId))) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
@@ -195,7 +202,7 @@ export class ProjectController extends Controller {
 
   private getQuotas = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
     if (!this.authz.canGetQuotas(req)) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 

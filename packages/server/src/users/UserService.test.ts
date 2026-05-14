@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,19 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { UserService } from './UserService';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { TestHelper } from '../utils/TestHelper';
-import { assert } from 'chai';
-import * as uuid from 'uuid-random';
+import { UserService } from './UserService.js';
+import { MongodbClient } from '../mongodb/MongodbClient.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { TestHelper } from '../utils/TestHelper.js';
+import uuid from 'uuid-random';
 import { AnonymousUser } from '@abc-map/shared';
+import { afterAll, beforeAll, describe, it, assert } from 'vitest';
 
 describe('UserService', () => {
   let service: UserService;
   let client: MongodbClient;
 
-  before(async () => {
+  beforeAll(async () => {
     const config = await ConfigLoader.load();
     client = await MongodbClient.createAndConnect(config);
 
@@ -36,7 +36,7 @@ describe('UserService', () => {
     await service.init();
   });
 
-  after(async () => {
+  afterAll(async () => {
     return client.disconnect();
   });
 

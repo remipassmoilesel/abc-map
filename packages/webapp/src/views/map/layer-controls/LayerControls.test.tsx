@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,10 +19,12 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { LayerControls } from './LayerControls';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import type { TestServices } from '../../../core/utils/test/TestServices';
+import { newTestServices } from '../../../core/utils/test/TestServices';
 import { abcRender } from '../../../core/utils/test/abcRender';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('LayerControls', () => {
   let map: MapWrapper;

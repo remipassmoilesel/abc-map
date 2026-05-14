@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,9 +17,8 @@
  */
 
 import React, { useCallback, useState } from 'react';
-import { withTranslation } from 'react-i18next';
-import Cls from './ColorPicker.module.scss';
-import ColorPickerModal from './ColorPickerModal';
+import Cls from './ColorPickerButton.module.scss';
+import { ColorPickerModal } from './ColorPickerModal';
 import clsx from 'clsx';
 
 interface Props {
@@ -30,13 +29,15 @@ interface Props {
   className?: string;
 }
 
-function ColorPickerButton(props: Props) {
+export function ColorPickerButton(props: Props) {
   const { value, onClose, onOpen, className, 'data-cy': dataCy } = props;
   const [modalVisible, displayModal] = useState(false);
 
   const handleOpen = useCallback(() => {
     displayModal(true);
-    onOpen && onOpen();
+    if (onOpen) {
+      onOpen();
+    }
   }, [onOpen]);
 
   const handleClose = useCallback(
@@ -44,7 +45,7 @@ function ColorPickerButton(props: Props) {
       displayModal(false);
       onClose(color);
     },
-    [onClose]
+    [onClose],
   );
 
   return (
@@ -57,5 +58,3 @@ function ColorPickerButton(props: Props) {
     </>
   );
 }
-
-export default withTranslation()(ColorPickerButton);

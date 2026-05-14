@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { MongodbClient } from './MongodbClient';
-import { ConfigLoader } from '../config/ConfigLoader';
+import type { Config } from '../config/Config.js';
+import { MongodbClient } from './MongodbClient.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { beforeAll, describe, it } from 'vitest';
 
 describe('MongodbClient', () => {
   let config: Config;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
   });
 

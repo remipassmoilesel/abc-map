@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as Bowser from 'bowser';
-
-const platform = Bowser.getParser(window.navigator.userAgent).getPlatform();
+import Bowser from 'bowser';
 
 export function isDesktopDevice(): boolean {
+  const platform = Bowser.getParser(window.navigator.userAgent).getPlatform();
   return platform.type === 'desktop';
 }

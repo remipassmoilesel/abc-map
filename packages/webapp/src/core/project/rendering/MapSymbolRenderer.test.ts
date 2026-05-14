@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,14 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { MapSymbolRenderer } from './MapSymbolRenderer';
-import sinon, { SinonStub, SinonStubbedInstance } from 'sinon';
+import type { SinonStub, SinonStubbedInstance } from 'sinon';
+import sinon from 'sinon';
 import CanvasImmediateRenderer from 'ol/render/canvas/Immediate';
 import { CanvasRenderingContext2D } from 'canvas';
-import { Point } from 'ol/geom';
+import type { Point } from 'ol/geom';
 import { Icon } from 'ol/style';
 import ImageState from 'ol/ImageState';
 import { AbcGeometryType } from '@abc-map/shared';
 import Style from 'ol/style/Style';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('MapSymbolRenderer', function () {
   let toContext: SinonStub;
@@ -45,7 +47,7 @@ describe('MapSymbolRenderer', function () {
   describe('renderSymbol()', () => {
     it('Point, image not loaded', async () => {
       // Prepare
-      const style = new Style({ image: new Icon({ img: new Image(20, 20), imgSize: [20, 20] }) });
+      const style = new Style({ image: new Icon({ img: new Image(20, 20) }) });
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADING);
@@ -72,7 +74,7 @@ describe('MapSymbolRenderer', function () {
 
     it('Point, image loaded', async () => {
       // Prepare
-      const style = new Style({ image: new Icon({ img: new Image(20, 20), imgSize: [20, 20] }) });
+      const style = new Style({ image: new Icon({ img: new Image(20, 20) }) });
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADED);

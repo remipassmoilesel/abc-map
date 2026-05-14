@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FromV090ToV100 migrate should work 1`] = `
-Object {
-  "layers": Array [
-    Object {
-      "metadata": Object {
+exports[`FromV090ToV100 > migrate should work 1`] = `
+{
+  "layers": [
+    {
+      "metadata": {
         "active": true,
-        "attributions": Array [
+        "attributions": [
           "© OpenTopoMap.org 2022 CC-BY-SA",
         ],
         "id": "72467822-2446-488a-ba28-139929db84d7",
@@ -19,9 +19,9 @@ Object {
       "type": "Xyz",
     },
   ],
-  "layouts": Array [
-    Object {
-      "format": Object {
+  "layouts": [
+    {
+      "format": {
         "height": 210,
         "id": "A4_LANDSCAPE",
         "orientation": "landscape",
@@ -29,45 +29,45 @@ Object {
       },
       "id": "937086d1-ff77-4a01-972a-0aaebd32d305",
       "name": "Page 1",
-      "textFrames": Array [
-        Object {
-          "content": Array [
-            Object {
-              "children": Array [
-                Object {
+      "textFrames": [
+        {
+          "content": [
+            {
+              "children": [
+                {
                   "text": "This is a brand new text frame !",
                 },
               ],
               "level": 3,
               "type": "title",
             },
-            Object {
-              "children": Array [
-                Object {
+            {
+              "children": [
+                {
                   "text": "You can edit it in full screen editor 😎",
                 },
               ],
               "type": "paragraph",
             },
-            Object {
-              "children": Array [
-                Object {
+            {
+              "children": [
+                {
                   "text": "Or you can edit it in place.",
                 },
               ],
               "type": "paragraph",
             },
-            Object {
-              "children": Array [
-                Object {
+            {
+              "children": [
+                {
                   "text": "You can move and resize it ✨",
                 },
               ],
               "type": "paragraph",
             },
-            Object {
-              "children": Array [
-                Object {
+            {
+              "children": [
+                {
                   "text": "And you can include images and videos 🎬 !",
                 },
               ],
@@ -75,70 +75,70 @@ Object {
             },
           ],
           "id": "Bbo-G4223D7MWB2qyl48V",
-          "position": Object {
+          "position": {
             "x": 30,
             "y": 30,
           },
-          "size": Object {
+          "size": {
             "height": 450,
             "width": 1100,
           },
-          "style": Object {
+          "style": {
             "background": "#FFFFFF",
             "withBorders": true,
             "withShadows": true,
           },
         },
       ],
-      "view": Object {
-        "center": Array [
+      "view": {
+        "center": [
           20559.458412894,
           5984262.955072035,
         ],
-        "projection": Object {
+        "projection": {
           "name": "EPSG:3857",
         },
         "resolution": 737,
       },
     },
   ],
-  "metadata": Object {
+  "metadata": {
     "containsCredentials": false,
     "id": "a1dcc00d-9668-4980-927a-728aa45a5545",
     "name": "Project of 30/03/2022",
     "public": true,
     "version": "1.0.0",
   },
-  "sharedViews": Object {
+  "sharedViews": {
     "fullscreen": false,
-    "list": Array [
-      Object {
+    "list": [
+      {
         "id": "S3uX1OvhDxeL_PTOnzy29",
-        "layers": Array [
-          Object {
+        "layers": [
+          {
             "layerId": "72467822-2446-488a-ba28-139929db84d7",
             "visible": true,
           },
         ],
-        "scale": Object {
+        "scale": {
           "x": 4.5,
           "y": 2.11,
         },
-        "textFrames": Array [
-          Object {
-            "content": Array [
-              Object {
-                "children": Array [
-                  Object {
+        "textFrames": [
+          {
+            "content": [
+              {
+                "children": [
+                  {
                     "text": "Voici une carte partagée 🪄",
                   },
                 ],
                 "level": 1,
                 "type": "title",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "",
                   },
@@ -146,15 +146,15 @@ Object {
                 "level": 1,
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "Créée avec ",
                   },
-                  Object {
-                    "children": Array [
-                      Object {
+                  {
+                    "children": [
+                      {
                         "size": 4,
                         "text": "Abc-Map !",
                       },
@@ -162,16 +162,16 @@ Object {
                     "type": "link",
                     "url": "https://abc-map.fr",
                   },
-                  Object {
+                  {
                     "text": "",
                   },
                 ],
                 "level": 1,
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "",
                   },
@@ -179,9 +179,9 @@ Object {
                 "level": 1,
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "Vous pouvez passer à la vue suivante en utilisant ",
                   },
@@ -189,9 +189,9 @@ Object {
                 "level": 1,
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "les flèches en haut de l'écran ",
                   },
@@ -199,9 +199,9 @@ Object {
                 "level": 1,
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "",
                   },
@@ -211,15 +211,15 @@ Object {
               },
             ],
             "id": "7QmQztqH1cupHBqKNW7Z2",
-            "position": Object {
+            "position": {
               "x": 0,
               "y": 74.83,
             },
-            "size": Object {
+            "size": {
               "height": 25.17,
               "width": 100,
             },
-            "style": Object {
+            "style": {
               "background": "#FFFFFF",
               "withBorders": true,
               "withShadows": true,
@@ -227,35 +227,35 @@ Object {
           },
         ],
         "title": "Main view",
-        "view": Object {
-          "center": Array [
+        "view": {
+          "center": [
             8912.065195865,
             5991300.474677441,
           ],
-          "projection": Object {
+          "projection": {
             "name": "EPSG:3857",
           },
           "resolution": 3708.299833211,
         },
       },
-      Object {
+      {
         "id": "MOTFDJ6Mwl-TYtNamAAtD",
-        "layers": Array [
-          Object {
+        "layers": [
+          {
             "layerId": "72467822-2446-488a-ba28-139929db84d7",
             "visible": true,
           },
         ],
-        "scale": Object {
+        "scale": {
           "x": 4,
           "y": 2.56,
         },
-        "textFrames": Array [
-          Object {
-            "content": Array [
-              Object {
-                "children": Array [
-                  Object {
+        "textFrames": [
+          {
+            "content": [
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "Cette carte peut être embarquée dans un site web, ou accessible de manière autonome à l'aide d'un lien 🔗",
                   },
@@ -264,88 +264,88 @@ Object {
               },
             ],
             "id": "kSXOyDn-sxwUg0O60SaeK",
-            "position": Object {
+            "position": {
               "x": 4,
               "y": 9.99,
             },
-            "size": Object {
+            "size": {
               "height": 11.6,
               "width": 78,
             },
-            "style": Object {
+            "style": {
               "background": "#FFFFFF",
               "withBorders": true,
               "withShadows": true,
             },
           },
-          Object {
-            "content": Array [
-              Object {
-                "children": Array [
-                  Object {
+          {
+            "content": [
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "Vous pouvez ajouter un ou plusieurs cadres de texte, où vous voulez, et de la taille que vous voulez.",
                   },
                 ],
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "",
                   },
                 ],
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "Titres, couleurs, tableaux: on peut déjà faire quelques trucs sympas. Mais ce n'est qu'un début !",
                   },
                 ],
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "size": 4,
                     "text": "",
                   },
                 ],
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "Population par tranches d'âges, en %",
                   },
-                  Object {
-                    "children": Array [
-                      Object {
+                  {
+                    "children": [
+                      {
                         "text": "",
                       },
                     ],
                     "type": "link",
                     "url": "https://www.insee.fr/fr/statistiques/2011101?geo=COM-50129",
                   },
-                  Object {
+                  {
                     "text": "",
                   },
                 ],
                 "level": 2,
                 "type": "title",
               },
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
@@ -354,11 +354,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "bold": true,
                                 "text": "2008  ",
                               },
@@ -368,11 +368,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "bold": true,
                                 "text": "2013  ",
                               },
@@ -382,11 +382,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "bold": true,
                                 "text": "2018  ",
                               },
@@ -399,13 +399,13 @@ Object {
                     ],
                     "type": "table-row",
                   },
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "bold": true,
                                 "text": "0 à 14 ans	",
                               },
@@ -415,11 +415,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "18,3",
                               },
                             ],
@@ -428,11 +428,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "17,0",
                               },
                             ],
@@ -441,11 +441,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "16,3",
                               },
                             ],
@@ -457,13 +457,13 @@ Object {
                     ],
                     "type": "table-row",
                   },
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "bold": true,
                                 "text": "15 à 29 ans	",
                               },
@@ -473,11 +473,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "20,2",
                               },
                             ],
@@ -486,11 +486,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "19.4",
                               },
                             ],
@@ -499,11 +499,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "18.5",
                               },
                             ],
@@ -515,13 +515,13 @@ Object {
                     ],
                     "type": "table-row",
                   },
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "bold": true,
                                 "text": "30 à 44 ans	",
                               },
@@ -531,11 +531,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "19.1",
                               },
                             ],
@@ -544,11 +544,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "17.8",
                               },
                             ],
@@ -557,11 +557,11 @@ Object {
                         ],
                         "type": "table-cell",
                       },
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "17.6",
                               },
                             ],
@@ -576,49 +576,49 @@ Object {
                 ],
                 "type": "table",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
-                  Object {
-                    "children": Array [
-                      Object {
+                  {
+                    "children": [
+                      {
                         "text": "Source Insee",
                       },
                     ],
                     "type": "link",
                     "url": "https://www.insee.fr/fr/statistiques/2011101?geo=COM-50129",
                   },
-                  Object {
+                  {
                     "text": "",
                   },
-                  Object {
-                    "children": Array [
-                      Object {
+                  {
+                    "children": [
+                      {
                         "text": "",
                       },
                     ],
                     "type": "link",
                     "url": "https://www.insee.fr/fr/statistiques/2011101?geo=COM-50129",
                   },
-                  Object {
+                  {
                     "text": "",
                   },
                 ],
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
                 "type": "paragraph",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "text": "",
                   },
                 ],
@@ -626,15 +626,15 @@ Object {
               },
             ],
             "id": "xw5_TwXfoa5_ENaHG9X1u",
-            "position": Object {
+            "position": {
               "x": 0,
               "y": 61.72,
             },
-            "size": Object {
+            "size": {
               "height": 38.28,
               "width": 100,
             },
-            "style": Object {
+            "style": {
               "background": "#FFFFFF",
               "withBorders": true,
               "withShadows": true,
@@ -642,50 +642,50 @@ Object {
           },
         ],
         "title": "View 2",
-        "view": Object {
-          "center": Array [
+        "view": {
+          "center": [
             -202784.873013322,
             6212083.888081631,
           ],
-          "projection": Object {
+          "projection": {
             "name": "EPSG:3857",
           },
           "resolution": 1156.08759485,
         },
       },
-      Object {
+      {
         "id": "nh2B0ibcoYLMhWg4MN8HG",
-        "layers": Array [
-          Object {
+        "layers": [
+          {
             "layerId": "72467822-2446-488a-ba28-139929db84d7",
             "visible": true,
           },
         ],
-        "textFrames": Array [],
+        "textFrames": [],
         "title": "View 3",
-        "view": Object {
-          "center": Array [
+        "view": {
+          "center": [
             26674.594589871,
             6112720.185948792,
           ],
-          "projection": Object {
+          "projection": {
             "name": "EPSG:3857",
           },
           "resolution": 905.418608562,
         },
       },
     ],
-    "mapDimensions": Object {
+    "mapDimensions": {
       "height": 862,
       "width": 400,
     },
   },
-  "view": Object {
-    "center": Array [
+  "view": {
+    "center": [
       20559.458412894,
       5984262.955072035,
     ],
-    "projection": Object {
+    "projection": {
       "name": "EPSG:3857",
     },
     "resolution": 921.822663104,

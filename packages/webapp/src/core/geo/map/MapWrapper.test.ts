@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -35,6 +35,7 @@ import { CommonModes } from '../../tools/common/common-modes';
 import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
 import { AttributionFormat } from '../AttributionFormat';
+import { describe, expect, it, vi } from 'vitest';
 
 logger.disable();
 
@@ -100,7 +101,7 @@ describe('MapWrapper', function () {
     it('dispose() should dispose map and size observer', () => {
       const support = document.createElement('div');
       const olMap = new Map({});
-      olMap.dispose = jest.fn();
+      olMap.dispose = vi.fn();
 
       const map = MapWrapper.from(olMap);
       map.addLayer(LayerFactory.newVectorLayer());
@@ -270,7 +271,7 @@ describe('MapWrapper', function () {
       // Prepare
       const map = MapFactory.createNaked();
 
-      const toolListener = jest.fn();
+      const toolListener = vi.fn();
       map.addToolListener(toolListener);
 
       // Act
@@ -288,7 +289,7 @@ describe('MapWrapper', function () {
       map.setActiveLayer(layer);
 
       const previous = ToolRegistry.getById(MapTool.LineString);
-      previous.dispose = jest.fn();
+      previous.dispose = vi.fn();
       map.setTool(previous);
 
       // Act
@@ -321,7 +322,7 @@ describe('MapWrapper', function () {
       map.setActiveLayer(layer);
 
       const tool = ToolRegistry.getById(MapTool.LineString);
-      tool.setup = jest.fn();
+      tool.setup = vi.fn();
 
       // Act
       map.setTool(tool);
@@ -338,7 +339,7 @@ describe('MapWrapper', function () {
       map.addLayer(layer);
       map.setActiveLayer(layer);
 
-      const toolListener = jest.fn();
+      const toolListener = vi.fn();
       map.addToolListener(toolListener);
 
       // Act
@@ -376,10 +377,10 @@ describe('MapWrapper', function () {
       map.setActiveLayer(vector);
 
       const tool = ToolRegistry.getById(MapTool.LineString);
-      tool.modeChanged = jest.fn();
+      tool.modeChanged = vi.fn();
       map.setTool(tool);
 
-      const toolListener = jest.fn();
+      const toolListener = vi.fn();
       map.addToolListener(toolListener);
 
       // Act

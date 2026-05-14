@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import { useTranslation, withTranslation } from 'react-i18next';
 import Cls from './MapSymbolPickerModal.module.scss';
 import { FaIcon } from '../../../../icon/FaIcon';
 import { IconDefs } from '../../../../icon/IconDefs';
-import { StyleCacheEntry } from '../../../../../core/geo/styles/StyleCache';
+import type { StyleCacheEntry } from '../../../../../core/geo/styles/StyleCache';
 
 interface Props {
   onSelected: (style: StyleCacheEntry) => void;

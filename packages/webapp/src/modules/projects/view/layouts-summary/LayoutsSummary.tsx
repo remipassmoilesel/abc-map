@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ import Cls from './LayoutsSummary.module.scss';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { useAppSelector } from '../../../../core/store/hooks';
+import { useAppSelector } from '../../../../store/hooks';
 
 interface Props {
   className?: string;

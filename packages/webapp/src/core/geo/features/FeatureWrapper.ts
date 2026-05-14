@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,15 +17,16 @@
  */
 
 import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import { AbcGeometryType, DefaultStyle, FeatureProperties, FeatureStyle, Logger, StyleProperties } from '@abc-map/shared';
+import type Geometry from 'ol/geom/Geometry';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, DefaultStyle, FeatureProperties, Logger, StyleProperties } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
-import { OlGeometry } from './OlGeometry';
-import { isOpenlayersFeature } from '../../utils/crossContextInstanceof';
+import type { OlGeometry } from './OlGeometry';
+import { isOpenlayersFeature } from '../../utils/instanceof.ts';
 import { GeoJSON } from 'ol/format';
-import { Projection } from 'ol/proj';
-import { GeoJSONFeature } from 'ol/format/GeoJSON';
-import { DataRow } from '../../data/data-source/DataSource';
+import type { Projection } from 'ol/proj';
+import type { GeoJSONFeature } from 'ol/format/GeoJSON';
+import type { DataRow } from '../../data/data-source/DataSource';
 import { isValidDataField } from './isValidDataField';
 import { HighlightedStyleFactory } from '../styles/HighlightedStyleFactory';
 
@@ -84,8 +85,13 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     return FeatureWrapper.from(feature as Feature<T>);
   }
 
-  public static fromGeoJSON(feature: GeoJSONFeature, dataProjection?: Projection | string): FeatureWrapper {
-    return FeatureWrapper.from(geoJson.readFeature(feature, { dataProjection }));
+  public static fromGeoJSON(feature: GeoJSONFeature, dataProjection?: Projection | string): FeatureWrapper[] {
+    const olFeats = geoJson.readFeature(feature, { dataProjection });
+    if (!Array.isArray(olFeats)) {
+      return [FeatureWrapper.from(olFeats)];
+    } else {
+      return olFeats.map((f) => FeatureWrapper.from(f));
+    }
   }
 
   constructor(private feature: Feature<Geom>) {}

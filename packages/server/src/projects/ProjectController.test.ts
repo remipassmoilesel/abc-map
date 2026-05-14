@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,18 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HttpServer } from '../server/HttpServer';
-import { Services, servicesFactory } from '../services/services';
-import { ConfigLoader } from '../config/ConfigLoader';
-import { TestHelper } from '../utils/TestHelper';
-import { assert } from 'chai';
-import { Config } from '../config/Config';
-import * as FormData from 'form-data';
-import { TestAuthentication } from '../utils/TestAuthentication';
-import { AbcProjectMetadata, AbcUser, CompressedProject, ProjectConstants } from '@abc-map/shared';
-import { IncomingHttpHeaders } from 'http';
-import * as _ from 'lodash';
+import { HttpServer } from '../server/HttpServer.js';
+import type { Services } from '../services/services.js';
+import { servicesFactory } from '../services/services.js';
+import { ConfigLoader } from '../config/ConfigLoader.js';
+import { TestHelper } from '../utils/TestHelper.js';
+import { assert } from 'vitest';
+import type { Config } from '../config/Config.js';
+import FormData from 'form-data';
+import { TestAuthentication } from '../utils/TestAuthentication.js';
+import type { AbcProjectMetadata, AbcUser, CompressedProject } from '@abc-map/shared';
+import { ProjectConstants } from '@abc-map/shared';
+import type { IncomingHttpHeaders } from 'http';
+import _ from 'lodash';
 import { range } from 'lodash';
+import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 
 describe('ProjectController', () => {
   let config: Config;
@@ -40,8 +43,9 @@ describe('ProjectController', () => {
   let project2: CompressedProject<Buffer>;
   let server: HttpServer;
 
-  before(async () => {
+  beforeAll(async () => {
     config = await ConfigLoader.load();
+
     config.server.log.requests = false;
     config.server.log.errors = false;
     config.server.log.warnings = false;
@@ -70,7 +74,7 @@ describe('ProjectController', () => {
     };
   });
 
-  after(async () => {
+  afterAll(async () => {
     await services.shutdown();
     await server.shutdown();
   });

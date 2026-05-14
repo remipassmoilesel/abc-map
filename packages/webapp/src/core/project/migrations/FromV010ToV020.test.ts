@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,9 +19,10 @@
 import { FromV010ToV020 } from './FromV010ToV020';
 import { deepFreeze } from '../../utils/deepFreeze';
 import { Views } from '../../geo/Views';
-import { MigrationProject } from './typings';
+import type { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
-import { AbcProjectManifest020 } from './dependencies/020-project-types';
+import type { AbcProjectManifest020 } from './dependencies/020-project-types';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('FromV010ToV020', () => {
   let project: MigrationProject<AbcProjectManifest020>;

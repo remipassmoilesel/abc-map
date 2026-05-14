@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Vimeo should return integration 1`] = `
+exports[`Vimeo > should return integration 1`] = `
 <div>
   <div>
     <iframe

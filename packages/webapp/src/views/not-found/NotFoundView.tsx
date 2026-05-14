@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,20 +17,22 @@
  */
 
 import Cls from './NotFoundView.module.scss';
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
 import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
 import { Routes } from '../../routes';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('NotFoundView.tsx');
 
 type Props = WithTranslation;
 
-class NotFoundView extends Component<Props, {}> {
+class NotFoundView extends Component<Props, unknown> {
   public render(): ReactNode {
-    const { t } = this.props;
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'NotFoundView');
 
     return (
       <div className={Cls.notFoundView}>
@@ -52,4 +54,4 @@ class NotFoundView extends Component<Props, {}> {
   }
 }
 
-export default withTranslation('NotFoundView')(NotFoundView);
+export default withTranslation()(NotFoundView);

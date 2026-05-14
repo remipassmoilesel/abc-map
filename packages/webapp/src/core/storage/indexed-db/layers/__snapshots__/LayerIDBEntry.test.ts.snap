@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`LayerIDBEntry should not change without migration 1`] = `
-Object {
-  "layer": Object {
-    "metadata": Object {
+exports[`LayerIDBEntry > should not change without migration 1`] = `
+{
+  "layer": {
+    "metadata": {
       "active": false,
       "id": "test-layer-1",
       "model": "OSM",
@@ -18,16 +18,16 @@ Object {
 }
 `;
 
-exports[`LayerIDBEntry should not change without migration 2`] = `
-Object {
-  "layer": Object {
-    "metadata": Object {
+exports[`LayerIDBEntry > should not change without migration 2`] = `
+{
+  "layer": {
+    "metadata": {
       "active": true,
-      "auth": Object {
+      "auth": {
         "password": "test-password",
         "username": "test-username",
       },
-      "extent": Array [
+      "extent": [
         1,
         2,
         3,
@@ -36,11 +36,11 @@ Object {
       "id": "test-layer-1",
       "name": "Couche WMS",
       "opacity": 1,
-      "projection": Object {
+      "projection": {
         "name": "EPSG:4326",
       },
       "remoteLayerName": "test-layer-name",
-      "remoteUrls": Array [
+      "remoteUrls": [
         "http://domain.fr/wms",
       ],
       "type": "Wms",
@@ -52,12 +52,12 @@ Object {
 }
 `;
 
-exports[`LayerIDBEntry should not change without migration 3`] = `
-Object {
-  "layer": Object {
-    "metadata": Object {
+exports[`LayerIDBEntry > should not change without migration 3`] = `
+{
+  "layer": {
+    "metadata": {
       "active": true,
-      "auth": Object {
+      "auth": {
         "password": "test-password",
         "username": "test-username",
       },
@@ -66,9 +66,9 @@ Object {
       "name": "Couche WMTS",
       "opacity": 1,
       "remoteLayerName": "GEOGRAPHICALGRIDSYSTEMS.MAPS",
-      "sourceOptions": Object {
+      "sourceOptions": {
         "crossOrigin": undefined,
-        "dimensions": Object {},
+        "dimensions": {},
         "format": "image/jpeg",
         "layer": "GEOGRAPHICALGRIDSYSTEMS.MAPS",
         "matrixSet": "PM",
@@ -77,7 +77,7 @@ Object {
           "canWrapX_": true,
           "code_": "EPSG:3857",
           "defaultTileGrid_": null,
-          "extent_": Array [
+          "extent_": [
             -20037508.342789244,
             -20037508.342789244,
             20037508.342789244,
@@ -87,7 +87,7 @@ Object {
           "global_": true,
           "metersPerUnit_": undefined,
           "units_": "m",
-          "worldExtent_": Array [
+          "worldExtent_": [
             -180,
             -85,
             180,
@@ -97,13 +97,13 @@ Object {
         "requestEncoding": "KVP",
         "style": "normal",
         "tileGrid": WMTSTileGrid {
-          "extent_": Array [
+          "extent_": [
             -7034346.839028204,
             -2443080.2980507985,
             6216929.25854652,
             6652314.571658893,
           ],
-          "fullTileRanges_": Array [
+          "fullTileRanges_": [
             TileRange {
               "maxX": 0,
               "maxY": 0,
@@ -219,7 +219,7 @@ Object {
               "minY": 87557,
             },
           ],
-          "matrixIds_": Array [
+          "matrixIds_": [
             "0",
             "1",
             "2",
@@ -243,85 +243,85 @@ Object {
           "maxZoom": 18,
           "minZoom": 0,
           "origin_": null,
-          "origins_": Array [
-            Array [
+          "origins_": [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
-            Array [
+            [
               -20037508.342789248,
               20037508.342789248,
             ],
           ],
-          "resolutions_": Array [
+          "resolutions_": [
             156543.033928041,
             78271.51696402048,
             39135.758482010235,
@@ -343,7 +343,7 @@ Object {
             0.5971642834779395,
           ],
           "tileSize_": null,
-          "tileSizes_": Array [
+          "tileSizes_": [
             256,
             256,
             256,
@@ -364,19 +364,19 @@ Object {
             256,
             256,
           ],
-          "tmpExtent_": Array [
+          "tmpExtent_": [
             0,
             0,
             0,
             0,
           ],
-          "tmpSize_": Array [
+          "tmpSize_": [
             256,
             256,
           ],
           "zoomFactor_": undefined,
         },
-        "urls": Array [
+        "urls": [
           "https://wxs.ign.fr/0666d69045a3e461-lol/geoportail/wmts?",
         ],
         "wrapX": false,
@@ -390,15 +390,15 @@ Object {
 }
 `;
 
-exports[`LayerIDBEntry should not change without migration 4`] = `
-Object {
-  "layer": Object {
-    "metadata": Object {
+exports[`LayerIDBEntry > should not change without migration 4`] = `
+{
+  "layer": {
+    "metadata": {
       "active": true,
       "id": "test-layer-1",
       "name": "Couche XYZ",
       "opacity": 1,
-      "projection": Object {
+      "projection": {
         "name": "EPSG:4326",
       },
       "remoteUrl": "http://domain.fr/xyz/{x}/{y}/{z}",
@@ -411,27 +411,27 @@ Object {
 }
 `;
 
-exports[`LayerIDBEntry should not change without migration 5`] = `
-Object {
-  "layer": Object {
-    "features": Object {
-      "features": Array [
-        Object {
-          "bbox": Array [
+exports[`LayerIDBEntry > should not change without migration 5`] = `
+{
+  "layer": {
+    "features": {
+      "features": [
+        {
+          "bbox": [
             1,
             2,
             3,
             4,
           ],
-          "geometry": Object {
-            "coordinates": Array [
+          "geometry": {
+            "coordinates": [
               1,
               5,
             ],
             "type": "Point",
           },
           "id": "test-feature-0",
-          "properties": Object {
+          "properties": {
             "val": "var",
           },
           "type": "Feature",
@@ -439,7 +439,7 @@ Object {
       ],
       "type": "FeatureCollection",
     },
-    "metadata": Object {
+    "metadata": {
       "active": true,
       "id": "test-layer-1",
       "name": "Vecteurs",

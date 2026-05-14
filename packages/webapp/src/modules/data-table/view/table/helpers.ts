@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DataRow } from '../../../../core/data/data-source/DataSource';
+import type { DataRow } from '../../../../core/data/data-source/DataSource';
 import { asNumberOrString } from '../../../../core/utils/numbers';
 import { getRemSize } from '../../../../core/ui/getRemSize';
 import { getTextWidth } from '../../../../core/ui/getTextWidth';

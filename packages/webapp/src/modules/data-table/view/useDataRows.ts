@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,10 +21,10 @@
 
 import { useEffect, useState } from 'react';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
-import { VectorSourceEvent } from 'ol/source/Vector';
+import type { VectorSourceEvent } from 'ol/source/Vector';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
-import { DataRow } from '../../../core/data/data-source/DataSource';
-import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import type { DataRow } from '../../../core/data/data-source/DataSource';
+import type { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('useDataRows.ts');

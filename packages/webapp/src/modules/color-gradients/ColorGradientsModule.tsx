@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,38 +18,38 @@
 
 import React from 'react';
 import ColorGradientsView from './view/ColorGradientsView';
-import { newParameters, Parameters } from './typings/Parameters';
-import { Logger } from '@abc-map/shared';
+import type { Parameters } from './typings/Parameters';
+import { newParameters } from './typings/Parameters';
+import { ModuleId, Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../core/geo/features/FeatureWrapper';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
+import type Feature from 'ol/Feature';
+import type Geometry from 'ol/geom/Geometry';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
-import { GradientAlgorithm, ScaleAlgorithm } from '../../core/modules/Algorithm';
-import { Services } from '../../core/Services';
-import { GradientClass } from './typings/GradientClass';
-import * as chroma from 'chroma-js';
+import type { GradientAlgorithm } from '../../core/modules/Algorithm';
+import { ScaleAlgorithm } from '../../core/modules/Algorithm';
+import type { Services } from '../../core/Services';
+import type { GradientClass } from './typings/GradientClass';
+import chroma from 'chroma-js';
 import { asValidNumber, toPrecision } from '../../core/utils/numbers';
-import { ProcessingResult, Status } from './typings/ProcessingResult';
+import type { ProcessingResult } from './typings/ProcessingResult';
+import { Status } from './typings/ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../core/history/changesets/layers/AddLayersChangeset';
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { BundledModuleId } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
+import type { AbcModule } from '../AbcModule.ts';
 
-const t = prefixedTranslation('ColorGradientsModule:');
+const t = prefixedTranslation('ColorGradientsModule');
 
 export const logger = Logger.get('ColorGradients.tsx');
 
-export class ColorGradientsModule extends ModuleAdapter {
+export class ColorGradientsModule implements AbcModule {
   private params = newParameters();
 
-  constructor(private services: Services) {
-    super();
-  }
+  constructor(private services: Services) {}
 
-  public getId(): ModuleId {
-    return BundledModuleId.ColorGradients;
+  public getId() {
+    return ModuleId.ColorGradients;
   }
 
   public getReadableName(): string {
@@ -61,7 +61,7 @@ export class ColorGradientsModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <ColorGradientsView initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
+    return () => <ColorGradientsView initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
   }
 
   public async process(params: Parameters): Promise<ProcessingResult> {
@@ -188,7 +188,7 @@ export class ColorGradientsModule extends ModuleAdapter {
     valueMax: number,
     startColor: string,
     endColor: string,
-    classes: GradientClass[]
+    classes: GradientClass[],
   ): string {
     if (ScaleAlgorithm.Interpolated === algorithm) {
       const colorFunc = chroma.scale([startColor, endColor]).domain([valueMin, valueMax]);

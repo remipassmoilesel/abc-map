@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import { FromV070ToV080 } from './FromV070ToV080';
 import { FromV080ToV090 } from './FromV080ToV090';
 import { FromV090ToV100 } from './FromV090ToV100';
 import { FromV100ToV110 } from './FromV100ToV110';
-import { ModalService } from '../../ui/ModalService';
+import type { ModalService } from '../../ui/ModalService';
 import { FromV110ToV120 } from './FromV110ToV120';
 import { FromV120ToV130 } from './FromV120ToV130';
 import { FromV130ToV140 } from './FromV130ToV140';

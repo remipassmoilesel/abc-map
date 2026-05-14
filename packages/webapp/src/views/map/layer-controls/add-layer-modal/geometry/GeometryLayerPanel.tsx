@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,26 +16,28 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import ControlButtons from '../_common/ControlButtons';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
+import type { ServiceProps } from '../../../../../core/withServices';
+import { withServices } from '../../../../../core/withServices';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import type { WithTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('GeometryLayerPanel.tsx');
 
-interface Props extends ServiceProps {
+interface Props extends ServiceProps, WithTranslation {
   onCancel: () => void;
   onConfirm: () => void;
 }
 
-const t = prefixedTranslation('MapView:');
-
-class GeometryLayerPanel extends Component<Props, {}> {
+class GeometryLayerPanel extends Component<Props, unknown> {
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const onCancel = this.props.onCancel;
 
     return (
@@ -65,4 +67,4 @@ class GeometryLayerPanel extends Component<Props, {}> {
   };
 }
 
-export default withServices(GeometryLayerPanel);
+export default withTranslation()(withServices(GeometryLayerPanel));

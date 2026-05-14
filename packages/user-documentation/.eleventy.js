@@ -1,8 +1,8 @@
-const { execSync } = require('child_process');
-const markdownIt = require('markdown-it');
-const anchor = require('markdown-it-anchor');
-const pluginTOC = require('eleventy-plugin-nesting-toc');
-const slugify = require('slugify');
+import { execSync } from 'child_process';
+import markdownIt from 'markdown-it';
+import anchor from 'markdown-it-anchor';
+import pluginTOC from 'eleventy-plugin-nesting-toc';
+import slugify from 'slugify';
 
 console.log(`
 
@@ -14,7 +14,7 @@ You can visit documentation on:
  
 `);
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
   // See: https://github.com/markdown-it/markdown-it
   const markdownItOptions = {
     html: true,
@@ -48,7 +48,7 @@ module.exports = function (eleventyConfig) {
   // When watching, after each build we copy results to server
   eleventyConfig.on('eleventy.after', async ({ dir, results, runMode, outputMode }) => {
     if (['watch', 'serve'].includes(runMode)) {
-      execSync('./node_modules/.bin/ts-node ./scripts/package.ts', { shell: true, stdio: 'inherit' });
+      execSync('./node_modules/.bin/tsx ./scripts/package.ts', { shell: true, stdio: 'inherit' });
     }
   });
 
@@ -71,4 +71,4 @@ module.exports = function (eleventyConfig) {
       includes: 'layouts',
     },
   };
-};
+}

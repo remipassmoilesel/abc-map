@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,15 +18,14 @@
 
 import { useServices } from '../useServices';
 import { ProjectStatus } from './ProjectStatus';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { resolveInAtLeast } from '../utils/resolveInAtLeast';
-import { useAppDispatch } from '../store/hooks';
-import { ProjectActions } from '../store/project/actions';
+import { useAppDispatch } from '../../store/hooks';
+import { ProjectActions } from '../../store/project/actions';
 import { DateTime } from 'luxon';
-
-const t = prefixedTranslation('useSaveProjectOnline:');
+import { useTranslation } from 'react-i18next';
 
 export function useSaveProjectOnline(): () => Promise<ProjectStatus> {
+  const { t } = useTranslation('useSaveProjectOnline');
   const { project, toasts } = useServices();
   const dispatch = useAppDispatch();
 
@@ -56,6 +55,6 @@ export function useSaveProjectOnline(): () => Promise<ProjectStatus> {
         toasts.genericError();
         return Promise.reject(err);
       })
-      .finally(() => dispatch(ProjectActions.setLastSaveOnline(DateTime.now())));
+      .finally(() => dispatch(ProjectActions.setLastSaveOnline(DateTime.now().toMillis())));
   };
 }

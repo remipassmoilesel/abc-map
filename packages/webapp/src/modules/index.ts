@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -22,10 +22,9 @@ import { ProportionalSymbolsModule } from './proportional-symbols/ProportionalSy
 import { DifferentSymbolsModule } from './different-symbols/DifferentSymbolsModule';
 import { FeatureCountByGeometriesModule } from './count-by-geometries/FeatureCountByGeometriesModule';
 import { ScriptsModule } from './scripts/ScriptsModule';
-import { Module } from '@abc-map/module-api';
-import { Services } from '../core/Services';
+import type { Services } from '../core/Services';
 import { isExperimentalFeatureEnabled } from '../core/ui/useExperimentalFeature';
-import { ArtefactGenerator } from '../experimental-features';
+import { ArtifactGenerator } from '../experimental-features';
 import { ArtefactGeneratorModule } from './artefact-generator/ArtefactGeneratorModule';
 import { DataStoreModule } from './data-store/DataStoreModule';
 import { MapExport } from './map-export/MapExport';
@@ -33,9 +32,10 @@ import { SharedMapSettings } from './shared-map-settings/SharedMapSettings';
 import { ProjectManagement } from './projects/ProjectManagement';
 import { DocumentationModule } from './documentation/DocumentationModule';
 import { LayerExport } from './layer-export/LayerExport';
+import type { AbcModule } from './AbcModule.ts';
 
-export function bundledModulesFactory(services: Services): Module[] {
-  const modules: Module[] = [
+export function bundledModulesFactory(services: Services): AbcModule[] {
+  const modules: AbcModule[] = [
     new ColorGradientsModule(services),
     new DataStoreModule(),
     new DataTableModule(),
@@ -51,7 +51,7 @@ export function bundledModulesFactory(services: Services): Module[] {
   ];
 
   // Add experimental modules
-  if (isExperimentalFeatureEnabled(ArtefactGenerator)) {
+  if (isExperimentalFeatureEnabled(ArtifactGenerator)) {
     modules.push(ArtefactGeneratorModule.create(services));
   }
 

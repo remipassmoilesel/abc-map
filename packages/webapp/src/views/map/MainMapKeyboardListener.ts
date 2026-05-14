@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { getServices, Services } from '../../core/Services';
+import type { Services } from '../../core/Services';
+import { getServices } from '../../core/Services';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { RemoveFeaturesChangeset } from '../../core/history/changesets/features/RemoveFeaturesChangeset';
 import { Logger } from '@abc-map/shared';
@@ -26,7 +27,7 @@ import { HistoryKeyboardListener } from '../../core/ui/HistoryKeyboardListener';
 
 const logger = Logger.get('MapKeyboardListener.ts');
 
-const t = prefixedTranslation('MapKeyboardListener:');
+const t = prefixedTranslation('MapKeyboardListener');
 
 export class MainMapKeyboardListener {
   public static create() {

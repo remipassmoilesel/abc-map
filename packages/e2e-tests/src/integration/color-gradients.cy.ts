@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { DataStore } from '../helpers/DataStore';
-import { TopBar } from '../helpers/TopBar';
-import { TestData } from '../test-data/TestData';
-import { MainMap } from '../helpers/MainMap';
-import { Modules } from '../helpers/Modules';
-import { Routes } from '../helpers/Routes';
-import { Project } from '../helpers/Project';
-import { FilePrompt } from '../helpers/FilePrompt';
-import { BundledModuleId } from '@abc-map/shared';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { DataStore } from '../helpers/DataStore.js';
+import { TopBar } from '../helpers/TopBar.js';
+import { TestData } from '../test-data/TestData.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { Modules } from '../helpers/Modules.js';
+import { Routes } from '../helpers/Routes.js';
+import { Project } from '../helpers/Project.js';
+import { FilePrompt } from '../helpers/FilePrompt.js';
+import { ModuleId } from '@abc-map/shared';
 
 describe('Color gradients', function () {
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('Color gradients', function () {
       // Import layer
       .then(() => DataStore.importByName('Countries of the world'))
       // Open module
-      .then(() => Modules.open(BundledModuleId.ColorGradients))
+      .then(() => Modules.open(ModuleId.ColorGradients))
       // Data source parameters
       .get('[data-cy=data-source-file]')
       .click()

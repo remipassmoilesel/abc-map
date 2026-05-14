@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,9 @@
  */
 
 import Cls from './Leaf.module.scss';
-import { RenderLeafProps } from 'slate-react';
-import { CSSProperties, useMemo } from 'react';
+import type { RenderLeafProps } from 'slate-react';
+import type { CSSProperties } from 'react';
+import { useMemo } from 'react';
 import clsx from 'clsx';
 
 const sizeClasses = [Cls.size1, Cls.size2, Cls.size3, Cls.size4];

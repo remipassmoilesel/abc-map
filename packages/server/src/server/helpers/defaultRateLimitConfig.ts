@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../../config/Config';
-import { FastifyRequest } from 'fastify';
-import { hashRequestSource } from './hashRequestSource';
+import type { Config } from '../../config/Config.js';
+import type { FastifyRequest } from 'fastify';
+import { hashRequestSource } from './hashRequestSource.js';
 
 export function defaultRateLimitConfig(config: Config) {
   return {
@@ -26,7 +26,7 @@ export function defaultRateLimitConfig(config: Config) {
     timeWindow: config.server.globalRateLimit.timeWindow,
     keyGenerator: (req: FastifyRequest) => {
       // We do not display warnings here because we do not check presence of source IP address
-      return hashRequestSource(req, true);
+      return hashRequestSource(req, false);
     },
   };
 }

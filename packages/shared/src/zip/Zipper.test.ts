@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestData } from './TestData';
-import { Zipper } from './Zipper';
-import { AbcFile } from './AbcFile';
+import { TestData } from './TestData.js';
+import { Zipper } from './Zipper.js';
+import type { AbcFile } from './AbcFile.js';
+import { describe, expect, it } from 'vitest';
 
 describe('Zipper', () => {
   const testData = new TestData();

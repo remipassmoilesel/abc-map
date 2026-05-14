@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DataRow, DataSource, DataSourceType } from './DataSource';
+import type { DataRow, DataSource, DataSourceType } from './DataSource';
 import uuid from 'uuid-random';
 import { nanoid } from 'nanoid';
 
@@ -37,7 +37,11 @@ export class TestDataSource implements DataSource {
     return new TestDataSource(uuid(), _rows, 'TestDataSource' as DataSourceType);
   }
 
-  constructor(private id: string, private rows: DataRow[], private type: DataSourceType) {}
+  constructor(
+    private id: string,
+    private rows: DataRow[],
+    private type: DataSourceType,
+  ) {}
 
   public getId(): string {
     return this.id;

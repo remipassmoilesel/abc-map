@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { I18nText, Language } from '@abc-map/shared';
-import { isDevelopmentWorkerEnv } from './serviceWorkerRegistration';
+import type { I18nText } from '@abc-map/shared';
+import { Language } from '@abc-map/shared';
 
 /*
  * You can reference in this file features that will not be enabled by default.
@@ -26,16 +26,17 @@ import { isDevelopmentWorkerEnv } from './serviceWorkerRegistration';
 export interface ExperimentalFeature {
   id: string;
   description: I18nText[];
+  // If defined and if it returns true, users will be able to enable/disable it
   condition?: () => boolean;
 }
 
 /**
- * Artefact generator is a data processing module used to create artefacts for WMS/WMTS/XYZ layers.
+ * Artifact generator is a data processing module used to create artefacts for WMS/WMTS/XYZ layers.
  *
  * It will never be enabled by default.
  */
-export const ArtefactGenerator: ExperimentalFeature = {
-  id: 'ArtefactGenerator',
+export const ArtifactGenerator: ExperimentalFeature = {
+  id: 'ArtifactGenerator',
   description: [
     {
       language: Language.English,
@@ -44,27 +45,6 @@ export const ArtefactGenerator: ExperimentalFeature = {
     {
       language: Language.French,
       text: 'Ceci est un module de traitement de données expérimental.',
-    },
-  ],
-};
-
-/**
- * Enable service worker on development environment.
- *
- */
-export const DevServiceWorker: ExperimentalFeature = {
-  id: 'DevServiceWorker',
-  condition: isDevelopmentWorkerEnv,
-  description: [
-    {
-      language: Language.English,
-      text: `You should not enable this feature unless you know what you are doing.<br/>
-             See: https://create-react-app.dev/docs/making-a-progressive-web-app/#offline-first-considerations`,
-    },
-    {
-      language: Language.French,
-      text: `Vous ne devriez pas activer cette fonction à moins que vous ne sachiez ce que vous faites.<br/>
-             Voir: https://create-react-app.dev/docs/making-a-progressive-web-app/#offline-first-considerations`,
     },
   ],
 };
@@ -83,4 +63,4 @@ export const DisableWarningBeforeUnload: ExperimentalFeature = {
   ],
 };
 
-export const ExperimentalFeatures: ExperimentalFeature[] = [ArtefactGenerator, DevServiceWorker, DisableWarningBeforeUnload];
+export const ExperimentalFeatures: ExperimentalFeature[] = [ArtifactGenerator, DisableWarningBeforeUnload];

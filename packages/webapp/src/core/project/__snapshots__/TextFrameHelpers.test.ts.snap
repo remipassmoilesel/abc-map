@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`TextFrameHelpers Extract images extractImagesFromLayouts() 1`] = `
-Array [
-  Object {
-    "format": Object {
+exports[`TextFrameHelpers > Extract images > extractImagesFromLayouts() 1`] = `
+[
+  {
+    "format": {
       "height": 297,
       "id": "A4_PORTRAIT",
       "orientation": "portrait",
@@ -11,39 +11,39 @@ Array [
     },
     "id": "test-layout-1",
     "name": "Sample layout",
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
             "size": 1,
             "type": "image",
-            "url": "/images/image-###-FAKE-NANOID-1-###",
+            "url": "/images/image-###-FAKE-NANOID-###",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
                             "size": 2,
                             "type": "image",
-                            "url": "/images/image-###-FAKE-NANOID-2-###",
+                            "url": "/images/image-###-FAKE-NANOID-###",
                           },
                         ],
                         "type": "paragraph",
@@ -59,59 +59,59 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
-      Object {
-        "content": Array [
-          Object {
+      {
+        "content": [
+          {
             "text": "Hello 2",
           },
-          Object {
+          {
             "text": "Hello 3",
           },
         ],
         "id": "test-frame-2",
-        "position": Object {
+        "position": {
           "x": 500,
           "y": 600,
         },
-        "size": Object {
+        "size": {
           "height": 800,
           "width": 700,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
     ],
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,
       "rotation": 0,
     },
   },
-  Object {
-    "format": Object {
+  {
+    "format": {
       "height": 297,
       "id": "A4_PORTRAIT",
       "orientation": "portrait",
@@ -119,39 +119,39 @@ Array [
     },
     "id": "test-layout-2",
     "name": "Sample layout",
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
             "size": 1,
             "type": "image",
-            "url": "/images/image-###-FAKE-NANOID-3-###",
+            "url": "/images/image-###-FAKE-NANOID-###",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
                             "size": 2,
                             "type": "image",
-                            "url": "/images/image-###-FAKE-NANOID-4-###",
+                            "url": "/images/image-###-FAKE-NANOID-###",
                           },
                         ],
                         "type": "paragraph",
@@ -167,27 +167,27 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
     ],
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,
@@ -197,48 +197,48 @@ Array [
 ]
 `;
 
-exports[`TextFrameHelpers Extract images extractImagesFromSharedViews() 1`] = `
-Array [
-  Object {
+exports[`TextFrameHelpers > Extract images > extractImagesFromSharedViews() 1`] = `
+[
+  {
     "id": "test-shared-view-1",
-    "layers": Array [],
-    "scale": Object {
+    "layers": [],
+    "scale": {
       "x": 30,
       "y": 100,
     },
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
             "size": 1,
             "type": "image",
-            "url": "/images/image-###-FAKE-NANOID-1-###",
+            "url": "/images/image-###-FAKE-NANOID-###",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
                             "size": 2,
                             "type": "image",
-                            "url": "/images/image-###-FAKE-NANOID-2-###",
+                            "url": "/images/image-###-FAKE-NANOID-###",
                           },
                         ],
                         "type": "paragraph",
@@ -254,39 +254,39 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
-      Object {
-        "content": Array [
-          Object {
+      {
+        "content": [
+          {
             "text": "Hello 2",
           },
-          Object {
+          {
             "text": "Hello 3",
           },
         ],
         "id": "test-frame-2",
-        "position": Object {
+        "position": {
           "x": 500,
           "y": 600,
         },
-        "size": Object {
+        "size": {
           "height": 800,
           "width": 700,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
@@ -294,58 +294,58 @@ Array [
       },
     ],
     "title": "Sample layout",
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,
       "rotation": 0,
     },
   },
-  Object {
+  {
     "id": "test-shared-view-2",
-    "layers": Array [],
-    "scale": Object {
+    "layers": [],
+    "scale": {
       "x": 30,
       "y": 100,
     },
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
             "size": 1,
             "type": "image",
-            "url": "/images/image-###-FAKE-NANOID-3-###",
+            "url": "/images/image-###-FAKE-NANOID-###",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
                             "size": 2,
                             "type": "image",
-                            "url": "/images/image-###-FAKE-NANOID-4-###",
+                            "url": "/images/image-###-FAKE-NANOID-###",
                           },
                         ],
                         "type": "paragraph",
@@ -361,15 +361,15 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
@@ -377,12 +377,12 @@ Array [
       },
     ],
     "title": "Sample layout",
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,
@@ -392,10 +392,10 @@ Array [
 ]
 `;
 
-exports[`TextFrameHelpers Load images loadImagesOfLayouts() 1`] = `
-Array [
-  Object {
-    "format": Object {
+exports[`TextFrameHelpers > Load images > loadImagesOfLayouts() 1`] = `
+[
+  {
+    "format": {
       "height": 297,
       "id": "A4_PORTRAIT",
       "orientation": "portrait",
@@ -403,15 +403,15 @@ Array [
     },
     "id": "test-layout-1",
     "name": "Sample layout",
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
@@ -419,17 +419,17 @@ Array [
             "type": "image",
             "url": "http://blob:IMAGE_1",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
@@ -451,59 +451,59 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
-      Object {
-        "content": Array [
-          Object {
+      {
+        "content": [
+          {
             "text": "Hello 2",
           },
-          Object {
+          {
             "text": "Hello 3",
           },
         ],
         "id": "test-frame-2",
-        "position": Object {
+        "position": {
           "x": 500,
           "y": 600,
         },
-        "size": Object {
+        "size": {
           "height": 800,
           "width": 700,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
     ],
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,
       "rotation": 0,
     },
   },
-  Object {
-    "format": Object {
+  {
+    "format": {
       "height": 297,
       "id": "A4_PORTRAIT",
       "orientation": "portrait",
@@ -511,15 +511,15 @@ Array [
     },
     "id": "test-layout-2",
     "name": "Sample layout",
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
@@ -527,17 +527,17 @@ Array [
             "type": "image",
             "url": "http://blob:IMAGE_1",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
@@ -559,27 +559,27 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
     ],
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,
@@ -589,24 +589,24 @@ Array [
 ]
 `;
 
-exports[`TextFrameHelpers Load images loadImagesOfSharedViews() 1`] = `
-Array [
-  Object {
+exports[`TextFrameHelpers > Load images > loadImagesOfSharedViews() 1`] = `
+[
+  {
     "id": "test-shared-view-1",
-    "layers": Array [],
-    "scale": Object {
+    "layers": [],
+    "scale": {
       "x": 30,
       "y": 100,
     },
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
@@ -614,17 +614,17 @@ Array [
             "type": "image",
             "url": "http://blob:IMAGE_1",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
@@ -646,39 +646,39 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
         },
       },
-      Object {
-        "content": Array [
-          Object {
+      {
+        "content": [
+          {
             "text": "Hello 2",
           },
-          Object {
+          {
             "text": "Hello 3",
           },
         ],
         "id": "test-frame-2",
-        "position": Object {
+        "position": {
           "x": 500,
           "y": 600,
         },
-        "size": Object {
+        "size": {
           "height": 800,
           "width": 700,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
@@ -686,34 +686,34 @@ Array [
       },
     ],
     "title": "Sample layout",
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,
       "rotation": 0,
     },
   },
-  Object {
+  {
     "id": "test-shared-view-2",
-    "layers": Array [],
-    "scale": Object {
+    "layers": [],
+    "scale": {
       "x": 30,
       "y": 100,
     },
-    "textFrames": Array [
-      Object {
-        "content": Array [
-          Object {
+    "textFrames": [
+      {
+        "content": [
+          {
             "text": "Hello",
           },
-          Object {
-            "children": Array [
-              Object {
+          {
+            "children": [
+              {
                 "text": "",
               },
             ],
@@ -721,17 +721,17 @@ Array [
             "type": "image",
             "url": "http://blob:IMAGE_1",
           },
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "children": Array [
-                      Object {
-                        "children": Array [
-                          Object {
-                            "children": Array [
-                              Object {
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
                                 "text": "",
                               },
                             ],
@@ -753,15 +753,15 @@ Array [
           },
         ],
         "id": "test-frame-1",
-        "position": Object {
+        "position": {
           "x": 100,
           "y": 200,
         },
-        "size": Object {
+        "size": {
           "height": 400,
           "width": 300,
         },
-        "style": Object {
+        "style": {
           "background": "#FFFFFF",
           "withBorders": true,
           "withShadows": true,
@@ -769,12 +769,12 @@ Array [
       },
     ],
     "title": "Sample layout",
-    "view": Object {
-      "center": Array [
+    "view": {
+      "center": [
         1.5,
         45.4,
       ],
-      "projection": Object {
+      "projection": {
         "name": "EPSG:3857",
       },
       "resolution": 1000,

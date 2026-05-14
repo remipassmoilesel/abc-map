@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,8 +18,9 @@
 
 import Cls from './EnableSharePanel.module.scss';
 import React, { useCallback } from 'react';
-import { LayerState, Logger, UserStatus } from '@abc-map/shared';
-import { useAppSelector } from '../../../../core/store/hooks';
+import type { LayerState } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
+import { useAppSelector } from '../../../../store/hooks';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import { useServices } from '../../../../core/useServices';

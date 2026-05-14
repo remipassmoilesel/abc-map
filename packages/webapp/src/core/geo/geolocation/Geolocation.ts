@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,17 +17,19 @@
  */
 
 import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
+import type Geometry from 'ol/geom/Geometry';
 import OlGeolocation from 'ol/Geolocation';
 import { Fill, Stroke, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import Point from 'ol/geom/Point';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Logger } from '@abc-map/shared';
-import { GeolocationChanged, GeolocationError, Position } from './events';
+import type { Position } from './events';
+import { GeolocationChanged, GeolocationError } from './events';
 import { toLonLat } from 'ol/proj';
+import type { DefaultVectorSource } from '../layers/LayerWrapper';
 
 const logger = Logger.get('Geolocation.ts');
 
@@ -40,7 +42,7 @@ export class Geolocation {
   private _followPosition = false;
   private _rotateMap = false;
   private geolocation?: OlGeolocation;
-  private layer = new VectorLayer<VectorSource<Geometry>>();
+  private layer = new VectorLayer<DefaultVectorSource>();
   private accuracyFeature = new Feature<Geometry>();
   private positionFeature = new Feature<Geometry>();
 
@@ -60,7 +62,7 @@ export class Geolocation {
       new Style({
         fill: new Fill({ color: '#ffffff66' }),
         stroke: new Stroke({ color: '#3399CCCC', width: 1 }),
-      })
+      }),
     );
 
     this.positionFeature.setStyle(
@@ -70,7 +72,7 @@ export class Geolocation {
           fill: new Fill({ color: '#3399CC' }),
           stroke: new Stroke({ color: '#fff', width: 3 }),
         }),
-      })
+      }),
     );
 
     this.geolocation.on('error', (error: { message?: string }) => {

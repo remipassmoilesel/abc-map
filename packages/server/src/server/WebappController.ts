@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { Config } from '../config/Config.js';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { Language, Logger, WebappRoutes } from '@abc-map/shared';
-import { getLang } from './helpers/getLang';
-import * as fastifyStatic from '@fastify/static';
-import * as path from 'path';
-import { Controller } from './Controller';
+import { getLang } from './helpers/getLang.js';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
+import { Controller } from './Controller.js';
 
 export const logger = Logger.get('WebappController.ts');
 
@@ -58,7 +58,7 @@ export class WebappController extends Controller {
     });
 
     // Webapp assets
-    void app.register(fastifyStatic, {
+    void app.register(fastifyStatic.default, {
       root: path.join(webappPath, '/assets'),
       wildcard: false,
       index: false,

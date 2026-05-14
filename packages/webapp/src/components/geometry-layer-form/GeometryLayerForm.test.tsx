@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,15 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { TestHelper } from '../../core/utils/test/TestHelper';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
-import sinon, { SinonStub } from 'sinon';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { abcRender } from '../../core/utils/test/abcRender';
 import GeometryLayerForm from './GeometryLayerForm';
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import userEvent from '@testing-library/user-event';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('GeometryLayerForm', () => {
   let map: MapWrapper;
@@ -39,8 +43,10 @@ describe('GeometryLayerForm', () => {
     services.geo.getMainMap.returns(map);
   });
 
-  it('should render', () => {
-    abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
+  it('should render', async () => {
+    await act(async () => {
+      abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
+    });
 
     expect(screen.getByText('Layer:')).toBeDefined();
     expect(screen.getByText('Join with data by:')).toBeDefined();
@@ -51,12 +57,13 @@ describe('GeometryLayerForm', () => {
     // Prepare
     const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
-    abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
+
+    await act(async () => {
+      abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
-    });
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {
@@ -71,10 +78,11 @@ describe('GeometryLayerForm', () => {
     map.addLayer(layer);
 
     // We render then select one layer
-    abcRender(<GeometryLayerForm values={{ layer: layer, joinBy: '' }} onChange={handleChanges} />, { services });
     await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+      abcRender(<GeometryLayerForm values={{ layer: layer, joinBy: '' }} onChange={handleChanges} />, { services });
     });
+
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     await waitFor(() => screen.getAllByText('Select a join field'));
     handleChanges.reset();
@@ -93,12 +101,13 @@ describe('GeometryLayerForm', () => {
     // Prepare
     const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
-    abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
+
+    await act(async () => {
+      abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
-    });
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {
@@ -112,12 +121,13 @@ describe('GeometryLayerForm', () => {
     const layer = LayerFactory.newVectorLayer();
     layer.setName('Empty layer');
     map.addLayer(layer);
-    abcRender(<GeometryLayerForm values={{ layer, joinBy: '' }} onChange={handleChanges} />, { services });
+
+    await act(async () => {
+      abcRender(<GeometryLayerForm values={{ layer, joinBy: '' }} onChange={handleChanges} />, { services });
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Empty layer');
-    });
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Empty layer');
 
     // Assert
     await waitFor(() => {

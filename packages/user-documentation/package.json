@@ -2,44 +2,45 @@
   "name": "@abc-map/user-documentation",
   "version": "1.0.0",
   "license": "AGPL-3.0-or-later",
+  "type": "module",
   "files": [
     "build"
   ],
   "scripts": {
-    "build": "node scripts/sass.ts && eleventy",
+    "build": "tsx scripts/sass.ts && eleventy",
     "clean": "rm -rf build",
     "clean-build": "pnpm run clean && pnpm run build",
     "dependency-check": "depcruise -c .dependency-cruiser.js src",
-    "lint": "prettier --loglevel warn --check . && sort-package-json --check",
-    "lint:fix": "prettier --loglevel warn --write . && sort-package-json",
-    "package": "ts-node ./scripts/package.ts",
+    "lint": "prettier --log-level warn --check . && sort-package-json --check",
+    "lint:fix": "prettier --log-level warn --write . && sort-package-json",
+    "package": "tsx ./scripts/package.ts",
     "start": "concurrently 'eleventy --serve --port=8085' 'pnpm run watch:styles'",
-    "test:documentation:ci": "ts-node ./scripts/test.ts",
+    "test:with-servers": "tsx ./scripts/test.ts",
     "watch": "concurrently 'pnpm run watch:eleventy' 'pnpm run watch:styles'",
     "watch:eleventy": "eleventy --watch",
-    "watch:styles": "ts-node ./scripts/sass.ts --watch"
+    "watch:styles": "tsx ./scripts/sass.ts --watch"
   },
   "dependencies": {
-    "@abc-map/shared": "1.0.0",
-    "bootstrap": "5.2.3",
-    "i18next": "^22.4.6"
+    "@abc-map/shared": "workspace:*",
+    "bootstrap": "5.3.8",
+    "i18next": "^25.8.13"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1",
-    "@types/node": "^18.11.17",
-    "axios": "^1.4.0",
-    "concurrently": "^7.6.0",
-    "dependency-cruiser": "^13.0.4",
+    "@11ty/eleventy": "^3.1.2",
+    "@types/node": "^24.12.2",
+    "axios": "^1.13.6",
+    "concurrently": "^9.2.1",
+    "dependency-cruiser": "^17.3.8",
     "eleventy-plugin-nesting-toc": "^1.3.0",
-    "fast-glob": "^3.2.12",
-    "html-validate": "^8.0.5",
-    "markdown-it": "^13.0.1",
-    "markdown-it-anchor": "^8.6.7",
-    "node-html-parser": "^6.1.5",
-    "prettier": "^2.8.1",
-    "sass": "^1.63.6",
+    "fast-glob": "^3.3.3",
+    "html-validate": "^10.9.0",
+    "markdown-it": "^14.1.1",
+    "markdown-it-anchor": "^9.2.0",
+    "node-html-parser": "^7.0.2",
+    "prettier": "3.8.1",
+    "sass-embedded": "1.78.0",
     "slugify": "^1.6.6",
-    "sort-package-json": "^2.4.1",
-    "ts-node": "^10.9.1"
+    "sort-package-json": "^3.6.1",
+    "tsx": "^4.21.0"
   }
 }

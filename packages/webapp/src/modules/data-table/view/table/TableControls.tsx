@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Table as TanstackTable } from '@tanstack/table-core';
-import { DataRow } from '../../../../core/data/data-source/DataSource';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import type { Table as TanstackTable } from '@tanstack/table-core';
+import type { DataRow } from '../../../../core/data/data-source/DataSource';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { LayerSelector } from '../../../../components/layer-selector/LayerSelector';
-import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
+import type { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import Cls from './TableControls.module.scss';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -58,7 +59,7 @@ export function TableControls(props: Props) {
         table.setPageIndex(page - 1);
       }
     },
-    [table]
+    [table],
   );
 
   const handleLimitChange = useCallback(
@@ -66,7 +67,7 @@ export function TableControls(props: Props) {
       const nbr = parseInt(ev.target.value);
       table.setPageSize(nbr);
     },
-    [table]
+    [table],
   );
 
   useEffect(() => {

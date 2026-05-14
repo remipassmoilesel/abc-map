@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,8 +18,9 @@
 
 import { Point } from 'ol/geom';
 import { ScriptFeature } from './ScriptFeature';
-import Geometry from 'ol/geom/Geometry';
+import type Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
+import { describe, expect, it } from 'vitest';
 
 describe('ScriptFeature', () => {
   it('getGeometry()', () => {

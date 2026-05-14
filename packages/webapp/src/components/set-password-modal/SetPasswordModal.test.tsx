@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { act, screen } from '@testing-library/react';
+import type { ModalEvent } from '../../core/ui/typings';
+import { ModalEventType } from '../../core/ui/typings';
+import { screen } from '@testing-library/react';
+import { act } from 'react';
 import userEvent from '@testing-library/user-event';
 import SetPasswordModal from './SetPasswordModal';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('SetPasswordModal', () => {
   let services: TestServices;

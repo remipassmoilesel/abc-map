@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,19 +18,18 @@
 
 import { useCallback } from 'react';
 import { CustomEditor } from '../../CustomEditor';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useEditor } from '../../useEditor';
 import { ButtonMenu } from '../../../button-menu/ButtonMenu';
 import { IconDefs } from '../../../icon/IconDefs';
 import { Action } from '../../../button-menu/Action';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   className?: string;
 }
 
 export function AlignmentSelector(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { className } = props;
   const { editor } = useEditor();
 

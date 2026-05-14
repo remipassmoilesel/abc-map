@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,19 +17,22 @@
  */
 
 import Cls from './MainMap.module.scss';
-import React, { Component, DragEvent, ReactNode } from 'react';
-import { AbcFile, Logger, ProjectConstants } from '@abc-map/shared';
+import type { DragEvent, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { AbcFile } from '@abc-map/shared';
+import { Logger, ProjectConstants } from '@abc-map/shared';
 import throttle from 'lodash/throttle';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import type { ServiceProps } from '../../../core/withServices';
+import { withServices } from '../../../core/withServices';
+import type { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
+import type { WithTranslation } from 'react-i18next';
 import { withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { InteractiveAttributions } from '../../../components/interactive-attributions/InteractiveAttributions';
 import { Zoom } from './zoom/Zoom';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import BaseEvent from 'ol/events/Event';
+import type { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import type BaseEvent from 'ol/events/Event';
 import { DataReader } from '../../../core/data/DataReader';
 import { ReadStatus } from '../../../core/data/ReadResult';
 import { Scale } from '../../../components/scale/Scale';
@@ -38,9 +41,13 @@ import clsx from 'clsx';
 import { MapRotation } from '../../../components/map-rotation/MapRotation';
 import { ModalStatus } from '../../../core/ui/typings';
 
-export const logger = Logger.get('MainMap.ts');
+const logger = Logger.get('MainMap.tsx');
 
-const t = prefixedTranslation('MapView:');
+export function disableMainMapLogs() {
+  logger.disable();
+}
+
+type Props = ServiceProps & WithTranslation;
 
 interface State {
   dragOverlay: boolean;
@@ -48,17 +55,18 @@ interface State {
 }
 
 // TODO: Refactor, remove footer controls, not easily usable on mobile
-class MainMap extends Component<ServiceProps, State> {
+class MainMap extends Component<Props, State> {
   private map: MapWrapper;
   private mapRef = React.createRef<HTMLDivElement>();
 
-  constructor(props: ServiceProps) {
+  constructor(props: Props) {
     super(props);
     this.map = props.services.geo.getMainMap();
     this.state = { dragOverlay: false, tileError: '' };
   }
 
   public render(): ReactNode {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const tileError = this.state.tileError;
     const dragOverlay = this.state.dragOverlay;
 
@@ -162,6 +170,7 @@ class MainMap extends Component<ServiceProps, State> {
   };
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     const { toasts, project: projectService, modals } = this.props.services;
     const dataReader = DataReader.create();
 
@@ -220,6 +229,7 @@ class MainMap extends Component<ServiceProps, State> {
   };
 
   private handleTileError = throttle((ev: TileLoadErrorEvent) => {
+    const t = this.props.i18n.getFixedT(this.props.i18n.language, 'MapView');
     this.setState({ tileError: t('Layer_does_not_load', { name: ev.layer.getName() || t('Layer_without_name') }) });
   }, 1000);
 

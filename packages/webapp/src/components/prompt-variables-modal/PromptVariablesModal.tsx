@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,22 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useServices } from '../../core/useServices';
-import { ModalEventType, ModalStatus, ShowPromptVariables } from '../../core/ui/typings';
-import { PromptDefinition } from '../../core/ui/PromptDefinition';
+import type { ShowPromptVariables } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
+import type { PromptDefinition } from '../../core/ui/PromptDefinition';
 import { PromptField } from './PromptField';
 import { FormState } from '../form-validation-label/FormState';
-import { VariableMap } from '../../core/utils/variableExpansion';
-import { prefixedTranslation } from '../../i18n/i18n';
+import type { VariableMap } from '../../core/utils/variableExpansion';
 import { FoldingInfo } from '../folding-info/FoldingInfo';
 
-const t = prefixedTranslation('PromptVariablesModal:');
-
 function PromptVariablesModal() {
+  const { t } = useTranslation('PromptVariablesModal');
   const { modals } = useServices();
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
@@ -75,7 +74,7 @@ function PromptVariablesModal() {
       const hasEmptyValue = definitions.map((def) => def.name).find((key) => !value[key]);
       setFormState(hasEmptyValue ? FormState.FieldMissing : FormState.Ok);
     },
-    [definitions]
+    [definitions],
   );
 
   return (

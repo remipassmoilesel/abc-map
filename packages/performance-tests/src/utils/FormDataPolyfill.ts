@@ -10,7 +10,7 @@
  * [1]: https://gist.github.com/Rob--W/8b5adedd84c0d36aba64
  **/
 
-import { FileData } from 'k6/http';
+import type { FileData } from 'k6/http';
 
 export class FormData {
   public readonly boundary: string;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -15,16 +15,20 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
-import sinon, { SinonStub } from 'sinon';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { TestServices } from '../../core/utils/test/TestServices';
+import { newTestServices } from '../../core/utils/test/TestServices';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import DataSourceForm from './DataSourceForm';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import userEvent from '@testing-library/user-event';
 import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('DataSourceForm', () => {
   let map: MapWrapper;
@@ -39,16 +43,18 @@ describe('DataSourceForm', () => {
     services.geo.getMainMap.returns(map);
   });
 
-  it('should render', () => {
-    abcRender(
-      <DataSourceForm
-        valuesFieldLabel={'Values field'}
-        valuesFieldTip={'tip-id'}
-        values={{ source: undefined, valueField: '', joinBy: '' }}
-        onChange={handleChanges}
-      />,
-      { services }
-    );
+  it('should render', async () => {
+    await act(async () => {
+      abcRender(
+        <DataSourceForm
+          valuesFieldLabel={'Values field'}
+          valuesFieldTip={'tip-id'}
+          values={{ source: undefined, valueField: '', joinBy: '' }}
+          onChange={handleChanges}
+        />,
+        { services },
+      );
+    });
 
     expect(screen.getByText(/Values field/)).toBeDefined();
     expect(screen.getByText(/Join with geometries by/)).toBeDefined();
@@ -56,16 +62,18 @@ describe('DataSourceForm', () => {
     expect((screen.getByTestId('data-join-by') as HTMLSelectElement).value).toEqual('Select a data source');
   });
 
-  it('should render', () => {
-    abcRender(
-      <DataSourceForm
-        valuesFieldLabel={'Values field'}
-        valuesFieldTip={'tip-id'}
-        values={{ source: undefined, valueField: '', joinBy: '' }}
-        onChange={handleChanges}
-      />,
-      { services }
-    );
+  it('should render', async () => {
+    await act(async () => {
+      abcRender(
+        <DataSourceForm
+          valuesFieldLabel={'Values field'}
+          valuesFieldTip={'tip-id'}
+          values={{ source: undefined, valueField: '', joinBy: '' }}
+          onChange={handleChanges}
+        />,
+        { services },
+      );
+    });
 
     expect(screen.getByText(/Select a layer/)).toBeDefined();
     expect(screen.getByText(/Use a CSV workbook/)).toBeDefined();
@@ -80,20 +88,20 @@ describe('DataSourceForm', () => {
     const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
 
-    abcRender(
-      <DataSourceForm
-        valuesFieldLabel={'Values field'}
-        valuesFieldTip={'tip-id'}
-        values={{ source: undefined, valueField: '', joinBy: '' }}
-        onChange={handleChanges}
-      />,
-      { services }
-    );
+    await act(async () => {
+      abcRender(
+        <DataSourceForm
+          valuesFieldLabel={'Values field'}
+          valuesFieldTip={'tip-id'}
+          values={{ source: undefined, valueField: '', joinBy: '' }}
+          onChange={handleChanges}
+        />,
+        { services },
+      );
+    });
 
     // Act
-    await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
-    });
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {
@@ -108,26 +116,25 @@ describe('DataSourceForm', () => {
     map.addLayer(layer);
 
     // We select a layer then wait for loading
-    abcRender(
-      <DataSourceForm
-        valuesFieldLabel={'Values field'}
-        valuesFieldTip={'tip-id'}
-        values={{ source: new LayerDataSource(layer), valueField: '', joinBy: '' }}
-        onChange={handleChanges}
-      />,
-      { services }
-    );
     await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+      abcRender(
+        <DataSourceForm
+          valuesFieldLabel={'Values field'}
+          valuesFieldTip={'tip-id'}
+          values={{ source: new LayerDataSource(layer), valueField: '', joinBy: '' }}
+          onChange={handleChanges}
+        />,
+        { services },
+      );
     });
+
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act
-    await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('value-field'), 'POP');
-    });
+    await userEvent.selectOptions(screen.getByTestId('value-field'), 'POP');
 
     // Assert
     await waitFor(() => {
@@ -142,25 +149,25 @@ describe('DataSourceForm', () => {
     map.addLayer(layer);
 
     // We select a layer, a value field then wait for loading
-    abcRender(
-      <DataSourceForm
-        valuesFieldLabel={'Values field'}
-        valuesFieldTip={'tip-id'}
-        values={{ source: new LayerDataSource(layer), valueField: 'POP', joinBy: '' }}
-        onChange={handleChanges}
-      />,
-      { services }
-    );
     await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+      abcRender(
+        <DataSourceForm
+          valuesFieldLabel={'Values field'}
+          valuesFieldTip={'tip-id'}
+          values={{ source: new LayerDataSource(layer), valueField: 'POP', joinBy: '' }}
+          onChange={handleChanges}
+        />,
+        { services },
+      );
     });
+
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act
-    await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('data-join-by'), 'CODE');
-    });
+    await userEvent.selectOptions(screen.getByTestId('data-join-by'), 'CODE');
 
     // Assert
     await waitFor(() => {
@@ -182,14 +189,12 @@ describe('DataSourceForm', () => {
           values={{ source: new LayerDataSource(layer), valueField: 'POP', joinBy: '' }}
           onChange={handleChanges}
         />,
-        { services }
+        { services },
       );
     });
 
     // Act
-    await act(async () => {
-      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
-    });
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {

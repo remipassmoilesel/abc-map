@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,11 +18,9 @@
 
 import Cls from './NorthArrow.module.scss';
 import React, { useMemo } from 'react';
-import { prefixedTranslation } from '../../i18n/i18n';
 import Compass from './compass.svg';
 import clsx from 'clsx';
-
-const t = prefixedTranslation('NorthArrow:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   size: string;
@@ -34,6 +32,7 @@ interface Props {
 export function NorthArrow(props: Props) {
   const { rotation, size, className } = props;
   const style = useMemo(() => ({ transform: `rotate(${rotation}deg)`, width: size, height: size }), [rotation, size]);
+  const { t } = useTranslation('NorthArrow');
 
   // We must disable drag in order to prevent weird behavior with FloatingNorthArrow
   return <img src={Compass} alt={t('North')} style={style} className={clsx(className, Cls.arrow)} draggable={false} />;

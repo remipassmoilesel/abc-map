@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Geometry } from 'ol/geom';
-import Feature from 'ol/Feature';
+import type { Geometry } from 'ol/geom';
+import type Feature from 'ol/Feature';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
 export function toleranceFromStyle(feature: Feature<Geometry>, resolution: number): number {

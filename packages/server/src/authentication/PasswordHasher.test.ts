@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PasswordHasher } from './PasswordHasher';
-import { assert } from 'chai';
-import { Config } from '../config/Config';
+import { PasswordHasher } from './PasswordHasher.js';
+import { assert } from 'vitest';
+import type { Config } from '../config/Config.js';
+import { describe, it } from 'vitest';
 
 describe('PasswordHasher', () => {
   it('hashPassword() should work', async () => {

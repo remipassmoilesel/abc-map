@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,16 +18,20 @@
 
 import Style from 'ol/style/Style';
 import { Fill, Icon, Stroke, Text } from 'ol/style';
-import { AbcGeometryType, DefaultStyle, FeatureStyle, Logger } from '@abc-map/shared';
-import { DefaultIcon, getSafeIconName, IconName } from '@abc-map/point-icons';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, DefaultStyle, Logger } from '@abc-map/shared';
+import type { IconName } from '@abc-map/point-icons';
+import { DefaultIcon, getSafeIconName } from '@abc-map/point-icons';
 import { SelectionStyleFactory } from './SelectionStyleFactory';
-import { StyleCache, StyleCacheEntry } from './StyleCache';
+import type { StyleCacheEntry } from './StyleCache';
+import { StyleCache } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
 import { IconProcessor } from '../../point-icons/IconProcessor';
-import { FeatureWrapper } from '../features/FeatureWrapper';
+import type { FeatureWrapper } from '../features/FeatureWrapper';
 import { toRadians } from '../../utils/numbers';
-import { DefaultStyleOptions, StyleFactoryOptions } from './StyleFactoryOptions';
-import { Type } from 'ol/geom/Geometry';
+import type { StyleFactoryOptions } from './StyleFactoryOptions';
+import { DefaultStyleOptions } from './StyleFactoryOptions';
+import type { Type } from 'ol/geom/Geometry';
 import { toAbcGeometryType } from '@abc-map/shared';
 
 const logger = Logger.get('StyleFactory.ts');

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import Cls from './SharedViewList.module.scss';
-import { useAppSelector } from '../../../../../core/store/hooks';
+import { useAppSelector } from '../../../../../store/hooks';
 import { IconDefs } from '../../../../../components/icon/IconDefs';
 import React, { useCallback } from 'react';
 import { useServices } from '../../../../../core/useServices';
 import { FaIcon } from '../../../../../components/icon/FaIcon';
 import SharedViewListItem from './SharedViewListItem';
-import { AbcSharedView, Logger } from '@abc-map/shared';
+import type { AbcSharedView } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { WithTooltip } from '../../../../../components/with-tooltip/WithTooltip';
 import { RemoveSharedViewsChangeset } from '../../../../../core/history/changesets/shared-views/RemoveSharedViewsChangeset';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
@@ -55,7 +56,7 @@ function SharedViewList(props: Props) {
         .then(() => history.register(HistoryKey.SharedViews, setActiveView))
         .catch((err) => logger.error('Cannot set active view', err));
     },
-    [history]
+    [history],
   );
 
   const handleDeleteView = useCallback(
@@ -70,7 +71,7 @@ function SharedViewList(props: Props) {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot delete view: ', err));
     },
-    [history, sharedViews.length, t, toasts]
+    [history, sharedViews.length, t, toasts],
   );
 
   const handleUpateView = useCallback(
@@ -80,7 +81,7 @@ function SharedViewList(props: Props) {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot delete view: ', err));
     },
-    [history]
+    [history],
   );
 
   return (

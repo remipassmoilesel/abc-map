@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 import { Encryption } from './Encryption';
 import { Errors } from './Errors';
+import { describe, expect, it } from 'vitest';
 
 /**
  * Warning: changes on encryption will require a data migration
@@ -35,8 +36,10 @@ describe('Encryption', () => {
      */
     it('with correct secret', async () => {
       // prettier-ignore
-      // eslint-disable-next-line max-len
+      /* eslint-disable max-len */
       const encrypted = 'encrypted:IntcIml2XCI6XCJsZm5XeTVoeUlSU1BuRWh4WWlOazZnPT1cIixcInZcIjoxLFwiaXRlclwiOjEwMDAwLFwia3NcIjoxMjgsXCJ0c1wiOjY0LFwibW9kZVwiOlwiY2NtXCIsXCJhZGF0YVwiOlwiXCIsXCJjaXBoZXJcIjpcImFlc1wiLFwic2FsdFwiOlwiZ25mM2RZbmxBVEE9XCIsXCJjdFwiOlwic09McnlaYjJ0dFNKV0dnenhKOTdiamFtdHZNWnVjND1cIn0i';
+      /* eslint-enable max-len */
+
       const result = await Encryption.decrypt(encrypted, 'secret');
       expect(result).toEqual('text to decrypt');
     });

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectManifest } from '../AbcProjectManifest';
-import { AbcFile, Zipper } from '../../zip';
-import { BlobIO } from '../../webapp/blob/BlobIO';
-import { ProjectConstants } from '../constants/ProjectConstants';
-import { CompressedProject } from '../CompressedProject';
+import type { AbcProjectManifest } from '../AbcProjectManifest.js';
+import type { AbcFile } from '../../zip/index.js';
+import { Zipper } from '../../zip/index.js';
+import { BlobIO } from '../../webapp/index.js';
+import { ProjectConstants } from '../constants/index.js';
+import type { CompressedProject } from '../CompressedProject.js';
 
 export class ProjectHelper<T extends Blob | Buffer = Blob | Buffer> {
   public static forBrowser(): ProjectHelper<Blob> {

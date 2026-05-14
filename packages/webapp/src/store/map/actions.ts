@@ -1,0 +1,265 @@
+/**
+ * Copyright © 2026 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import type { FeatureStyle, FillPatterns } from '@abc-map/shared';
+import type { IconName } from '@abc-map/point-icons';
+
+export enum ActionType {
+  SetFillColor1 = 'Map-SetFillColor1',
+  SetFillColor2 = 'Map-SetFillColor2',
+  SetStrokeColor = 'Map-SetStrokeColor',
+  SetStrokeWidth = 'Map-SetStrokeWidth',
+  SetFillPattern = 'Map-SetFillPattern',
+  SetTextColor = 'Map-SetTextColor',
+  SetTextSize = 'Map-SetTextSize',
+  SetTextOffsetX = 'Map-SetTextOffsetX',
+  SetTextOffsetY = 'Map-SetTextOffsetY',
+  SetTextRotation = 'Map-SetTextRotation',
+  SetPointIcon = 'Map-SetPointIcon',
+  SetPointSize = 'Map-SetPointSize',
+  SetPointColor = 'Map-SetPointColor',
+  SetDrawingStyle = 'Map-SetDrawingStyle',
+  SetGeolocation = 'Map-SetGeolocation',
+  SetFollowPosition = 'Map-SetFollowPosition',
+  SetRotateMap = 'Map-SetRotateMap',
+}
+
+export interface SetFillColor1 {
+  type: ActionType.SetFillColor1;
+  color: string;
+}
+
+export interface SetFillColor2 {
+  type: ActionType.SetFillColor2;
+  color: string;
+}
+
+export interface SetStrokeColor {
+  type: ActionType.SetStrokeColor;
+  color: string;
+}
+
+export interface SetStrokeWidth {
+  type: ActionType.SetStrokeWidth;
+  width: number;
+}
+
+export interface SetFillPattern {
+  type: ActionType.SetFillPattern;
+  pattern: FillPatterns;
+}
+
+export interface SetTextColor {
+  type: ActionType.SetTextColor;
+  color: string;
+}
+
+export interface SetTextSize {
+  type: ActionType.SetTextSize;
+  size: number;
+}
+
+export interface SetTextOffsetX {
+  type: ActionType.SetTextOffsetX;
+  value: number;
+}
+
+export interface SetTextOffsetY {
+  type: ActionType.SetTextOffsetY;
+  value: number;
+}
+
+export interface SetTextRotation {
+  type: ActionType.SetTextRotation;
+  value: number;
+}
+
+export interface SetPointIcon {
+  type: ActionType.SetPointIcon;
+  icon: IconName;
+}
+
+export interface SetPointSize {
+  type: ActionType.SetPointSize;
+  size: number;
+}
+
+export interface SetPointColor {
+  type: ActionType.SetPointColor;
+  color: string;
+}
+
+export interface SetDrawingStyle {
+  type: ActionType.SetDrawingStyle;
+  style: FeatureStyle;
+}
+
+export interface SetGeolocation {
+  type: ActionType.SetGeolocation;
+  value: boolean;
+}
+
+export interface SetFollowPosition {
+  type: ActionType.SetFollowPosition;
+  value: boolean;
+}
+
+export interface SetRotateMap {
+  type: ActionType.SetRotateMap;
+  value: boolean;
+}
+
+export type MapAction =
+  | SetStrokeColor
+  | SetFillColor1
+  | SetFillColor2
+  | SetStrokeWidth
+  | SetFillPattern
+  | SetTextColor
+  | SetTextOffsetX
+  | SetTextOffsetY
+  | SetTextRotation
+  | SetTextSize
+  | SetPointIcon
+  | SetPointSize
+  | SetPointColor
+  | SetDrawingStyle
+  | SetGeolocation
+  | SetFollowPosition
+  | SetRotateMap;
+
+export class MapActions {
+  public static setFillColor1(color: string): MapAction {
+    return {
+      type: ActionType.SetFillColor1,
+      color,
+    };
+  }
+
+  public static setFillColor2(color: string): MapAction {
+    return {
+      type: ActionType.SetFillColor2,
+      color,
+    };
+  }
+
+  public static setStrokeColor(color: string): MapAction {
+    return {
+      type: ActionType.SetStrokeColor,
+      color,
+    };
+  }
+
+  public static setStrokeWidth(width: number): MapAction {
+    return {
+      type: ActionType.SetStrokeWidth,
+      width,
+    };
+  }
+
+  public static setFillPattern(pattern: FillPatterns): MapAction {
+    return {
+      type: ActionType.SetFillPattern,
+      pattern,
+    };
+  }
+
+  public static setTextColor(color: string): MapAction {
+    return {
+      type: ActionType.SetTextColor,
+      color,
+    };
+  }
+
+  public static setTextOffsetX(value: number): MapAction {
+    return {
+      type: ActionType.SetTextOffsetX,
+      value,
+    };
+  }
+
+  public static setTextOffsetY(value: number): MapAction {
+    return {
+      type: ActionType.SetTextOffsetY,
+      value,
+    };
+  }
+
+  public static setTextRotation(value: number): MapAction {
+    return {
+      type: ActionType.SetTextRotation,
+      value,
+    };
+  }
+
+  public static setTextSize(size: number): MapAction {
+    return {
+      type: ActionType.SetTextSize,
+      size,
+    };
+  }
+
+  public static setPointIcon(icon: IconName): MapAction {
+    return {
+      type: ActionType.SetPointIcon,
+      icon,
+    };
+  }
+
+  public static setPointSize(size: number): MapAction {
+    return {
+      type: ActionType.SetPointSize,
+      size,
+    };
+  }
+
+  public static setPointColor(color: string): MapAction {
+    return {
+      type: ActionType.SetPointColor,
+      color,
+    };
+  }
+
+  public static setDrawingStyle(style: FeatureStyle): MapAction {
+    return {
+      type: ActionType.SetDrawingStyle,
+      style,
+    };
+  }
+
+  public static setGeolocation(value: boolean): MapAction {
+    return {
+      type: ActionType.SetGeolocation,
+      value,
+    };
+  }
+
+  public static setFollowPosition(value: boolean): MapAction {
+    return {
+      type: ActionType.SetFollowPosition,
+      value,
+    };
+  }
+
+  public static setRotateMap(value: boolean): MapAction {
+    return {
+      type: ActionType.SetRotateMap,
+      value,
+    };
+  }
+}

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,12 +17,13 @@
  */
 
 import Cls from './ArtefactDetails.module.scss';
-import { withTranslation } from 'react-i18next';
-import { AbcArtefact, getListByLang, getTextByLang, Logger, Zipper, ArtefactType } from '@abc-map/shared';
+import { useTranslation, withTranslation } from 'react-i18next';
+import type { AbcArtefact } from '@abc-map/shared';
+import { ArtefactType, getListByLang, getTextByLang, Logger, Zipper } from '@abc-map/shared';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import React, { useCallback, useState } from 'react';
-import { getLang, prefixedTranslation } from '../../../i18n/i18n';
+import { getLang } from '../../../i18n/i18n';
 import LicenceModal from '../licence-modal/LicenceModal';
 import { DataReader } from '../../../core/data/DataReader';
 import { resolveInAtLeast } from '../../../core/utils/resolveInAtLeast';
@@ -38,8 +39,6 @@ import { attributionsVariableExpansion } from '../../../core/utils/variableExpan
 import { linkify, stripHtml } from '../../../core/utils/strings';
 
 const logger = Logger.get('ArtefactDetails.tsx');
-
-const t = prefixedTranslation('DataStoreModule:');
 
 interface Props {
   activeArtefact: AbcArtefact | undefined;
@@ -57,6 +56,7 @@ function ArtefactDetails(props: Props) {
   const keywords = artefact && getListByLang(artefact.keywords, getLang());
   const icon = artefact && getArtefactIcon(artefact);
   const attributions = artefact?.attributions && attributionsVariableExpansion(artefact.attributions).join('<br/>');
+  const { t } = useTranslation('DataStoreModule');
 
   const handleShowDescription = useCallback(() => showDescriptionModal(true), []);
   const handleDescriptionModalClose = useCallback(() => showDescriptionModal(false), []);
@@ -82,7 +82,7 @@ function ArtefactDetails(props: Props) {
         logger.error('Cannot import artefact: ', err);
         toasts.genericError();
       });
-  }, [artefact, toasts]);
+  }, [artefact, t, toasts]);
 
   const handleDownloadArtefact = useCallback(() => {
     if (!artefact) {
@@ -90,7 +90,7 @@ function ArtefactDetails(props: Props) {
       return;
     }
 
-    toasts.info(t('Download_in_progress'));
+    const firstToast = toasts.info(t('Download_in_progress'));
     resolveInAtLeast(dataStore.downloadFilesFrom(artefact), 800)
       .then(async (res) => {
         let content: Blob;
@@ -101,12 +101,13 @@ function ArtefactDetails(props: Props) {
         }
 
         FileIO.downloadBlob(content, 'artefact.zip');
+        toasts.dismiss(firstToast);
       })
       .catch((err) => {
         logger.error('Cannot donwload artefact', err);
         toasts.genericError();
       });
-  }, [artefact, dataStore, toasts]);
+  }, [artefact, dataStore, t, toasts]);
 
   return (
     <div className={clsx(Cls.details, mobileVisible && Cls.mobileVisible, className)}>

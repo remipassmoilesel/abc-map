@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,14 +17,13 @@
  */
 
 import Cls from './Scale.module.scss';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import type { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { getPointResolution } from 'ol/proj';
-import { CSSProperties, useEffect, useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
-import { prefixedTranslation } from '../../i18n/i18n';
-
-const t = prefixedTranslation('Scale:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   map: MapWrapper;
@@ -50,6 +49,7 @@ const defaultBaseFontSizeEm = 1.1;
  * @constructor
  */
 export function Scale(props: Props) {
+  const { t } = useTranslation('Scale');
   const { map, minWidth: _minWidth, className, baseFontSizeEm = defaultBaseFontSizeEm, ratio = 1, tooltip = true } = props;
   const minWidth = _minWidth ?? 60 * ratio;
   const [visible, setVisible] = useState(false);

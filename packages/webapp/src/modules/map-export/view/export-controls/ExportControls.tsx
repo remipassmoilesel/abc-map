@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,8 +17,10 @@
  */
 
 import Cls from './ExportControls.module.scss';
-import React, { ChangeEvent, useCallback } from 'react';
-import { AbcNorth, AbcScale, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
+import type { ChangeEvent } from 'react';
+import React, { useCallback } from 'react';
+import type { AbcNorth, AbcScale, AbcTextFrame, LayoutFormat } from '@abc-map/shared';
+import { LayoutFormats, Logger } from '@abc-map/shared';
 import { ExportFormat } from '../../ExportFormat';
 import { useTranslation, withTranslation } from 'react-i18next';
 import { LabeledLayoutFormats } from './LabeledLayoutFormats';
@@ -26,7 +28,7 @@ import HistoryControls from '../../../../components/history-controls/HistoryCont
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
-import { useAppSelector } from '../../../../core/store/hooks';
+import { useAppSelector } from '../../../../store/hooks';
 import { useActiveLayout } from '../../../../core/project/useActiveLayout';
 import { ScaleControls } from '../../../../components/scale-controls/ScaleControls';
 import { TextFrameControls } from '../../../../components/text-frame-controls/TextFrameControls';
@@ -83,7 +85,7 @@ function ExportControls(props: Props) {
 
       onFormatChanged(format);
     },
-    [onFormatChanged]
+    [onFormatChanged],
   );
 
   const handleAddTextFrame = useCallback(
@@ -99,7 +101,7 @@ function ExportControls(props: Props) {
           height: 450,
         },
       }),
-    [onAddTextFrame]
+    [onAddTextFrame],
   );
 
   const abcMapAttributions = useAppSelector((st) => st.project.layouts.abcMapAttributionsEnabled);

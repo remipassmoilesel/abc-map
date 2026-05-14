@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from '../config/Config';
-import { UserDao } from './UserDao';
-import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcUser, AnonymousUser } from '@abc-map/shared';
-import { UserMapper } from './UserMapper';
-import { PasswordHasher } from '../authentication/PasswordHasher';
-import { AbstractService } from '../services/AbstractService';
+import type { Config } from '../config/Config.js';
+import { UserDao } from './UserDao.js';
+import type { MongodbClient } from '../mongodb/MongodbClient.js';
+import type { AbcUser } from '@abc-map/shared';
+import { AnonymousUser } from '@abc-map/shared';
+import { UserMapper } from './UserMapper.js';
+import { PasswordHasher } from '../authentication/PasswordHasher.js';
+import { AbstractService } from '../services/AbstractService.js';
 
 export class UserService extends AbstractService {
   public static create(config: Config, client: MongodbClient): UserService {
@@ -30,7 +31,11 @@ export class UserService extends AbstractService {
     return new UserService(config, new UserDao(config, client), hasher);
   }
 
-  constructor(private config: Config, private dao: UserDao, private hasher: PasswordHasher) {
+  constructor(
+    private config: Config,
+    private dao: UserDao,
+    private hasher: PasswordHasher,
+  ) {
     super();
   }
 

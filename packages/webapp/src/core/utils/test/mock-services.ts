@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
  */
 
 import { getAbcWindow } from '@abc-map/shared';
-import { newTestServices, TestServices } from './TestServices';
+import type { TestServices } from './TestServices';
+import { newTestServices } from './TestServices';
 
 /**
  * This function mocks the main service map, which is returned by getServices().

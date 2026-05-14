@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -19,8 +19,9 @@
 import Style from 'ol/style/Style';
 import { Fill, Stroke } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
-import { AbcGeometryType, FeatureStyle, Logger } from '@abc-map/shared';
-import Geometry from 'ol/geom/Geometry';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, Logger } from '@abc-map/shared';
+import type Geometry from 'ol/geom/Geometry';
 
 export const logger = Logger.get('HighlightedStyleFactory.ts');
 

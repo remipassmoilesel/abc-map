@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -21,13 +21,12 @@ import TextFeedbackForm from './form/TextFeedbackForm';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useServices } from '../../core/useServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
-import { prefixedTranslation } from '../../i18n/i18n';
-
-const t = prefixedTranslation('FeedbackModal:');
+import { useTranslation } from 'react-i18next';
 
 function FeedbackModal() {
   const { modals } = useServices();
   const [modalVisible, showModal] = useState(false);
+  const { t } = useTranslation('FeedbackModal');
 
   const handleShow = useCallback(() => showModal(true), []);
 

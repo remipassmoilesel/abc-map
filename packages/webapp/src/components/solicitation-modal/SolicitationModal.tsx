@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -28,8 +28,6 @@ import TextFeedbackForm from '../feedback/form/TextFeedbackForm';
 import { confetti } from '../../core/ui/confetti';
 import { useServices } from '../../core/useServices';
 import { useNavigate } from 'react-router-dom';
-import { useBudget } from '../../core/budget/useBudget';
-import clsx from 'clsx';
 
 const logger = Logger.get('SolicitationModal.ts');
 
@@ -37,10 +35,8 @@ export function SolicitationModal() {
   const { t } = useTranslation('SolicitationModal');
   const [visible, setVisible] = useState(false);
   const [voteValue, setVoteValue] = useState<VoteValue | undefined>(undefined);
-  const { modals, feedback } = useServices();
+  const { modals, feedback, toasts } = useServices();
   const navigate = useNavigate();
-
-  const { readableTotal, totalTheme } = useBudget();
 
   useEffect(() => {
     const handleOpen = () => {
@@ -71,13 +67,13 @@ export function SolicitationModal() {
         confetti();
       }
     },
-    [feedback]
+    [feedback],
   );
 
   const handleExplainDonation = useCallback(() => {
-    navigate(Routes.funding().format());
+    navigate(Routes.funding().format())?.catch((err) => toasts.genericError(err));
     close();
-  }, [close, navigate]);
+  }, [close, navigate, toasts]);
 
   const voteDone = typeof voteValue !== 'undefined';
 
@@ -93,13 +89,6 @@ export function SolicitationModal() {
         <h4 className={'text-center fs-20 mb-5'}>{t('Support_your_software')} ✊</h4>
 
         <FundingLinks />
-
-        <h5 onClick={handleExplainDonation} className={'cursor-pointer'}>
-          {t('For_the_moment_the_budget_is')}
-        </h5>
-        <h2 onClick={handleExplainDonation} className={clsx(totalTheme, 'fw-bold cursor-pointer mb-4')}>
-          {readableTotal}
-        </h2>
 
         <button onClick={handleExplainDonation} className={'btn btn-link mt-3'}>
           {t('What_are_donations_used_for')}

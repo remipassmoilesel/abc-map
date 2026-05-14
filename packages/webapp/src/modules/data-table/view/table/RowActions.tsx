@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Row } from '@tanstack/react-table';
-import { DataRow } from '../../../../core/data/data-source/DataSource';
+import type { Row } from '@tanstack/react-table';
+import type { DataRow } from '../../../../core/data/data-source/DataSource';
 import { useTranslation } from 'react-i18next';
 import React, { useCallback } from 'react';
 import { FaIcon } from '../../../../components/icon/FaIcon';

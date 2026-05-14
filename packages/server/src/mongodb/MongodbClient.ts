@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Collection, Db, Document, GridFSBucket, MongoClient, MongoClientOptions } from 'mongodb';
-import { Config } from '../config/Config';
-import { MongodbCollection } from './MongodbCollection';
-import { MongodbBucket } from './MongodbBucket';
+import type { Collection, Db, Document, MongoClientOptions } from 'mongodb';
+import { GridFSBucket, MongoClient } from 'mongodb';
+import type { Config } from '../config/Config.js';
+import type { MongodbCollection } from './MongodbCollection.js';
+import type { MongodbBucket } from './MongodbBucket.js';
 
 /**
  * MongoDB client wrapper.

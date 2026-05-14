@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,6 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './AbcLayer';
-export * from './LayerProperties';
-export * from './LayerAuthentication';
+export * from './AbcLayer.js';
+export * from './LayerProperties.js';
+export * from './LayerAuthentication.js';

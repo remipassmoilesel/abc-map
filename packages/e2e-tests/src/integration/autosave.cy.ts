@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,17 +17,18 @@
  */
 
 import 'cypress-file-upload';
-import { AbcProjectMetadata, BundledModuleId, LayerType, MapTool } from '@abc-map/shared';
-import { TestHelper } from '../helpers/TestHelper';
-import { MainMap } from '../helpers/MainMap';
-import { LayerControls } from '../helpers/LayerControls';
-import { Routes } from '../helpers/Routes';
-import { Modules } from '../helpers/Modules';
-import { TopBar } from '../helpers/TopBar';
-import { Project } from '../helpers/Project';
-import { ToolSelector } from '../helpers/ToolSelector';
-import { Draw } from '../helpers/Draw';
-import { Store } from '../helpers/Store';
+import type { AbcProjectMetadata } from '@abc-map/shared';
+import { ModuleId, LayerType, MapTool } from '@abc-map/shared';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { MainMap } from '../helpers/MainMap.js';
+import { LayerControls } from '../helpers/LayerControls.js';
+import { Routes } from '../helpers/Routes.js';
+import { Modules } from '../helpers/Modules.js';
+import { TopBar } from '../helpers/TopBar.js';
+import { Project } from '../helpers/Project.js';
+import { ToolSelector } from '../helpers/ToolSelector.js';
+import { Draw } from '../helpers/Draw.js';
+import { Store } from '../helpers/Store.js';
 
 describe('Auto save', function () {
   describe('As a visitor', function () {
@@ -39,7 +40,7 @@ describe('Auto save', function () {
       cy.visit(Routes.map().format())
         .then(() => Project.newProject())
         // We rename project
-        .then(() => Modules.open(BundledModuleId.ProjectManagement))
+        .then(() => Modules.open(ModuleId.ProjectManagement))
         .get('[data-cy=edit-project-name]')
         .click()
         .get('[data-cy=prompt-input]')
@@ -58,9 +59,9 @@ describe('Auto save', function () {
         .then(() => Draw.click(400, 400))
         .then(() => Draw.click(500, 500))
         // We wait a little then reload
-        .wait(1500)
+        .wait(3000)
         .reload()
-        .wait(500)
+        .wait(1500)
         // Assert
         .then(() => Store.getReference())
         .then((store) => {

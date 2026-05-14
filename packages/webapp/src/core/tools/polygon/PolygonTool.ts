@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,23 +16,24 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tool } from '../Tool';
-import { AbcGeometryType, FeatureStyle, Logger, MapTool } from '@abc-map/shared';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
-import Map from 'ol/Map';
+import type { Tool } from '../Tool';
+import type { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, Logger, MapTool } from '@abc-map/shared';
+import type Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/polygon.inline.svg';
-import { DrawInteractionsBundle, GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
+import type { GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
+import { DrawInteractionsBundle } from '../common/interactions/DrawInteractionsBundle';
 import { HistoryKey } from '../../history/HistoryKey';
-import { HistoryService } from '../../history/HistoryService';
-import { MainStore } from '../../store/store';
-import { MapActions } from '../../store/map/actions';
+import type { HistoryService } from '../../history/HistoryService';
+import type { MainStore } from '../../../store/store';
+import { MapActions } from '../../../store/map/actions';
 import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
-import { ToolMode } from '../ToolMode';
+import type { ToolMode } from '../ToolMode';
 import { CommonConditions, CommonModes } from '../common/common-modes';
 import { FinishDrawingButton } from '../common/finish-button/FinishDrawingButton';
 import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
+import type { DefaultVectorSource } from '../../geo/layers/LayerWrapper';
 
 const logger = Logger.get('PolygonTool.ts');
 
@@ -43,7 +44,10 @@ export class PolygonTool implements Tool {
   private finishDrawing?: FinishDrawingButton;
   private map?: Map;
 
-  constructor(private store: MainStore, private history: HistoryService) {}
+  constructor(
+    private store: MainStore,
+    private history: HistoryService,
+  ) {}
 
   public getId(): MapTool {
     return MapTool.Polygon;
@@ -61,7 +65,7 @@ export class PolygonTool implements Tool {
     return 'Polygons';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
+  public setup(map: Map, source: DefaultVectorSource): void {
     this.map = map;
 
     // Interactions for map view manipulation
@@ -73,7 +77,7 @@ export class PolygonTool implements Tool {
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke, fill: style.fill }));
-    this.selection.setup(map, source, [AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON]);
+    this.selection.setup(map, [AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON]);
 
     // Draw interactions
     const getStyle: GetStyleFunc = () => {
@@ -130,7 +134,7 @@ export class PolygonTool implements Tool {
   private removeFinishButton = () => {
     if (this.finishDrawing) {
       this.finishDrawing.dispose();
-      this.finishDrawing && this.map?.removeInteraction(this.finishDrawing);
+      this.map?.removeInteraction(this.finishDrawing);
       this.finishDrawing = undefined;
     }
   };

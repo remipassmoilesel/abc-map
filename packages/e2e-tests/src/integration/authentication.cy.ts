@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestHelper } from '../helpers/TestHelper';
-import { Registration } from '../helpers/Registration';
-import { Authentication } from '../helpers/Authentication';
-import { Toasts } from '../helpers/Toasts';
-import { Routes } from '../helpers/Routes';
-import { MainMenu } from '../helpers/MainMenu';
-import { UrlHelper } from '../helpers/UrlHelper';
+import { TestHelper } from '../helpers/TestHelper.js';
+import { Registration } from '../helpers/Registration.js';
+import { Authentication } from '../helpers/Authentication.js';
+import { Toasts } from '../helpers/Toasts.js';
+import { Routes } from '../helpers/Routes.js';
+import { MainMenu } from '../helpers/MainMenu.js';
+import { UrlHelper } from '../helpers/UrlHelper.js';
 
 describe('Authentication', function () {
   beforeEach(() => {

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -18,11 +18,13 @@
  *
  */
 
-import { AbstractService } from '../services/AbstractService';
+import { AbstractService } from '../services/AbstractService.js';
 import { Logger } from '@abc-map/shared';
 import { Counter } from 'prom-client';
-import { CounterMap, CounterNames, Counters } from './MetricsService.definitions';
-import { PromClient, promClient } from './PromClient';
+import type { CounterMap } from './MetricsService.definitions.js';
+import { CounterNames, Counters } from './MetricsService.definitions.js';
+import type { PromClient } from './PromClient.js';
+import { promClient } from './PromClient.js';
 
 const logger = Logger.get('MetricsService.ts');
 

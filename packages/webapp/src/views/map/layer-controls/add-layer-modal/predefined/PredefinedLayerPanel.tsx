@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
  */
 
 import React, { useCallback } from 'react';
-import { BundledModuleId, Logger, PredefinedLayerModel } from '@abc-map/shared';
+import type { PredefinedLayerModel } from '@abc-map/shared';
+import { ModuleId, Logger } from '@abc-map/shared';
 import ControlButtons from '../_common/ControlButtons';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
@@ -78,7 +79,7 @@ export function PredefinedLayerPanel(props: Props) {
       <div className={'alert alert-info d-flex align-items-center'}>
         <FaIcon icon={IconDefs.faInfoCircle} className={'me-2'} />
         {t('Looking_for_another_basemap')} &nbsp;
-        <Link to={Routes.module().withParams({ moduleId: BundledModuleId.DataStore })}>{t('Try_data_store')}</Link>
+        <Link to={Routes.module().withParams({ moduleId: ModuleId.DataStore })}>{t('Try_data_store')}</Link>
       </div>
 
       <div className={'flex-grow-1'} />

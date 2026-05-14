@@ -1,4 +1,4 @@
-# Copyright © 2023 Rémi Pace.
+# Copyright © 2026 Rémi Pace.
 # This file is part of Abc-Map.
 #
 # Abc-Map is free software: you can redistribute it and/or modify
@@ -19,15 +19,13 @@
 ## You should not use it out of this repository.
 ##
 
-version: '3'
-
 services:
   abc-dev-mongodb:
-    image: 'mongo:5.0.20-focal'
+    image: 'mongo:7'
     container_name: abc-dev-mongodb
     restart: always
     ports:
-      - '27019:27017'
+      - '27017:27017'
     networks:
       - abc-dev-services
     environment:
@@ -37,7 +35,7 @@ services:
       - 'abc-dev-mongodb-data:/data/db'
 
   abc-dev-mongo-express:
-    image: 'mongo-express:0.54'
+    image: 'mongo-express:1.0.2-20-alpine3.19'
     container_name: abc-dev-mongo-express
     restart: always
     ports:

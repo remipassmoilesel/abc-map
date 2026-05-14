@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -24,16 +24,15 @@ import { useEditor } from '../../useEditor';
 import { EmbedMediaModal } from './EmbedMediaModal';
 import { CustomEditor } from '../../CustomEditor';
 import { WithTooltip } from '../../../with-tooltip/WithTooltip';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import clsx from 'clsx';
-
-const t = prefixedTranslation('TextEditor:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   className?: string;
 }
 
 export function EmbedMedia(props: Props) {
+  const { t } = useTranslation('TextEditor');
   const { className } = props;
   const { editor } = useEditor();
   const [open, setOpen] = useState(false);
@@ -45,7 +44,7 @@ export function EmbedMedia(props: Props) {
       setOpen(false);
       CustomEditor.image.create(editor, url);
     },
-    [editor]
+    [editor],
   );
 
   const handleEmbedVideo = useCallback(
@@ -53,7 +52,7 @@ export function EmbedMedia(props: Props) {
       setOpen(false);
       CustomEditor.video.create(editor, url);
     },
-    [editor]
+    [editor],
   );
 
   return (

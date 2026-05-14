@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 import React from 'react';
-import { Provider } from '../Provider';
+import type { Provider } from '../Provider';
 import { DefaultIntegration } from '../DefaultIntegration';
 
 const shortUrlRegexp = /youtu\.be\/([0-9A-Za-z_-]+)/i;

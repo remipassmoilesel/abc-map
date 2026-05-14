@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { mainStore } from '../store/store';
-import { useAppSelector } from '../store/hooks';
-import { ExperimentalFeature } from '../../experimental-features';
+import { mainStore } from '../../store/store';
+import { useAppSelector } from '../../store/hooks';
+import type { ExperimentalFeature } from '../../experimental-features';
 
 export function isExperimentalFeatureEnabled(feat: ExperimentalFeature): boolean {
   return mainStore.getState().ui.experimentalFeatures[feat.id] ?? false;

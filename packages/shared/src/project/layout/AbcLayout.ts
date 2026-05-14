@@ -1,5 +1,5 @@
 /**
- * Copyright © 2023 Rémi Pace.
+ * Copyright © 2026 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcView } from '../AbcView';
-import { AbcTextFrame } from '../text-frame';
-import { AbcScale } from '../scale';
-import { AbcNorth } from '../north';
+import type { AbcView } from '../AbcView.js';
+import type { AbcTextFrame } from '../text-frame/index.js';
+import type { AbcScale } from '../scale/index.js';
+import type { AbcNorth } from '../north/index.js';
 
 /**
  * Layouts are used to export as PDF or PNG
