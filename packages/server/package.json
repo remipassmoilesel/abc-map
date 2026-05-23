@@ -6,7 +6,8 @@
   "type": "module",
   "main": "build/main.js",
   "files": [
-    "build"
+    "build",
+    "public"
   ],
   "scripts": {
     "build": "tsc",

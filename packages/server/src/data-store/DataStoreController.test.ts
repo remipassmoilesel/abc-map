@@ -16,7 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { disableSmtpClientLogging } from '../email/SmtpClient.js';
 import type { Config } from '../config/Config.js';
 import type { Services } from '../services/services.js';
 import { servicesFactory } from '../services/services.js';
@@ -28,8 +27,9 @@ import type { IncomingHttpHeaders } from 'http';
 import uuid from 'uuid-random';
 import { TestAuthentication } from '../utils/TestAuthentication.js';
 import { ArtefactFilter } from '@abc-map/shared';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
 
-disableSmtpClientLogging();
+disableIntegrationTestLogs();
 
 describe('DataStoreController', () => {
   let config: Config;

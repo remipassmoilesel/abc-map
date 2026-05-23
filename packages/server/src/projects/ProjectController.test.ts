@@ -31,6 +31,9 @@ import type { IncomingHttpHeaders } from 'http';
 import _ from 'lodash';
 import { range } from 'lodash';
 import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('ProjectController', () => {
   let config: Config;

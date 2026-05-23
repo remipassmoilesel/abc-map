@@ -25,6 +25,9 @@ import type { Config } from '../config/Config.js';
 import type { AbcVote } from '@abc-map/shared';
 import { VoteValue } from '@abc-map/shared';
 import { TestAuthentication } from '../utils/TestAuthentication.js';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('FeedbackController', () => {
   let config: Config;

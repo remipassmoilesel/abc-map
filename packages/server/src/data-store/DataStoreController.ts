@@ -25,6 +25,9 @@ import fastifyStatic from '@fastify/static';
 import type { ByIdParams, ListQuery, SearchQuery } from './DataStoreController.schemas.js';
 import { GetByIdSchema, ListSchema, SearchSchema } from './DataStoreController.schemas.js';
 import { PaginationHelper } from '../server/helpers/PaginationHelper.js';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 export class DataStoreController extends Controller {
   constructor(private services: Services) {

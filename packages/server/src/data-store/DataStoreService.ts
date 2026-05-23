@@ -136,12 +136,16 @@ export class DataStoreService extends AbstractService {
     }
 
     // Save them
-    await this.dao.saveAll(artefacts);
+    if (artefacts.length) {
+      await this.dao.saveAll(artefacts);
+    }
 
     // Delete non existing ones
     const existing = await this.dao.findAll();
     const toDelete = existing.filter((artA) => !artefacts.find((artB) => artB._id === artA._id));
-    await this.dao.delete(toDelete);
+    if (toDelete.length) {
+      await this.dao.delete(toDelete);
+    }
 
     logger.info('Indexing done !');
   }

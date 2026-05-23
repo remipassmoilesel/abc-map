@@ -49,7 +49,11 @@ import { jwtPlugin } from '../server/helpers/jwtPlugin.js';
 import '@fastify/rate-limit';
 import { defaultRateLimitConfig } from '../server/helpers/defaultRateLimitConfig.js';
 
-export const logger = Logger.get('AuthenticationController.ts');
+const logger = Logger.get('AuthenticationController.ts');
+
+export function disableAuthenticationControllerLogs() {
+  logger.disable();
+}
 
 export class AuthenticationController extends Controller {
   constructor(

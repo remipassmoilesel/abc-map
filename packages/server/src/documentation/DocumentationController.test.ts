@@ -25,6 +25,9 @@ import type { Services } from '../services/services.js';
 import { servicesFactory } from '../services/services.js';
 import { HttpServer } from '../server/HttpServer.js';
 import { ConfigLoader } from '../config/ConfigLoader.js';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('DocumentationController', () => {
   let config: Config;

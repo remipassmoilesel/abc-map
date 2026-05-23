@@ -26,6 +26,10 @@ import type { Config } from '../config/Config.js';
 
 const logger = Logger.get('MetricsController.ts', 'info');
 
+export function disableMetricsControllerLogs() {
+  logger.disable();
+}
+
 export class MetricsController extends Controller {
   constructor(
     private config: Config,

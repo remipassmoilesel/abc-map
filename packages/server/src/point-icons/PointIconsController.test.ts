@@ -24,6 +24,9 @@ import type { Config } from '../config/Config.js';
 import { TestAuthentication } from '../utils/TestAuthentication.js';
 import type { GetPointIconsResponse } from '@abc-map/shared';
 import { afterAll, assert, beforeAll, describe, expect, it } from 'vitest';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('PointIconsController', () => {
   let config: Config;

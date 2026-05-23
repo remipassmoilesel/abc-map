@@ -1,12 +1,13 @@
 .cypress-cache
 .git
 .idea
+.npm-cache
 .pnpm-store
 .turbo
 .vscode
 documentation
-node_modules/
-notes/
+node_modules
+notes
 packages/server/resources/dev-datastore
 packages/server/resources/sample-projects
 packages/server/resources/test

@@ -20,9 +20,8 @@ import type { Services } from '../services/services.js';
 import { servicesFactory } from '../services/services.js';
 import { ConfigLoader } from '../config/ConfigLoader.js';
 import { HttpServer } from '../server/HttpServer.js';
-import { assert } from 'vitest';
+import { afterAll, assert, beforeAll, describe, it } from 'vitest';
 import uuid from 'uuid-random';
-import { disableSmtpClientLogging } from '../email/SmtpClient.js';
 import { TestHelper } from '../utils/TestHelper.js';
 import type { Config } from '../config/Config.js';
 import { PasswordHasher } from './PasswordHasher.js';
@@ -31,13 +30,9 @@ import { AnonymousUser, Language } from '@abc-map/shared';
 import jwt from 'jsonwebtoken';
 import { RegistrationDao } from './RegistrationDao.js';
 import { MongodbClient } from '../mongodb/MongodbClient.js';
-import { logger } from './AuthenticationController.js';
-import { afterAll, beforeAll, describe, it } from 'vitest';
-import { disableAuthenticationServiceLogs } from './AuthenticationService.js';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
 
-logger.disable();
-disableSmtpClientLogging();
-disableAuthenticationServiceLogs();
+disableIntegrationTestLogs();
 
 describe('AuthenticationController', () => {
   let config: Config;

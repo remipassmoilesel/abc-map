@@ -22,6 +22,9 @@ import { servicesFactory } from '../services/services.js';
 import { HttpServer } from '../server/HttpServer.js';
 import { ConfigLoader } from '../config/ConfigLoader.js';
 import { afterAll, assert, beforeAll, describe, it } from 'vitest';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('HealthCheckController', () => {
   let config: Config;

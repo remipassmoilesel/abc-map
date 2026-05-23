@@ -41,7 +41,7 @@
     "@tanstack/react-virtual": "3.13.18",
     "@tanstack/table-core": "8.21.3",
     "@turf/turf": "^7.3.4",
-    "axios": "^1.13.6",
+    "axios": "^1.16.1",
     "axios-retry": "^4.5.0",
     "bootstrap": "5.3.8",
     "bowser": "^2.14.1",

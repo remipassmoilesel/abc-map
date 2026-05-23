@@ -65,7 +65,7 @@ export class ConfigLoader {
   public static async load(pathArg: string | undefined = undefined): Promise<Config> {
     const _configPath = path.resolve(pathArg ?? ConfigLoader.getPathFromEnv());
 
-    const explainedError = (message: string) => {
+    const showError = (message: string) => {
       logger.error(
         [
           '',
@@ -98,13 +98,13 @@ export class ConfigLoader {
 
       input = await import(_configPath).then((mod) => mod.default);
     } catch (err) {
-      explainedError(errorMessage(err));
+      showError(errorMessage(err));
       return Promise.reject(new Error(`Cannot load configuration ${_configPath}: ${errorMessage(err)}`));
     }
 
     // We validate config input
     if (!Validation.ConfigInput(input)) {
-      explainedError(Validation.formatErrors(Validation.ConfigInput));
+      showError(Validation.formatErrors(Validation.ConfigInput));
       return Promise.reject(new Error(`Configuration ${_configPath} is not valid: ${Validation.formatErrors(Validation.ConfigInput)}`));
     }
 

@@ -34,7 +34,7 @@ import { PointIconsService } from '../point-icons/PointIconsService.js';
 
 const logger = Logger.get('services.ts');
 
-export declare type ShutdownFunc = () => void;
+export declare type ShutdownFunc = () => Promise<void>;
 
 export interface Services {
   [k: string]: AbstractService | ShutdownFunc;
@@ -78,7 +78,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     emails,
     projections,
     pointIcons,
-    shutdown: () => undefined,
+    shutdown: async () => undefined,
   };
 
   for (const name in services) {
@@ -96,7 +96,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
       }
     }
 
-    mongodb.disconnect().catch((err) => logger.error(err));
+    await mongodb.disconnect().catch((err) => logger.error(err));
   };
 
   return services;

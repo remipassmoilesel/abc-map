@@ -124,7 +124,14 @@ export class HttpServer {
     await this.app.register(fastifySensible);
 
     // Metrics
-    await this.app.register(metricsPlugin.default, { defaultMetrics: { enabled: false }, clearRegisterOnInit: true });
+    await this.app.register(metricsPlugin.default, {
+      // Default metrics are already registered by MetricsService
+      defaultMetrics: { enabled: false },
+      clearRegisterOnInit: false,
+      promClient: this.services.metrics.getClient(),
+      // We disable plugin metrics exposure, we use our own, see MetricsController
+      endpoint: null,
+    });
 
     // Templating engine
     await this.app.register(fastifyView, {

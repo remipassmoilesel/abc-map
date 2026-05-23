@@ -26,6 +26,9 @@ import { TestAuthentication } from '../utils/TestAuthentication.js';
 import sinon from 'sinon';
 import type { SinonStub } from 'sinon';
 import { afterAll, beforeAll, describe, it } from 'vitest';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('ProjectionController', () => {
   let config: Config;

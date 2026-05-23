@@ -19,8 +19,12 @@
 import { errorMessage } from '@abc-map/shared';
 import { ConfigLoader, disableConfigLoaderLogger } from './ConfigLoader.js';
 import { assert, describe, expect, it } from 'vitest';
+import { Validation } from '../utils/Validation.js';
+import { ResourceHelper } from '../utils/ResourceHelper.js';
 
 disableConfigLoaderLogger();
+
+const resourceHelper = new ResourceHelper();
 
 describe('ConfigLoader', () => {
   it('load inexistant', async () => {
@@ -48,6 +52,20 @@ describe('ConfigLoader', () => {
     assert.isDefined(config.environmentName);
     assert.isDefined(config.webappPath);
     assert.isDefined(config.userDocumentationPath);
+  });
+
+  it('default.mjs', async () => {
+    // Prepare
+    const configPath = resourceHelper.getResourcePath('configuration/default.mjs');
+    const input = await import(configPath).then((mod) => mod.default);
+
+    // Act
+    const isValid = Validation.ConfigInput(input);
+    const errors = Validation.formatErrors(Validation.ConfigInput);
+
+    // Assert
+    expect(isValid).toEqual(true);
+    expect(errors).toEqual('<No error message found>');
   });
 
   it('safeConfig() should hide secrets', async () => {

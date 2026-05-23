@@ -1,8 +1,13 @@
 # Changelog
 
-For the moment we use git hashes as version, since no one care about it 👍
+For the moment we use Git hashes as version 👍
 
-## 14/05/2026 - (git: main)
+## 25/05/2026 - Fix of Prometheus metrics (git: main)
+
+- It's all in the title! You can access the metrics at https://abc-map.fr/api/metrics
+- The size of Docker images has been reduced
+
+## 14/05/2026 - General update of dependencies ! (git: 09f75bb9f)
 
 - Well, well, well, that was what you call a pause in development
 - Replaced CRA by Vite, and whoa ! (RIP CRA, you were hacky but useful)

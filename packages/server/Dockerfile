@@ -21,10 +21,17 @@ FROM node:24-alpine3.22
 RUN mkdir -p /srv
 WORKDIR /srv
 
-RUN corepack enable pnpm && corepack install -g pnpm@latest-10
+RUN corepack enable pnpm
 
+# Datastore path from default config
+RUN mkdir -p /datastore
+
+# We copy all files
 COPY . .
-RUN pnpm install --frozen-lockfile --recursive --prod --force
+
+# We install dependencies. "..." means package + dependencies
+RUN pnpm install --frozen-lockfile --recursive --prod --force --filter "@abc-map/server"... --fail-if-no-match
 
 ENV NODE_ENV=production
+ENV ABC_CONFIGURATION=/srv/packages/server/resources/configuration/default.mjs
 CMD ["node", "/srv/packages/server/build/main.js"]

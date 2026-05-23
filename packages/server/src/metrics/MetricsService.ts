@@ -28,6 +28,10 @@ import { promClient } from './PromClient.js';
 
 const logger = Logger.get('MetricsService.ts');
 
+export function disableMetricsServiceLogs() {
+  logger.disable();
+}
+
 export class MetricsService extends AbstractService {
   public static create(): MetricsService {
     return new MetricsService(promClient);
@@ -40,19 +44,17 @@ export class MetricsService extends AbstractService {
   }
 
   public async init() {
-    this.clearMetrics();
-    this.client.collectDefaultMetrics();
+    this.client.collectDefaultMetrics({
+      register: this.client.register,
+    });
 
     this.counters = {};
     for (const name of Object.values(CounterNames)) {
-      try {
-        this.counters[name] = new Counter({
-          ...Counters[name],
-          registers: [this.client.register],
-        });
-      } catch (e) {
-        logger.error(`Cannot register counter ${name}`, e);
-      }
+      this.counters[name] = new Counter({
+        name: Counters[name].name,
+        help: Counters[name].help,
+        registers: [this.client.register],
+      });
     }
   }
 
@@ -62,6 +64,10 @@ export class MetricsService extends AbstractService {
 
   public clearMetrics() {
     this.client.register.clear();
+  }
+
+  public getClient() {
+    return this.client;
   }
 
   public getMetrics(): Promise<string> {

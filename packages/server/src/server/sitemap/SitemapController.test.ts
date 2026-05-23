@@ -21,13 +21,15 @@
 
 import { XMLParser } from 'fast-xml-parser';
 import _ from 'lodash';
-import { assert, expect } from 'vitest';
+import { afterAll, assert, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { Config } from '../../config/Config.js';
 import type { Services } from '../../services/services.js';
 import { servicesFactory } from '../../services/services.js';
 import { HttpServer } from '../HttpServer.js';
 import { ConfigLoader } from '../../config/ConfigLoader.js';
-import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
+import { disableIntegrationTestLogs } from '../../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('SitemapController', () => {
   let config: Config;

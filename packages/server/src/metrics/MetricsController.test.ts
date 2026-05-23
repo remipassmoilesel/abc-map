@@ -21,7 +21,10 @@ import type { Services } from '../services/services.js';
 import { servicesFactory } from '../services/services.js';
 import { HttpServer } from '../server/HttpServer.js';
 import { ConfigLoader } from '../config/ConfigLoader.js';
-import { afterAll, assert, beforeAll, describe, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { disableIntegrationTestLogs } from '../utils/disableIntegrationTestLogs.js';
+
+disableIntegrationTestLogs();
 
 describe('MetricsController', () => {
   let config: Config;
@@ -46,6 +49,17 @@ describe('MetricsController', () => {
 
   describe('GET /api/metrics', async () => {
     it('should return metrics', async () => {
+      // Prepare
+      services.metrics.anonymousAuthenticationSucceeded();
+      services.metrics.anonymousAuthenticationSucceeded();
+      services.metrics.anonymousAuthenticationSucceeded();
+
+      services.metrics.authenticationFailed();
+      services.metrics.authenticationFailed();
+      services.metrics.authenticationFailed();
+      services.metrics.authenticationFailed();
+      services.metrics.authenticationFailed();
+
       // Act
       const response = await server.getApp().inject({
         method: 'GET',
@@ -53,8 +67,10 @@ describe('MetricsController', () => {
       });
 
       // Assert
-      assert.equal(response.statusCode, 200);
-      assert.match(response.body, /# HELP http_request_duration_seconds/);
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).includes('http_request_duration_seconds');
+      expect(response.body).includes('abcmap_anonymous_authentications_succeeded 3');
+      expect(response.body).includes('abcmap_authentications_failed 5');
     });
   });
 });
